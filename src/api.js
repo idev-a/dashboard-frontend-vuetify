@@ -1,4 +1,4 @@
-const BASE_API = 'http://localhost:5000'
+const BASE_API = 'http://34.74.44.219'
 
 module.exports = {
   registerUser: async (data) => {
