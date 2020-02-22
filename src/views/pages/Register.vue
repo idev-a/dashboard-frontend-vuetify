@@ -90,6 +90,7 @@
 
 <script>
   import { BASE_API } from '../../api'
+  import axios from 'axios'
 
   export default {
     name: 'PagesRegister',
@@ -175,19 +176,15 @@
             username: this.form.username,
             email: this.form.email,
           }
-          fetch(`${BASE_API}/api/users/register`, {
-            crossdomain: true,
-            headers: {
-              'Content-Type': 'application/json',
-            },
+          axios({
+            url: `${BASE_API}/api/users/register`,
             method: 'POST',
-            body: JSON.stringify(data),
+            data: data,
           })
-            .then(response => response.json())
             .then(function (res) {
               self.loading = false
-              self.snackbar_message = res.message
-              if (res.status === 'failure') {
+              self.snackbar_message = res.data.message
+              if (res.data.status === 'failure') {
                 self.snackbar_color = 'red darken-3'
               } else {
                 self.snackbar_color = 'success'

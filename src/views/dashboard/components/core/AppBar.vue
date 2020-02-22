@@ -222,7 +222,7 @@
 
       goTo (name) {
         if (name === 'Login') {
-          localStorage.setItem('token', '')
+          localStorage.setItem('jwt', null)
         } 
         
         this.$router.push({ name })

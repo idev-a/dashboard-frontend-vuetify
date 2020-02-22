@@ -98,6 +98,7 @@
 
 <script>
   import { BASE_API } from '../../api'
+  import axios from 'axios'
 
   export default {
     name: 'PagesLogin',
@@ -154,7 +155,7 @@
         this.$router.push({ name: "Register" });
       },
       gotoDashboard () {
-        localStorage.setItem('token', 'success')
+        localStorage.setItem('jwt', 'success')
         this.$router.push({ name: "Dashboard" });
       },
       resetForm () {
@@ -177,19 +178,14 @@
           const data = {
             email: this.form.email,
           }
-          fetch(`${BASE_API}/api/users/login/code`, {
-            crossdomain: true,
-            headers: {
-              'Content-Type': 'application/json',
-            },
+          axios(`${BASE_API}/api/users/login/code`, {
             method: 'POST',
-            body: JSON.stringify(data),
+            data,
           })
-            .then(response => response.json())
             .then(function (res) {
               self.loading = false
-              self.snackbar_message = res.message
-              if (res.status === 'failure') {
+              self.snackbar_message = res.data.message
+              if (res.data.status === 'failure') {
                 self.snackbar_color = 'red darken-3'
               } else {
                 self.snackbar_color = 'success'
@@ -215,19 +211,14 @@
           const data = {
             code: this.code,
           }
-          fetch(`${BASE_API}/api/users/login/verify`, {
-            crossdomain: true,
-            headers: {
-              'Content-Type': 'application/json',
-            },
+          axios(`${BASE_API}/api/users/login/verify`, {
             method: 'POST',
-            body: JSON.stringify(data),
+            data,
           })
-            .then(response => response.json())
             .then(function (res) {
               self.loading = false
-              self.snackbar_message = res.message
-              if (res.status === 'failure') {
+              self.snackbar_message = res.data.message
+              if (res.data.status === 'failure') {
                 self.snackbar_color = 'red darken-3'
               } else {
                 self.snackbar_color = 'success'

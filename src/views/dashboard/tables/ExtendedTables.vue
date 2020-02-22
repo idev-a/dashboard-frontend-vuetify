@@ -23,6 +23,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
+
   export default {
     name: 'DashboardExtendedTables',
 
@@ -84,7 +85,6 @@
         const self = this
         self.loading = true
         fetch(`${BASE_API}/api/users/all`, {
-            crossdomain: true,
             headers: {
               'Content-Type': 'application/json',
             },
