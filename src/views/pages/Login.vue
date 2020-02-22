@@ -97,6 +97,8 @@
 </template>
 
 <script>
+  import { registerUser, BASE_API } from '../../api'
+
   export default {
     name: 'PagesLogin',
 
@@ -175,7 +177,7 @@
           const data = {
             email: this.form.email,
           }
-          fetch('http://localhost:5000/api/users/login/code', {
+          fetch(`${BASE_API}/api/users/login/code`, {
             crossdomain: true,
             headers: {
               'Content-Type': 'application/json',
@@ -213,7 +215,7 @@
           const data = {
             code: this.code,
           }
-          fetch('http://localhost:5000/api/users/login/verify', {
+          fetch(`${BASE_API}/api/users/login/verify`, {
             crossdomain: true,
             headers: {
               'Content-Type': 'application/json',

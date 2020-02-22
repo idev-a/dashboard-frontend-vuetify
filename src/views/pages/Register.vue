@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  // import { registerUser } from '../../api'
+  import { registerUser, BASE_API } from '../../api'
 
   export default {
     name: 'PagesRegister',
@@ -175,7 +175,7 @@
             username: this.form.username,
             email: this.form.email,
           }
-          fetch('http://localhost:5000/api/users/register', {
+          fetch(`${BASE_API}/api/users/register`, {
             crossdomain: true,
             headers: {
               'Content-Type': 'application/json',
