@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  import { registerUser, BASE_API } from '../../api'
+  import { BASE_API } from '../../api'
 
   export default {
     name: 'PagesLogin',

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+  import { BASE_API } from '../../../api'
   export default {
     name: 'DashboardExtendedTables',
 
@@ -82,7 +83,7 @@
       fetchUsers () {
         const self = this
         self.loading = true
-        fetch('http://localhost:5000/api/users/all', {
+        fetch(`${BASE_API}/api/users/all`, {
             crossdomain: true,
             headers: {
               'Content-Type': 'application/json',
