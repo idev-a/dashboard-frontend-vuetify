@@ -154,8 +154,9 @@
       gotoSignup () {
         this.$router.push({ name: "Register" });
       },
-      gotoDashboard () {
+      gotoDashboard (user) {
         localStorage.setItem('jwt', 'success')
+        localStorage.setItem('user', JSON.stringify(user))
         this.$router.push({ name: "Dashboard" });
       },
       resetForm () {
@@ -178,7 +179,8 @@
           const data = {
             email: this.form.email,
           }
-          axios(`${BASE_API}/api/users/login/code`, {
+          axios({
+            url: `${BASE_API}/api/users/login/code`,
             method: 'POST',
             data,
           })
@@ -186,7 +188,7 @@
               self.loading = false
               self.snackbar_message = res.data.message
               if (res.data.status === 'failure') {
-                self.snackbar_color = 'red darken-3'
+                self.snackbar_color = 'error'
               } else {
                 self.snackbar_color = 'success'
               }
@@ -211,7 +213,8 @@
           const data = {
             code: this.code,
           }
-          axios(`${BASE_API}/api/users/login/verify`, {
+          axios({
+            url:`${BASE_API}/api/users/login/verify`,
             method: 'POST',
             data,
           })
@@ -219,10 +222,10 @@
               self.loading = false
               self.snackbar_message = res.data.message
               if (res.data.status === 'failure') {
-                self.snackbar_color = 'red darken-3'
+                self.snackbar_color = 'error'
               } else {
                 self.snackbar_color = 'success'
-                self.gotoDashboard()
+                self.gotoDashboard(res.data.user)
               }
               self.snackbar = true
             })

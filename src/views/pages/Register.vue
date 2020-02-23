@@ -42,11 +42,11 @@
             class="text-center"
             @submit.prevent="submit"
           >
-            <v-text-field
+          <!--   <v-text-field
               ref="username"
               v-model="form.username"
               :rules="[rules.required]"
-              :error-messages="errorMessages.email"
+              :error-messages="errorMessages.username"
               :loading="loading"
               hide-details="auto"
               class="mb-2"
@@ -54,7 +54,7 @@
               label="Username"
               prepend-icon="mdi-face"
               required
-            />
+            /> -->
 
             <v-text-field
               ref="email"
@@ -164,11 +164,9 @@
         this.formHasErrors = false
       },
       async submit () {
-        Object.keys(this.form).forEach(f => {
-          if (!this.form[f]) this.formHasErrors = true
-
-          this.$refs[f].validate(true)
-        })
+        if (!this.form.email) this.formHasErrors = true
+        this.$refs.email.validate(true)
+      
         if (!this.formHasErrors) {
           this.loading = true
           const self = this

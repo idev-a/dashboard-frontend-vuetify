@@ -11,7 +11,8 @@
     "now-start": "vue-cli-service serve",
     "now-build": "npm run build",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "deploy": "sudo rm -rf /var/www/html/ && sudo mv dist/ /var/www/html/"
   },
   "dependencies": {
     "axios": "^0.19.2",

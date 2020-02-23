@@ -22,8 +22,8 @@
     <v-list-item two-line>
       <v-list-item-content>
         <v-list-item-title class="text-uppercase font-weight-regular display-2">
-          <span class="logo-mini">{{ $t('ct') }}</span>
-          <span class="logo-normal">{{ $t('tim') }}</span>
+          <span class="logo-mini">{{ $t('SD') }}</span>
+          <span class="logo-normal">{{ $t('Secure Dashboard') }}</span>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -49,7 +49,7 @@
 
       <template v-for="(item, i) in computedItems">
         <base-item-group
-          v-if="item.children"
+          v-if="item && item.children"
           :key="`group-${i}`"
           :item="item"
         >
@@ -94,13 +94,33 @@
           to: '/',
         },
         {
-          group: '/tables',
-          icon: 'mdi-grid',
-          title: 'Users',
+          group: '/users',
+          icon: 'mdi-account-multiple',
+          title: 'Manage Users',
+          is_admin: true,
           children: [
             {
               title: 'All',
-              to: 'extended-tables',
+              to: 'all',
+            },
+          ]
+        },
+        {
+          group: '/risks',
+          icon: 'mdi-alert',
+          title: 'Risks',
+          children: [
+            {
+              title: 'High Risks',
+              to: 'high',
+            },
+            {
+              title: 'Medium Risks',
+              to: 'medium',
+            },
+            {
+              title: 'Low Risks',
+              to: 'low',
             },
           ]
         },
@@ -118,7 +138,8 @@
         },
       },
       computedItems () {
-        return this.items.map(this.mapItem)
+        const new_items = this.items.map(this.mapItem)
+        return new_items.filter(item => item)
       },
       profile () {
         return {
@@ -151,10 +172,24 @@
 
     methods: {
       mapItem (item) {
-        return {
-          ...item,
-          children: item.children ? item.children.map(this.mapItem) : undefined,
-          title: this.$t(item.title),
+        let user = {}
+        try {
+          user = JSON.parse(localStorage.getItem('user'))
+        } catch (e) {}
+        if (item.is_admin) {
+          if (user.role === 'Admin') {
+            return {
+              ...item,
+              children: item.children ? item.children.map(this.mapItem) : undefined,
+              title: this.$t(item.title),
+            }
+          }
+        } else {
+          return {
+            ...item,
+            children: item.children ? item.children.map(this.mapItem) : undefined,
+            title: this.$t(item.title),
+          }
         }
       },
     },

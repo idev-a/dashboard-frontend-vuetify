@@ -76,13 +76,38 @@ let router = new Router({
           }
         },
         {
-          name: 'Customers',
-          path: 'tables/extended-tables',
-          component: () => import('@/views/dashboard/tables/ExtendedTables'),
+          name: 'Users',
+          path: 'users/all',
+          component: () => import('@/views/dashboard/users/all'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'High Risks',
+          path: 'risks/high',
+          component: () => import('@/views/dashboard/risks/high'),
           meta: {
             requiresAuth: true
           }
-        }
+        },
+        {
+          name: 'Medium Risks',
+          path: 'risks/medium',
+          component: () => import('@/views/dashboard/risks/medium'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Low Risks',
+          path: 'risks/low',
+          component: () => import('@/views/dashboard/risks/low'),
+          meta: {
+            requiresAuth: true
+          }
+        },
       ],
     },
     {
@@ -110,7 +135,20 @@ router.beforeEach((to, from, next) => {
                 params: { nextUrl: to.fullPath }
             })
         } else {
-            next()
+            let user = {}
+            try {
+              user = JSON.parse(localStorage.getItem('user'))
+            } catch (e) {}
+            if(to.matched.some(record => record.meta.is_admin)) {
+                if(user.role == 'Admin'){
+                    next()
+                }
+                else{
+                    next({ name: 'Dashboard'})
+                }
+            }else {
+                next()
+            }
         }
     } else {
         next()
