@@ -22,7 +22,7 @@
     <v-row justify="center">
       <v-slide-y-transition appear>
         <base-material-card
-          color="success"
+          color="light-blue accent-3"
           light
           max-width="100%"
           width="400"
@@ -50,7 +50,7 @@
               hide-details="auto"
               class="mb-2"
               color="secondary"
-              label="Your purchase email address"
+              label="Please enter your business email address."
               prepend-icon="mdi-email"
               required
             />
@@ -183,6 +183,8 @@
             url: `${BASE_API}/api/users/login/code`,
             method: 'POST',
             data,
+            withCredentials: false,
+            crossdomain: true,
           })
             .then(function (res) {
               self.loading = false
@@ -217,6 +219,8 @@
             url:`${BASE_API}/api/users/login/verify`,
             method: 'POST',
             data,
+            withCredentials: false,
+            crossdomain: true,
           })
             .then(function (res) {
               self.loading = false

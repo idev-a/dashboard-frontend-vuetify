@@ -57,8 +57,18 @@
       class="ml-2"
       min-width="0"
       text
+      to="/"
     >
       <v-icon>mdi-view-dashboard</v-icon>
+    </v-btn>
+
+    <v-btn
+      class="ml-2"
+      min-width="0"
+      text
+      to="/pages/lock"
+    >
+      <v-icon>mdi-lock-open-outline</v-icon>
     </v-btn>
 
     <v-menu

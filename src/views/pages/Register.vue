@@ -23,7 +23,7 @@
     <v-row justify="center">
       <v-slide-y-transition appear>
         <base-material-card
-          color="blue"
+          color="light-blue accent-3"
           light
           max-width="100%"
           width="400"
@@ -59,13 +59,13 @@
             <v-text-field
               ref="email"
               v-model="form.email"
-              :rules="[rules.required, rules.email]"
+              :rules="[rules.required, rules.email, rules.validEmail]"
               :error-messages="errorMessages.email"
               :loading="loading"
               class="mb-5"
               hide-details="auto"
               color="secondary"
-              label="Your purchase email address"
+              label="Please enter your business email address."
               prepend-icon="mdi-email"
               required
             />
@@ -90,6 +90,7 @@
 
 <script>
   import { BASE_API } from '../../api'
+  import { DOMAIN_LIST } from '../../util'
   import axios from 'axios'
 
   export default {
@@ -134,6 +135,10 @@
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             return pattern.test(value) || 'Invalid e-mail.'
           },
+          validEmail: value => {
+            const domain = value.split('@')[1]
+            return value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase()) || 'Please enter a business email'
+          }
         },
       }
     },

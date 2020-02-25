@@ -4,7 +4,7 @@
 
     <pages-core-view />
 
-    <pages-core-footer />
+    <!-- <pages-core-footer /> -->
   </v-app>
 </template>
 
@@ -14,7 +14,7 @@
 
     components: {
       PagesCoreAppBar: () => import('./components/core/AppBar'),
-      PagesCoreFooter: () => import('./components/core/Footer'),
+      // PagesCoreFooter: () => import('./components/core/Footer'),
       PagesCoreView: () => import('./components/core/View'),
     },
 

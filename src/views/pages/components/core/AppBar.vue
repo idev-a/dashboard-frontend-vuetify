@@ -42,30 +42,30 @@
 
     data: () => ({
       items: [
-        {
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard',
-          name: 'Dashboard',
-          to: '/',
-        },
-        {
-          icon: 'mdi-account-multiple-plus',
-          text: 'Register',
-          name: 'Register',
-          to: '/pages/register',
-        },
-        {
-          icon: 'mdi-fingerprint',
-          text: 'Login',
-          name: 'Login',
-          to: '/pages/login',
-        },
-        {
-          icon: 'mdi-lock-open-outline',
-          text: 'Lock',
-          name: 'Lock',
-          to: '/pages/lock',
-        },
+        // {
+        //   icon: 'mdi-view-dashboard',
+        //   text: 'Dashboard',
+        //   name: 'Dashboard',
+        //   to: '/',
+        // },
+        // {
+        //   icon: 'mdi-account-multiple-plus',
+        //   text: 'Register',
+        //   name: 'Register',
+        //   to: '/pages/register',
+        // },
+        // {
+        //   icon: 'mdi-fingerprint',
+        //   text: 'Login',
+        //   name: 'Login',
+        //   to: '/pages/login',
+        // },
+        // {
+        //   icon: 'mdi-lock-open-outline',
+        //   text: 'Lock',
+        //   name: 'Lock',
+        //   to: '/pages/lock',
+        // },
       ],
       titles: {
         '/pages/lock': 'Lock Page',
