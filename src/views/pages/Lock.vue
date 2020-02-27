@@ -4,39 +4,35 @@
     class="fill-height"
     tag="section"
   >
-    <v-row justify="center">
-      <v-slide-y-transition appear>
-        <v-card
-          class="mt-6 mt-md-0"
-          light
-          max-width="100%"
-          width="250"
-        >
-          <v-card-text class="text-center">
-            <v-avatar
-              class="mt-n12 mb-6 elevation-12"
-              color="grey"
-              size="88"
-            >
-              <v-img src="https://demos.creative-tim.com/material-dashboard-pro/assets/img/faces/avatar.jpg" />
-            </v-avatar>
+    <v-row justify="center" no-gutters>
+      <v-col cols="12" lg="6" md="6">
+        <v-slide-y-transition appear>
+          <v-card
+            class="mt-6 mt-md-0"
+            light
+            max-width="100%"
+          >
+            <v-card-text class="text-center py-12">
+              <v-icon x-large color="blue darken-2">mdi-lock</v-icon>
+              <div class="display-2 font-weight-bold mt-3 mb-3 text--darken-2 blue--text">
+                Just to be safe, we logged you out.
+              </div>
 
-            <div class="display-2 font-weight-light mb-3 text--darken-2 grey--text">
-              Tania Andrew
-            </div>
+              <div class="display-1 font-weight-bold mt-3 mb-10 text--darken-2 dark--text">
+                Log back in to pick up where you left off.
+              </div>
 
-            <v-text-field
-              class="mb-8"
-              color="secondary"
-              label="Enter Password"
-            />
-
-            <pages-btn>
-              Unlock
-            </pages-btn>
-          </v-card-text>
-        </v-card>
-      </v-slide-y-transition>
+              <v-btn
+                class="ma-0"
+                color="success"
+                @click="gotoLogin"
+              >
+                Login Again
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-slide-y-transition>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -48,5 +44,16 @@
     components: {
       PagesBtn: () => import('./components/Btn'),
     },
+
+    mounted () {
+      // logout
+      localStorage.setItem('jwt', null)
+    },
+
+    methods: {
+      gotoLogin () {
+        this.$router.push({ name: 'Login' })
+      }
+    }
   }
 </script>

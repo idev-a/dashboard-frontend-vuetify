@@ -24,5 +24,18 @@
     data: () => ({
       expandOnHover: false,
     }),
+
+    watch: {
+      isIdle (val) {
+        if (val) {
+          this.$router.push({ name: 'Lock' })
+        }
+      }
+    },
+    computed: {
+      isIdle() {
+        return this.$store.state.idleVue.isIdle;
+      }
+    }
   }
 </script>
