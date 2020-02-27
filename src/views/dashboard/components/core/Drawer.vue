@@ -94,9 +94,9 @@
           to: '/',
         },
         {
-          group: '/users',
+          group: '/customers',
           icon: 'mdi-account-multiple',
-          title: 'Manage Users',
+          title: 'Manage Customers',
           is_admin: true,
           children: [
             {
@@ -121,6 +121,28 @@
             {
               title: 'Low Risks',
               to: 'low',
+            },
+          ]
+        },
+        {
+          group: '/applications',
+          icon: 'mdi-application',
+          title: 'Applications',
+          children: [
+            {
+              title: 'All',
+              to: 'index',
+            },
+          ]
+        },
+        {
+          group: '/users',
+          icon: 'mdi-account-group-outline',
+          title: 'Users',
+          children: [
+            {
+              title: 'All',
+              to: 'index',
             },
           ]
         },

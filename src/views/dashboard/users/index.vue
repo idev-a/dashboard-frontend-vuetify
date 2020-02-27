@@ -65,23 +65,23 @@
       headers: [
         {
           text: 'Question',
-          value: 'question',
+          value: 'Question',
         },
         {
           text: 'Answer',
-          value: 'answer',
+          value: 'Answer',
         },
         {
           text: 'Category',
-          value: 'category',
+          value: 'Category',
         },
         {
           text: 'Description',
-          value: 'description',
+          value: 'Description',
         },
         {
           text: 'Notes',
-          value: 'notes',
+          value: 'Notes',
         },
       ],
       risks: [
@@ -94,14 +94,9 @@
 
     methods: {
       fetchRisks () {
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/high/${companyId}`, {
+        axios(`${BASE_API}/api/risks/high`, {
             method: 'GET',
           })
             .then(function (res) {

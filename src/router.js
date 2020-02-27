@@ -76,9 +76,9 @@ let router = new Router({
           }
         },
         {
-          name: 'Users',
-          path: 'users/all',
-          component: () => import('@/views/dashboard/users/all'),
+          name: 'Customers',
+          path: 'customers/all',
+          component: () => import('@/views/dashboard/customers/all'),
           meta: {
             is_admin: true,
             requiresAuth: true
@@ -104,6 +104,22 @@ let router = new Router({
           name: 'Low Risks',
           path: 'risks/low',
           component: () => import('@/views/dashboard/risks/low'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Applications',
+          path: 'applications/index',
+          component: () => import('@/views/dashboard/applications/application'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Users',
+          path: 'users/index',
+          component: () => import('@/views/dashboard/users/index'),
           meta: {
             requiresAuth: true
           }

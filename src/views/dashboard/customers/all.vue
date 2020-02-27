@@ -15,34 +15,6 @@
         :search="search"
         :items-per-page="5"
       >
-     <!--    <template v-slot:item.status="props">
-          <v-edit-dialog
-            :return-value.sync="props.item.status"
-            @save="save(props.item)"
-            @open="open"
-          > {{ props.item.status }}
-            <template v-slot:input>
-              <v-select
-                v-model="props.item.status"
-                :items="userStatusList"
-                label="Status"
-                class="mt-2"
-                solo
-              ></v-select>
-              <v-row
-                class="mx-2 mb-2"
-              >
-                <v-btn
-                  color="success"
-                  @click="save(props.item)"
-                >
-                  Ok
-                </v-btn>
-              </v-row>
-            </template>
-          </v-edit-dialog>
-        </template> -->
-
         <template v-slot:top>
           <v-toolbar flat color="white">
             <v-toolbar-title>

@@ -44,14 +44,14 @@
             <v-text-field
               ref="email"
               v-model="form.email"
-              :rules="[rules.required, rules.email]"
-              :error-message="errorMessages"
+              :rules="[rules.required, rules.email, rules.validEmail]"
               :loading="loading"
               hide-details="auto"
               class="mb-2"
               color="secondary"
               label="Please enter your business email address."
               prepend-icon="mdi-email"
+              @keyup.enter="request"
               required
             />
 
@@ -68,13 +68,13 @@
               ref="code"
               v-model="code"
               :rules="[rules.required]"
-              :error-message="errorMessages"
               :loading="loading"
               hide-details="auto"
               class="mb-2"
               color="secondary"
               label="Your access code"
               prepend-icon="mdi-eye"
+              @keyup.enter="submit"
               required
             />
 
@@ -98,6 +98,7 @@
 
 <script>
   import { BASE_API } from '../../api'
+  import { DOMAIN_LIST } from '../../util'
   import axios from 'axios'
 
   export default {
@@ -115,7 +116,11 @@
         loading: false,
         formHasErrors: false,
         errorMessages: {
-          email: '',
+          email: {
+            required: false,
+            invalid: false,
+            business: false
+          },
         },
         snackbar: false,
         snackbar_message: '',
@@ -125,12 +130,21 @@
         form: Object.assign({}, defaultForm),
         code: '',
         rules: {
-          required: value => !!value || 'This field is required.',
-          counter: value => value.length <= 20 || 'Max 20 characters',
+          required: value => {
+            this.errorMessages.email.required = !!value
+            return this.errorMessages.email.required || 'This field is required.'
+          },
+          counter: value => value.length >= 6 || 'Min 6 characters',
           email: value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid e-mail.'
+            this.errorMessages.email.invalid = pattern.test(value)
+            return this.errorMessages.email.invalid || 'Invalid e-mail.'
           },
+          validEmail: value => {
+            const domain = value.split('@')[1]
+            this.errorMessages.email.business = value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase()) 
+            return this.errorMessages.email.business || 'Please enter a business email'
+          }
         },
         socials: [
           {
@@ -145,9 +159,6 @@
     },
 
     watch: {
-      email () {
-        this.errorMessages = ''
-      },
     },
 
     methods: {
@@ -165,13 +176,7 @@
         this.formHasErrors = false
       },
       request () {
-        this.formHasErrors = false
-
-        Object.keys(this.form).forEach(f => {
-          if (!this.form[f]) this.formHasErrors = true
-
-          this.$refs[f].validate(true)
-        })
+        this.formHasErrors = !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.errorMessages.email.business
 
         if (!this.formHasErrors) {
           this.loading = true

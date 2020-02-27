@@ -17,6 +17,9 @@
           value="+245"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All High Risks"
+          to="High Risks"
+          hover
+          ripple
         />
       </v-col>
 
@@ -32,6 +35,9 @@
           value="75.521"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Medium Risks"
+          to="Medium Risks"
+          hover
+          ripple
         />
       </v-col>
 
@@ -47,6 +53,9 @@
           value="34,245"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Low Risks"
+          to="Low Risks"
+          hover
+          ripple
         />
       </v-col>
 
@@ -62,6 +71,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          hover
+          ripple
         />
       </v-col>
 
@@ -77,6 +88,9 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Applications Data"
+          to="Applications"
+          hover
+          ripple
         />
       </v-col>
 
@@ -92,6 +106,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Email Settings, Pushing Attempts"
+          hover
+          ripple
         />
       </v-col>
 
@@ -107,6 +123,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Wifi, Internet"
+          hover
+          ripple
         />
       </v-col>
 
@@ -122,6 +140,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Doors, Alarms, Locks"
+          hover
+          ripple
         />
       </v-col>
 
@@ -137,6 +157,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          hover
+          ripple
         />
       </v-col>
 
@@ -152,6 +174,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          hover
+          ripple
         />
       </v-col>
 
@@ -167,6 +191,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          hover
+          ripple
         />
       </v-col>
 
@@ -182,6 +208,8 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          hover
+          ripple
         />
       </v-col>
 

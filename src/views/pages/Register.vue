@@ -40,7 +40,6 @@
           <div
             ref="form"
             class="text-center"
-            @submit.prevent="submit"
           >
           <!--   <v-text-field
               ref="username"
@@ -60,13 +59,13 @@
               ref="email"
               v-model="form.email"
               :rules="[rules.required, rules.email, rules.validEmail]"
-              :error-messages="errorMessages.email"
               :loading="loading"
               class="mb-5"
               hide-details="auto"
               color="secondary"
               label="Please enter your business email address."
               prepend-icon="mdi-email"
+              @keyup.enter="submit"
               required
             />
 
@@ -74,6 +73,7 @@
               :loading="loading"
               color="primary"
               class="display-1"
+              :diabled="formHasErrors"
               @click="submit"
             >
               Submit
@@ -115,10 +115,14 @@
           },
         ],
         loading: false,
-        formHasErrors: false,
         errorMessages: {
           username: '',
-          email: '',
+          email: {
+            required: false,
+            invalid: false,
+            business: false
+          },
+          password: ''
         },
         snackbar: false,
         timeout: 10000,
@@ -129,27 +133,33 @@
         defaultForm,
         form: Object.assign({}, defaultForm),
         rules: {
-          required: value => !!value || 'This field is required.',
+          required: value => {
+            this.errorMessages.email.required = !!value
+            return this.errorMessages.email.required || 'This field is required.'
+          },
           counter: value => value.length >= 6 || 'Min 6 characters',
           email: value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid e-mail.'
+            this.errorMessages.email.invalid = pattern.test(value)
+            return this.errorMessages.email.invalid || 'Invalid e-mail.'
           },
           validEmail: value => {
             const domain = value.split('@')[1]
-            return value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase()) || 'Please enter a business email'
+            this.errorMessages.email.business = value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase()) 
+            return this.errorMessages.email.business || 'Please enter a business email'
           }
         },
       }
     },
 
     computed: {
+      formHasErrors () {
+        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.errorMessages.email.business
+      }
     },
 
     watch: {
-      name () {
-        this.errorMessages = ''
-      },
+      
     },
 
     methods: {
@@ -169,7 +179,6 @@
         this.formHasErrors = false
       },
       async submit () {
-        if (!this.form.email) this.formHasErrors = true
         this.$refs.email.validate(true)
       
         if (!this.formHasErrors) {

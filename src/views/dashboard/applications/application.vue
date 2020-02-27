@@ -21,7 +21,7 @@
       <v-data-table
         :loading="loading"
         :headers="headers"
-        :items="risks"
+        :items="apps"
         :items-per-page="5"
         :search="search"
       >
@@ -39,7 +39,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'DashboardHighRisksTables',
+    name: 'DashboardApplications',
 
     data: () => ({
       loading: false,
@@ -64,27 +64,31 @@
       ],
       headers: [
         {
-          text: 'Question',
-          value: 'question',
+          text: 'Name',
+          value: 'application_name',
         },
         {
-          text: 'Answer',
-          value: 'answer',
+          text: 'Purpose',
+          value: 'purpose',
         },
         {
-          text: 'Category',
-          value: 'category',
+          text: 'Risk',
+          value: 'risk',
         },
         {
-          text: 'Description',
-          value: 'description',
+          text: 'SOC2',
+          value: 'soc2',
         },
         {
-          text: 'Notes',
-          value: 'notes',
+          text: 'Admin User',
+          value: 'admin_user',
+        },
+         {
+          text: 'No User',
+          value: 'no_user',
         },
       ],
-      risks: [
+      apps: [
       ],
     }),
 
@@ -101,11 +105,11 @@
         const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/high/${companyId}`, {
+        axios(`${BASE_API}/api/applications/all/${companyId}`, {
             method: 'GET',
           })
             .then(function (res) {
-              self.risks = res.data.risks
+              self.apps = res.data.apps
             })
             .catch(error => {
               console.log(error)

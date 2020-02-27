@@ -17,13 +17,14 @@
       <v-sheet
         v-else
         :class="{
-          'pa-7': !$slots.image
+          'pa-7': !$slots.image,
         }"
         :color="color"
         :max-height="icon ? 90 : undefined"
         :width="inline || icon ? 'auto' : '100%'"
         elevation="6"
-        class="text-start v-card--material__heading mb-n6"
+        class="btn text-start v-card--material__heading mb-n6"
+        @click="goTo(to)"
         dark
       >
         <slot
@@ -131,6 +132,14 @@
         type: String,
         default: '',
       },
+      to: {
+        type: String, 
+        default: '' 
+      },
+      hand: {
+        type: String, 
+        default: '' 
+      },
     },
 
     computed: {
@@ -146,6 +155,14 @@
       hasAltHeading () {
         return Boolean(this.$slots.heading || (this.title && this.icon))
       },
+    },
+
+    methods: {
+      goTo (name) {
+        if (name) {
+          this.$router.push({ name });
+        }
+      }
     },
   }
 </script>
