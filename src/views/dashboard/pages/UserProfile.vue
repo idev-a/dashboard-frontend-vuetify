@@ -47,6 +47,8 @@
                   <v-text-field
                     label="Email Address"
                     class="purple-input"
+                    :value="user.email"
+                    disabled
                   />
                 </v-col>
 
@@ -97,7 +99,13 @@
 
     data: () => ({
       loading: false,
-      
+      user: {}
     }),
+
+    mounted () {
+      try {
+        this.user = JSON.parse(localStorage.getItem('user'))
+      } catch(e){}
+    }
   }
 </script>
