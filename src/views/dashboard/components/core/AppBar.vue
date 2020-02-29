@@ -214,7 +214,7 @@
         'Another one',
       ],
       profile: [
-        { title: 'Profile', name: 'Profile' },
+        { title: 'Profile', name: 'My Profile' },
         { title: 'Settings', name: 'Settings' },
         { divider: true },
         { title: 'Log out', name: 'Login' },

@@ -165,6 +165,17 @@
             },
           ]
         },
+        {
+          group: '/company',
+          icon: 'mdi-information-variant',
+          title: 'Company',
+          children: [
+            {
+              title: 'All',
+              to: 'all',
+            },
+          ]
+        },
       ],
     }),
 
@@ -189,12 +200,8 @@
           title: this.$t('avatar'),
           children: [
             {
-              href: '',
+              to: 'pages/user',
               title: this.$t('my-profile'),
-            },
-            {
-              to: '',
-              title: this.$t('edit-profile'),
             },
             {
               to: '',

@@ -105,87 +105,87 @@
       :title="currentApp.application_name"
       class="px-5 py-3"
     >
-      <v-row no-gutters>
+      <v-row>
         <v-col
           cols="12"
-          md="4"
           sm="3"
+          md="3"
         >
-          <v-card>
-            <v-card-title class="headline">No of Users</v-card-title>
-            <v-card-subtitle>{{currentApp.no_users}}</v-card-subtitle>
+          <v-card shaped outlined class="my-0">
+            <v-card-title>No of Users</v-card-title>
+            <v-card-text>{{currentApp.no_users}}</v-card-text>
           </v-card>
         </v-col>
         <v-col
           cols="12"
-          md="4"
           sm="3"
+          md="3"
         >
-          <v-card>
-            <v-card-title class="headline">Price</v-card-title>
-            <v-card-subtitle>{{currentApp.price}}</v-card-subtitle>
+          <v-card shaped outlined class="my-0">
+            <v-card-title>Price</v-card-title>
+            <v-card-text>{{currentApp.price}}</v-card-text>
           </v-card>
         </v-col>
         <v-col
           cols="12"
-          md="4"
           sm="3"
+          md="3"
         >
-          <v-card>
-            <v-card-title class="headline">SoC2</v-card-title>
-            <v-card-subtitle>{{currentApp.soc2}}</v-card-subtitle>
+          <v-card shaped outlined class="my-0">
+            <v-card-title>SoC2</v-card-title>
+            <v-card-text>{{currentApp.soc2}}</v-card-text>
           </v-card>
         </v-col>
         <v-col
           cols="12"
-          md="4"
           sm="3"
+          md="3"
         >
-          <v-card>
-            <v-card-title class="headline">Other</v-card-title>
-            <v-card-subtitle>{{currentApp.other}}</v-card-subtitle>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col
-          cols="12"
-          md="4"
-          sm="3"
-        >
-          <v-card>
-            <v-card-title class="headline">Application Risk</v-card-title>
-            <v-card-subtitle>{{currentApp.risk}}</v-card-subtitle>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          md="4"
-          sm="3"
-        >
-          <v-card>
-            <v-card-title class="headline">Login URL</v-card-title>
-            <v-card-subtitle>{{currentApp.login_url}}</v-card-subtitle>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          md="4"
-          sm="3"
-        >
-          <v-card>
-            <v-card-title class="headline">Owner</v-card-title>
-            <v-card-subtitle>{{currentApp.Owner}}</v-card-subtitle>
+          <v-card shaped outlined class="my-0">
+            <v-card-title>Other</v-card-title>
+            <v-card-text>{{currentApp.other}}</v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <v-row no-gutters>
+      <v-row>
         <v-col
           cols="12"
+          md="3"
+          sm="3"
         >
-          <v-card>
-            <v-card-title class="headline">Purpose</v-card-title>
-            <v-card-subtitle>{{currentApp.purpose}}</v-card-subtitle>
+          <v-card  shaped outlined class="my-0">
+            <v-card-title>Application Risk</v-card-title>
+            <v-card-text>{{currentApp.risk}}</v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="3"
+          sm="3"
+        >
+          <v-card  shaped outlined class="my-0">
+            <v-card-title>Login URL</v-card-title>
+            <v-card-text>{{currentApp.login_url}}</v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="3"
+          sm="3"
+        >
+          <v-card  shaped outlined class="my-0">
+            <v-card-title>Owner</v-card-title>
+            <v-card-text>{{currentApp.Owner}}</v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="6"
+        >
+          <v-card shaped outlined class="my-0">
+            <v-card-title>Purpose</v-card-title>
+            <v-card-text>{{currentApp.purpose}}</v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -283,7 +283,6 @@
         this.currentApp = item
         this.details = true
         this.user = false
-
       },
       showUsers (item) {
         this.currentApp = item

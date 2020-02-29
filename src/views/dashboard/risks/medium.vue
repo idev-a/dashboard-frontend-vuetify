@@ -76,6 +76,7 @@
     }),
 
     mounted () {
+      this.fetchRisks()
     },
 
     methods: {

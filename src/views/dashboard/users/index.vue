@@ -65,11 +65,11 @@
       headers: [
         {
           text: 'Full Name',
-          value: 'Fullname',
+          value: 'firstname_lastname',
         },
         {
           text: 'Email',
-          value: 'Email',
+          value: 'email',
         },
         {
           text: 'Job Title',
@@ -81,11 +81,11 @@
     }),
 
     mounted () {
-      this.fetchRisks()
+      this.fetchUsers()
     },
 
     methods: {
-      fetchRisks () {
+      fetchUsers () {
         let user = {}
         try {
           user = JSON.parse(localStorage.getItem('user'))

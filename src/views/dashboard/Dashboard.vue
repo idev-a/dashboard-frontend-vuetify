@@ -160,6 +160,7 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          to="Company Information"
           hover
           ripple
         />

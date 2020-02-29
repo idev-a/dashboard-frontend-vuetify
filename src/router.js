@@ -60,7 +60,7 @@ let router = new Router({
         },
         // Pages
         {
-          name: 'User Profile',
+          name: 'My Profile',
           path: 'pages/user',
           component: () => import('@/views/dashboard/pages/UserProfile'),
           meta: {
@@ -144,6 +144,14 @@ let router = new Router({
           name: 'Physical Security',
           path: 'security/physical',
           component: () => import('@/views/dashboard/security/physical'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+         {
+          name: 'Company Information',
+          path: 'company/all',
+          component: () => import('@/views/dashboard/company/all'),
           meta: {
             requiresAuth: true
           }
