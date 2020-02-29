@@ -106,6 +106,7 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Email Settings, Pushing Attempts"
+          to="Email Security"
           hover
           ripple
         />
@@ -123,6 +124,7 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Wifi, Internet"
+          to="Network Security"
           hover
           ripple
         />
@@ -140,6 +142,7 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Doors, Alarms, Locks"
+          to="Physical Security"
           hover
           ripple
         />
@@ -174,6 +177,7 @@
           value="3"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          to="Users"
           hover
           ripple
         />

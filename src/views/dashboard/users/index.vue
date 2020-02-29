@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="high-risks"
+    id="company-users"
     fluid
     tag="section"
   >
@@ -21,7 +21,7 @@
       <v-data-table
         :loading="loading"
         :headers="headers"
-        :items="risks"
+        :items="users"
         :items-per-page="5"
         :search="search"
       >
@@ -39,7 +39,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'DashboardHighRisksTables',
+    name: 'DashboardCompanyUsers',
 
     data: () => ({
       loading: false,
@@ -64,27 +64,19 @@
       ],
       headers: [
         {
-          text: 'Question',
-          value: 'Question',
+          text: 'Full Name',
+          value: 'Fullname',
         },
         {
-          text: 'Answer',
-          value: 'Answer',
+          text: 'Email',
+          value: 'Email',
         },
         {
-          text: 'Category',
-          value: 'Category',
-        },
-        {
-          text: 'Description',
-          value: 'Description',
-        },
-        {
-          text: 'Notes',
-          value: 'Notes',
+          text: 'Job Title',
+          value: 'job_title',
         },
       ],
-      risks: [
+      users: [
       ],
     }),
 
@@ -94,13 +86,18 @@
 
     methods: {
       fetchRisks () {
+        let user = {}
+        try {
+          user = JSON.parse(localStorage.getItem('user'))
+        } catch(e) {}
+        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/high`, {
+        axios(`${BASE_API}/api/users/${companyId}/all`, {
             method: 'GET',
           })
             .then(function (res) {
-              self.risks = res.data.risks
+              self.users = res.data.users
             })
             .catch(error => {
               console.log(error)

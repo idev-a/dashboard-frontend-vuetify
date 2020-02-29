@@ -124,6 +124,30 @@ let router = new Router({
             requiresAuth: true
           }
         },
+        {
+          name: 'Email Security',
+          path: 'security/email',
+          component: () => import('@/views/dashboard/security/email'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Network Security',
+          path: 'security/network',
+          component: () => import('@/views/dashboard/security/network'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Physical Security',
+          path: 'security/physical',
+          component: () => import('@/views/dashboard/security/physical'),
+          meta: {
+            requiresAuth: true
+          }
+        },
       ],
     },
     {
@@ -145,7 +169,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAuth)) {
-        if (localStorage.getItem('jwt') == null) {
+        if (localStorage.getItem('jwt') == 'null') {
             next({
                 path: '/pages/login',
                 params: { nextUrl: to.fullPath }

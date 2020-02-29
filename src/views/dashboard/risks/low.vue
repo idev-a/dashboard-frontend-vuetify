@@ -80,9 +80,14 @@
 
     methods: {
       fetchRisks () {
+        let user = {}
+        try {
+          user = JSON.parse(localStorage.getItem('user'))
+        } catch(e) {}
+        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/all`, {
+        axios(`${BASE_API}/api/risks/low/${companyId}`, {
             method: 'GET',
           })
             .then(function (res) {

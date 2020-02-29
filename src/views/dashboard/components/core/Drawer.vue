@@ -146,6 +146,25 @@
             },
           ]
         },
+        {
+          group: '/security',
+          icon: 'mdi-security',
+          title: 'Security',
+          children: [
+            {
+              title: 'Email Security',
+              to: 'email',
+            },
+            {
+              title: 'Network Security',
+              to: 'network',
+            },
+            {
+              title: 'Physical Security',
+              to: 'physical',
+            },
+          ]
+        },
       ],
     }),
 

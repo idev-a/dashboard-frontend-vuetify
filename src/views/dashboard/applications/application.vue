@@ -26,7 +26,7 @@
         :loading="loading"
         :headers="appHeaders"
         :items="apps"
-        :items-per-page="10"
+        :items-per-page="5"
         item-key="id"
         :search="search"
       >
@@ -44,6 +44,19 @@
             </template>
             <span>Show Users</span>
           </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn 
+                text 
+                icon 
+                v-on="on"
+                @click="showDetails(item)"
+              >
+                <v-icon>mdi-application</v-icon>
+              </v-btn>
+            </template>
+            <span>Show Details</span>
+          </v-tooltip>
         </template>
       </v-data-table>
     </base-material-card>
@@ -52,7 +65,7 @@
 
     <!-- Users for the each application -->
     <base-material-card
-      v-if="currentApp"
+      v-if="user"
       color="success"
       inline
       :title="usersTitle"
@@ -82,6 +95,101 @@
         </template>
       </v-data-table>
     </base-material-card>
+
+    <!-- Application detail -->
+    <base-material-card
+      v-if="details"
+      color="success"
+      inline
+      icon="mdi-application"
+      :title="currentApp.application_name"
+      class="px-5 py-3"
+    >
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">No of Users</v-card-title>
+            <v-card-subtitle>{{currentApp.no_users}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">Price</v-card-title>
+            <v-card-subtitle>{{currentApp.price}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">SoC2</v-card-title>
+            <v-card-subtitle>{{currentApp.soc2}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">Other</v-card-title>
+            <v-card-subtitle>{{currentApp.other}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">Application Risk</v-card-title>
+            <v-card-subtitle>{{currentApp.risk}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">Login URL</v-card-title>
+            <v-card-subtitle>{{currentApp.login_url}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          sm="3"
+        >
+          <v-card>
+            <v-card-title class="headline">Owner</v-card-title>
+            <v-card-subtitle>{{currentApp.Owner}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+        >
+          <v-card>
+            <v-card-title class="headline">Purpose</v-card-title>
+            <v-card-subtitle>{{currentApp.purpose}}</v-card-subtitle>
+          </v-card>
+        </v-col>
+      </v-row>
+    </base-material-card>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn text @click="snack = false">Close</v-btn>
@@ -104,6 +212,8 @@
       snackColor: '',
       snackText: '',
       currentApp: '',
+      user: false,
+      details: false,
       pagination: {},
       appHeaders: [
         {
@@ -161,7 +271,7 @@
     computed: {
       usersTitle () {
         if (this.currentApp) {
-          return `Users (${this.currentApp})`
+          return `Users (${this.currentApp.application_name})`
         } else {
           return 'Users'
         }
@@ -169,8 +279,16 @@
     },
 
     methods: {
+      showDetails (item) {
+        this.currentApp = item
+        this.details = true
+        this.user = false
+
+      },
       showUsers (item) {
-        this.currentApp = item.application_name
+        this.currentApp = item
+        this.user = true
+        this.details = false
         let user = {}
         try {
           user = JSON.parse(localStorage.getItem('user'))
