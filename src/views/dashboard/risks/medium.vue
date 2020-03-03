@@ -58,18 +58,6 @@
           text: 'Answer',
           value: 'Answer',
         },
-        {
-          text: 'Category',
-          value: 'Category',
-        },
-        {
-          text: 'Description',
-          value: 'Description',
-        },
-        {
-          text: 'Notes',
-          value: 'Notes',
-        },
       ],
       risks: [
       ],

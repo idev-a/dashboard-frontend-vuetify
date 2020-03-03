@@ -29,6 +29,9 @@
         :items-per-page="5"
         item-key="id"
         :search="search"
+        single-expand
+        show-expand
+        :expanded.sync="expanded"
       >
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -58,138 +61,153 @@
             <span>Show Details</span>
           </v-tooltip>
         </template>
-      </v-data-table>
-    </base-material-card>
+        <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+          <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
+          <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
+        </template>
+        <template v-slot:expanded-item="{ headers }">
+          <td :colspan="headers.length">
+            <!-- Users for the each application -->
+            <v-card
+              v-if="user"
+              class="px-5 py-3"
+            >
+              <v-card-title
+              >
+                <span
+                  class="font-weight-bold"
+                >
+                  {{usersTitle}}
+                </span>
+              </v-card-title>
+              <v-card-title>
+                <v-text-field
+                  v-model="searchUser"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  class="mb-3"
+                  single-line
+                  hide-details
+                ></v-text-field>
+                <v-spacer></v-spacer>
+              </v-card-title>
+              <v-data-table
+                :loading="loading"
+                :headers="userHeaders"
+                :items="users"
+                :items-per-page="5"
+                item-key="id"
+                :search="searchUser"
+              >
+                <template v-slot:item.has_2fa="{ item }">
+                  <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
+                </template>
+              </v-data-table>
+            </v-card>
 
-    <v-spacer class="mt-12"></v-spacer>
-
-    <!-- Users for the each application -->
-    <base-material-card
-      v-if="user"
-      color="success"
-      inline
-      :title="usersTitle"
-      class="px-5 py-3"
-    >
-      <v-card-title>
-        <v-text-field
-          v-model="searchUser"
-          append-icon="mdi-magnify"
-          label="Search"
-          class="mb-3"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-spacer></v-spacer>
-      </v-card-title>
-      <v-data-table
-        :loading="loading"
-        :headers="userHeaders"
-        :items="users"
-        :items-per-page="5"
-        item-key="id"
-        :search="searchUser"
-      >
-        <template v-slot:item.has_2fa="{ item }">
-          <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
+            <!-- Application detail -->
+            <v-card
+              v-if="details"
+              class="px-5 py-3"
+            >
+               <v-card-title
+              >
+                <span
+                  class="font-weight-bold"
+                >
+                  {{currentApp.application_name}}
+                </span>
+              </v-card-title>
+              <v-row>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  md="3"
+                >
+                  <v-card shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">No of Users</div>
+                    <span>{{currentApp.no_users}}</span>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  md="3"
+                >
+                  <v-card shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">Price</div>
+                    <span>{{currentApp.price}}</span>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  md="3"
+                >
+                  <v-card shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">SoC2</div>
+                    <span>{{currentApp.soc2}}</span>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  md="3"
+                >
+                  <v-card shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">Other</div>
+                    <span>{{currentApp.other}}</span>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="12"
+                  md="3"
+                  sm="3"
+                >
+                  <v-card  shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">Application Risk</div>
+                    <span>{{currentApp.risk}}</span>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="3"
+                  sm="3"
+                >
+                  <v-card  shaped outlined class="my-0">
+                    <div class="display-2 font-weight-light">Login URL</div>
+                    <span>{{currentApp.login_url}}</span>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="3"
+                  sm="3"
+                >
+                  <v-card  shaped outlined class="my-0 pa-2">
+                    <div class="display-2 font-weight-light">Owner</div>
+                    <span>{{currentApp.Owner}}</span>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="6"
+                >
+                  <v-card shaped outlined class="my-0 pa-2">
+                    <div class="display-2 font-weight-light">Purpose</div>
+                    <span>{{currentApp.purpose}}</span>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+          </td>
         </template>
       </v-data-table>
     </base-material-card>
 
-    <!-- Application detail -->
-    <base-material-card
-      v-if="details"
-      color="success"
-      inline
-      icon="mdi-application"
-      :title="currentApp.application_name"
-      class="px-5 py-3"
-    >
-      <v-row>
-        <v-col
-          cols="12"
-          sm="3"
-          md="3"
-        >
-          <v-card shaped outlined class="my-0">
-            <v-card-title>No of Users</v-card-title>
-            <v-card-text>{{currentApp.no_users}}</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          sm="3"
-          md="3"
-        >
-          <v-card shaped outlined class="my-0">
-            <v-card-title>Price</v-card-title>
-            <v-card-text>{{currentApp.price}}</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          sm="3"
-          md="3"
-        >
-          <v-card shaped outlined class="my-0">
-            <v-card-title>SoC2</v-card-title>
-            <v-card-text>{{currentApp.soc2}}</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          sm="3"
-          md="3"
-        >
-          <v-card shaped outlined class="my-0">
-            <v-card-title>Other</v-card-title>
-            <v-card-text>{{currentApp.other}}</v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col
-          cols="12"
-          md="3"
-          sm="3"
-        >
-          <v-card  shaped outlined class="my-0">
-            <v-card-title>Application Risk</v-card-title>
-            <v-card-text>{{currentApp.risk}}</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          md="3"
-          sm="3"
-        >
-          <v-card  shaped outlined class="my-0">
-            <v-card-title>Login URL</v-card-title>
-            <v-card-text>{{currentApp.login_url}}</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col
-          cols="12"
-          md="3"
-          sm="3"
-        >
-          <v-card  shaped outlined class="my-0">
-            <v-card-title>Owner</v-card-title>
-            <v-card-text>{{currentApp.Owner}}</v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col
-          cols="6"
-        >
-          <v-card shaped outlined class="my-0">
-            <v-card-title>Purpose</v-card-title>
-            <v-card-text>{{currentApp.purpose}}</v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </base-material-card>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn text @click="snack = false">Close</v-btn>
@@ -237,8 +255,8 @@
           value: 'admin_user',
         },
          {
-          text: 'No User',
-          value: 'no_user',
+          text: 'No Users',
+          value: 'no_users',
         },
         { text: 'Actions', value: 'action', sortable: false },
       ],
@@ -262,6 +280,7 @@
         },
       ],
       users: [],
+      expanded: [],
     }),
 
     mounted () {
@@ -283,6 +302,8 @@
         this.currentApp = item
         this.details = true
         this.user = false
+        this.expanded = []
+        this.expanded.push(item)
       },
       showUsers (item) {
         this.currentApp = item
@@ -295,11 +316,13 @@
         const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
+        self.expanded = []
         axios(`${BASE_API}/api/users/${item.application_name}/${companyId}`, {
             method: 'GET',
           })
             .then(function (res) {
               self.users = res.data.users
+              self.expanded.push(item)
             })
             .catch(error => {
               console.log(error)

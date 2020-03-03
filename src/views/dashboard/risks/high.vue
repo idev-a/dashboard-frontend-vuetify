@@ -71,18 +71,6 @@
           text: 'Answer',
           value: 'answer',
         },
-        {
-          text: 'Category',
-          value: 'category',
-        },
-        {
-          text: 'Description',
-          value: 'description',
-        },
-        {
-          text: 'Notes',
-          value: 'notes',
-        },
       ],
       risks: [
       ],
