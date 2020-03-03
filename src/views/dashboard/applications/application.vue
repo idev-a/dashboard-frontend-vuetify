@@ -124,7 +124,7 @@
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0">
+                  <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">No of Users</div>
                     <span>{{currentApp.no_users}}</span>
                   </v-card>
@@ -134,7 +134,7 @@
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0">
+                  <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Price</div>
                     <span>{{currentApp.price}}</span>
                   </v-card>
@@ -144,7 +144,7 @@
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0">
+                  <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">SoC2</div>
                     <span>{{currentApp.soc2}}</span>
                   </v-card>
@@ -154,7 +154,7 @@
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0">
+                  <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Other</div>
                     <span>{{currentApp.other}}</span>
                   </v-card>
@@ -166,7 +166,7 @@
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0">
+                  <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Application Risk</div>
                     <span>{{currentApp.risk}}</span>
                   </v-card>
@@ -176,7 +176,7 @@
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0">
+                  <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Login URL</div>
                     <span>{{currentApp.login_url}}</span>
                   </v-card>
