@@ -28,7 +28,34 @@
     watch: {
       isIdle (val) {
         if (val) {
-          this.$router.push({ name: 'Lock' })
+          let user = {}
+          try {
+            user = JSON.parse(localStorage.getItem('user'))
+          } catch(e) {}
+          const self = this
+          self.loading = true
+          const data = {
+            id: user.id,
+          }
+          axios({
+            url:`${BASE_API}/api/users/login/keep`,
+            method: 'POST',
+            data,
+            withCredentials: false,
+            crossdomain: true,
+          })
+            .then(function (res) {
+              self.loading = false
+              if (res.data.status === 'ok') {
+                if (res.data.is_required) {
+                  this.$router.push({ name: 'Lock' })
+                }
+              } 
+            })
+            .catch(error => {
+              console.log(error)
+              self.loading = false
+            })
         }
       }
     },

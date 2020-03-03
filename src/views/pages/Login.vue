@@ -78,8 +78,14 @@
               required
             />
 
+            <v-checkbox
+              v-model="keepMeLogin"
+              label="Keep me login"
+              required
+            ></v-checkbox>
+
             <v-btn
-              class="ma-1 mt-4"
+              class="ma-1 mt-1"
               color="primary"
               :loading="loading"
               @click="submit"
@@ -129,6 +135,7 @@
         defaultForm,
         form: Object.assign({}, defaultForm),
         code: '',
+        keepMeLogin: false,
         rules: {
           required: value => {
             this.errorMessages.email.required = !!value
@@ -219,6 +226,7 @@
           const self = this
           const data = {
             code: this.code,
+            keep: this.keepMeLogin,
           }
           axios({
             url:`${BASE_API}/api/users/login/verify`,

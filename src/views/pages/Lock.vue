@@ -38,8 +38,15 @@
 </template>
 
 <script>
+  import { BASE_API } from '../../api'
+  import axios from 'axios'
+
   export default {
     name: 'PagesLock',
+
+    data: ()  => ({
+      loading: false,
+    }),
 
     components: {
       PagesBtn: () => import('./components/Btn'),
@@ -48,6 +55,8 @@
     mounted () {
       // logout
       localStorage.setItem('jwt', null)
+      
+      
     },
 
     methods: {

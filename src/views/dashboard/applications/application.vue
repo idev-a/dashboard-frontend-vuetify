@@ -309,6 +309,8 @@
         this.currentApp = item
         this.user = true
         this.details = false
+        self.expanded.push(item)
+        
         let user = {}
         try {
           user = JSON.parse(localStorage.getItem('user'))
@@ -322,7 +324,6 @@
           })
             .then(function (res) {
               self.users = res.data.users
-              self.expanded.push(item)
             })
             .catch(error => {
               console.log(error)
