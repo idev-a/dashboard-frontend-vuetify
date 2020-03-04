@@ -11,6 +11,9 @@
 </template>
 
 <script>
+  import { BASE_API } from '../../api'
+  import axios from 'axios'
+  
   export default {
     name: 'DashboardIndex',
 
