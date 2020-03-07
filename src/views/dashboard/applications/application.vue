@@ -33,6 +33,11 @@
         show-expand
         :expanded.sync="expanded"
       >
+        <template v-slot:item.risk="{ item }">
+          <v-chip :color="levelColor(item.risk)" dark>
+            <div class="subtitle-2">{{ item.risk ? item.risk : 'low' }}</div>
+          </v-chip>
+        </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -99,6 +104,9 @@
                 item-key="id"
                 :search="searchUser"
               >
+                <template v-slot:item.email="{ item }">
+                  <span v-html="beautifyEmail(item.email)"></span>
+                </template>
                 <template v-slot:item.has_2fa="{ item }">
                   <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
                 </template>
@@ -168,7 +176,7 @@
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Application Risk</div>
-                    <span>{{currentApp.risk}}</span>
+                    <v-chip :color="levelColor(currentApp.risk_level)" dark><div class="subtitle-2">{{ currentApp.risk_level ? currentApp.risk_level : 'low' }}</div></v-chip>
                   </v-card>
                 </v-col>
                 <v-col
@@ -178,7 +186,7 @@
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Login URL</div>
-                    <span>{{currentApp.login_url}}</span>
+                    <a :href="currentApp.login_url" target="_blank">{{currentApp.login_url}}</a>
                   </v-card>
                 </v-col>
                 <v-col
@@ -217,6 +225,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
+  import { validEmail } from '../../../util'
   import axios from 'axios'
 
   export default {
@@ -246,18 +255,18 @@
           text: 'Risk',
           value: 'risk',
         },
-        {
-          text: 'SOC2',
-          value: 'soc2',
-        },
+        // {
+        //   text: 'SOC2',
+        //   value: 'soc2',
+        // },
         {
           text: 'Admin User',
           value: 'admin_user',
         },
-         {
-          text: 'No Users',
-          value: 'no_users',
-        },
+        //  {
+        //   text: 'No Users',
+        //   value: 'no_users',
+        // },
         { text: 'Actions', value: 'action', sortable: false },
       ],
       apps: [],
@@ -298,6 +307,29 @@
     },
 
     methods: {
+      beautifyEmail (email) {
+        if (validEmail(email)) {
+          return `<a href="mailto:${email}">${email}</a>`
+        } else {
+          return email
+        }
+      },
+      levelColor (level) {
+        let color = 'yellow darken-1'
+        level = level ? level.toLowerCase() : 'low'
+        switch (level) {
+          case 'high':
+            color = 'red darken-4'
+            break
+          case 'medium':
+            color = 'red lighten-1'
+            break
+          case 'low':
+            color = 'yellow darken-1'
+            break
+        }
+        return color
+      },
       showDetails (item) {
         this.currentApp = item
         this.details = true
@@ -310,7 +342,7 @@
         this.user = true
         this.details = false
         this.expanded = []
-        self.expanded.push(item)
+        this.expanded.push(item)
         
         let user = {}
         try {

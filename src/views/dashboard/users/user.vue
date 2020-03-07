@@ -30,6 +30,9 @@
         :expanded.sync="expanded"
         @click:row="showDetails"
       >
+        <template v-slot:item.email="{ item }">
+          <span v-html="beautifyEmail(item.email)"></span>
+        </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -65,7 +68,7 @@
                 >
                   <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Email</div>
-                    <span>{{currentUser.email}}</span>
+                    <span v-html="beautifyEmail(currentUser.email)"></span>
                   </v-card>
                 </v-col>
                 <v-col
@@ -96,7 +99,7 @@
                   <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Active</div>
                     <span>{{currentUser.other}}</span>
-                    <v-chip :color="currentUser.email_not_active == 1 ? 'success' : 'default'" dark>{{ currentUser.email_not_active == 1 ? 'Yes' : 'No' }}</v-chip>
+                    <v-chip :color="currentUser.email_not_active == 1 ? 'success' : 'default'" dark><div class="subtitle-2">{{ currentUser.email_not_active == 1 ? 'Yes' : 'No' }}</div></v-chip>
                   </v-card>
                 </v-col>
               </v-row>
@@ -108,7 +111,7 @@
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Individual Risk</div>
-                    <v-chip :color="levelColor(currentUser.risk_level)" dark><div class="display-1 text-center">{{ currentUser.risk_level ? currentUser.risk_level : 'low' }}</div></v-chip>
+                    <v-chip :color="levelColor(currentUser.risk_level)" dark><div class="subtitle-2">{{ currentUser.risk_level ? currentUser.risk_level : 'low' }}</div></v-chip>
                   </v-card>
                 </v-col>
                 <v-col
@@ -178,6 +181,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
+  import { validEmail } from '../../../util'
   import axios from 'axios'
 
   export default {
@@ -232,6 +236,13 @@
     },
 
     methods: {
+      beautifyEmail (email) {
+        if (validEmail(email)) {
+          return `<a href="mailto:${email}">${email}</a>`
+        } else {
+          return email
+        }
+      },
       levelColor (level) {
         let color = 'yellow darken-1'
         level = level ? level.toLowerCase() : 'low'

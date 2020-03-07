@@ -42,8 +42,8 @@
         return this.srcs[this.$route.path]
       },
       styles () {
-        const paddingTop = this.$vuetify.breakpoint.mdAndUp ? 175 : 100
-        const paddingBottom = this.$vuetify.breakpoint.mdAndUp ? 175 : 150
+        const paddingTop = this.$vuetify.breakpoint.mdAndUp ? 75 : 10
+        const paddingBottom = this.$vuetify.breakpoint.mdAndUp ? 75 : 50
         return {
           padding: `${paddingTop}px 0 ${paddingBottom}px 0`,
         }
