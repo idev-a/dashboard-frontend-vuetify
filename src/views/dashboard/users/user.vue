@@ -88,7 +88,7 @@
                 >
                   <v-card shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Previliged</div>
-                    <span>{{currentUser.privileged_account}}</span>
+                    <v-chip :color="currentUser.privileged_account == 1 ? 'success' : 'default'" dark><div class="subtitle-2">{{ currentUser.privileged_account == 1 ? 'Yes' : 'No' }}</div></v-chip>
                   </v-card>
                 </v-col>
                 <v-col
@@ -140,26 +140,26 @@
                   sm="3"
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">observations</div>
-                    <span>{{currentUser.observations}}</span>
+                    <div class="display-2 font-weight-light">Job Title</div>
+                    <span>{{currentUser.job_title}}</span>
                   </v-card>
                 </v-col>
               </v-row>
                <v-row>
                 <v-col
                   cols="12"
-                  md="3"
-                  sm="3"
+                  md="6"
+                  sm="6"
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Job Title</div>
-                    <span>{{currentUser.job_title}}</span>
+                    <div class="display-2 font-weight-light">observations</div>
+                    <span>{{currentUser.observations}}</span>
                   </v-card>
                 </v-col>
                 <v-col
                   cols="12"
-                  md="3"
-                  sm="3"
+                  md="6"
+                  sm="6"
                 >
                   <v-card  shaped outlined class="my-0 pa-2">
                     <div class="display-2 font-weight-light">Notes</div>
