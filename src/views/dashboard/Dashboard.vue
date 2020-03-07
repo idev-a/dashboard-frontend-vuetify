@@ -11,10 +11,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red darken-4"
           icon="mdi-alert-outline"
           title="High Risks"
-          value="+245"
+          :value="smallCards.high_risk"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All High Risks"
           to="High Risks"
@@ -29,10 +30,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red lighten-1"
           icon="mdi-alert-outline"
           title="Medium Risks"
-          value="75.521"
+          :value="smallCards.medium_risk"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Medium Risks"
           to="Medium Risks"
@@ -47,10 +49,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="yellow darken-1"
           icon="mdi-alert-outline"
           title="Low Risks"
-          value="34,245"
+          :value="smallCards.low_risk"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Low Risks"
           to="Low Risks"
@@ -65,10 +68,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="orange"
           icon="mdi-format-list-bulleted"
           title="Other"
-          value="3"
+          :value="smallCards.other"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
           hover
@@ -82,10 +86,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="success"
           icon="mdi-application"
           title="Applications"
-          value="3"
+          :value="smallCards.applications"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Applications Data"
           to="Applications"
@@ -100,10 +105,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red lighten-1"
           icon="mdi-security"
           title="Email Security"
-          value="3"
+          :value="smallCards.email_security"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Email Settings, Pushing Attempts"
           to="Email Security"
@@ -118,10 +124,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red lighten-1"
           icon="mdi-security"
           title="Network Security"
-          value="3"
+          :value="smallCards.network_security"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Wifi, Internet"
           to="Network Security"
@@ -136,10 +143,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red lighten-1"
           icon="mdi-security"
           title="Physial Security"
-          value="3"
+          :value="smallCards.physical_security"
           sub-icon="mdi-chevron-triple-right"
           sub-text="Doors, Alarms, Locks"
           to="Physical Security"
@@ -154,10 +162,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="info"
           icon="mdi-information-variant"
           title="Company Info"
-          value="3"
+          :value="smallCards.company_info"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
           to="Company Information"
@@ -172,10 +181,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="secondary"
           icon="mdi-account-group-outline"
           title="Users"
-          value="3"
+          :value="smallCards.users"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
           to="Users"
@@ -190,10 +200,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="info"
           icon="mdi-web"
           title="Website"
-          value="3"
+          :value="smallCards.website"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
           hover
@@ -207,10 +218,11 @@
         lg="3"
       >
         <base-material-stats-card
+          :loading="loading"
           color="red darken-1"
           icon="mdi-alert-rhombus-outline"
           title="Alerts"
-          value="3"
+          :value="smallCards.alerts"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
           hover
@@ -773,11 +785,15 @@
 </template>
 
 <script>
+  import { BASE_API } from '../../api'
+  import axios from 'axios'
+
   export default {
     name: 'DashboardDashboard',
 
     data () {
       return {
+        loading: false,
         countryData: {
           US: 2920,
           DE: 1390,
@@ -965,6 +981,20 @@
           1: false,
           2: false,
         },
+        smallCards: {
+          high_risk: '0',
+          medium_risk: '0',
+          low_risk: '0',
+          other: '0',
+          applications: '0',
+          email_security: '0',
+          network_security: '0',
+          physical_security: '0',
+          company_info: '0',
+          users: '0',
+          website: '0',
+          alerts: '0',
+        }
       }
     },
 
@@ -974,7 +1004,32 @@
       },
     },
 
+    mounted () {
+      this.fetchAllCardData()
+    },
+
     methods: {
+      fetchAllCardData () {
+        let user = {}
+        try {
+          user = JSON.parse(localStorage.getItem('user'))
+        } catch(e) {}
+        const companyId = user.email.split('@')[1];
+        const self = this
+        self.loading = true
+        axios(`${BASE_API}/api/dashboard/${companyId}/all`, {
+            method: 'GET',
+          })
+            .then(function (res) {
+              self.smallCards = res.data
+            })
+            .catch(error => {
+              console.log(error)
+            })
+            .finally(() => {
+              self.loading = false
+            })
+      },
       complete (index) {
         this.list[index] = !this.list[index]
       },

@@ -119,7 +119,7 @@ let router = new Router({
         {
           name: 'Users',
           path: 'users/index',
-          component: () => import('@/views/dashboard/users/index'),
+          component: () => import('@/views/dashboard/users/user'),
           meta: {
             requiresAuth: true
           }
@@ -177,7 +177,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAuth)) {
-        if (localStorage.getItem('jwt') == 'null') {
+        if (localStorage.getItem('jwt') == null || localStorage.getItem('jwt') == 'null') {
             next({
                 path: '/pages/login',
                 params: { nextUrl: to.fullPath }

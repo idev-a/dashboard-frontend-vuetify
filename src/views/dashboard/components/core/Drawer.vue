@@ -30,14 +30,14 @@
 
     <v-divider class="mb-1" />
 
-    <v-list
+<!--     <v-list
       dense
       nav
     >
       <base-item-group :item="profile" />
     </v-list>
 
-    <v-divider class="mb-2" />
+    <v-divider class="mb-2" /> -->
 
     <v-list
       expand

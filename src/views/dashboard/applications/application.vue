@@ -70,7 +70,7 @@
             <!-- Users for the each application -->
             <v-card
               v-if="user"
-              class="px-5 py-3"
+              class="px-5 py-3 my-1"
             >
               <v-card-title
               >
@@ -108,7 +108,7 @@
             <!-- Application detail -->
             <v-card
               v-if="details"
-              class="px-5 py-3"
+              class="px-5 py-1"
             >
                <v-card-title
               >
@@ -309,6 +309,7 @@
         this.currentApp = item
         this.user = true
         this.details = false
+        this.expanded = []
         self.expanded.push(item)
         
         let user = {}
@@ -318,7 +319,6 @@
         const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        self.expanded = []
         axios(`${BASE_API}/api/users/${item.application_name}/${companyId}`, {
             method: 'GET',
           })
