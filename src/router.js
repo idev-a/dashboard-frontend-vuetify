@@ -148,6 +148,14 @@ let router = new Router({
             requiresAuth: true
           }
         },
+        {
+          name: 'Device Security',
+          path: 'security/device',
+          component: () => import('@/views/dashboard/security/device'),
+          meta: {
+            requiresAuth: true
+          }
+        },
          {
           name: 'Company Information',
           path: 'company/all',

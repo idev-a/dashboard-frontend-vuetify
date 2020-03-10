@@ -13,7 +13,7 @@
         />
 
         <h3 class="display-2 font-weight-light text--primary">
-          {{ value }} <small>{{ smallValue }}</small>
+          {{ value.toString() }} <small>{{ smallValue }}</small>
         </h3>
       </div>
     </template>

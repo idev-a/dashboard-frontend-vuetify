@@ -199,6 +199,16 @@
                     <span>{{currentApp.Owner}}</span>
                   </v-card>
                 </v-col>
+                <v-col
+                  cols="12"
+                  md="3"
+                  sm="3"
+                >
+                  <v-card  shaped outlined class="my-0 pa-2">
+                    <div class="display-2 font-weight-light">Admin User</div>
+                    <span v-html="beautifyEmail(currentApp.admin_user)"></span>
+                  </v-card>
+                </v-col>
               </v-row>
               <v-row>
                 <v-col
@@ -259,10 +269,10 @@
         //   text: 'SOC2',
         //   value: 'soc2',
         // },
-        {
-          text: 'Admin User',
-          value: 'admin_user',
-        },
+        // {
+        //   text: 'Admin User',
+        //   value: 'admin_user',
+        // },
         //  {
         //   text: 'No Users',
         //   value: 'no_users',
@@ -307,12 +317,18 @@
     },
 
     methods: {
-      beautifyEmail (email) {
-        if (validEmail(email)) {
-          return `<a href="mailto:${email}">${email}</a>`
-        } else {
-          return email
-        }
+      beautifyEmail (emails) {
+        let res = ''
+        const list = emails.split(' ')
+        list.map(email => {
+          if (validEmail(email)) {
+            res += `<a href="mailto:${email}">${email}</a><br />`
+          } else {
+            res += `${email} <br />`
+          }
+        })
+
+        return res
       },
       levelColor (level) {
         let color = 'yellow darken-1'

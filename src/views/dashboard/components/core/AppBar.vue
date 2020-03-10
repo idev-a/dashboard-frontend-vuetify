@@ -71,7 +71,7 @@
       <v-icon>mdi-lock-open-outline</v-icon>
     </v-btn>
 
-    <v-menu
+    <!-- <v-menu
       bottom
       left
       offset-y
@@ -113,7 +113,7 @@
           </app-bar-item>
         </div>
       </v-list>
-    </v-menu>
+    </v-menu> -->
 
     <v-menu
       bottom
