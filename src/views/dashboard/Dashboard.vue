@@ -8,9 +8,53 @@
       <v-col
         cols="12"
         sm="6"
-        lg="4"
+        lg="3"
       >
-        <highcharts  :options="riskLevelCharts"></highcharts>
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts :options="riskLevelCharts"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts  :options="highRiskUsers"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts  :options="highRiskApps"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts  :options="CIACharts"></highcharts>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -257,7 +301,6 @@
           ripple
         />
       </v-col>
-      
 
       <v-col
         cols="12"
@@ -282,6 +325,7 @@
 
 <script>
   import { BASE_API } from '../../api'
+  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart } from '../../util'
   import axios from 'axios'
 
   export default {
@@ -289,7 +333,9 @@
 
     data () {
       return {
-        loading: false,
+        loading: true,
+        loadingCard: true,
+        companyId: '',
         smallCards: {
           high_risk: '0',
           medium_risk: '0',
@@ -308,92 +354,74 @@
           alerts: '0',
           charts: '0',
           links: '0'
+        },
+        charts: {
+          high_risk: 0,
+          medium_risk: 0,
+          low_risk: 0,
+          user_high: 0,
+          user_medium: 0,
+          user_low: 0,
+          app_high: 0,
+          app_medium: 0,
+          app_low: 0,
+          confidentiality: 0,
+          availability: 0,
+          integrity: 0
         }
       }
     },
 
     computed: {
-      totalSales () {
-        return this.sales.reduce((acc, val) => acc + val.salesInM, 0)
+      riskLevelCharts () {
+        return riskLevelChart(this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk)
       },
 
-      riskLevelCharts () {
-        const totalRisks = Number(this.smallCards.high_risk) + Number(this.smallCards.medium_risk) + Number(this.smallCards.low_risk)
-        let high = 0, medium = 0, low = 0
-        if (totalRisks) {
-          high = parseFloat((Number(this.smallCards.high_risk)/totalRisks*100).toFixed(2))
-          medium = parseFloat((Number(this.smallCards.medium_risk)/totalRisks*100).toFixed(2))
-          low = parseFloat((Number(this.smallCards.low_risk)/totalRisks*100).toFixed(2))
-        }
-        return {
-          chart: {
-              plotBackgroundColor: null,
-              plotBorderWidth: null,
-              plotShadow: false,
-              type: 'pie'
-          },
-          title: {
-              text: 'Risk Levels'
-          },
-          tooltip: {
-              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-          },
-          accessibility: {
-              point: {
-                  valueSuffix: '%'
-              }
-          },
-          plotOptions: {
-              pie: {
-                  allowPointSelect: true,
-                  cursor: 'pointer',
-                  dataLabels: {
-                      enabled: false
-                  },
-                  showInLegend: true,
-                  center: ['50%', '50%']
-              }
-          },
-          series: [{
-            name: 'Brands',
-            colorByPoint: true,
-            size: '80%',
-            innerSize: '55%',
-            data: [{
-                name: 'High',
-                y: high,
-                sliced: true,
-                selected: true,
-                color: 'red',
-                
-            }, {
-                name: 'Medium',
-                y: medium,
-                color: 'orange'
-            }, {
-                name: 'Low',
-                y: low,
-                color: 'yellow'
-            }]
-          }]
-        }
+      highRiskUsers () {
+        return userRiskChart(this.charts.user_high, this.charts.user_medium, this.charts.user_low)
+      },
+
+      highRiskApps () {
+        return appRiskChart(this.charts.app_high, this.charts.app_medium, this.charts.app_low)
+      },
+
+      CIACharts () {
+        return CIAChart(this.charts.confidentiality, this.charts.availability, this.charts.integrity)
       }
     },
 
     mounted () {
+      let user = {}
+      try {
+        user = JSON.parse(localStorage.getItem('user'))
+      } catch(e) {}
+      this.companyId = user.email.split('@')[1];
+
       this.fetchAllCardData()
+
+      this.fetchChartsData()
     },
 
     methods: {
-      fetchAllCardData () {
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
+      fetchChartsData() {
         const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/dashboard/${companyId}/all`, {
+        axios(`${BASE_API}/api/charts/${this.companyId}/all`, {
+            method: 'GET',
+          })
+            .then(function (res) {
+              self.charts = res.data.charts
+            })
+            .catch(error => {
+              console.log(error)
+            })
+            .finally(() => {
+              self.loadingCard = false
+            })
+      },
+
+      fetchAllCardData () {
+        const self = this
+        axios(`${BASE_API}/api/dashboard/${this.companyId}/all`, {
             method: 'GET',
           })
             .then(function (res) {
@@ -406,15 +434,6 @@
               self.loading = false
             })
       },
-      complete (index) {
-        this.list[index] = !this.list[index]
-      },
     },
   }
 </script>
-
-<style>
-  .highcharts-credits {
-    display: none;
-  }
-</style>

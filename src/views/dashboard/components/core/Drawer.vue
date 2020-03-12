@@ -181,13 +181,24 @@
           ]
         },
         {
-          group: '/company',
-          icon: 'mdi-information-variant',
-          title: 'Company',
+          group: '/category',
+          icon: 'mdi-security',
+          title: 'Category',
           children: [
             {
               title: 'All',
               to: 'all',
+            },
+          ]
+        },
+        {
+          group: '/charts',
+          icon: 'mdi-poll',
+          title: 'Charts',
+          children: [
+            {
+              title: 'All',
+              to: 'index',
             },
           ]
         },

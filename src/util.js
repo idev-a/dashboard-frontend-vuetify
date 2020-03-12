@@ -53,3 +53,77 @@ export const validEmail = (email) => {
   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return pattern.test(email)
 }
+
+const riskPieChart = (high, medium, low, title, high_label='High', medium_label='Medium', low_label="Low") => {
+  return {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        height: '100%'
+    },
+    title: {
+        text: title
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true,
+            center: ['50%', '50%']
+        }
+    },
+    series: [{
+      name: 'Brands',
+      colorByPoint: true,
+      size: '100%',
+      innerSize: '55%',
+      data: [{
+          name: high_label,
+          y: parseFloat(high),
+          sliced: true,
+          selected: true,
+          color: 'red',
+          
+      }, {
+          name: medium_label,
+          y: parseFloat(medium),
+          color: 'orange'
+      }, {
+          name: low_label,
+          y: parseFloat(low),
+          color: 'yellow'
+      }]
+    }]
+  }
+}
+
+export const riskLevelChart = (high, medium, low) => {
+  return riskPieChart(high, medium, low, 'Risk Levels')
+}
+
+export const userRiskChart = (high, medium, low) => {
+  return riskPieChart(high, medium, low, 'High Risk Users')
+}
+
+export const appRiskChart = (high, medium, low) => {
+  return riskPieChart(high, medium, low, 'High Risk Apps')
+}
+
+export const CIAChart = (high, medium, low) => {
+  return riskPieChart(high, medium, low, 'CIA', 'Confidetiality', 'Availability')
+}
+
+

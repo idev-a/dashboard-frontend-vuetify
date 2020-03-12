@@ -164,10 +164,18 @@ let router = new Router({
             requiresAuth: true
           }
         },
-         {
-          name: 'Company Information',
-          path: 'company/all',
-          component: () => import('@/views/dashboard/company/all'),
+        {
+          name: 'Category',
+          path: 'category/all',
+          component: () => import('@/views/dashboard/category/all'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Charts',
+          path: 'charts/index',
+          component: () => import('@/views/dashboard/charts/chart'),
           meta: {
             requiresAuth: true
           }

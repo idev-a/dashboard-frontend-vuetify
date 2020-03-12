@@ -1,13 +1,13 @@
 <template>
   <category-risk
-    category="physical"
-    title="Physical Security"
+    category="all"
+    title="General Security"
   />
 </template>
 
 <script>
   export default {
-    name: 'DashboardSecurityPhysical',
+    name: 'DashboardSecurityDevice',
 
     components: {
       CategoryRisk: () => import('../component/Category'),
