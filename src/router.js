@@ -109,7 +109,7 @@ let router = new Router({
           }
         },
         {
-          name: 'Applications',
+          name: 'Application Risk',
           path: 'applications/index',
           component: () => import('@/views/dashboard/applications/application'),
           meta: {
@@ -120,6 +120,14 @@ let router = new Router({
           name: 'Users',
           path: 'users/index',
           component: () => import('@/views/dashboard/users/user'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Groups',
+          path: 'groups/index',
+          component: () => import('@/views/dashboard/groups/group'),
           meta: {
             requiresAuth: true
           }

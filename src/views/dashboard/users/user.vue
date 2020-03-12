@@ -5,8 +5,13 @@
     tag="section"
   >
     <v-card
+      icon="mdi-account-multiple"
+      title="Users"
       class="px-5 py-3"
     >
+      <v-card-title>
+        Users
+      </v-card-title>
       <v-card-title>
         <v-text-field
           v-model="search"

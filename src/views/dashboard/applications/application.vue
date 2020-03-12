@@ -5,12 +5,15 @@
     tag="section"
   >
     <!-- Applications to each company -->
-    <base-material-card
-      color="success"
+    <v-card
       inline
-      title="Applications"
+      icon="mdi-alert-outline"
+      title="Application Risk"
       class="px-5 py-3"
     >
+      <v-card-title>
+        Application Risk
+      </v-card-title>
       <v-card-title>
         <v-text-field
           v-model="search"
@@ -26,12 +29,13 @@
         :loading="loading"
         :headers="appHeaders"
         :items="apps"
-        :items-per-page="5"
+        :items-per-page="page"
         item-key="id"
         :search="search"
         single-expand
         show-expand
         :expanded.sync="expanded"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:item.risk="{ item }">
           <v-chip :color="levelColor(item.risk)" dark>
@@ -100,7 +104,7 @@
                 :loading="loading"
                 :headers="userHeaders"
                 :items="users"
-                :items-per-page="5"
+                :items-per-page="page"
                 item-key="id"
                 :search="searchUser"
               >
@@ -224,7 +228,7 @@
           </td>
         </template>
       </v-data-table>
-    </base-material-card>
+    </v-card>
 
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
@@ -265,18 +269,6 @@
           text: 'Risk',
           value: 'risk',
         },
-        // {
-        //   text: 'SOC2',
-        //   value: 'soc2',
-        // },
-        // {
-        //   text: 'Admin User',
-        //   value: 'admin_user',
-        // },
-        //  {
-        //   text: 'No Users',
-        //   value: 'no_users',
-        // },
         { text: 'Actions', value: 'action', sortable: false },
       ],
       apps: [],
@@ -313,10 +305,16 @@
         } else {
           return 'Users'
         }
-      }
+      },
+      page () {
+        return Number(localStorage.getItem('page')) || 5
+      }, 
     },
 
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
       beautifyEmail (emails) {
         let res = ''
         const list = emails.split(' ')

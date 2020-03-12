@@ -5,8 +5,13 @@
     tag="section"
   >
     <v-card
+      icon="mdi-security"
+      title="Device Security"
       class="px-5 py-3"
     >
+      <v-card-title>
+        Device Security
+      </v-card-title>
       <v-card-title>
         <v-text-field
           v-model="search"
@@ -23,12 +28,13 @@
         :headers="headers"
         :items="risks"
         item-key="id"
-        :items-per-page="5"
+        :items-per-page="page"
         :search="search"
         single-expand
         show-expand
         :expanded.sync="expanded"
         @click:row="showDetails"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -387,8 +393,17 @@
     mounted () {
       this.fetchRisks()
     },
+    
+    computed: {
+      page () {
+        return Number(localStorage.getItem('page')) || 5
+      }, 
+    },
 
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
       expand (can) {
         if (can) {
 
@@ -412,7 +427,7 @@
         const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/physical/${companyId}`, {
+        axios(`${BASE_API}/api/risks/device/${companyId}`, {
             method: 'GET',
           })
             .then(function (res) {

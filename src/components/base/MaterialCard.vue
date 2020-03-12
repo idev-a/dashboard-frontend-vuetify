@@ -3,6 +3,7 @@
     v-bind="$attrs"
     :class="classes"
     class="v-card--material pa-3"
+    @click="goTo(to)"
   >
     <div class="d-flex grow flex-wrap">
       <v-avatar

@@ -137,8 +137,19 @@
         },
         {
           group: '/users',
-          icon: 'mdi-account-group-outline',
+          icon: 'mdi-account-multiple',
           title: 'Users',
+          children: [
+            {
+              title: 'All',
+              to: 'index',
+            },
+          ]
+        },
+        {
+          group: '/groups',
+          icon: 'mdi-account-group-outline',
+          title: 'Groups',
           children: [
             {
               title: 'All',
@@ -162,6 +173,10 @@
             {
               title: 'Physical Security',
               to: 'physical',
+            },
+            {
+              title: 'Device Security',
+              to: 'device',
             },
           ]
         },

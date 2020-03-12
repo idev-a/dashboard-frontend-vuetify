@@ -5,8 +5,13 @@
     tag="section"
   >
     <v-card
+      icon="mdi-security"
+      title="Physical Security"
       class="px-5 py-3"
     >
+      <v-card-title>
+        Physical Security
+      </v-card-title>
       <v-card-title>
         <v-text-field
           v-model="search"
@@ -23,12 +28,13 @@
         :headers="headers"
         :items="risks"
         item-key="id"
-        :items-per-page="5"
+        :items-per-page="page"
         :search="search"
         single-expand
         show-expand
         :expanded.sync="expanded"
         @click:row="showDetails"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -388,7 +394,16 @@
       this.fetchRisks()
     },
 
+    computed: {
+      page () {
+        return Number(localStorage.getItem('page')) || 5
+      }, 
+    },
+
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
       expand (can) {
         if (can) {
 
