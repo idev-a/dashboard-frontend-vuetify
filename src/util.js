@@ -67,26 +67,31 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
         text: title
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '<b>{point.percentage:.1f}%</b>'
     },
     accessibility: {
-        point: {
-            valueSuffix: '%'
-        }
+      announceNewData: {
+            enabled: true
+      },
+      point: {
+          valueSuffix: '%'
+      }
     },
     plotOptions: {
         pie: {
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
-                enabled: false
+                enabled: true,
+                format: '{point.y:.1f} %',
+                distance: '-20%',
             },
             showInLegend: true,
             center: ['50%', '50%']
-        }
+        },
     },
     series: [{
-      name: 'Brands',
+      name: '',
       colorByPoint: true,
       size: '100%',
       innerSize: '55%',
@@ -96,15 +101,17 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
           sliced: true,
           selected: true,
           color: 'red',
-          
+          drilldown: "High"
       }, {
           name: medium_label,
           y: parseFloat(medium),
-          color: 'orange'
+          color: 'orange',
+          drilldown: "Medium"
       }, {
           name: low_label,
           y: parseFloat(low),
-          color: 'yellow'
+          color: 'yellow',
+          drilldown: "Low"
       }]
     }]
   }
@@ -126,4 +133,76 @@ export const CIAChart = (high, medium, low) => {
   return riskPieChart(high, medium, low, 'CIA', 'Confidetiality', 'Availability')
 }
 
-
+export const scoreDonutChart = (score) => {
+  let label = 'High Risk';
+  let color = 'red';
+  switch (score) {
+    case 4:
+    case 5:
+      label = 'High Risk';
+      color = 'red';
+      break;
+    case 3:
+      label = 'Medium Risk';
+      color = 'orange';
+      break;
+    default:
+      label = 'Low Risk';
+      color = 'yellow';
+      break;
+  }
+  return {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: 0,
+        plotShadow: false,
+        height: '100%'
+    },
+    title: {
+      text: 'Org Score'
+    },
+    exporting: {
+      enabled: false
+    },
+    credits: {
+      enabled: false
+    },
+    tooltip: {
+        pointFormat: '<b>{point.y}</b>'
+    },
+    plotOptions: {
+        pie: {
+            dataLabels: {
+                enabled: true,
+                distance: '-100%',
+                y: -5,
+                format: label,
+                style: {
+                    fontWeight: 'bold',
+                    color: color,
+                    fontSize: '14px'
+                },
+                filter: {
+                    property: 'name',
+                    operator: '===',
+                    value: 'Score'
+                },
+            },
+             borderWidth: 3
+        },
+        series: {
+          animation: false
+        }
+    },
+    series: [{
+        type: 'pie',
+        name: '',
+        size: '70%',
+        innerSize: '80%',
+        data: [
+            { name: 'Score', y: score, color: color },
+            { name: '', y: 5-score, color: "#E6E6E6" },
+        ]
+    }]
+}
+}

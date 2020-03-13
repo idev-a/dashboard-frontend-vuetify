@@ -71,9 +71,9 @@
         </template>
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
-            <v-card
+            <div
               v-if="details"
-              class="px-10 my-1 py-4"
+              class="px-4"
             >
               <v-row
                 align="center"
@@ -346,7 +346,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </v-card>
+            </div>
           </td>
         </template>
       </v-data-table>

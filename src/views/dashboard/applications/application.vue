@@ -77,9 +77,9 @@
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
             <!-- Users for the each application -->
-            <v-card
+            <div
               v-if="user"
-              class="px-5 py-3 my-1"
+              class="px-4 py-1"
             >
               <v-card-title
               >
@@ -115,12 +115,12 @@
                   <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
                 </template>
               </v-data-table>
-            </v-card>
+            </div>
 
             <!-- Application detail -->
-            <v-card
+            <div
               v-if="details"
-              class="px-5 py-1"
+              class="px-4 py-1"
             >
                <v-card-title
               >
@@ -224,7 +224,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </v-card>
+            </div>
           </td>
         </template>
       </v-data-table>

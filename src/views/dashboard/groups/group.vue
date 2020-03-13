@@ -59,12 +59,12 @@
         </template>
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
-            <base-material-card
-              color="success"
-              class="px-5 py-3"
-              icon="mdi-details"
-              :title="currentGroup.name"
+            <div
+              class="px-3 py-1"
             >
+              <v-card-title>
+                {{ currentGroup.name }}
+              </v-card-title>
               <v-row>
                 <v-col
                   cols="12"
@@ -89,7 +89,7 @@
                 </v-col>
                 
               </v-row>
-            </base-material-card>
+            </div>
           </td>
         </template>
       </v-data-table>

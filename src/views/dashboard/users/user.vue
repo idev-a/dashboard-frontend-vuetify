@@ -58,13 +58,14 @@
           <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
         </template>
         <template v-slot:expanded-item="{ headers }">
-          <td :colspan="headers.length">
-            <base-material-card
+          <td :colspan="headers.length" >
+            <div
               color="success"
-              class="px-5 py-3"
-              icon="mdi-alert-outline"
-              :title="currentUser.firstname_lastname"
+              class="px-3 py-1"
             >
+              <v-card-title>
+                {{ currentUser.firstname_lastname }}
+              </v-card-title>
               <v-row>
                 <v-col
                   cols="12"
@@ -172,7 +173,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </base-material-card>
+            </div>
           </td>
         </template>
       </v-data-table>

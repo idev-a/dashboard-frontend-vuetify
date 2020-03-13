@@ -14,6 +14,19 @@
           class="pt-3"
           :loading="loadingCard"
         >
+          <highcharts :options="scoreChart"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
           <highcharts :options="riskLevelCharts"></highcharts>
         </v-card>
       </v-col>
@@ -325,7 +338,7 @@
 
 <script>
   import { BASE_API } from '../../api'
-  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart } from '../../util'
+  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart } from '../../util'
   import axios from 'axios'
 
   export default {
@@ -356,6 +369,7 @@
           links: '0'
         },
         charts: {
+          org_score: 0,
           high_risk: 0,
           medium_risk: 0,
           low_risk: 0,
@@ -387,6 +401,10 @@
 
       CIACharts () {
         return CIAChart(this.charts.confidentiality, this.charts.availability, this.charts.integrity)
+      },
+
+      scoreChart () {
+        return scoreDonutChart(this.charts.org_score)
       }
     },
 
