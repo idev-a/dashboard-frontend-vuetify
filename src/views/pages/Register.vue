@@ -41,20 +41,6 @@
             ref="form"
             class="text-center"
           >
-          <!--   <v-text-field
-              ref="username"
-              v-model="form.username"
-              :rules="[rules.required]"
-              :error-messages="errorMessages.username"
-              :loading="loading"
-              hide-details="auto"
-              class="mb-2"
-              color="secondary"
-              label="Username"
-              prepend-icon="mdi-face"
-              required
-            /> -->
-
             <v-text-field
               ref="email"
               v-model="form.email"
@@ -159,7 +145,6 @@
     },
 
     watch: {
-      
     },
 
     methods: {
@@ -170,7 +155,6 @@
         this.errorMessages.password = this.form.password !== this.form.password1
           ? 'The password does not match.'
           : ''
-
         return !!this.errorMessages.password
       },
       resetForm () {

@@ -22,6 +22,7 @@ import './plugins/vue-world-map'
 import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import IdleVue from 'idle-vue'
+import VueFriendlyIframe from 'vue-friendly-iframe';
 
 Vue.config.productionTip = false
 
@@ -39,3 +40,5 @@ Vue.use(IdleVue, {
   idleTime: 15*60*1000, // 15 mins  15*60*1000 = 900000
   startAtIdle: false
 });
+
+Vue.use(VueFriendlyIframe);

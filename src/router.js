@@ -180,6 +180,14 @@ let router = new Router({
             requiresAuth: true
           }
         },
+        {
+          name: 'Public Data',
+          path: 'publicdata/index',
+          component: () => import('@/views/dashboard/publicdata/public'),
+          meta: {
+            requiresAuth: true
+          }
+        },
       ],
     },
     {

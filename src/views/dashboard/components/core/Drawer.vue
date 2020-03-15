@@ -192,6 +192,17 @@
           ]
         },
         {
+          group: '/publicdata',
+          icon: 'mdi-poll',
+          title: 'Public Data',
+          children: [
+            {
+              title: 'All',
+              to: 'index',
+            },
+          ]
+        },
+        {
           group: '/charts',
           icon: 'mdi-poll',
           title: 'Charts',

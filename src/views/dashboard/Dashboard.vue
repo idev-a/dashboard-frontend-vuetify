@@ -179,6 +179,7 @@
           :value="smallCards.groups"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          to="Groups"
           hover
           ripple
         />
@@ -292,6 +293,7 @@
           :value="smallCards.charts"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          to="Charts"
           hover
           ripple
         />
