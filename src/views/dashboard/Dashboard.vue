@@ -198,6 +198,7 @@
           :value="smallCards.public_data"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
+          to="Public Data"
           hover
           ripple
         />
