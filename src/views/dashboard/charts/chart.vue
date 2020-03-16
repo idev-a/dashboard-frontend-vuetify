@@ -5,37 +5,49 @@
     tag="section"
     class="px-5 py-3"
   >
-      <v-row>
-        <v-col
-          cols="12"
-          sm="6"
-          lg="4"
-        >
-          <v-card
-            class="pt-3"
-            :loading="loadingCard"
-          >
-            <highcharts :options="riskLevelCharts"></highcharts>
-          </v-card>
-        </v-col>
-
-        <v-col
-          cols="12"
-          sm="6"
-          lg="4"
-        >
-          <v-card
-            class="pt-3"
-            :loading="loadingCard"
-          >
-            <highcharts  :options="highRiskUsers"></highcharts>
-          </v-card>
-        </v-col>
-
-        <v-col
+    <v-row>
+      <v-col
         cols="12"
         sm="6"
-        lg="4"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts :options="scoreChart"></highcharts>
+        </v-card>
+      </v-col>
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts :options="riskLevelCharts"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts  :options="highRiskUsers"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
       >
         <v-card
           class="pt-3"
@@ -48,7 +60,7 @@
       <v-col
         cols="12"
         sm="6"
-        lg="4"
+        lg="3"
       >
         <v-card
           class="pt-3"
@@ -57,7 +69,7 @@
           <highcharts  :options="CIACharts"></highcharts>
         </v-card>
       </v-col>
-      </v-row>
+    </v-row>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <v-btn text @click="snack = false">Close</v-btn>
@@ -67,7 +79,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
-  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart } from '../../../util'
+  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart } from '../../../util'
   import axios from 'axios'
 
   export default {
@@ -82,6 +94,7 @@
       snackText: '',
       pagination: {},
       charts: {
+        org_score: 0,
         high_risk: 0,
         medium_risk: 0,
         low_risk: 0,
@@ -122,6 +135,10 @@
 
       CIACharts () {
         return CIAChart(this.charts.confidentiality, this.charts.availability, this.charts.integrity)
+      },
+
+      scoreChart () {
+        return scoreDonutChart(this.charts.org_score)
       }
     },
 

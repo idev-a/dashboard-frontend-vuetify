@@ -239,7 +239,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
-  import { validEmail } from '../../../util'
+  import { validEmail, levelColor } from '../../../util'
   import axios from 'axios'
 
   export default {
@@ -312,6 +312,9 @@
     },
 
     methods: {
+      levelColor (level) {
+        return levelColor(level)
+      },
       getPageNum (_page) {
         localStorage.setItem('page', _page)
       },
@@ -327,22 +330,6 @@
         })
 
         return res
-      },
-      levelColor (level) {
-        let color = 'yellow darken-1'
-        level = level ? level.toLowerCase() : 'low'
-        switch (level) {
-          case 'high':
-            color = 'red darken-4'
-            break
-          case 'medium':
-            color = 'red lighten-1'
-            break
-          case 'low':
-            color = 'yellow darken-1'
-            break
-        }
-        return color
       },
       showDetails (item) {
         this.currentApp = item

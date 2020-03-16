@@ -313,8 +313,8 @@
           :value="smallCards.links"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
-          hover
-          ripple
+          flat
+          dark
         />
       </v-col>
 
@@ -325,14 +325,13 @@
       >
         <base-material-stats-card
           :loading="loading"
-          color="default"
+          color="info"
           icon="mdi-alert-rhombus-outline"
           title="Other"
           :value="smallCards.other"
           sub-icon="mdi-chevron-triple-right"
           sub-text="View Details"
-          hover
-          ripple
+          dark
         />
       </v-col>
     </v-row>

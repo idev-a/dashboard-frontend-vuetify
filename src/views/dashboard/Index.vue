@@ -81,4 +81,8 @@
   tr.v-data-table__mobile-table-row:nth-of-type(odd) td.v-data-table__mobile-row{
     background: rgba(0, 0, 0, .05);
   }
+
+  .bg-dead {
+    background: #E0E0E;
+  }
 </style>

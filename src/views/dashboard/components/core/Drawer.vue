@@ -186,14 +186,14 @@
           title: 'Category',
           children: [
             {
-              title: 'All',
+              title: 'All Questions',
               to: 'all',
             },
           ]
         },
         {
           group: '/publicdata',
-          icon: 'mdi-poll',
+          icon: 'mdi-database',
           title: 'Public Data',
           children: [
             {

@@ -82,7 +82,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
-                enabled: true,
+                enabled: false,
                 format: '{point.y:.1f} %',
                 distance: '-20%',
             },
@@ -93,8 +93,8 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
     series: [{
       name: '',
       colorByPoint: true,
-      size: '100%',
-      innerSize: '55%',
+      size: '90%',
+      innerSize: '80%',
       data: [{
           name: high_label,
           y: parseFloat(high),
@@ -110,7 +110,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
       }, {
           name: low_label,
           y: parseFloat(low),
-          color: 'yellow',
+          color: 'green',
           drilldown: "Low"
       }]
     }]
@@ -148,7 +148,7 @@ export const scoreDonutChart = (score) => {
       break;
     default:
       label = 'Low Risk';
-      color = 'yellow';
+      color = 'green';
       break;
   }
   return {
@@ -205,4 +205,23 @@ export const scoreDonutChart = (score) => {
         ]
     }]
 }
+}
+
+// mark colors based upon level
+
+export const levelColor = (level) => {
+  let color = 'green darken-1'
+  level = level ? level.toLowerCase() : 'low'
+  switch (level) {
+    case 'high':
+      color = 'red darken-4'
+      break
+    case 'medium':
+      color = 'red lighten-1'
+      break
+    case 'low':
+      color = 'green darken-1'
+      break
+  }
+  return color
 }
