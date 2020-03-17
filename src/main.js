@@ -42,3 +42,4 @@ Vue.use(IdleVue, {
 });
 
 Vue.use(VueFriendlyIframe);
+Vue.use(require('vue-moment'));
