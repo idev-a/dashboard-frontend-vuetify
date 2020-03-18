@@ -39,16 +39,16 @@
 		                  cols="12"
 		                >
 		                  <v-card shaped outlined class="my-0 pa-4 p-relative">
-		                  	<v-chip class="whoxy-date secondary">{{beautifyDate(item.registrant_contact.query_time)}}</v-chip>
-		                    <div><b>Owner:</b> <span>{{item.registrant_contact.full_name}}</span></div>
-		                    <div><b>Company:</b> <span>{{item.administrative_contact.company_name}}</span></div>
-		                    <div><b>Domain:</b> <span>{{item.domain_registrar.registrar_name}}</span></div>
-		                    <div><b>Geolocation:</b> <span>{{item.registrant_contact.city_name}}, {{item.registrant_contact.state_name}} {{item.registrant_contact.zip_code}}, {{item.registrant_contact.country_name}}</span></div>
-		                    <div><b>Email:</b> <span>{{item.administrative_contact.email_address}}</span></div>
-		                    <div><b>Phone:</b> <span>{{item.administrative_contact.phone_number}}</span></div>
-		                    <div><b>Email:</b> <span v-html="beautifyEmail(item.administrative_contact.email_address)"></span></div>
-		                    <div><b>Nameservers:</b> <span>{{item.name_servers.join(', ')}}</span></div>
-		                    <div><b>Status:</b> <span>{{item.domain_status[0]}}</span></div>
+		                  	<v-chip class="whoxy-date secondary mb-2">{{beautifyDate(item.registrant_contact.query_time)}}</v-chip>
+		                    <div class="mb-2"><b>Owner:</b> <span>{{item.registrant_contact.full_name}}</span></div>
+		                    <div class="mb-2"><b>Company:</b> <span>{{item.administrative_contact.company_name}}</span></div>
+		                    <div class="mb-2"><b>Domain:</b> <span>{{item.domain_registrar.registrar_name}}</span></div>
+		                    <div class="mb-2"><b>Geolocation:</b> <span>{{item.registrant_contact.city_name}}, {{item.registrant_contact.state_name}} {{item.registrant_contact.zip_code}}, {{item.registrant_contact.country_name}}</span></div>
+		                    <div class="mb-2"><b>Email:</b> <span>{{item.administrative_contact.email_address}}</span></div>
+		                    <div class="mb-2"><b>Phone:</b> <span>{{item.administrative_contact.phone_number}}</span></div>
+		                    <div class="mb-2"><b>Email:</b> <span v-html="beautifyEmail(item.administrative_contact.email_address)"></span></div>
+		                    <div class="mb-2"><b>Nameservers:</b> <span>{{item.name_servers.join(', ')}}</span></div>
+		                    <div class="mb-2"><b>Status:</b> <span>{{item.domain_status[0]}}</span></div>
 		                  </v-card>
 		                </v-col>
 		            </v-row>
@@ -162,6 +162,102 @@
 	              	</v-col>
 				</v-row>
 			</div>
+			<div v-if="select['shodan']" class="overflow-y py-4 pa-4">
+				<v-card-title>Shodan.io</v-card-title>
+				<v-row>
+					<v-col
+	                  cols="12"
+	                  md="6"
+	              	>
+						<div>
+							<v-icon
+								large
+						      size="16"
+						      class="ml-2 mr-1"
+						    >
+						      mdi-earth
+						    </v-icon>
+						    <b class="display-2">{{data.shodan.ip_str}}</b>
+						</div>
+						<v-divider class="my-2"></v-divider>
+						<div class="mb-3"><b>Country:</b> <span>{{data.shodan.country_name}}</span></div>
+						<div class="mb-3"><b>Last Update:</b> <span>{{data.shodan.last_update}}</span></div>
+						<div class=""><b>ASN:</b> <span>{{data.shodan.asn}}</span></div>
+						<v-row>
+							<v-col
+			                  cols="6"
+			              	>
+			              		<div class="mb-3"><b>Latitude:</b> <span>{{data.shodan.latitude.toFixed(2)}}</span></div>
+			              	</v-col>
+			              	<v-col
+			                  cols="6"
+			              	>
+			              		<div class="mb-3"><b>Longitude:</b> <span>{{data.shodan.longitude.toFixed(2)}}</span></div>
+			              	</v-col>
+			          	</v-row>
+	              	</v-col>
+	              	<v-col
+	                  cols="12"
+	                  md="6"
+	              	>
+	              		<div>
+							<v-icon
+								large
+						      size="16"
+						      class="ml-2 mr-1"
+						    >
+						      mdi-power-plug
+						    </v-icon>
+						    <b class="display-2">Ports</b>
+						</div>
+						<v-divider class="my-2"></v-divider>
+						<div class="d-flex flex-wrap">
+							<div v-for="port in data.shodan.ports">
+								<v-chip label outlined class="success ma-2 pa-2 mb-3">{{port}}</v-chip>
+							</div>
+						</div>
+					</v-col>
+				</v-row>
+				<div>
+					<v-icon
+						large
+				      size="16"
+				      class="ml-2 mr-1"
+				    >
+				      mdi-power-plug
+				    </v-icon>
+				    <b class="display-2">Services</b>
+				</div>
+				<v-divider class="my-2"></v-divider>
+				<v-row>
+					<v-col
+						cols="12"
+	                  	md="6"
+	                  	v-for="service in data.shodan.data"
+	                >	
+	                	<div class="d-inline-flex mb-2">
+	                		<v-chip label class="success pa-0 px-5">{{service.port}}</v-chip>
+	                		<v-chip label class="orange pa-0 px-5">{{service.transport}}</v-chip>
+	                		<v-chip label class="dark pa-0 px-5">{{service.ssl ? 'https':'http'}}</v-chip>
+	                	</div>
+	                	<pre >{{service.data}}</pre>
+						<div v-if="service.http">
+							<div v-html="service.http.html"></div>
+							<div>{{service.http.title}}</div>
+						</div>
+						<div v-if="service.ssl">
+							<div v-if="service.ssl">
+								<div class="display-1">SSL Certificate</div>
+								<div class="mb-1"><b>Version:</b> <span>{{service.ssl.cert.version}}</span></div>
+								<div class="mb-1"><b>Serial Number:</b> <span>{{service.ssl.cert.serial}}</span></div>
+								<div class="mb-1"><b>Signature Algorithm:</b> <span>{{service.ssl.cert.sig_alg}}</span></div>
+								<div class="mb-1"><b>Issuer:</b> <span v-for="(val, name) in service.ssl.cert.issuer"><span class="ma-1">{{name}}={{val}},</span></span></div>
+								<div class="mb-1"><b>Subject:</b> <span v-for="(val, name) in service.ssl.cert.subject"><span class="ma-1">{{name}}={{val}},</span></span></div>
+							</div>
+						</div>
+	              	</v-col>
+				</v-row>
+		   </div>
 		</v-card>
 	</v-container>
 </template>
@@ -201,11 +297,13 @@
 					builtWith: 'https://builtwith.com/',
 					ssllab: 'https://www.ssllabs.com/ssltest/analyze.html?hideResults=on&d=',
 					crunchbase: 'https://www.crunchbase.com/organization/grove',
-					shodan: 'https://www.shodan.io/search?query=',
 				},
 				data: {
 				}
 			}
+		},
+
+		computed: {
 		},
 
 		mounted () {
@@ -260,7 +358,17 @@
 					this.select[data] = true
 					switch (data) {
 						case 'whoxy':
-							this.data['whoxy'] = JSON.parse(this.data['whoxy'])
+							try {
+								this.data['whoxy'] = JSON.parse(this.data['whoxy'])
+							} catch (e) {}
+							this.data['whoxy'] = this.data['whoxy'] || {}
+							this.loading = false
+							break
+						case 'shodan':
+							try {
+								this.data['shodan'] = JSON.parse(this.data['shodan'])
+							} catch (e) {}
+							this.data['shodan'] = this.data['shodan'] || {}
 							this.loading = false
 							break
 						case 'spoofcheck':
@@ -358,5 +466,14 @@
 		top: 10px;
 		right: 10px;
 	}
+
+	pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+     }
 </style>
 
