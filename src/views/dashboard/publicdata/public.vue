@@ -54,7 +54,7 @@
 		            </v-row>
 				</div>
 			</div>
-			<div v-if="select['spoofcheck']" class="py-4 pa-4">
+			<div v-if="select['spoofcheck']" class="overflow-y py-4 pa-4">
 				<v-card-title>Spoof Check</v-card-title>
 			 	<v-sheet
 			 		class="pa-3 py-4 my-3"
@@ -66,7 +66,7 @@
 				<div class="mb-3"><b>dmarc:</b> <span>{{data.spf_dmarc}}</span></div>
 				<div class="mb-2" v-html="checkSPFPossible(data.spf_spoofing_possible)"></div>
 			</div>
-			<div v-if="select['ctfr']" class="py-4 pa-4">
+			<div v-if="select['ctfr']" class="overflow-y py-4 pa-4">
 				<v-card-title>CTFR (Sub domains)</v-card-title>
 				<div class="d-flex flex-wrap">
 					<div v-for="domain in data.ctfr_subdomain.split(';')">
@@ -74,8 +74,93 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="select['urlscan']" class="py-4 pa-4">
+			<div v-if="select['urlscan']" class="overflow-y py-4 pa-4">
 				<v-card-title>Urlscan.io</v-card-title>
+				<v-row>
+					<v-col
+	                  cols="12"
+	                  md="6"
+	              	>
+	              		<b>Domain:</b> <span>{{data.urlscan_domain}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Country:</b> <span>{{data.urlscan_country}}</span>
+	              	</v-col>
+					<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+		              	<b>IP Address:</b> <span>{{data.urlscan_ip_address}}</span>
+	              	</v-col>
+					<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+		              	<b>IPV6:</b> <span>{{data.urlscan_ipv6}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	class="d-flex align-center"
+	              	>
+	              		<b>Web Apps:</b> 
+	              		<span class="d-flex flex-wrap">
+							<span v-for="app in data.urlscan_web_apps.split(';')">
+								<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{app}}</v-chip>
+							</span>
+						</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Server:</b> <span>{{data.urlscan_server}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Number of Requests:</b> <span>{{data.urlscan_number_of_requests}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Ads Blocked:</b> 
+	              		<v-chip outlined class="ma-2 mb-3" :color="data.urlscan_ads_blocked == 1 ? 'green' : 'black'" >{{data.urlscan_ads_blocked == 1 ? 'YES' : 'No'}}</v-chip>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>HTTP Requests:</b> <span>{{data.urlscan_http_requests}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Unique Country Counts:</b> <span>{{data.urlscan_unique_country}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	md="6"
+	              	>
+	              		<b>Malicious Requests:</b> <span>{{data.urlscan_malicious_requests}}</span>
+	              	</v-col>
+	              	<v-col
+	                  	cols="12"
+	                  	class="d-flex"
+	              	>
+	              		<b>Pointed Domains:</b> 
+	              		<span class="d-flex flex-wrap">
+							<span v-for="domain in data.urlscan_pointed_domains.split(';')">
+								<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{domain}}</v-chip>
+							</span>
+						</span>
+	              	</v-col>
+				</v-row>
 			</div>
 		</v-card>
 	</v-container>
