@@ -4,6 +4,8 @@
 	    fluid
 	    tag="section"
 	  >
+	  	<blockquote class="blockquote">Below is the data we found on your business.</blockquote>
+	  	</v-card>
 	  	<v-select
 	  	  v-model="service"
 	  	  chips
@@ -16,7 +18,7 @@
 
 	    <v-card
 			:loading="loading"
-	      	class="px-5 py-3 iframe"
+	      	class="px-5 py-3 mt-1 iframe"
 	    >
 			<vue-friendly-iframe
 				v-if="isIframe"
@@ -491,7 +493,6 @@
 				services: [
 					'builtWith',
 					'ssllabs',
-					'crunchbase',
 					'shodan',
 					'spoofcheck',
 					'urlscan',
