@@ -346,19 +346,25 @@
 								<div class="mb-1 ml-2"><span>Not Before:</span> {{beautifyDateZ(service.ssl.cert.issued)}} </div>
 								<div class="mb-1 ml-2"><span>Not After :</span> {{beautifyDateZ(service.ssl.cert.expires)}} </div>
 								<div class="mb-1"><b>Subject:</b> <span v-for="(val, name) in service.ssl.cert.subject"><span class="ma-1">{{name}}={{val}},</span></span></div>
-								<div class="mb-2">
+								<div class="">
 									<b>Subject Public Key Info:</b> 
 									<div class="mb-1 ml-2"><span>Public-Key:</span> {{ service.ssl.cert.pubkey.type }} - {{ service.ssl.cert.pubkey.bits }} bit </div>
-									<div class="mb-1 ml-2">Fingerprint :
-										<div class="mb-1 ml-4">
-											<div v-for="(val, name) in service.ssl.cert.fingerprint">
-												<div class="mb-1 fingerprint">
-													<div>{{name}}:</div>
-													<div class="mb-1 ml-4">{{hexEncode(val)}} </div>
+									<v-expansion-panels
+										flat
+										hover
+									>
+										<v-expansion-panel>
+									        <v-expansion-panel-header><b>Fingerprint:</b></v-expansion-panel-header>
+									        <v-expansion-panel-content>
+												<div v-for="(val, name) in service.ssl.cert.fingerprint">
+													<div class="fingerprint">
+														<div>{{name}}:</div>
+														<pre class="mb-1 ml-4 body-2">{{hexEncode(val)}} </pre>
+													</div>
 												</div>
-											</div>
-										</div>
-									</div>
+									        </v-expansion-panel-content>
+								      	</v-expansion-panel>
+							      	</v-expansion-panels>
 								</div>
 								<!-- <div class="mb-1">
 									<b>X509v3 extensions:</b> 
@@ -373,12 +379,19 @@
 									</div>
 								</div> -->
 								<div class="mb-2">
-									<b>Certificates:</b> 
-									<div class="mb-1 ml-2">
-										<div v-for="item in service.ssl.chain">
-											<pre class="mb-2">{{item}}</pre>
-										</div>
-									</div>
+									<v-expansion-panels
+										flat
+										hover
+									>
+										<v-expansion-panel>
+									        <v-expansion-panel-header><b>Certificates:</b></v-expansion-panel-header>
+									        <v-expansion-panel-content>
+												<div v-for="item in service.ssl.chain">
+													<pre class="body-2">{{item}}</pre>
+												</div>
+									        </v-expansion-panel-content>
+								      	</v-expansion-panel>
+							      	</v-expansion-panels>
 								</div>
 							</div>
 						</div>
