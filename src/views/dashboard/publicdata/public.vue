@@ -652,7 +652,6 @@
 				return this.$moment(timestamp, 'x').format('DD MMM YYYY, HH:mm:ss')
 			},
 
-
 			beautifyDateTime (date) {
 				return this.$moment(date).format('DD MMM YYYY, HH:mm:ss')
 			},
@@ -729,7 +728,7 @@
 							this.loading = false
 							break
 						case 'wpscan':
-							this.data.wpscan = this.data.wpscan.trimStart()
+							this.data.wpscan = this.data.wpscan.trimStart().replace(/\\n/g, '')
 							this.loading = false
 							break
 						case 'spoofcheck':
