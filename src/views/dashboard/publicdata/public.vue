@@ -78,10 +78,10 @@
 			      		<template v-slot:item.grade="{ item }">
 		                   <div class="display-3 font-weight-bold" :class="determinGrateClass(item.grade)">{{item.grade}}</div>
 		                </template>
-		                <template v-slot:item.details="{ item }">
+		                <!-- <template v-slot:item.details="{ item }">
 		                   <div class="body-1">{{beautifyDateTimeFromUnix(item.details.hostStartTime)}}</div>
-		                   <!-- <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div> -->
-		                </template>
+		                   <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div>
+		                </template> -->
 				    </v-data-table>
 			     <!--  </v-tab-item>
 			      <v-tab
@@ -520,10 +520,10 @@
 			          value: 'ipAddress',
 			          text: 'Server',
 			        },
-			        {
-			          value: 'details',
-			          text: 'Test time',
-			        },
+			        // {
+			        //   value: 'details',
+			        //   text: 'Test time',
+			        // },
 			        {
 			          value: 'grade',
 			          text: 'Grade',
