@@ -82,6 +82,11 @@
     background: rgba(0, 0, 0, .05);
   }
 
+  .theme--light.v-data-table thead tr:last-child th {
+    /*background: #64B5F6;*/
+    font-weight: 500 !important;
+  }
+
   .bg-dead {
     background: #E0E0E;
   }
