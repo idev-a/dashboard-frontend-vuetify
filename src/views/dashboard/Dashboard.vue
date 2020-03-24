@@ -69,6 +69,19 @@
           <highcharts  :options="CIACharts"></highcharts>
         </v-card>
       </v-col>
+
+      <v-col
+        cols="12"
+        md="12"
+        lg="9"
+      >
+        <v-card
+          class="pt-3"
+          :loading="loadingCard"
+        >
+          <highcharts  :options="appUsersChart"></highcharts>
+        </v-card>
+      </v-col>
     </v-row>
     <v-row>
        <v-col
@@ -340,7 +353,7 @@
 
 <script>
   import { BASE_API } from '../../api'
-  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart } from '../../util'
+  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart, appUsersChart } from '../../util'
   import axios from 'axios'
 
   export default {
@@ -383,7 +396,8 @@
           app_low: 0,
           confidentiality: 0,
           availability: 0,
-          integrity: 0
+          integrity: 0,
+          applications: []
         }
       }
     },
@@ -407,6 +421,10 @@
 
       scoreChart () {
         return scoreDonutChart(this.charts.org_score)
+      },
+
+      appUsersChart () {
+        return appUsersChart(this.charts.applications)
       }
     },
 

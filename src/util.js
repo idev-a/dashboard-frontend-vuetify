@@ -1,3 +1,4 @@
+import { companyId } from './api'
 export const DOMAIN_LIST = [
   /* Default domains included */
   "aol.com", "att.net", "comcast.net", "facebook.com", "gmail.com", "gmx.com", "googlemail.com",
@@ -49,11 +50,32 @@ export const DOMAIN_LIST = [
   "yahoo.com.br", "hotmail.com.br", "outlook.com.br", "uol.com.br", "bol.com.br", "terra.com.br", "ig.com.br", "itelefonica.com.br", "r7.com", "zipmail.com.br", "globo.com", "globomail.com", "oi.com.br"
 ]
 
+// mark colors based upon level
+
+export const levelColor = (level) => {
+  let color = 'green darken-1'
+  level = level ? level.toLowerCase() : 'low'
+  switch (level) {
+    case 'high':
+      color = 'red darken-4'
+      break
+    case 'medium':
+      color = 'red lighten-1'
+      break
+    case 'low':
+      color = 'green darken-1'
+      break
+  }
+  return color
+}
+
+
 export const validEmail = (email) => {
   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return pattern.test(email)
 }
 
+// Pie chart 
 const riskPieChart = (high, medium, low, title, high_label='High', medium_label='Medium', low_label="Low") => {
   return {
     chart: {
@@ -114,6 +136,60 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
           drilldown: "Low"
       }]
     }]
+  }
+}
+
+// Bar Chart
+const barchart = (title, data) => {
+  return {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: title
+    },
+    // subtitle: {
+    //     text: companyId
+    // },
+    accessibility: {
+        announceNewData: {
+            enabled: true
+        }
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '# of Users'
+        },
+        tickInterval: 1,
+    },
+    legend: {
+      enabled: false,
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+    },
+
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y}'
+            }
+        }
+    },
+    series: [
+        {
+          name: "",
+          colorByPoint: true,
+          data
+        }
+    ]
   }
 }
 
@@ -204,24 +280,25 @@ export const scoreDonutChart = (score) => {
             { name: '', y: 5-score, color: "#E6E6E6" },
         ]
     }]
-}
-}
-
-// mark colors based upon level
-
-export const levelColor = (level) => {
-  let color = 'green darken-1'
-  level = level ? level.toLowerCase() : 'low'
-  switch (level) {
-    case 'high':
-      color = 'red darken-4'
-      break
-    case 'medium':
-      color = 'red lighten-1'
-      break
-    case 'low':
-      color = 'green darken-1'
-      break
   }
-  return color
+}
+
+export const appUsersChart = (apps) => {
+  let axis = []
+  let topApps = apps.sort((a, b) => b.no_users - a.no_users )
+  let title= 'Users for Applications'
+
+  let data = []
+  topApps.map(app => {
+    if (Number(app.no_users) > 0) {
+      axis.push(app.application_name)
+      data.push({
+        name: app.application_name,
+        y: app.no_users,
+        drilldown: null
+      })
+    }
+  })
+
+  return barchart(title, data)
 }

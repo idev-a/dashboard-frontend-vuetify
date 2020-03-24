@@ -18,7 +18,7 @@
 
 	    <v-card
 			:loading="loading"
-	      	class="px-5 py-3 mt-1 iframe"
+	      	class="px-5 py-3 iframe"
 	    >
 			<vue-friendly-iframe
 				v-if="isIframe"
@@ -126,13 +126,14 @@
 			<div v-if="select['spoofcheck']" class="overflow-y py-4 pa-4">
 				<v-card-title>Spoof Check</v-card-title>
 			 	<v-sheet
+			 		v-if="data.spf_record"
 			 		class="pa-3 py-4 my-3"
 			        color="info"
 		      	>
 		      		{{data.spf_record}}
 		      	</v-sheet>
 				<div class="mb-2"><span>{{data.spf_record_more}}</span></div>
-				<div class="mb-3"><b>dmarc:</b> <span>{{data.spf_dmarc}}</span></div>
+				<div v-if="data.spf_dmarc" class="mb-3"><b>dmarc:</b> <span>{{data.spf_dmarc}}</span></div>
 				<div class="mb-2" v-html="checkSPFPossible(data.spf_spoofing_possible)"></div>
 			</div>
 
@@ -152,7 +153,7 @@
 	                  cols="12"
 	                  md="6"
 	              	>
-	              		<b>Domain:</b> <span>{{data.urlscan_domain}}</span>
+	              		<b>Domain:</b> <span>{{company}}</span>
 	              	</v-col>
 	              	<v-col
 	                  	cols="12"
@@ -234,7 +235,7 @@
 				</v-row>
 			</div>
 
-			<div v-if="select['shodan']" class="overflow-y py-4 pa-4">
+			<div v-if="select['shodan'] && data.shodan.error == undefined" class="overflow-y py-4 pa-4">
 				<v-card-title> <span class="mr-2">Shodan.io</span> <v-img src="https://static.shodan.io/shodan/img/logo.png" max-width="112"/></v-card-title>
 				<v-row>
 					<v-col

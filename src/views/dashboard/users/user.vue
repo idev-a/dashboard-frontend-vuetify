@@ -93,7 +93,7 @@
                   md="3"
                 >
                   <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Previleged</div>
+                    <div class="display-2 font-weight-light">Privileged</div>
                     <v-chip :color="currentUser.privileged_account == 1 ? 'success' : 'default'" dark><div class="subtitle-2">{{ currentUser.privileged_account == 1 ? 'Yes' : 'No' }}</div></v-chip>
                   </v-card>
                 </v-col>

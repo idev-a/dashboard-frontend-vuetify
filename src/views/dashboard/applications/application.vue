@@ -26,6 +26,7 @@
         <v-spacer></v-spacer>
       </v-card-title>
       <v-data-table
+        v-if="apps.length > 0"
         :loading="loading"
         :headers="appHeaders"
         :items="apps"
@@ -238,9 +239,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../../api'
+  import { fetchApps, fetchAppUsers } from '../../../api'
   import { validEmail, levelColor } from '../../../util'
-  import axios from 'axios'
 
   export default {
     name: 'DashboardApplications',
@@ -294,8 +294,10 @@
       expanded: [],
     }),
 
-    mounted () {
-      this.fetchRisks()
+    async mounted () {
+      this.loading = true
+      this.apps = await fetchApps()
+      this.loading = false
     },
 
     computed: {
@@ -338,53 +340,16 @@
         this.expanded = []
         this.expanded.push(item)
       },
-      showUsers (item) {
+      async showUsers (item) {
         this.currentApp = item
         this.user = true
         this.details = false
         this.expanded = []
         this.expanded.push(item)
         
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
-        const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/users/${item.application_name}/${companyId}`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.users = res.data.users
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
-      },
-      fetchRisks () {
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
-        const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/applications/all/${companyId}`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.apps = res.data.apps
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+        this.loading = true
+        this.users = await fetchAppUsers(item.application_name)
+        this.loading = false
       },
     }
   }
