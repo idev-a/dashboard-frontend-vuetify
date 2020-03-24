@@ -140,7 +140,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
 }
 
 // Bar Chart
-const barchart = (title, data) => {
+const barchart = (title, yLabel, data, interval=1) => {
   return {
     chart: {
         type: 'column'
@@ -152,43 +152,43 @@ const barchart = (title, data) => {
     //     text: companyId
     // },
     accessibility: {
-        announceNewData: {
-            enabled: true
-        }
+      announceNewData: {
+          enabled: true
+      }
     },
     xAxis: {
         type: 'category'
     },
     yAxis: {
-        min: 0,
-        title: {
-            text: '# of Users'
-        },
-        tickInterval: 1,
+      min: 0,
+      title: {
+        text: yLabel
+      },
+      tickInterval: interval,
     },
     legend: {
       enabled: false,
     },
     tooltip: {
-        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+      headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
     },
 
     plotOptions: {
-        series: {
-            borderWidth: 0,
-            dataLabels: {
-                enabled: true,
-                format: '{point.y}'
-            }
-        }
+      series: {
+          borderWidth: 0,
+          dataLabels: {
+              enabled: true,
+              format: '{point.y}'
+          }
+      }
     },
     series: [
-        {
-          name: "",
-          colorByPoint: true,
-          data
-        }
+      {
+        name: "",
+        colorByPoint: true,
+        data
+      }
     ]
   }
 }
@@ -284,14 +284,13 @@ export const scoreDonutChart = (score) => {
 }
 
 export const appUsersChart = (apps) => {
-  let axis = []
   let topApps = apps.sort((a, b) => b.no_users - a.no_users )
   let title= 'Users for Applications'
+  let yLabel = '# of Users'
 
   let data = []
   topApps.map(app => {
     if (Number(app.no_users) > 0) {
-      axis.push(app.application_name)
       data.push({
         name: app.application_name,
         y: app.no_users,
@@ -300,5 +299,24 @@ export const appUsersChart = (apps) => {
     }
   })
 
-  return barchart(title, data)
+  return barchart(title, yLabel, data)
+}
+
+export const highriskCategoryChart = (categories) => {
+  let title= 'Highest Risk by Category'
+  let yLabel = '# of Questions'
+
+  let topCategories = categories.sort((a, b) => b.cnt - a.cnt )
+  let data = []
+  topCategories.map(category => {
+    if (Number(category.cnt) > 0) {
+      data.push({
+        name: category.category,
+        y: category.cnt,
+        drilldown: null
+      })
+    }
+  })
+
+  return barchart(title, yLabel, data, 10)
 }
