@@ -345,7 +345,7 @@ export const appUsersChart = (apps) => {
 
 export const highriskCategoryChart = (categories) => {
   let title= 'Highest Risk by Category'
-  let subtitle = `${data.length} Categories`
+  let subtitle = `${categories.length} Categories`
   let yLabel = '# of Questions'
 
   let topCategories = categories.sort((a, b) => b.cnt - a.cnt )
