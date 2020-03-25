@@ -171,7 +171,7 @@
       },
 
       highriskCategoryChart () {
-        return highriskCategoryChart(this.charts.categories)
+        return highriskCategoryChart(this.charts.hishrisk_by_categories)
       }
     },
 
