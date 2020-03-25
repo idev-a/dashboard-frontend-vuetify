@@ -140,7 +140,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
 }
 
 // Bar Chart
-const barchart = (title, yLabel, data, interval=1) => {
+const barchart = (title, subtitle, yLabel, data, interval=1) => {
   return {
     chart: {
         type: 'column'
@@ -149,7 +149,7 @@ const barchart = (title, yLabel, data, interval=1) => {
         text: title
     },
     subtitle: {
-        text: `${data.length} Categories`
+        text: subtitle
     },
     accessibility: {
       announceNewData: {
@@ -326,6 +326,7 @@ export const scoreDonutChart = (score) => {
 export const appUsersChart = (apps) => {
   let topApps = apps.sort((a, b) => b.no_users - a.no_users )
   let title= 'Users for Applications'
+  let subtitle = `${data.length} Applications`
   let yLabel = '# of Users'
 
   let data = []
@@ -339,11 +340,12 @@ export const appUsersChart = (apps) => {
     }
   })
 
-  return barchart(title, yLabel, data)
+  return barchart(title, subtitle, yLabel, data)
 }
 
 export const highriskCategoryChart = (categories) => {
   let title= 'Highest Risk by Category'
+  let subtitle = `${data.length} Categories`
   let yLabel = '# of Questions'
 
   let topCategories = categories.sort((a, b) => b.cnt - a.cnt )
@@ -358,7 +360,7 @@ export const highriskCategoryChart = (categories) => {
     }
   })
 
-  return barchart(title, yLabel, data, 10)
+  return barchart(title, subtitle, yLabel, data, 10)
 }
 
 export const ciaCategoryChart = (data, categories) => {
