@@ -90,4 +90,8 @@
   .bg-dead {
     background: #E0E0E;
   }
+
+  .min-50 {
+    min-height: 50px;
+  }
 </style>

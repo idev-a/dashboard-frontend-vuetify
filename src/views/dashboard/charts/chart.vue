@@ -12,10 +12,10 @@
         lg="3"
       >
         <v-card
-          class="pt-3"
+          class="pt-3 min-50"
           :loading="loadingCard"
         >
-          <highcharts :options="scoreChart"></highcharts>
+          <highcharts v-if="!loadingCard" :options="scoreChart"></highcharts>
         </v-card>
       </v-col>
       <v-col
@@ -24,23 +24,10 @@
         lg="3"
       >
         <v-card
-          class="pt-3"
+          class="pt-3 min-50"
           :loading="loadingCard"
         >
-          <highcharts :options="riskLevelCharts"></highcharts>
-        </v-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <v-card
-          class="pt-3"
-          :loading="loadingCard"
-        >
-          <highcharts  :options="highRiskUsers"></highcharts>
+          <highcharts v-if="!loadingCard" :options="riskLevelCharts"></highcharts>
         </v-card>
       </v-col>
 
@@ -50,10 +37,10 @@
         lg="3"
       >
         <v-card
-          class="pt-3"
+          class="pt-3 min-50"
           :loading="loadingCard"
         >
-          <highcharts  :options="highRiskApps"></highcharts>
+          <highcharts v-if="!loadingCard" :options="highRiskUsers"></highcharts>
         </v-card>
       </v-col>
 
@@ -63,10 +50,48 @@
         lg="3"
       >
         <v-card
-          class="pt-3"
+          class="pt-3 min-50"
           :loading="loadingCard"
         >
-          <highcharts  :options="CIACharts"></highcharts>
+          <highcharts v-if="!loadingCard" :options="highRiskApps"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <v-card
+          class="pt-3 min-50"
+          :loading="loadingCard"
+        >
+          <highcharts v-if="!loadingCard" :options="CIACharts"></highcharts>
+        </v-card>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="12"
+        lg="9"
+      >
+        <v-card
+          class="pt-3 min-50"
+          :loading="loadingCard"
+        >
+          <highcharts v-if="!loadingCard" :options="appUsersChart"></highcharts>
+        </v-card>
+      </v-col>
+      
+      <v-col
+        cols="12"
+        md="12"
+      >
+        <v-card
+          class="pt-3 min-50"
+          :loading="loadingCard"
+        >
+          <highcharts v-if="!loadingCard" :options="highriskCategoryChart"></highcharts>
         </v-card>
       </v-col>
     </v-row>
@@ -79,7 +104,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
-  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart } from '../../../util'
+  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart,appUsersChart, highriskCategoryChart } from '../../../util'
   import axios from 'axios'
 
   export default {
@@ -139,6 +164,14 @@
 
       scoreChart () {
         return scoreDonutChart(this.charts.org_score)
+      },
+
+      appUsersChart () {
+        return appUsersChart(this.charts.applications)
+      },
+
+      highriskCategoryChart () {
+        return highriskCategoryChart(this.charts.categories)
       }
     },
 

@@ -193,6 +193,46 @@ const barchart = (title, yLabel, data, interval=1) => {
   }
 }
 
+// column chart
+export const columnChart = (title, subtitle, yLabel, series, categories, interval=1) => {
+  return {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: title
+    },
+    subtitle: {
+        text: subtitle
+    },
+    xAxis: {
+        categories: categories,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: yLabel
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: series
+  }
+}
+
 export const riskLevelChart = (high, medium, low) => {
   return riskPieChart(high, medium, low, 'Risk Levels')
 }
@@ -319,4 +359,12 @@ export const highriskCategoryChart = (categories) => {
   })
 
   return barchart(title, yLabel, data, 10)
+}
+
+export const ciaCategoryChart = (data, categories) => {
+  let title = 'CIA by Category'
+  let subtitle = `${categories.length} Categories`
+  let yLabel = '#'
+
+  return columnChart(title, subtitle, yLabel, data, categories)
 }
