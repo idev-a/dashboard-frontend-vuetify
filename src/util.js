@@ -326,7 +326,7 @@ export const scoreDonutChart = (score) => {
 export const appUsersChart = (apps) => {
   let topApps = apps.sort((a, b) => b.no_users - a.no_users )
   let title= 'Users for Applications'
-  let subtitle = `${data.length} Applications`
+  let subtitle = `${apps.length} Applications`
   let yLabel = '# of Users'
 
   let data = []
