@@ -148,9 +148,9 @@ const barchart = (title, yLabel, data, interval=1) => {
     title: {
         text: title
     },
-    // subtitle: {
-    //     text: companyId
-    // },
+    subtitle: {
+        text: `${data.length} Categories`
+    },
     accessibility: {
       announceNewData: {
           enabled: true
