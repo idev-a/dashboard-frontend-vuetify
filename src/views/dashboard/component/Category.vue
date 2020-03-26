@@ -389,6 +389,7 @@
           {
             text: 'Answer',
             value: 'answer',
+            width: '200'
           },
         ]
         if (this.category == 'all') {

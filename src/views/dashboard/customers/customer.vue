@@ -11,8 +11,10 @@
         :loading="loading"
         :headers="headers"
         :items="users"
+        item-key="id"
         :search="search"
-        :items-per-page="5"
+        :items-per-page="page"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
@@ -159,10 +161,10 @@
           text: 'Status',
           value: 'status',
         },
-        {
-          text: 'IP',
-          value: 'ip',
-        },
+        // {
+        //   text: 'IP',
+        //   value: 'ip',
+        // },
         {
           text: 'Last Login',
           value: 'last_login',
@@ -200,13 +202,13 @@
         member_since: '',
       },
       rules: {
-          required: value => !!value || 'This field is required.',
-          counter: value => value.length >= 6 || 'Min 6 characters',
-          email: value => {
-            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid e-mail.'
-          },
+        required: value => !!value || 'This field is required.',
+        counter: value => value.length >= 6 || 'Min 6 characters',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
         },
+      },
     }),
 
     mounted () {
@@ -217,9 +219,14 @@
       formTitle () {
         return this.editedIndex === -1 ? 'New User' : 'Edit User'
       },
+
       emailReadonly () {
         return this.editedIndex > -1
-      }
+      },
+
+      page () {
+        return Number(localStorage.getItem('page')) || 5
+      }, 
     },
 
     watch: {
@@ -229,6 +236,10 @@
     },
 
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
+
       changeStatus (val) {
         console.log(val)
       },
@@ -238,7 +249,6 @@
       cancel () {
       },
       open () {
-       
       },
       close () {
         this.dialog = false

@@ -96,12 +96,16 @@
         {
           group: '/customers',
           icon: 'mdi-account-multiple',
-          title: 'Manage Customers',
+          title: 'Admin',
           is_admin: true,
           children: [
             {
-              title: 'All',
+              title: 'Customers',
               to: 'all',
+            },
+            {
+              title: 'Daily Tips',
+              to: 'dailytips',
             },
           ]
         },

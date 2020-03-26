@@ -78,7 +78,16 @@ let router = new Router({
         {
           name: 'Customers',
           path: 'customers/all',
-          component: () => import('@/views/dashboard/customers/all'),
+          component: () => import('@/views/dashboard/customers/customer'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Daily Tips',
+          path: 'customers/dailytips',
+          component: () => import('@/views/dashboard/customers/dailytips'),
           meta: {
             is_admin: true,
             requiresAuth: true
