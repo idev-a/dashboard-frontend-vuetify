@@ -81,34 +81,34 @@
             </v-dialog>
           </v-toolbar>
         </template>
-          <template v-slot:item.action="{ item }">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn 
-                  text 
-                  icon 
-                  v-on="on"
-                  @click="editItem(item)"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-              <span>Edit User</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn 
-                <v-btn 
-                  text 
-                  icon 
-                  v-on="on"
-                  @click="deleteItem(item)"
-                >
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </template>
-              <span>Delete User</span>
-            </v-tooltip>
+        <template v-slot:item.action="{ item }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn 
+                text 
+                icon 
+                v-on="on"
+                @click="editItem(item)"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+            <span>Edit User</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn 
+              <v-btn 
+                text 
+                icon 
+                v-on="on"
+                @click="deleteItem(item)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+            <span>Delete User</span>
+          </v-tooltip>
         </template>
       </v-data-table>
     </v-card>
