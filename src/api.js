@@ -9,7 +9,7 @@ export const getCompanyId = () => {
 	try {
 		user = JSON.parse(localStorage.getItem('user'))
 	} catch(e) {}
-	return user.email.split('@')[1];
+	return user && user.email && user.email.split('@')[1] || '';
 }
 
 export const companyId = getCompanyId();

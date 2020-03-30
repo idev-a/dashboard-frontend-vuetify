@@ -56,8 +56,8 @@
 		                class="mx-3"
 	              	></v-text-field>
 			    </template>
-			    <template v-slot:item.email="{ item }">
-                  <span v-html="beautifyEmail(item.email)"></span>
+			    <template v-slot:item.emails="{ item }">
+                  <span v-html="beautifyEmails(item.emails)"></span>
                 </template>
                 <template v-slot:item.status="{ item }">
                 	<v-chip class="text-uppercase" :class="item.status == 'delivered'? 'success' : 'danger'">{{item.status}}</v-chip>
@@ -277,8 +277,8 @@
           ],
           deliveredUsersHeaders: [
 	        {
-	          text: 'Email',
-	          value: 'email',
+	          text: 'Emails',
+	          value: 'emails',
 	        },
 	        {
 	          text: 'Status',
@@ -501,6 +501,20 @@
 		        } else {
 		          return email
 		        }
+	      	},
+
+	      	beautifyEmails (emails) {
+		        let res = ''
+		        const list = emails.split(' ')
+		        list.map(email => {
+		          if (validEmail(email)) {
+		            res += `<a href="mailto:${email}">${email}</a><br />`
+		          } else {
+		            res += `${email} <br />`
+		          }
+		        })
+
+		        return res
 	      	},
 
 	      	formatTime (date) {
