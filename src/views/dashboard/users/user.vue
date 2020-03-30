@@ -172,6 +172,14 @@
                     <span>{{currentUser.notes}}</span>
                   </v-card>
                 </v-col>
+                <v-col
+                  cols="12"
+                >
+                  <v-card  shaped outlined class="my-0 pa-2">
+                    <div class="display-2 font-weight-light">Applications</div>
+                    <div class="d-flex flex-wrap"><v-chip v-for="app in currentUser.apps" class="ma-2"><span class="subtitle-1">{{app.name}}</span></v-chip></div>
+                  </v-card>
+                </v-col>
               </v-row>
             </div>
           </td>
@@ -242,6 +250,12 @@
     },
 
     methods: {
+      beautifyApps (apps) {
+        let appList = ''
+        apps.map(app => {
+
+        })
+      },
       levelColor (level) {
         return levelColor(level)
       },

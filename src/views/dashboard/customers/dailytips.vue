@@ -38,6 +38,7 @@
       	>
 			<div class="subtitle-1 mt-3 border-line">TODAY DELIVERED USERS</div>
 				<v-data-table
+				v-if="deliveredUsers.length > 0"
 		        :loading="loading"
 		        :headers="deliveredUsersHeaders"
 		        :items="deliveredUsers"
@@ -57,7 +58,7 @@
 	              	></v-text-field>
 			    </template>
 			    <template v-slot:item.emails="{ item }">
-                  <span v-html="beautifyEmails(item.emails)"></span>
+                  <div class="d-flex flex-wrap" v-html="beautifyEmails(item.emails)"></div>
                 </template>
                 <template v-slot:item.status="{ item }">
                 	<v-chip class="text-uppercase" :class="item.status == 'delivered'? 'success' : 'danger'">{{item.status}}</v-chip>
@@ -279,6 +280,7 @@
 	        {
 	          text: 'Emails',
 	          value: 'emails',
+	          width: '350',
 	        },
 	        {
 	          text: 'Status',
@@ -505,10 +507,10 @@
 
 	      	beautifyEmails (emails) {
 		        let res = ''
-		        const list = emails.split(' ')
+		        const list = emails.split(';')
 		        list.map(email => {
 		          if (validEmail(email)) {
-		            res += `<a href="mailto:${email}">${email}</a><br />`
+		            res += `<a href="mailto:${email}" class="mr-2">${email}</a>`
 		          } else {
 		            res += `${email} <br />`
 		          }
