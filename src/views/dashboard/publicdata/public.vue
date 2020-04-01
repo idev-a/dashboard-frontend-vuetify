@@ -324,7 +324,7 @@
 	                		<v-chip label class="orange pa-0 px-5">{{service.transport}}</v-chip>
 	                		<v-chip label class="dark pa-0 px-5">{{service._shodan.module}}</v-chip>
 	                	</div>
-	                	<pre >{{service.data}}</pre>
+	                	<pre class="shodan" >{{service.data}}</pre>
 						<div v-if="service.http && !service.ssl">
 							<b class="mb-2">{{service.http.title}}</b>
 							<div v-html="service.http.html"></div>
@@ -833,7 +833,7 @@
 		right: 10px;
 	}
 
-	pre {
+	pre.shodan {
         overflow-x: auto;
         white-space: pre-line;
         white-space: -moz-pre-wrap;

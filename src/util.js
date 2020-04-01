@@ -89,7 +89,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
         text: title
     },
     tooltip: {
-        pointFormat: '<b>{point.percentage:.1f}%</b>'
+        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
     },
     accessibility: {
       announceNewData: {
