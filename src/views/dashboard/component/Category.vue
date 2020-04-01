@@ -57,7 +57,7 @@
                 text 
                 icon 
                 v-on="on"
-                @click="showDetails(item)"
+                @click.stop="showDetails(item)"
               >
                 <v-icon>mdi-application</v-icon>
               </v-btn>

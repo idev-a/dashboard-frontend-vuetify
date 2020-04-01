@@ -107,6 +107,10 @@
               title: 'Daily Tips',
               to: 'dailytips',
             },
+            {
+              title: 'Public Data',
+              to: 'publictable',
+            },
           ]
         },
         {

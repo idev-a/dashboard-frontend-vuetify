@@ -50,7 +50,7 @@
                 text 
                 icon 
                 v-on="on"
-                @click="showUsers(item)"
+                @click.stop="showUsers(item)"
               >
                 <v-icon>mdi-account-search</v-icon>
               </v-btn>

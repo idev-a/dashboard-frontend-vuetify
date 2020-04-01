@@ -94,6 +94,15 @@ let router = new Router({
           }
         },
         {
+          name: 'DB (public_data table)',
+          path: 'customers/publictable',
+          component: () => import('@/views/dashboard/customers/PublicTable'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),
