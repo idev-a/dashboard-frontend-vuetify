@@ -189,8 +189,11 @@
       showDetails (item) {
         this.currentGroup = item
         this.user = true
-        this.expanded = []
-        this.expanded.push(item)
+        if (this.expanded.length) {
+          this.expanded = []
+        } else {
+          this.expanded.push(item)
+        }
       },
       fetchGroups () {
         let user = {}

@@ -337,19 +337,25 @@
         this.currentApp = item
         this.details = true
         this.user = false
-        this.expanded = []
-        this.expanded.push(item)
+        if (this.expanded.length) {
+          this.expanded = []
+        } else {
+          this.expanded.push(item)
+        }
       },
       async showUsers (item) {
         this.currentApp = item
         this.user = true
         this.details = false
-        this.expanded = []
-        this.expanded.push(item)
+        if (this.expanded.length) {
+          this.expanded = []
+        } else {
+          this.expanded.push(item)
+          this.loading = true
+          this.users = await fetchAppUsers(item.application_name)
+          this.loading = false
+        }
         
-        this.loading = true
-        this.users = await fetchAppUsers(item.application_name)
-        this.loading = false
       },
     }
   }

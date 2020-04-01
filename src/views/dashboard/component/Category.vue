@@ -423,12 +423,11 @@
         }
       },
       showDetails (item) {
-        this.expanded = []
-        if (this.expanded.includes(item)) {
-          this.details = false
+        this.currentQuestion = item
+        this.details = true
+        if (this.expanded.length) {
+          this.expanded = []
         } else {
-          this.currentQuestion = item
-          this.details = true
           this.expanded.push(item)
         }
       },
