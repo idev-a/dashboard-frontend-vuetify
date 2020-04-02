@@ -30,7 +30,7 @@
         >
           <template v-slot:heading>
             <div class="text-center">
-              <h1 class="display-2 font-weight-bold mb-2">
+              <h1 class="display-2 font-weight-bold">
                 Login
               </h1>
              
@@ -44,12 +44,12 @@
             <v-text-field
               ref="email"
               v-model="form.email"
-              :rules="[rules.required, rules.email, rules.validEmail]"
+              :rules="[rules.required, rules.email]"
               :loading="loading"
               hide-details="auto"
               class="mb-2"
               color="secondary"
-              label="Please enter your business email address."
+              label="Please enter your email address."
               prepend-icon="mdi-email"
               @keyup.enter="request"
               required

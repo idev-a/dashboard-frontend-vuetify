@@ -31,9 +31,9 @@
         >
           <template v-slot:heading>
             <div class="text-center">
-              <h1 class="display-2 font-weight-bold mb-2">
-                Register
-              </h1>
+              <div class="display-2 font-weight-bold">
+                Register to Secure Dashboard
+              </div>
             </div>
           </template>
 
@@ -44,16 +44,24 @@
             <v-text-field
               ref="email"
               v-model="form.email"
-              :rules="[rules.required, rules.email, rules.validEmail]"
+              :rules="[rules.required, rules.email]"
               :loading="loading"
-              class="mb-5"
+              class="mt-5 mb-7"
               hide-details="auto"
               color="secondary"
-              label="Please enter your business email address."
+              label="Please enter your email address."
               prepend-icon="mdi-email"
               @keyup.enter="submit"
               required
             />
+
+            <v-checkbox
+              v-model="form.opt_out"
+            >
+              <template v-slot:label>
+                <div class="black--text">Would you like to receive <b>Daily Security Tips</b>?</div>
+              </template>
+            </v-checkbox>
 
             <v-btn
               :loading="loading"
@@ -90,9 +98,11 @@
       const defaultForm = Object.freeze({
         username: '',
         email: '',
+        opt_out: 1,
       })
 
       return {
+        loading: false,
         socials: [
           {
             href: '#',
@@ -100,7 +110,6 @@
             iconColor: '#dd4b39',
           },
         ],
-        loading: false,
         errorMessages: {
           username: '',
           email: {
@@ -171,6 +180,7 @@
           const data = {
             username: this.form.username,
             email: this.form.email,
+            daily_tips_opt_out: !this.form.opt_out
           }
           axios({
             url: `${BASE_API}/api/users/register`,

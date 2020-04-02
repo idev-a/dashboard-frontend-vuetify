@@ -107,10 +107,10 @@
               title: 'Daily Tips',
               to: 'dailytips',
             },
-            {
-              title: 'Public Data',
-              to: 'publictable',
-            },
+            // {
+            //   title: 'Public Data',
+            //   to: 'publictable',
+            // },
           ]
         },
         {
@@ -133,37 +133,19 @@
           ]
         },
         {
-          group: '/applications',
           icon: 'mdi-application',
           title: 'Applications',
-          children: [
-            {
-              title: 'All',
-              to: 'index',
-            },
-          ]
+          to: '/applications/index'
         },
         {
-          group: '/users',
           icon: 'mdi-account-multiple',
           title: 'Users',
-          children: [
-            {
-              title: 'All',
-              to: 'index',
-            },
-          ]
+          to: '/users/index',
         },
         {
-          group: '/groups',
           icon: 'mdi-account-group-outline',
           title: 'Groups',
-          children: [
-            {
-              title: 'All',
-              to: 'index',
-            },
-          ]
+          to: '/groups/index',
         },
         {
           group: '/security',
@@ -189,37 +171,19 @@
           ]
         },
         {
-          group: '/category',
           icon: 'mdi-security',
-          title: 'Category',
-          children: [
-            {
-              title: 'All Questions',
-              to: 'all',
-            },
-          ]
+          title: 'All Questions',
+          to: '/category/all',
         },
         {
-          group: '/publicdata',
           icon: 'mdi-database',
           title: 'Public Data',
-          children: [
-            {
-              title: 'All',
-              to: 'index',
-            },
-          ]
+          to: '/publicdata/index',
         },
         {
-          group: '/charts',
           icon: 'mdi-poll',
           title: 'Charts',
-          children: [
-            {
-              title: 'All',
-              to: 'index',
-            },
-          ]
+          to: '/charts/index',
         },
       ],
     }),

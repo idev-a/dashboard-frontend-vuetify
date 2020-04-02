@@ -5,6 +5,22 @@
     tag="section"
   >
     <v-card
+      v-if="banner"
+      raised
+      shaped
+      class="p-3"
+    >
+      <v-card-title class="mb-2" >
+        {{banner.title}}
+      </v-card-title>
+      <v-card-text>
+        <span>
+          {{banner.body}}
+        </span>
+      </v-card-text>
+    </v-card>
+
+    <v-card
       icon="mdi-security"
       title="Email Security"
       class="px-5 py-3"
@@ -423,13 +439,10 @@
         }
       },
       showDetails (item) {
+        this.expanded = []
         this.currentQuestion = item
         this.details = true
-        if (this.expanded.length) {
-          this.expanded = []
-        } else {
-          this.expanded.push(item)
-        }
+        this.expanded.push(item)
       },
       fetchRisks () {
         let user = {}
@@ -465,6 +478,10 @@
         type: String,
         default: 'Email Security'
       },
+      banner: {
+        type: Object,
+        default: undefined
+      }
     }
   }
 </script>

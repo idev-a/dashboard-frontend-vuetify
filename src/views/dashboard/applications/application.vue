@@ -172,9 +172,7 @@
                     <span>{{currentApp.other}}</span>
                   </v-card>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col
+                <!-- <v-col
                   cols="12"
                   md="3"
                   sm="3"
@@ -183,7 +181,7 @@
                     <div class="display-2 font-weight-light">Application Risk</div>
                     <v-chip :color="levelColor(currentApp.risk_level)" dark><div class="subtitle-2">{{ currentApp.risk_level ? currentApp.risk_level : 'low' }}</div></v-chip>
                   </v-card>
-                </v-col>
+                </v-col> -->
                 <v-col
                   cols="12"
                   md="3"
@@ -214,8 +212,6 @@
                     <span v-html="beautifyEmail(currentApp.admin_user)"></span>
                   </v-card>
                 </v-col>
-              </v-row>
-              <v-row>
                 <v-col
                   cols="6"
                 >
@@ -334,28 +330,21 @@
         return res
       },
       showDetails (item) {
+        this.expanded = []
         this.currentApp = item
         this.details = true
         this.user = false
-        if (this.expanded.length) {
-          this.expanded = []
-        } else {
-          this.expanded.push(item)
-        }
+        this.expanded.push(item)
       },
       async showUsers (item) {
         this.currentApp = item
-        this.user = true
+        this.user  = true
         this.details = false
-        if (this.expanded.length) {
-          this.expanded = []
-        } else {
-          this.expanded.push(item)
-          this.loading = true
-          this.users = await fetchAppUsers(item.application_name)
-          this.loading = false
-        }
-        
+        this.expanded = []
+        this.expanded.push(item)
+        this.loading = true
+        this.users = await fetchAppUsers(item.application_name)
+        this.loading = false
       },
     }
   }

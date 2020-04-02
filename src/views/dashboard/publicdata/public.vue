@@ -471,7 +471,7 @@
 </template>
 
 <script>
-	import { BASE_API } from '../../../api'
+	import { BASE_API, fetchPublicData, getCompanyId } from '../../../api'
 	import { validEmail } from '../../../util'
 	import axios from 'axios'
 
@@ -521,10 +521,6 @@
 			          value: 'ipAddress',
 			          text: 'Server',
 			        },
-			        // {
-			        //   value: 'details',
-			        //   text: 'Test time',
-			        // },
 			        {
 			          value: 'grade',
 			          text: 'Grade',
@@ -566,22 +562,6 @@
 			          value: 'dns-ns',
 			          text: 'NS',
 			        },
-			        // {
-			        //   value: 'geoip-country',
-			        //   text: 'Geoip Country',
-			        // },
-			        // {
-			        //   value: 'whois-created',
-			        //   text: 'Created By',
-			        // },
-			        // {
-			        //   value: 'whois-updated',
-			        //   text: 'Updated By',
-			        // },
-			        // {
-			        //   value: 'ssdeep-score',
-			        //   text: 'SSDeep Score',
-			        // },
 		        ]
 			}
 		},
@@ -592,14 +572,10 @@
 	      	}, 
 		},
 
-		mounted () {
-			let user = {}
-	        try {
-	          user = JSON.parse(localStorage.getItem('user'))
-	        } catch(e) {}
-	        this.company = user.email.split('@')[1];
+		async mounted () {
+	        this.company = getCompanyId();
 
-	        this.fetchData()
+	        await this.fetchPublicData()
 		},
 
 		methods: {
@@ -748,21 +724,10 @@
 					}
 				}
 			},
-			fetchData () {
-				const self = this
-		        self.loading = true
-		        axios(`${BASE_API}/api/public/${this.company}/data`, {
-		            method: 'GET',
-		          })
-		            .then(function (res) {
-		              self.data = res.data.data
-		            })
-		            .catch(error => {
-		              console.log(error)
-		            })
-		            .finally(() => {
-		              self.loading = false
-		            })
+			async fetchPublicData () {
+		        this.loading = true
+		        this.data = await fetchPublicData(this.company)
+		        this.loading = false
 			},
 			fetchPage (data) {
 				const url = this.links[data] + this.company

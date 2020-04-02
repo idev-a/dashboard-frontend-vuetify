@@ -269,11 +269,8 @@
       showDetails (item) {
         this.currentUser = item
         this.user = true
-        if (this.expanded.length) {
-          this.expanded = []
-        } else {
-          this.expanded.push(item)
-        }
+        this.expanded = []
+        this.expanded.push(item)
       },
       fetchUsers () {
         let user = {}

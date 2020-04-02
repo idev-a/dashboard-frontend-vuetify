@@ -30,3 +30,9 @@ export const fetchAppUsers = async (app_name) => {
 	const response = await axios.get(`${BASE_API}/api/users/${app_name}/${companyId}`)
 	return response.data.users;
 }
+
+// fetch public data
+export const fetchPublicData = async (companyId) => {
+	const res = await axios.get(`${BASE_API}/api/public/${companyId}/data`)
+    return res.data.data
+}

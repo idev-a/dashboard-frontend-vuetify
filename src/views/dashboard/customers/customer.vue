@@ -39,7 +39,7 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="12" md="12">
+                      <v-col cols="12" sm="6" md="6">
                         <v-text-field 
                           :rules="[rules.required, rules.email]"
                           v-model="editedItem.email"
@@ -67,6 +67,22 @@
                           class="mt-2"
                           required
                         ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-select
+                          v-model="editedItem.daily_tips_opt_out"
+                          :items="userOptoutList"
+                          label="Daily Tips Optout"
+                          class="mt-2"
+                          required
+                        >
+                          <template v-slot:selection="{ item, index }">
+                            <span>{{ item ? 'Yes' : 'No' }}</span>
+                          </template>
+                          <template v-slot:item="{ item }">
+                            <span>{{ item ? 'Yes' : 'No' }}</span>
+                          </template>
+                        </v-select>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -182,7 +198,12 @@
         'Active',
         'Denied'
       ],
+      userOptoutList: [
+        true,
+        false
+      ],
       userRoleList: [
+        'Admin',
         'Customer',
       ],
       dialog: false,
@@ -192,14 +213,16 @@
         role: '',
         status: '',
         member_since: '',
+        daily_tips_opt_out: ''
       },
       defaultItem: {
         email: '',
-        role: '',
-        status: '',
+        role: 'Customer',
+        status: 'Pending',
         ip: '',
         last_login: '',
         member_since: '',
+        daily_tips_opt_out: false
       },
       rules: {
         required: value => !!value || 'This field is required.',
@@ -334,7 +357,8 @@
             url: `${BASE_API}/api/users/${item.email}`,
             data: {
               status: item.status,
-              role: item.role
+              role: item.role,
+              daily_tips_opt_out: item.daily_tips_opt_out
             },
             method: 'PUT',
           })
