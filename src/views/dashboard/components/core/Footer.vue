@@ -8,18 +8,14 @@
         no-gutters
       >
         <v-col
-          v-for="(link, i) in links"
+          v-for="(social, i) in socials"
           :key="i"
-          class="text-center mb-sm-0 mb-5"
+          class="text-center mb-sm-0 mb-5 mx-2"
           cols="auto"
         >
-          <a
-            :href="link.href"
-            class="mr-0 grey--text text--darken-3"
-            rel="noopener"
-            target="_blank"
-            v-text="link.text"
-          />
+          <v-btn icon color="indigo" fab outlined :href="social.href">
+            <v-icon size="25">{{social.icon}}</v-icon>
+          </v-btn>
         </v-col>
 
         <v-spacer class="hidden-sm-and-down" />
@@ -28,14 +24,24 @@
           cols="12"
           md="auto"
         >
-          <div class="body-1 font-weight-light pt-6 pt-md-0 text-center">
-            &copy; 2019, made with
-            <v-icon size="18">
-              mdi-heart
-            </v-icon>
-            by <a href="https://www.creative-tim.com">Creative Tim</a> for a better web.
+          <div
+            class="text-center"
+          >
+            <a  
+              v-for="(link, i) in links"
+              :key="i" 
+              class="mb-sm-0 mb-5 mx-1 text--black"
+              :href="link.href">
+              {{link.text}}
+            </a>
           </div>
         </v-col>
+      </v-row>
+      <v-row class="mt-7" align="center" justify="center">
+        <div class="body-1 font-weight-light pt-6 pt-md-0 text-center">
+          &copy; 2019, copyright
+          by <a href="https://revampcybersecurity.com/">RevampCyberSecurity</a>
+        </div>
       </v-row>
     </v-container>
   </v-footer>
@@ -48,20 +54,46 @@
     data: () => ({
       links: [
         {
-          href: '#',
-          text: 'Creative Tim',
+          href: 'https://revampcybersecurity.com',
+          icon: 'mdi-home',
+          text: 'Home',
         },
         {
-          href: '#',
-          text: 'About Us',
+          href: 'https://revampcybersecurity.com/privacy-policy/',
+          icon: 'mdi-twitter',
+          text: 'Privacy Policy',
         },
         {
-          href: '#',
-          text: 'Blog',
+          href: 'https://revampcybersecurity.com/security/',
+          icon: 'mdi-twitter',
+          text: 'Security',
+        },
+      ],
+      socials: [
+        {
+          href: 'https://twitter.com/revampcyber',
+          icon: 'mdi-twitter',
+          text: 'Twitter',
         },
         {
-          href: '#',
-          text: 'Licenses',
+          href: 'https://www.instagram.com/revampcyber/',
+          icon: 'mdi-instagram',
+          text: 'Instagram',
+        },
+        {
+          href: 'https://www.facebook.com/Revamp-Cybersecurity-764581397233712/',
+          icon: 'mdi-facebook',
+          text: 'Facebook',
+        },
+        {
+          href: 'https://www.linkedin.com/company/revamp-cybersecurity',
+          icon: 'mdi-linkedin',
+          text: 'Linkedin',
+        },
+        {
+          href: 'https://www.youtube.com/channel/UCCKRNAopNV_U-9EGVUGM7rA',
+          icon: 'mdi-youtube',
+          text: 'Youtube',
         },
       ],
     }),
