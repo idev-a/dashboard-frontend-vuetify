@@ -56,7 +56,7 @@
             />
 
             <v-checkbox
-              v-model="form.opt_out ? false : true"
+              v-model="form.opt_out"
             >
               <template v-slot:label>
                 <div class="black--text">Would you like to receive <b>Daily Security Tips</b>?</div>
@@ -98,7 +98,7 @@
       const defaultForm = Object.freeze({
         username: '',
         email: '',
-        opt_out: 1,
+        opt_out: 0,
       })
 
       return {

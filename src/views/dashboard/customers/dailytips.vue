@@ -198,7 +198,19 @@
 							          auto-grow
 	                        		  rows="3"
 							          :rules="[rules.required]"
-							          label="Text"
+							          label="Full Text"
+							        ></v-textarea>
+							      </v-col>
+		                    </v-row>
+		                    <v-row>
+		                    	<v-col cols="12">
+							        <v-textarea
+							          v-model="editedItem.img_url"	
+							          outlined
+							          auto-grow
+	                        		  rows="1"
+							          :rules="[rules.required]"
+							          label="Image url"
 							        ></v-textarea>
 							      </v-col>
 		                    </v-row>
@@ -335,6 +347,7 @@
 	        date: new Date().toISOString().substr(0, 10),
          	title_text: '',
 	        full_text: '',
+	        img_url: '',
       	  },
 	      today: '',
 	      tip_id: '',
@@ -345,6 +358,7 @@
 	        date: new Date().toISOString().substr(0, 10),
 	        title_text: '',
 	        full_text: '',
+	        img_url: '',
 	      },
 	      
 	      rules: {
