@@ -85,7 +85,7 @@
               <v-card-title
               >
                 <span
-                  class="font-weight-bold"
+                  class="display-1"
                 >
                   {{usersTitle}}
                 </span>
@@ -123,54 +123,54 @@
               v-if="details"
               class="px-4 py-1"
             >
-               <v-card-title
+               <!-- <v-card-title
               >
                 <span
                   class="font-weight-bold"
                 >
                   {{currentApp.application_name}}
                 </span>
-              </v-card-title>
+              </v-card-title> -->
               <v-row>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">No of Users</div>
-                    <span>{{currentApp.no_users}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">No of Users</b>
+                    <div class="text--secondary">{{currentApp.no_users}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Price</div>
-                    <span>{{currentApp.price}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Price</b>
+                    <div class="text--secondary">{{currentApp.price}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">SoC2</div>
-                    <span>{{currentApp.soc2}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">SoC2</b>
+                    <div class="text--secondary">{{currentApp.soc2}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Other</div>
-                    <span>{{currentApp.other}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Other</b>
+                    <div class="text--secondary">{{currentApp.other}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <!-- <v-col
                   cols="12"
@@ -187,38 +187,38 @@
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Login URL</div>
-                    <a :href="currentApp.login_url" target="_blank">{{currentApp.login_url}}</a>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Login URL</b>
+                    <a :href="currentApp.login_url" target="_blank" class="text--secondary">{{currentApp.login_url}}</a>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Owner</div>
-                    <span>{{currentApp.Owner}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Owner</b>
+                    <div class="text--secondary">{{currentApp.Owner}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Admin User</div>
-                    <span v-html="beautifyEmail(currentApp.admin_user)"></span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Admin User</b>
+                    <div v-html="beautifyEmail(currentApp.admin_user)" class="text--secondary"></div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="6"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Purpose</div>
-                    <span>{{currentApp.purpose}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Purpose</b>
+                    <div class="text--secondary">{{currentApp.purpose}}</div>
+                  <!-- </v-card> -->
                 </v-col>
               </v-row>
             </div>
@@ -298,6 +298,7 @@
 
     computed: {
       usersTitle () {
+        return 'Users'
         if (this.currentApp) {
           return `Users (${this.currentApp.application_name})`
         } else {

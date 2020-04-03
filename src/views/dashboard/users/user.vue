@@ -63,50 +63,49 @@
               color="success"
               class="px-3 py-1"
             >
-              <v-card-title>
+              <!-- <v-card-title>
                 {{ currentUser.firstname_lastname }}
-              </v-card-title>
+              </v-card-title> -->
               <v-row>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Email</div>
-                    <span v-html="beautifyEmail(currentUser.email)"></span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Email</b>
+                    <div class="text--secondary" v-html="beautifyEmail(currentUser.email)"></div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Department</div>
-                    <span>{{currentUser.department}}</span>
-                  </v-card>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Department</b>
+                    <div class="text--secondary">{{currentUser.department}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Privileged</div>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1 d-block">Privileged</b>
                     <v-chip :color="currentUser.privileged_account == 1 ? 'success' : 'default'" dark><div class="subtitle-2">{{ currentUser.privileged_account == 1 ? 'Yes' : 'No' }}</div></v-chip>
-                  </v-card>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <v-card shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Active</div>
-                    <span>{{currentUser.other}}</span>
+                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1 d-block">Active</b>
                     <v-chip :color="currentUser.email_not_active == 1 ? 'success' : 'default'" dark><div class="subtitle-2">{{ currentUser.email_not_active == 1 ? 'Yes' : 'No' }}</div></v-chip>
-                  </v-card>
+                  <!-- </v-card> -->
                 </v-col>
               </v-row>
               <v-row>
@@ -115,40 +114,40 @@
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Individual Risk</div>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1 d-block">Individual Risk</b>
                     <v-chip :color="levelColor(currentUser.risk_level)" dark><div class="subtitle-2">{{ currentUser.risk_level ? currentUser.risk_level : 'low' }}</div></v-chip>
-                  </v-card>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Type</div>
-                    <span>{{currentUser.user_type}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Type</b>
+                    <div class="text--secondary">{{currentUser.user_type}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Location</div>
-                    <span>{{currentUser.location ? currentUser.location.replace('/', '') : ''}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Location</b>
+                    <div class="text--secondary">{{currentUser.location ? currentUser.location.replace('/', '') : ''}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Job Title</div>
-                    <span>{{currentUser.job_title}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Job Title</b>
+                    <div class="text--secondary">{{currentUser.job_title}}</div>
+                  <!-- </v-card> -->
                 </v-col>
               </v-row>
                <v-row>
@@ -157,28 +156,28 @@
                   md="6"
                   sm="6"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Observations</div>
-                    <span>{{currentUser.observations}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Observations</b>
+                    <div class="text--secondary">{{currentUser.observations}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   md="6"
                   sm="6"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Notes</div>
-                    <span>{{currentUser.notes}}</span>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Notes</b>
+                    <div class="text--secondary">{{currentUser.notes}}</div>
+                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                 >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Applications</div>
-                    <div class="d-flex flex-wrap"><v-chip v-for="app in currentUser.apps" class="ma-2"><span class="subtitle-1">{{app.name}}</span></v-chip></div>
-                  </v-card>
+                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
+                    <b class="display-1">Applications</b>
+                    <div class="d-flex flex-wrap text--secondary"><v-chip v-for="app in currentUser.apps" class="ma-2"><span class="subtitle-1">{{app.name}}</span></v-chip></div>
+                  <!-- </v-card> -->
                 </v-col>
               </v-row>
             </div>

@@ -5,7 +5,7 @@
 	    tag="section"
 	  >
 	  	<blockquote class="blockquote">Below is the data we found on your business.</blockquote>
-	  	</v-card>
+	  	
 	  	<v-select
 	  	  v-model="service"
 	  	  chips

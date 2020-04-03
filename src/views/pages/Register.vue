@@ -56,7 +56,7 @@
             />
 
             <v-checkbox
-              v-model="form.opt_out"
+              v-model="form.opt_out ? false : true"
             >
               <template v-slot:label>
                 <div class="black--text">Would you like to receive <b>Daily Security Tips</b>?</div>
@@ -149,7 +149,7 @@
 
     computed: {
       formHasErrors () {
-        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.errorMessages.email.business
+        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid
       }
     },
 
@@ -173,7 +173,8 @@
       },
       async submit () {
         this.$refs.email.validate(true)
-      
+        
+        console.log(this.formHasErrors)
         if (!this.formHasErrors) {
           this.loading = true
           const self = this

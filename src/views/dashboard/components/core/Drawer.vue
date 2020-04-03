@@ -176,9 +176,20 @@
           to: '/category/all',
         },
         {
+          group: '/publicdata',
           icon: 'mdi-database',
           title: 'Public Data',
-          to: '/publicdata/index',
+          children: [
+            {
+              title: 'Business',
+              to: 'business',
+            },
+            {
+              title: 'Personal',
+              to: 'personal',
+            },
+
+          ]
         },
         {
           icon: 'mdi-poll',
