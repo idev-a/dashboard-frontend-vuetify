@@ -540,7 +540,7 @@
 	}
 
 	img {
-		widows: 100%;
+		width: 100%;
 		height: auto;
 	}
 
