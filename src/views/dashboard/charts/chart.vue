@@ -104,6 +104,7 @@
           :loading="loadingCard"
         > 
           <v-menu
+            v-if="!loadingCard"
             bottom
             right
             offset-x

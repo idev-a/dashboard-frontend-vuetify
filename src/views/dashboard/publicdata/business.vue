@@ -1,6 +1,7 @@
 <template>
 	<public-data
-		title="Business Data"
+		title='Business Data'
+		category='business'
 	>
   	</public-data>
 </template>

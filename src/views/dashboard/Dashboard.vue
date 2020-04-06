@@ -104,6 +104,7 @@
           :loading="loadingCard"
         > 
           <v-menu
+            v-if="!loadingCard"
             bottom
             right
             offset-x
@@ -511,50 +512,30 @@
       }
     },
 
-    mounted () {
+    async mounted () {
       let user = {}
       try {
         user = JSON.parse(localStorage.getItem('user'))
       } catch(e) {}
       this.companyId = user.email.split('@')[1];
 
-      this.fetchAllCardData()
+      await this.fetchAllCardData()
 
-      this.fetchChartsData()
+      await this.fetchChartsData()
     },
 
     methods: {
-      fetchChartsData() {
-        const self = this
-        axios(`${BASE_API}/api/charts/${this.companyId}/all`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.charts = res.data.charts
-              self.selectedCategories = self.charts.cia_by_categories.categories
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loadingCard = false
-            })
+      async fetchChartsData() {
+        const res = await axios.get(`${BASE_API}/api/charts/${this.companyId}/all`)
+        this.charts = res.data.charts
+        this.selectedCategories = this.charts.cia_by_categories.categories
+        this.loadingCard = false
       },
 
-      fetchAllCardData () {
-        const self = this
-        axios(`${BASE_API}/api/dashboard/${this.companyId}/all`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.smallCards = res.data
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+      async fetchAllCardData () {
+        const res = await axios.get(`${BASE_API}/api/dashboard/${this.companyId}/all`)
+        this.smallCards = res.data
+        this.loading = false
       },
     },
   }

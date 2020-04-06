@@ -35,34 +35,6 @@
 				<v-card-title><img src="https://ssllabs.com/images/qualys-ssl-labs-logo.png" width="341" height="55" alt="SSL Labs logo" title="SSL Labs logo"></v-card-title>
 				<div class="display-2">SSL Report: {{ company }}</div>
 				<div class="title mb-3">Assessed on:  {{beautifyDateTime(data.ssllabs.last_update)}}</div>
-				<!-- <v-tabs
-			      background-color=""
-			      class="elevation-1"
-			      grow
-			    >
-			      <v-tabs-slider></v-tabs-slider>
-
-			      <v-tab
-			        href="#tab-0"
-			      >
-			        Server Test
-			      </v-tab>
-
-			      <v-tab-item
-			        value="tab-0"
-			        class="pt-3"
-			      > -->
-			        <!-- <v-card-title>
-			        <v-text-field
-			          v-model="search"
-			          append-icon="mdi-magnify"
-			          label="Search"
-			          class="mb-3"
-			          single-line
-			          hide-details
-			        ></v-text-field>
-			        <v-spacer></v-spacer>
-			      	</v-card-title> -->
 			      	<v-data-table
 				        :loading="loading"
 				        :headers="ssllabsHeaders"
@@ -83,22 +55,7 @@
 		                   <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div>
 		                </template> -->
 				    </v-data-table>
-			     <!--  </v-tab-item>
-			      <v-tab
-			        href="#tab-1"
-			      >
-			        Certificates
-			      </v-tab>
-
-			      <v-tab-item
-			        value="tab-1"
-			      >
-			      	
-			      </v-tab-item>
-			    </v-tabs> -->
-				
-			</div>
-
+				</div>
 			<div v-if="select['whoxy']" class="overflow-y">
 				<v-card-title><img src="https://www.whoxy.com/images/logo.png" width="300" height="100" alt="Whoxy.com"></v-card-title>
 				<div v-for="item in data.whoxy" :key="item.num">
