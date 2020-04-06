@@ -409,7 +409,7 @@
 
 	      	builtWithLink () {
 	      		if (this.publicData.high.domain) {
-		      		return 'https://builtwith.com/' + this.publicData.high.domain.answer
+		      		return 'https://builtwith.com/' + removeQuotes(this.publicData.high.domain.answer)
 	      		} else {
 	      			return ''
 	      		}
