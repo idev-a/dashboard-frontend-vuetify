@@ -22,6 +22,7 @@
       		>
 		      	<v-row>
 		            <v-col
+		              v-if="publicData.high.domain"
 		              cols="12"
 		              sm="6"
 		              md="6"
@@ -30,6 +31,7 @@
 		                <span class="display-1">{{publicData.high.domain.answer}}</span>
 		            </v-col>
 		            <v-col
+		              v-if="publicData.high.website_ip"
 		              cols="12"
 		              sm="6"
 		              md="6"
@@ -46,6 +48,7 @@
 		    >
 		    	<v-row>
 		            <v-col
+		              v-if="publicData.high.name"
 		              cols="12"
 		              sm="6"
 		              md="4"
@@ -54,14 +57,16 @@
 		                <span class="display-1">{{publicData.high.name.answer}}</span>
 		            </v-col>
 		            <v-col
+		              v-if="publicData.high.email"
 		              cols="12"
 		              sm="6"
 		              md="4"
 		            >
 		                <b class="mr-2">Email:</b>
-		                <span class="display-1">{{publicData.high.email.answer}}</span>
+		                <span class="display-1">{{beautifyEmail(publicData.high.email.answer)}}</span>
 		            </v-col>
 		            <v-col
+		              v-if="publicData.high.dob"
 		              cols="12"
 		              sm="6"
 		              md="4"
