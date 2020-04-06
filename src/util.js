@@ -410,3 +410,11 @@ export const beautifyDate = (date) => {
 export const beautifyDateZ = (date) => {
   return moment(date, 'YYYYMMDDHHmmss').format('MMM DD YYYY HH:mm:ss')
 }
+
+export const removeQuotes = (val) => {
+  return val.replace(/\"/g, "")
+}
+
+export const readNewLine = (val) => {
+  return val.replace(/\\n/g, '<br \\>')
+}

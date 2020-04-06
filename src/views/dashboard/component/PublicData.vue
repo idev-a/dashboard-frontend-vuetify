@@ -28,7 +28,7 @@
 		              md="6"
 		            >
 		                <b class="mr-2">Domain:</b>
-		                <span class="display-1">{{publicData.high.domain.answer}}</span>
+		                <span class="display-1">{{removeQuotes(publicData.high.domain.answer)}}</span>
 		            </v-col>
 		            <v-col
 		              v-if="publicData.high.website_ip"
@@ -37,7 +37,7 @@
 		              md="6"
 		            >
 		                <b class="mr-2">IP:</b>
-		                <span class="display-1">{{publicData.high.website_ip.answer}}</span>
+		                <span class="display-1">{{removeQuotes(publicData.high.website_ip.answer)}}</span>
 		            </v-col>
 		        </v-row>
 		    </div>
@@ -266,7 +266,7 @@
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 
-							<public-data-panel-item-pre
+							<public-data-panel-item
 								:data="result.wpscan"
 	                    	/>
 	                		
@@ -319,7 +319,16 @@
 
 <script>
 	import { BASE_API, fetchPublicData, getCompanyId } from '../../../api'
-	import { validEmail, get_json, beautifyEmail, beautifyDate, beautifyDuration, beautifyDateTimeFromUnix, beautifyDateTime } from '../../../util'
+	import { 
+		validEmail,
+		get_json,
+		beautifyEmail,
+		beautifyDate,
+		beautifyDuration,
+		beautifyDateTimeFromUnix,
+		beautifyDateTime,
+		removeQuotes
+	} from '../../../util'
 	import axios from 'axios'
 
 	export default {
@@ -409,12 +418,15 @@
 
 		components: {
 	      PublicDataPanelItemPre: () => import('../component/PublicItemPre'),
+	      PublicDataPanelItem: () => import('../component/PublicItem'),
 	      PublicDataShodan: () => import('../component/PublicItemShodan'),
 	      PublicDataWhoxy: () => import('../component/PublicItemWhoxy'),
 	      PublicItemUrlscan: () => import('../component/PublicItemUrlscan'),
 	    },
 
 	    methods: {
+	    	removeQuotes,
+
 	    	get_json,
 
 	    	beautifyDuration,
@@ -526,4 +538,5 @@
 	    font-weight: 700;
 	    height: auto;
 	}
+
 </style>
