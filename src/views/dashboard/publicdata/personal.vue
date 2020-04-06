@@ -1,6 +1,7 @@
 <template>
 	<public-data
 		title="Personal Data"
+		category="personal"
 	>
   	</public-data>
 </template>

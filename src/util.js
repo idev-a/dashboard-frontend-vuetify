@@ -1,4 +1,6 @@
+const moment = require('moment');
 import { companyId } from './api'
+
 export const DOMAIN_LIST = [
   /* Default domains included */
   "aol.com", "att.net", "comcast.net", "facebook.com", "gmail.com", "gmx.com", "googlemail.com",
@@ -372,4 +374,39 @@ export const ciaCategoryChart = (data, categories) => {
   let yLabel = '#'
 
   return columnChart(title, subtitle, yLabel, data, categories)
+}
+
+export const get_json = (val) => {
+  let res = {}
+  try {
+    res = JSON.parse(val.answer)
+  } catch(e) {}
+  return res
+}
+
+export const beautifyEmail = (email) => {
+  if (validEmail(email)) {
+    return `<a href="mailto:${email}">${email}</a>`
+  } else {
+    return `${email}`
+  }
+}
+
+export const beautifyDuration = (duration) => {
+  return moment(duration, 'x').format('HH:mm:ss')
+}
+export const beautifyDateTimeFromUnix = (timestamp) => {
+  return moment(timestamp, 'x').format('DD MMM YYYY, HH:mm:ss')
+}
+
+export const beautifyDateTime = (date) => {
+  return moment(date).format('DD MMM YYYY, HH:mm:ss')
+}
+
+export const beautifyDate = (date) => {
+  return moment(date).format('DD MMM YYYY')
+}
+
+export const beautifyDateZ = (date) => {
+  return moment(date, 'YYYYMMDDHHmmss').format('MMM DD YYYY HH:mm:ss')
 }

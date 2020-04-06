@@ -19,7 +19,6 @@
         </span>
       </v-card-text>
     </v-card>
-
     <v-card
       icon="mdi-security"
       title="Email Security"

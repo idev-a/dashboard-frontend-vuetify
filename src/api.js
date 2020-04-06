@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// export const BASE_API = process.env.BASE_API
 // export const BASE_API = 'http://localhost:5000'
 export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
 

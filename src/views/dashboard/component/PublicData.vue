@@ -14,26 +14,63 @@
         {{ title }}
       	</v-card-title>
       	<div
-  	  	  v-if="!loading"
+  	  	  v-if="!loading && publicData.high"
       	>
-	      	<v-row>
-	            <v-col
-	              cols="12"
-	              sm="6"
-	              md="6"
-	            >
-	                <b class="mr-2">Domain:</b>
-	                <span class="display-1">Apple.com</span>
-	            </v-col>
-	            <v-col
-	              cols="12"
-	              sm="6"
-	              md="6"
-	            >
-	                <b class="mr-2">IP:</b>
-	                <span class="display-1">3.15.67.2</span>
-	            </v-col>
-	        </v-row>
+      		<!-- General Business data -->
+      		<div
+				v-if="category=='business'"
+      		>
+		      	<v-row>
+		            <v-col
+		              cols="12"
+		              sm="6"
+		              md="6"
+		            >
+		                <b class="mr-2">Domain:</b>
+		                <span class="display-1">{{publicData.high.domain.answer}}</span>
+		            </v-col>
+		            <v-col
+		              cols="12"
+		              sm="6"
+		              md="6"
+		            >
+		                <b class="mr-2">IP:</b>
+		                <span class="display-1">{{publicData.high.website_ip.answer}}</span>
+		            </v-col>
+		        </v-row>
+		    </div>
+
+		    <!-- General Personal Data -->
+		    <div
+				v-if="category=='personal'"
+		    >
+		    	<v-row>
+		            <v-col
+		              cols="12"
+		              sm="6"
+		              md="4"
+		            >
+		                <b class="mr-2">Name:</b>
+		                <span class="display-1">{{publicData.high.name.answer}}</span>
+		            </v-col>
+		            <v-col
+		              cols="12"
+		              sm="6"
+		              md="4"
+		            >
+		                <b class="mr-2">Email:</b>
+		                <span class="display-1">{{publicData.high.email.answer}}</span>
+		            </v-col>
+		            <v-col
+		              cols="12"
+		              sm="6"
+		              md="4"
+		            >
+		                <b class="mr-2">Birthday:</b>
+		                <span class="display-1">{{publicData.high.dob.answer}}</span>
+		            </v-col>
+		        </v-row>
+		    </div>
 	      	<v-tabs
 		      class="elevation-2 mt-4"
 		      dark
@@ -62,236 +99,210 @@
 		          class="px-3"
 		        >
 		          	<v-row>
-		                <v-col
-		                  v-if="result.spf_record"
-		                  cols="12"
-		                >
-		                    <b class="display-2 d-block mb-1">{{result.spf_record.question}}</b>
-		                    <div class="text--secondary">{{result.spf_record.answer}}</div>
-		                </v-col>
-		                <v-col
-		                  v-if="result.spf_dmarc"
-		                  cols="12"
-		                >
-		                    <b class="display-2 d-block mb-1">{{result.spf_dmarc.question}}</b>
-		                    <div class="text--secondary">{{result.spf_dmarc.answer}}</div>
-		                </v-col>
-	  					<v-col
-		                  v-if="result.spf_record_more"
-		                  cols="12"
-		                  sm="6"
-		                  md="6"
-		                >
-		                    <b class="display-2 d-block mb-1">{{result.spf_record_more.question}}</b>
-		                    <div class="text--secondary">{{result.spf_record_more.answer}}</div>
-		                </v-col>
-		                <v-col
-		                  v-if="result.spf_spoofing_possible"
-		                  cols="12"
-		                  sm="6"
-		                  md="6"
-		                >
-		                    <b class="display-2 d-block mb-1">{{result.spf_spoofing_possible.question}}</b>
-		                    <div class="text--secondary">{{result.spf_spoofing_possible.answer}}</div>
-		                </v-col>
-		                <v-col
-		                  v-if="result.ctfr_subdomain"
-		                  cols="12"
-		                  sm="6"
-		                  md="6"
-		                >
-		                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-		                    <b class="display-2 d-block mb-1">{{result.ctfr_subdomain.question}}</b>
-		                    <div class="d-flex flex-wrap">
-								<div v-for="domain in result.ctfr_subdomain.answer.split(';')">
-									<v-chip outlined class="secondary ma-2 pa-2 mb-3 text--secondary">{{domain}}</v-chip>
-								</div>
-							</div>
-		                  <!-- </v-card> -->
-		                </v-col>
-		                <v-col
-		                  v-if="result.dnstwist"
-		                  cols="12"
-		                >
-		                	<b class="display-2 d-block mb-1">{{result.dnstwist.question}}</b>
-					      	<v-data-table
-						        :headers="dnstwistHeaders"
-						        :items="data.dnstwist.answer"
-						        :items-per-page="page"
-						        item-key="domain-name"
-						        @update:items-per-page="getPageNum"
-					      	>
-						    </v-data-table>
-			            </v-col>
-			            <v-col
-		                  v-if="result.hibp"
-		                  cols="12"
-		                >
-		                	<b class="display-2 d-block mb-1">{{result.hibp.question}}</b>
-		                	<v-data-table
-						        :headers="hibpHeaders"
-						        :items="result.hibp.answer"
-						        :items-per-page="page"
-						        item-key="Email"
-						        @update:items-per-page="getPageNum"
-					      	>
-					      		<template v-slot:item.Email="{ item }">
-				                  <span v-html="beautifyEmail(item.Email)"></span>
-				                </template>
-						    </v-data-table>
-			            </v-col>
-		                <v-col
-		                  v-if="result.ssllabs"
-		                  cols="12"
-		                >
-		                	<b class="display-2 d-block mb-1">{{result.ssllabs.question}}</b>
-		                	<div class="title mb-3">Assessed on:  {{beautifyDateTime(result.ssllabs.answer.last_update)}}</div>
-					      	<v-data-table
-						        :headers="ssllabsHeaders"
-						        :items="result.ssllabs.answer.endpoints"
-						        :items-per-page="page"
-						        item-key="Email"
-						        @update:items-per-page="getPageNum"
-					      	>
-					      		<template v-slot:item.no="{ item }">
-				                   <div class="body-1 font-weight-bold">{{result.ssllabs.answer.endpoints.indexOf(item) + 1}}</div>
-				                </template>
-					      		<template v-slot:item.grade="{ item }">
-				                   <div class="display-3 font-weight-bold" :class="determinGrateClass(item.grade)">{{item.grade}}</div>
-				                </template>
-				                <!-- <template v-slot:item.details="{ item }">
-				                   <div class="body-1">{{beautifyDateTimeFromUnix(item.details.hostStartTime)}}</div>
-				                   <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div>
-				                </template> -->
-						    </v-data-table>
-			            </v-col>
-			            <v-col
-		                  v-if="result.wpscan"
-		                  cols="12"
-		                >
-		                	<b class="display-2 d-block mb-1">{{result.wpscan.question}}</b>
-		                	<template>
-								<pre>
-									{{result.wpscan.answer}}
-								</pre>
-							</template>
-			            </v-col>
+	                	<v-expansion-panels
+							flat
+						>
+							<!-- Business Information -->
+							<!-- Manual information -->
+	                    	<public-data-panel-item-pre
+								:data="result.observations"
+	                    	/>
 
-			            <v-col
-		                  v-if="result.urlscan"
-		                  cols="12"
-		                >
-		                	<b class="display-2 d-block mb-1">{{result.urlscan.question}}</b>
-		                	<v-row>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Country:</b> <span>{{get_urlscan().urlscan_country}}</span>
-				              	</v-col>
-								<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-					              	<b>IP Address:</b> <span>{{get_urlscan().urlscan_ip_address}}</span>
-				              	</v-col>
-								<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-					              	<b>IPV6:</b> <span>{{get_urlscan().urlscan_ipv6}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	class="d-flex align-center"
-				              	>
-				              		<b>Web Apps:</b> 
-				              		<span class="d-flex flex-wrap">
-										<span v-for="app in get_urlscan().urlscan_web_apps.split(';')">
-											<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{app}}</v-chip>
-										</span>
-									</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Server:</b> <span>{{get_urlscan().urlscan_server}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Number of Requests:</b> <span>{{get_urlscan().urlscan_number_of_requests}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Ads Blocked:</b> 
-				              		<v-chip outlined class="ma-2 mb-3" :color="get_urlscan().urlscan_ads_blocked == 1 ? 'green' : 'black'" >{{get_urlscan().urlscan_ads_blocked == 1 ? 'YES' : 'No'}}</v-chip>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>HTTP Requests:</b> <span>{{get_urlscan().urlscan_http_requests}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Unique Country Counts:</b> <span>{{get_urlscan().urlscan_unique_country}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	md="6"
-				              	>
-				              		<b>Malicious Requests:</b> <span>{{get_urlscan().urlscan_malicious_requests}}</span>
-				              	</v-col>
-				              	<v-col
-				                  	cols="12"
-				                  	class="d-flex"
-				              	>
-				              		<b>Pointed Domains:</b> 
-				              		<span class="d-flex flex-wrap">
-										<span v-for="domain in get_urlscan().urlscan_pointed_domains.split(';')">
-											<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{domain}}</v-chip>
-										</span>
-									</span>
-				              	</v-col>
-							</v-row>
-			            </v-col>
+	                    	<public-data-panel-item-pre
+								:data="result.email_provider"
+	                    	/>
 
-		                <v-col
-		                  v-if="result.whoxy_history"
-		                  cols="12"
-		                >
-		                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-		                    <b class="display-2 d-block mb-1">{{result.whoxy_history.question}}</b>
-		                    <div v-for="item in JSON.parse(result.whoxy_history.answer)" :key="item.num">
-								<v-row>
-					                <v-col
-					                  cols="12"
-					                >
-					                  <v-card shaped outlined class="my-0 pa-4 p-relative whoxy-block">
-					                  	<v-chip class="whoxy-date secondary mb-2">{{beautifyDate(item.registrant_contact.query_time)}}</v-chip>
-					                    <div class="mb-2"><b>Owner:</b> <span>{{item.registrant_contact.full_name}}</span></div>
-					                    <div class="mb-2"><b>Company:</b> <span>{{item.administrative_contact.company_name}}</span></div>
-					                    <div class="mb-2"><b>Domain:</b> <span>{{item.domain_registrar.registrar_name}}</span></div>
-					                    <div class="mb-2"><b>Geolocation:</b> <span>{{item.registrant_contact.city_name}}, {{item.registrant_contact.state_name}} {{item.registrant_contact.zip_code}}, {{item.registrant_contact.country_name}}</span></div>
-					                    <div class="mb-2"><b>Email:</b> <span>{{item.administrative_contact.email_address}}</span></div>
-					                    <div class="mb-2"><b>Phone:</b> <span>{{item.administrative_contact.phone_number}}</span></div>
-					                    <div class="mb-2"><b>Email:</b> <span v-html="beautifyEmail(item.administrative_contact.email_address)"></span></div>
-					                    <div class="mb-2"><b>Nameservers:</b> <span>{{item.name_servers.join(', ')}}</span></div>
-					                    <div class="mb-2"><b>Status:</b> <span>{{item.domain_status[0]}}</span></div>
-					                  </v-card>
-					                </v-col>
-					            </v-row>
-							</div>
-		                  <!-- </v-card> -->
-		                </v-col>
-		                
+	                    	<public-data-panel-item-pre
+								:data="result.name_associated"
+	                    	/>
+
+	                    	<public-data-panel-item-pre
+								:data="result.website_type"
+	                    	/>
+
+	                    	<public-data-panel-item-pre
+								:data="result.business_geo"
+	                    	/>
+	
+							<public-data-panel-item-pre
+								:data="result.business_google_search_results"
+	                    	/>
+
+	                    	<public-data-panel-item-pre
+								:data="result.business_other"
+	                    	/>
+
+							<public-data-panel-item-pre
+								:data="result.linkedin_data"
+	                    	/>
+
+							<!-- Automation result from public_data.py -->
+	                    	<public-data-panel-item-pre
+								:data="result.spf_record"
+	                    	/>
+
+				            <public-data-panel-item-pre
+								:data="result.spf_dmarc"
+	                    	/>
+
+	                    	<public-data-panel-item-pre
+								:data="result.spf_record_more"
+	                    	/>
+
+				            <public-data-panel-item-pre
+								:data="result.spf_spoofing_possible"
+	                    	/>
+
+							<v-expansion-panel
+								v-if="result.ctfr_subdomain"
+							>
+								<v-expansion-panel-header>
+	                    			<b class="display-2 d-block">{{result.ctfr_subdomain.question}}</b>
+	                    		</v-expansion-panel-header>
+	                    		<v-expansion-panel-content>
+				                    <div class="d-flex flex-wrap">
+										<div v-for="domain in result.ctfr_subdomain.answer.split(';')">
+											<v-chip outlined class="secondary ma-2 pa-2 mb-3 text--secondary">{{domain}}</v-chip>
+										</div>
+									</div>
+								</v-expansion-panel-content>
+							</v-expansion-panel>
+							<v-expansion-panel
+								v-if="result.builtwith"
+							>
+								<v-expansion-panel-header>
+	                    			<b class="display-2 d-block">{{result.builtwith.question}}</b>
+	                    		</v-expansion-panel-header>
+	                    		<v-expansion-panel-content>
+	                    			<vue-friendly-iframe
+										className="iframe"
+										:src="builtWithLink" 
+										allow="Allow"
+										name="builtWith"
+										crossorigin="any"
+									>
+									</vue-friendly-iframe>
+	                    		</v-expansion-panel-content>
+	                    	</v-expansion-panel>
+
+							<v-expansion-panel
+								v-if="result.dnstwist"
+							>
+								<v-expansion-panel-header>
+	                				<b class="display-2 d-block">{{result.dnstwist.question}}</b>
+	                			</v-expansion-panel-header>
+	                			<v-expansion-panel-content>
+							      	<v-data-table
+								        :headers="dnstwistHeaders"
+								        :items="get_json(result.dnstwist)"
+								        :items-per-page="page"
+								        item-key="domain-name"
+								        @update:items-per-page="getPageNum"
+							      	>
+								    </v-data-table>
+								</v-expansion-panel-content>
+							</v-expansion-panel>
+
+							<public-data-shodan
+								:data="result.shodan"
+							/>
+
+							<public-data-whoxy
+								:data="result.whoxy_history"
+							/>
+
+							<v-expansion-panel
+								v-if="result.hibp"
+							>
+								<v-expansion-panel-header>
+	                				<b class="display-2 d-block">{{result.hibp.question}}</b>
+	                			</v-expansion-panel-header>
+	                			<v-expansion-panel-content>
+				                	<v-data-table
+								        :headers="hibpHeaders"
+								        :items="get_json(result.hibp)"
+								        :items-per-page="page"
+								        item-key="Email"
+								        @update:items-per-page="getPageNum"
+							      	>
+							      		<template v-slot:item.Email="{ item }">
+						                  <span v-html="beautifyEmail(item.Email)"></span>
+						                </template>
+								    </v-data-table>
+								</v-expansion-panel-content>
+							</v-expansion-panel>
+
+							<v-expansion-panel
+								v-if="result.ssllabs"
+							>
+								<v-expansion-panel-header>
+	                				<b class="display-2 d-block">{{result.ssllabs.question}}</b>
+	                			</v-expansion-panel-header>
+	                			<v-expansion-panel-content>
+				                	<div class="mb-3">Assessed on:  {{beautifyDateTime(get_json(result.ssllabs).last_update)}}</div>
+							      	<v-data-table
+								        :headers="ssllabsHeaders"
+								        :items="get_json(result.ssllabs).endpoints"
+								        :items-per-page="page"
+								        item-key="Email"
+								        @update:items-per-page="getPageNum"
+							      	>
+							      		<template v-slot:item.no="{ item }">
+						                   <div class="body-1 font-weight-bold">{{get_json(result.ssllabs).endpoints.indexOf(item) + 1}}</div>
+						                </template>
+							      		<template v-slot:item.grade="{ item }">
+						                   <div class="display-3 font-weight-bold" :class="determinGrateClass(item.grade)">{{item.grade}}</div>
+						                </template>
+						                <!-- <template v-slot:item.details="{ item }">
+						                   <div class="body-1">{{beautifyDateTimeFromUnix(item.details.hostStartTime)}}</div>
+						                   <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div>
+						                </template> -->
+								    </v-data-table>
+								</v-expansion-panel-content>
+							</v-expansion-panel>
+
+							<public-data-panel-item-pre
+								:data="result.wpscan"
+	                    	/>
+	                		
+	                		<public-item-urlscan
+								:data="result.urlscan"
+	                		/>
+
+	                		<!-- Personal data -->
+	                		<!-- Manual data -->
+							<public-data-panel-item-pre
+								:data="result.email"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.personal_geo"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.facebook"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.instagram"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.twitter"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.other_social_media"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.personal_google_search_results"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.images"
+	                		/>
+						</v-expansion-panels>
 		            </v-row>
 		        </v-card>
 		      </v-tab-item>
@@ -303,7 +314,7 @@
 
 <script>
 	import { BASE_API, fetchPublicData, getCompanyId } from '../../../api'
-	import { validEmail } from '../../../util'
+	import { validEmail, get_json, beautifyEmail, beautifyDate, beautifyDuration, beautifyDateTimeFromUnix, beautifyDateTime } from '../../../util'
 	import axios from 'axios'
 
 	export default {
@@ -377,45 +388,84 @@
 			await this.fetchData()
 	    },
 
+	    computed: {
+			page () {
+		        return Number(localStorage.getItem('page')) || 5
+	      	}, 
+
+	      	builtWithLink () {
+	      		if (this.publicData) {
+		      		return 'https://builtwith.com/' + this.publicData.high.domain.answer
+	      		} else {
+	      			return ''
+	      		}
+	      	}
+		},
+
+		components: {
+	      PublicDataPanelItemPre: () => import('../component/PublicItemPre'),
+	      PublicDataShodan: () => import('../component/PublicItemShodan'),
+	      PublicDataWhoxy: () => import('../component/PublicItemWhoxy'),
+	      PublicItemUrlscan: () => import('../component/PublicItemUrlscan'),
+	    },
+
 	    methods: {
-	    	get_urlscan () {
-	    		return JSON.parse(result.urlscan.answer)
-	    	},
-	    	beautifyDuration (duration) {
-				return this.$moment(duration, 'x').format('HH:mm:ss')
-			},
-			beautifyDateTimeFromUnix (timestamp) {
-				return this.$moment(timestamp, 'x').format('DD MMM YYYY, HH:mm:ss')
+	    	get_json,
+
+	    	beautifyDuration,
+
+	    	beautifyDateTimeFromUnix,
+
+	    	beautifyDateTime,
+
+	    	beautifyDate,
+
+			beautifyEmail,
+
+			determinGrateClass (grade) {
+				let color = 'black'
+				switch (grade) {
+					case 'A':
+						color = 'success'
+						break
+					case 'B':
+						color = 'orange'
+						break
+					case 'C':
+						color = 'purple'
+						break
+					default:
+						color = 'red'
+						break
+				}
+
+				return color + '--text'
 			},
 
-			beautifyDateTime (date) {
-				return this.$moment(date).format('DD MMM YYYY, HH:mm:ss')
-			},
+			getPageNum (_page) {
+		        localStorage.setItem('page', _page)
+	      	},
 
-			beautifyDate (date) {
-				return this.$moment(date).format('DD MMM YYYY')
-			},
+			hexEncode (str) {
+			    var hex, i;
 
-			beautifyDateZ (date) {
-				return this.$moment(date, 'YYYYMMDDHHmmss').format('MMM DD YYYY HH:mm:ss')
-			},
+			    var result = "";
+			    for (i=0; i < str.length; i++) {
+			        hex = str.charCodeAt(i).toString(16);
+			        result += (":"+hex).slice(-4);
+			    }
 
-			beautifyEmail (email) {
-				if (validEmail(email)) {
-		            return `<a href="mailto:${email}">${email}</a>`
-	          	} else {
-		            return `${email}`
-	          	}
+			    return result.slice(1, result.length-2)
 			},
 			async fetchData () {
 				this.loading = true
 				const res = await axios.get(`${BASE_API}/api/public/${getCompanyId()}/${this.category}`)
+				this.loading = false
 				this.publicData = {
 					high: res.data.data.high,
 					medium: res.data.data.medium,
 					low: res.data.data.low
 				};
-				this.loading = false
 			}
 	    },
 
@@ -433,6 +483,11 @@
 </script>
 
 <style type="text/css">
+	.iframe {
+		width: 100%;
+		min-height: calc(100vh - 180px);
+	}
+
 	.whoxy-block span {
 		color: rgba(0, 0, 0, 0.6) !important;
 	}
@@ -441,5 +496,29 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
+	}
+
+	pre.pre-strim {
+        overflow-x: auto;
+        white-space: pre-line;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        color: rgba(0, 0, 0, 0.6) !important;
+ 	}
+
+ 	.fingerprint {
+ 		word-break: break-all;
+ 	}
+
+ 	.hibp-brand {
+	    border-radius: 10px;
+	    border: 2px solid #3c3c3c !important;
+	    font-size: 1.4em;
+	    padding: 4px 8px 7px;
+	    margin: 7px;
+	    font-weight: 700;
+	    height: auto;
 	}
 </style>
