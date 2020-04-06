@@ -183,7 +183,7 @@
         this.formHasErrors = false
       },
       request () {
-        this.formHasErrors = !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.errorMessages.email.business
+        this.formHasErrors = !this.errorMessages.email.required || !this.errorMessages.email.invalid
 
         if (!this.formHasErrors) {
           this.loading = true
