@@ -539,4 +539,9 @@
 	    height: auto;
 	}
 
+	img {
+		widows: 100%;
+		height: auto;
+	}
+
 </style>
