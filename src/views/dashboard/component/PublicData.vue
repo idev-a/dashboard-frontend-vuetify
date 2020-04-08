@@ -1,14 +1,11 @@
 <template>
-	<v-container
-	    id="public-common-data"
-	    fluid
-	    tag="section"
-	  >
-	  <blockquote class="blockquote">Below is the data we found on your business.</blockquote>
+	<div>
+	  <blockquote v-if="banner" class="blockquote">Below is the data we found on your business.</blockquote>
 
 	  <v-card
   	  	:loading="loading"
 	  	class="px-5 py-3"
+	  	:class="company != '' ? 'mt-0' : ''"
 	  >
 	  	<v-card-title>
         {{ title }}
@@ -63,7 +60,7 @@
 		              md="4"
 		            >
 		                <b class="mr-2">Email:</b>
-		                <span class="display-1">{{beautifyEmail(publicData.high.email.answer)}}</span>
+		                <span class="display-1" v-html="beautifyEmail(publicData.high.email.answer)"></span>
 		            </v-col>
 		            <v-col
 		              v-if="publicData.high.dob"
@@ -314,7 +311,7 @@
 		    </v-tabs>
   		</div>
 	  </v-card>
-	</v-container>
+	</div>
 </template>
 
 <script>
@@ -399,7 +396,13 @@
 		}),
 
 		async mounted () {
-			await this.fetchData()
+			await this.loadData()
+	    },
+
+	    watch: {
+	    	async company () {
+	    		await this.loadData()
+	    	}
 	    },
 
 	    computed: {
@@ -463,20 +466,17 @@
 		        localStorage.setItem('page', _page)
 	      	},
 
-			hexEncode (str) {
-			    var hex, i;
+	      	async loadData() {
+	      		let company_id = getCompanyId()
+				if (this.company) {
+					company_id = this.company
+				}
+				await this.fetchData(company_id)
+	      	},
 
-			    var result = "";
-			    for (i=0; i < str.length; i++) {
-			        hex = str.charCodeAt(i).toString(16);
-			        result += (":"+hex).slice(-4);
-			    }
-
-			    return result.slice(1, result.length-2)
-			},
-			async fetchData () {
+			async fetchData (company_id) {
 				this.loading = true
-				const res = await axios.get(`${BASE_API}/api/public/${getCompanyId()}/${this.category}`)
+				const res = await axios.get(`${BASE_API}/api/public/${company_id}/${this.category}`)
 				this.loading = false
 				this.publicData = {
 					high: res.data.data.high,
@@ -493,7 +493,15 @@
 	      },
 	      category: {
 	      	type: String,
-	      	default: 'Public Data - Business'
+	      	default: 'business'
+	      },
+	      banner: {
+	      	type: Boolean,
+	      	default: true
+	      },
+	      company: {
+	      	type: String,
+	      	default: ''
 	      }
 	  	}	
 	}

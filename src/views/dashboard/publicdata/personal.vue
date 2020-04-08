@@ -1,9 +1,15 @@
 <template>
-	<public-data
-		title="Personal Data"
-		category="personal"
-	>
-  	</public-data>
+	<v-container
+	    id="public-common-data"
+	    fluid
+	    tag="section"
+	  >
+		<public-data
+			title="Personal Data"
+			category="personal"
+		>
+  		</public-data>
+  	</v-container>
 </template>
 
 <script>
