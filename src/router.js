@@ -94,7 +94,7 @@ let router = new Router({
           }
         },
         {
-          name: 'DB (public_data table)',
+          name: 'DB (security_questions & security_answers table)',
           path: 'customers/publictable',
           component: () => import('@/views/dashboard/customers/PublicTable'),
           meta: {

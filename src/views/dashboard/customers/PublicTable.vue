@@ -122,8 +122,8 @@
 	      				self.defaultCompanies.push(user.email.split('@')[1]) 
 	      			}
 	      		})
-	      		const persons = res.filter(user => DOMAIN_LIST.includes(user.email.split('@')[1]))
-	      		this.defaultPersonalEmails = persons.map(user => user.email)
+	      		// const persons = res.filter(user => DOMAIN_LIST.includes(user.email.split('@')[1]))
+	      		this.defaultPersonalEmails = res.map(user => user.email)
 	      	},
 
 	      	async changeCategory () {

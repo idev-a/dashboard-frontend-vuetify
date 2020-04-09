@@ -87,7 +87,7 @@
 		      	:href="`#${key}`"
 		      	:class="bgColor[key]"
 		      >
-		        {{key}}
+		        {{tabKeys[key]}}
 		      </v-tab>
 
 		      <v-tab-item
@@ -339,6 +339,11 @@
 				low: 'green accent-3'
 			},
 			publicData: {
+			},
+			tabKeys: {
+				high: 'High Risk',
+				medium: 'Medium Risk',
+				low: 'Low Risk'
 			},
 			ssllabsHeaders : [
 				{

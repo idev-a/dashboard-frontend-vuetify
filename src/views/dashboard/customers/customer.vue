@@ -30,7 +30,7 @@
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="success" dark class="mb-2" v-on="on">Add New User</v-btn>
+                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
               </template>
               <v-card>
                 <v-card-title>

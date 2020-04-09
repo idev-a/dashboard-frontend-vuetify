@@ -120,7 +120,7 @@
                     color="success"
                     dark
                     v-on="{ ...tooltip, ...menu }"
-                  >Filter by Categories</v-btn>
+                  ><v-icon size="16" left dark>mdi-filter-menu-outline</v-icon>Filter by Categories</v-btn>
                 </template>
                 <span>Select multiple categories to display chart</span>
               </v-tooltip>

@@ -24,7 +24,7 @@
 				<div class="mb-4 text-uppercase display-1 font-weight-bold">{{todayTip.title_text}}</div>
 				<p>{{todayTip.full_text}} </p>
 			</v-sheet>
-			<v-btn :loading="sendLoading" :disabled="sendLoading" color="success" @click="showAlert(todayTip.id)">Send Now</v-btn>
+			<v-btn :loading="sendLoading" :disabled="sendLoading" color="success" @click="showAlert(todayTip.id)">Send Now<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 			<!-- <v-chip
 		      class="ma-2 float-right"
 		    >
@@ -144,7 +144,7 @@
 		            <v-spacer></v-spacer>
 		            <v-dialog v-model="dialog" max-width="720px">
 		              <template v-slot:activator="{ on }">
-		                <v-btn color="success" dark class="mb-2" v-on="on">Add New Tip</v-btn>
+		                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New Tip</v-btn>
 		              </template>
 		              <v-card>
 		                <v-card-title>
