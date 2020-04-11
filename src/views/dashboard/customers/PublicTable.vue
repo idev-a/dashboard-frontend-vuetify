@@ -15,6 +15,7 @@
 	    		>
 					<v-select
 				  	  v-model="category"
+				  	  :loading="loadingUsers"
 				  	  chips
 			          :items="categories"
 			          label="Select a Category"
@@ -28,6 +29,7 @@
 	    		>
 	    			<v-select
 				  	  v-model="company"
+				  	  :loading="loadingUsers"
 				  	  chips
 			          :items="companies"
 			          :label="companyLabel"
@@ -58,6 +60,7 @@
 
 	    data: () => ({
 	      loading: true,
+	      loadingUsers: true,
 	      search: '',
 	      company: '',
 	      banner: false,
@@ -124,6 +127,7 @@
 	      		})
 	      		// const persons = res.filter(user => DOMAIN_LIST.includes(user.email.split('@')[1]))
 	      		this.defaultPersonalEmails = res.map(user => user.email)
+	      		this.loadingUsers = false
 	      	},
 
 	      	async changeCategory () {

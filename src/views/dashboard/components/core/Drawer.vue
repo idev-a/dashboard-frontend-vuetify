@@ -111,6 +111,10 @@
               title: 'Public Data',
               to: 'publictable',
             },
+            {
+              title: 'Apps & Users',
+              to: 'appusers',
+            },
           ]
         },
         {

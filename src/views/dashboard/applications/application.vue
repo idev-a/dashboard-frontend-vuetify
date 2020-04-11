@@ -123,34 +123,22 @@
               v-if="details"
               class="px-4 py-1"
             >
-               <!-- <v-card-title
-              >
-                <span
-                  class="font-weight-bold"
-                >
-                  {{currentApp.application_name}}
-                </span>
-              </v-card-title> -->
               <v-row>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">No of Users</b>
                     <div class="text--secondary">{{currentApp.no_users}}</div>
-                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
                   sm="3"
                   md="3"
                 >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Price</b>
                     <div class="text--secondary">{{currentApp.price}}</div>
-                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="12"
@@ -167,58 +155,38 @@
                   sm="3"
                   md="3"
                 >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Other</b>
                     <div class="text--secondary">{{currentApp.other}}</div>
-                  <!-- </v-card> -->
                 </v-col>
-                <!-- <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                  <v-card  shaped outlined class="my-0 pa-2">
-                    <div class="display-2 font-weight-light">Application Risk</div>
-                    <v-chip :color="levelColor(currentApp.risk_level)" dark><div class="subtitle-2">{{ currentApp.risk_level ? currentApp.risk_level : 'low' }}</div></v-chip>
-                  </v-card>
-                </v-col> -->
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Login URL</b>
-                    <a :href="currentApp.login_url" target="_blank" class="text--secondary">{{currentApp.login_url}}</a>
-                  <!-- </v-card> -->
+                    <a :href="currentApp.login_url" target="_blank" class="text--red">GoTo</a>
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Owner</b>
-                    <div class="text--secondary">{{currentApp.Owner}}</div>
-                  <!-- </v-card> -->
+                    <div class="text--secondary">{{currentApp.owner}}</div>
                 </v-col>
                 <v-col
                   cols="12"
                   md="3"
                   sm="3"
                 >
-                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Admin User</b>
                     <div v-html="beautifyEmail(currentApp.admin_user)" class="text--secondary"></div>
-                  <!-- </v-card> -->
                 </v-col>
                 <v-col
                   cols="6"
                 >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Purpose</b>
                     <div class="text--secondary">{{currentApp.purpose}}</div>
-                  <!-- </v-card> -->
                 </v-col>
               </v-row>
             </div>
@@ -344,7 +312,7 @@
         this.expanded = []
         this.expanded.push(item)
         this.loading = true
-        this.users = await fetchAppUsers(item.application_name)
+        this.users = await fetchAppUsers(item.users_table_name)
         this.loading = false
       },
     }

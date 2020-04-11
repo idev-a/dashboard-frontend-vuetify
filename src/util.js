@@ -418,3 +418,16 @@ export const removeQuotes = (val) => {
 export const readNewLine = (val) => {
   return val.replace(/\\n/g, '<br \\>')
 }
+
+export const getTableName = (val) => {
+  const _val = val.toLowerCase().replace(' ', '_');
+  var letters = /^[0-9a-zA-Z_]+$/;
+  let name = ''
+  for (var i = 0; i < _val.length; i++) {
+    if (_val.charAt(i).match(letters)) {
+      name += _val.charAt(i)
+    }
+  }
+
+  return name
+}

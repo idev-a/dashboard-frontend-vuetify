@@ -19,16 +19,21 @@ export const companyId = getCompanyId();
   API methods
 */
 
-
 // fetch applications and its users 
-export const fetchApps = async () => {
-  	const response = await axios.get(`${BASE_API}/api/applications/all/${companyId}`);
+export const fetchApps = async (company_id='') => {
+	if (company_id == '') {
+		company_id = companyId;
+	}
+  	const response = await axios.get(`${BASE_API}/api/applications/detail/${company_id}`);
   	return response.data.apps;
 }
 
 // fetch users 
-export const fetchAppUsers = async (app_name) => {
-	const response = await axios.get(`${BASE_API}/api/users/${app_name}/${companyId}`)
+export const fetchAppUsers = async (users_table_name, company_id='') => {
+	if (company_id == '') {
+		company_id = companyId;
+	}
+	const response = await axios.get(`${BASE_API}/api/users/${users_table_name}/${company_id}`)
 	return response.data.users;
 }
 

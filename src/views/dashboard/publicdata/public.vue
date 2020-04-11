@@ -57,7 +57,7 @@
 				    </v-data-table>
 				</div>
 			<div v-if="select['whoxy']" class="overflow-y">
-				<v-card-title><img src="https://www.whoxy.com/images/logo.png" width="300" height="100" alt="Whoxy.com"></v-card-title>
+				<v-card-title><img src="https://www.whoxy.com/images/logo.png" width="300" height="100" alt="Whoxy.com" style="max-width: 120px;"></v-card-title>
 				<div v-for="item in data.whoxy" :key="item.num">
 					<v-row>
 		                <v-col

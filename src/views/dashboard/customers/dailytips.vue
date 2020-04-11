@@ -187,7 +187,7 @@
 								          </v-text-field>
 								        </template>
 								        <v-date-picker v-model="editedItem.date"  @input="dateMenu = false"></v-date-picker>
-								      </v-menu>
+							      	</v-menu>
 		                      	</v-col>
 		                    </v-row>
 		                    <v-row>
@@ -343,17 +343,17 @@
 	      	title_text: '',
 	      	full_text: ''
 	      },
+	      today: '',
+	      tip_id: '',
+	      upcoming: '',
+	      dialog: false,
+	      editedIndex: -1,
 	      defaultItem: {
 	        date: new Date().toISOString().substr(0, 10),
          	title_text: '',
 	        full_text: '',
 	        img_url: '',
       	  },
-	      today: '',
-	      tip_id: '',
-	      upcoming: '',
-	      dialog: false,
-	      editedIndex: -1,
 	      editedItem: {
 	        date: new Date().toISOString().substr(0, 10),
 	        title_text: '',

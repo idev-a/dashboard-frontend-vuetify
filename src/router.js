@@ -87,7 +87,7 @@ let router = new Router({
         {
           name: 'Daily Tips',
           path: 'customers/dailytips',
-          component: () => import('@/views/dashboard/customers/dailytips'),
+          component: () => import('@/views/dashboard/customers/DailyTips'),
           meta: {
             is_admin: true,
             requiresAuth: true
@@ -97,6 +97,15 @@ let router = new Router({
           name: 'DB (security_questions & security_answers table)',
           path: 'customers/publictable',
           component: () => import('@/views/dashboard/customers/PublicTable'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Apps & Users',
+          path: 'customers/appusers',
+          component: () => import('@/views/dashboard/customers/AppUsers'),
           meta: {
             is_admin: true,
             requiresAuth: true
