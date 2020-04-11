@@ -84,7 +84,7 @@
                             >
                           </v-textarea>
                         </v-col>
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="8">
                           <v-textarea
                             v-model="editedAppItem.purpose"
                             label="Purpose" 
@@ -353,6 +353,9 @@
                 </template>
                 <template v-slot:item.has_2fa="{ item }">
                   <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
+                </template>
+                <template v-slot:item.status="{ item }">
+                  <v-chip :color="item.status == 'Active' ? 'success' : 'default'" dark>{{ item.status == 'Active' ? 'Active' : 'Disabled' }}</v-chip>
                 </template>
               </v-data-table>
             </div>
@@ -682,8 +685,8 @@
       company: '',
       companies: [],
       statusItems: [
-        'active',
-        'disable'
+        'Active',
+        'Disabled'
       ],
       search: '',
       searchDetail: '',
@@ -722,7 +725,8 @@
         email: '',
         has_2fa: 'false',
         status: 'active',
-        fullname: ''
+        fullname: '',
+        company_id: ''
       },
       defaultDetailItem: {
         application_id: -1,
@@ -808,6 +812,9 @@
         required: value => !!value || 'This field is required.',
         counter: value => value.length >= 6 || 'Min 6 characters',
         email: value => {
+          if (value.length == 0) {
+            return true
+          }
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
         },
@@ -1170,10 +1177,12 @@
       },
 
       async _updateUser (data) {
+        data.users_table_name = this.currentApp.users_table_name
         return await this._callAPI(data, `${BASE_API}/api/applications/user/update`)
       },
 
       async _createUser (data) {
+        data.users_table_name = this.currentApp.users_table_name
         return await this._callAPI(data, `${BASE_API}/api/applications/user/create`)
       },
 
