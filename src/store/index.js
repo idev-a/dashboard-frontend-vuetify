@@ -3,7 +3,10 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+import publicdata from './public'
+
 export default new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
@@ -22,5 +25,8 @@ export default new Vuex.Store({
   },
   actions: {
 
+  },
+  modules: { 
+    publicdata
   },
 })

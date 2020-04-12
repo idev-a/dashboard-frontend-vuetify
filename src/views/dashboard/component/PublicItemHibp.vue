@@ -20,37 +20,64 @@
                 </div>
             </v-row>
 		</v-expansion-panel-header>
-			</v-hover>
 		<v-expansion-panel-content>
-			<div class="pre-strim">{{removeQuotes(data.answer)}}</div>
-			<update-answer-dialog 
-				:dialog="dialog"
-				:loading="loading"
-				:item="data" 
-				@close-dialog="closeDialog"
-				@update-answer="updateItem"
-			/>
+			<template>
+				<v-data-table
+			        :headers="hibpHeaders"
+			        :items="parse_array(data)"
+			        :items-per-page="page"
+			        item-key="Email"
+			        @update:items-per-page="getPageNum"
+		      	>
+		      		<template v-slot:item.Email="{ item }">
+	                  <span v-html="beautifyEmail(item.Email)"></span>
+	                </template>
+			    </v-data-table>
+				<update-answer-dialog 
+					:dialog="dialog"
+					:loading="loading"
+					:item="data" 
+					@close-dialog="closeDialog"
+					@update-answer="updateItem"
+				/>
+			</template>
 		</v-expansion-panel-content>
 	</v-expansion-panel>
 </template>
 
 <script>
 	import { 
-		get_json,
-		removeQuotes
+		parse_array,
+		beautifyEmail
 	} from '../../../util'
 	import { mapState, mapActions } from 'vuex';
 
 	export default {
-    	name: 'PublicDataPanelItemPre',
+    	name: 'PublicItemHibp',
 
     	components: {
 	      	UpdateAnswerDialog: () => import('./UpdateAnswerDialog'),
 		},
 
+		computed: {
+			page () {
+		        return Number(localStorage.getItem('page')) || 5
+	      	}, 
+	    },
+
     	data: () => ({
     		dialog: false,
     		loading: false,
+    		hibpHeaders: [
+			 	{
+		          value: 'Breach',
+		          text: 'Breach',
+		        },
+		        {
+		          value: 'Email',
+		          text: 'Email',
+		        },
+			],
     	}),
 
     	props: {
@@ -60,8 +87,12 @@
       	},
       	methods: {
       		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey']),
+	    	parse_array,
+			beautifyEmail,
 
-	    	removeQuotes,
+			getPageNum (_page) {
+		        localStorage.setItem('page', _page)
+	      	},
 
 	    	showDialog () {
 	    		this.dialog = true

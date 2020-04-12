@@ -31,7 +31,7 @@
               	>
               		<b>Web Apps:</b> 
               		<span class="d-flex flex-wrap">
-						<span v-for="app in get_json(data).urlscan_web_apps.split(';')">
+						<span v-for="app in split(get_json(data).urlscan_web_apps)">
 							<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{app}}</v-chip>
 						</span>
 					</span>
@@ -79,7 +79,7 @@
               	>
               		<b>Pointed Domains:</b> 
               		<span class="d-flex flex-wrap">
-						<span v-for="domain in get_json(data).urlscan_pointed_domains.split(';')">
+						<span v-for="domain in split(get_json(data).urlscan_pointed_domains)">
 							<v-chip outlined class="secondary ma-2 pa-2 mb-3">{{domain}}</v-chip>
 						</span>
 					</span>
@@ -102,6 +102,13 @@
 
 		methods: {
 			get_json,
+
+      split (data) {
+        if (get_json(data).urlscan_web_apps) {
+          return get_json(data).urlscan_web_apps.split(';') 
+        }
+        return []
+      },
 		}
 	}
 </script>

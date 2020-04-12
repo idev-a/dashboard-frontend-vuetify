@@ -44,6 +44,7 @@
 				:category='category.toLowerCase()'
 				:banner="banner"
 				:company="company"
+				:key="componentkey"
 			>
 		  	</public-data>
 		</v-card>
@@ -54,6 +55,7 @@
 	import { BASE_API, fetchPublicData } from '../../../api'
 	import { DOMAIN_LIST } from '../../../util'
 	import axios from 'axios'
+	import { mapState, mapActions } from 'vuex';
 
  	export default {
 	    name: 'PublicDataTable',
@@ -92,6 +94,9 @@
       	}),
 
       	computed: {
+      		...mapState('publicdata', {
+	    		componentkey: state => state.componentkey
+	    	}),
 			page () {
 		        return Number(localStorage.getItem('page')) || 5
 	      	}, 

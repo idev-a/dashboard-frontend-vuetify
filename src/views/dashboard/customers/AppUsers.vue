@@ -69,7 +69,6 @@
                     <v-form
                       ref="appForm"
                       v-model="appValid"
-                      
                     >
                       <v-row>
                         <v-col cols="12" md="4">

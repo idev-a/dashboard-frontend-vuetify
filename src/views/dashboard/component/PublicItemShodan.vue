@@ -40,12 +40,12 @@
 						<v-col
 		                  cols="6"
 		              	>
-		              		<div class="mb-3"><b>Latitude:</b> <span>{{get_json(data).latitude.toFixed(2)}}</span></div>
+		              		<div class="mb-3"><b>Latitude:</b> <span>{{fixed(get_json(data).latitude)}}</span></div>
 		              	</v-col>
 		              	<v-col
 		                  cols="6"
 		              	>
-		              		<div class="mb-3"><b>Longitude:</b> <span>{{get_json(data).longitude.toFixed(2)}}</span></div>
+		              		<div class="mb-3"><b>Longitude:</b> <span>{{fixed(get_json(data).longitude)}}</span></div>
 		              	</v-col>
 		          	</v-row>
               	</v-col>
@@ -61,7 +61,7 @@
 					    >
 					      mdi-power-plug
 					    </v-icon>
-					    <b class="display-2">Ports ({{get_json(data).ports.length}})</b>
+					    <b class="display-2">Ports ({{length(get_json(data).ports)}})</b>
 					</div>
 					<v-divider class="my-2"></v-divider>
 					<div class="d-flex flex-wrap">
@@ -79,7 +79,7 @@
 			    >
 			      mdi-power-plug
 			    </v-icon>
-			    <b class="display-2">Services ({{ get_json(data).data.length}})</b>
+			    <b class="display-2">Services ({{ length(get_json(data).data)}})</b>
 			</div>
 			<v-divider class="my-2"></v-divider>
 			<v-row>
@@ -174,7 +174,7 @@
 </template>
 
 <script>
-	import { validEmail, get_json, beautifyEmail } from '../../../util'
+	import { validEmail, get_json, beautifyEmail, hexEncode} from '../../../util'
 	export default {
 		name: 'PublicDataShodan',
 
@@ -188,6 +188,26 @@
 			get_json,
 
 			beautifyEmail,
+
+			hexEncode,
+
+			length (data) {
+				if (data) {
+					return data.length
+				}
+				return 0
+			},
+
+			fixed (data) {
+				if (data) {
+					return data.toFixed(2)
+				}
+				return 0
+			},
+
+			beautifyDateZ (date) {
+				return this.$moment(date, 'YYYYMMDDHHmmss').format('MMM DD YYYY HH:mm:ss')
+			},
 		}
 	}
 </script>

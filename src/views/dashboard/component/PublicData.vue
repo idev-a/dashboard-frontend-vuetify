@@ -107,7 +107,7 @@
 							<!-- Business Information -->
 							<!-- Manual information -->
 	                    	<public-data-panel-item-pre
-								:data="result.observations"
+								:data="result.business_observations"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
@@ -163,7 +163,7 @@
 	                    		</v-expansion-panel-header>
 	                    		<v-expansion-panel-content>
 				                    <div class="d-flex flex-wrap">
-										<div v-for="domain in result.ctfr_subdomain.answer.split(';')">
+										<div v-for="domain in split(result.ctfr_subdomain.answer)">
 											<v-chip outlined class="secondary ma-2 pa-2 mb-3 text--secondary">{{domain}}</v-chip>
 										</div>
 									</div>
@@ -196,7 +196,7 @@
 	                			<v-expansion-panel-content>
 							      	<v-data-table
 								        :headers="dnstwistHeaders"
-								        :items="get_json(result.dnstwist)"
+								        :items="parse_array(result.dnstwist)"
 								        :items-per-page="page"
 								        item-key="domain-name"
 								        @update:items-per-page="getPageNum"
@@ -213,26 +213,9 @@
 								:data="result.whoxy_history"
 							/>
 
-							<v-expansion-panel
-								v-if="result.hibp"
-							>
-								<v-expansion-panel-header>
-	                				<b class="display-2 d-block">{{result.hibp.question}}</b>
-	                			</v-expansion-panel-header>
-	                			<v-expansion-panel-content>
-				                	<v-data-table
-								        :headers="hibpHeaders"
-								        :items="get_json(result.hibp)"
-								        :items-per-page="page"
-								        item-key="Email"
-								        @update:items-per-page="getPageNum"
-							      	>
-							      		<template v-slot:item.Email="{ item }">
-						                  <span v-html="beautifyEmail(item.Email)"></span>
-						                </template>
-								    </v-data-table>
-								</v-expansion-panel-content>
-							</v-expansion-panel>
+							<public-item-hibp 
+								:data="result.business_hibp"
+							/>
 
 							<v-expansion-panel
 								v-if="result.ssllabs"
@@ -244,7 +227,7 @@
 				                	<div class="mb-3">Assessed on:  {{beautifyDateTime(get_json(result.ssllabs).last_update)}}</div>
 							      	<v-data-table
 								        :headers="ssllabsHeaders"
-								        :items="get_json(result.ssllabs).endpoints"
+								        :items="parse_array(result.ssllabs).endpoints"
 								        :items-per-page="page"
 								        item-key="Email"
 								        @update:items-per-page="getPageNum"
@@ -279,6 +262,10 @@
 
 	                		<public-data-panel-item-pre
 								:data="result.personal_geo"
+	                		/>
+
+	                		<public-data-panel-item-pre
+								:data="result.personal_observations"
 	                		/>
 
 	                		<public-data-panel-item-pre
@@ -319,6 +306,7 @@
 	import { 
 		validEmail,
 		get_json,
+		parse_array,
 		beautifyEmail,
 		beautifyDate,
 		beautifyDuration,
@@ -327,6 +315,7 @@
 		removeQuotes
 	} from '../../../util'
 	import axios from 'axios'
+	import { mapState, mapActions } from 'vuex';
 
 	export default {
 		name: 'DashboardPublicCommonData',
@@ -337,8 +326,6 @@
 				high: 'red accent-3',
 				medium: 'orange accent-3',
 				low: 'green accent-3'
-			},
-			publicData: {
 			},
 			tabKeys: {
 				high: 'High Risk',
@@ -360,16 +347,6 @@
 		          value: 'grade',
 		          text: 'Grade',
 		          align: 'center',
-		        },
-			],
-			hibpHeaders: [
-			 	{
-		          value: 'Breach',
-		          text: 'Breach',
-		        },
-		        {
-		          value: 'Email',
-		          text: 'Email',
 		        },
 			],
 			dnstwistHeaders: [
@@ -411,6 +388,9 @@
 	    },
 
 	    computed: {
+	    	...mapState('publicdata', {
+	    		publicData: state => state.publicData
+	    	}),
 			page () {
 		        return Number(localStorage.getItem('page')) || 5
 	      	}, 
@@ -430,12 +410,17 @@
 	      PublicDataShodan: () => import('../component/PublicItemShodan'),
 	      PublicDataWhoxy: () => import('../component/PublicItemWhoxy'),
 	      PublicItemUrlscan: () => import('../component/PublicItemUrlscan'),
+	      PublicItemHibp: () => import('../component/PublicItemHibp'),
 	    },
 
 	    methods: {
+	    	...mapActions('publicdata', ['getPublicData']),
+
 	    	removeQuotes,
 
 	    	get_json,
+
+	    	parse_array,
 
 	    	beautifyDuration,
 
@@ -476,19 +461,17 @@
 				if (this.company) {
 					company_id = this.company
 				}
-				await this.fetchData(company_id)
+				this.loading = true
+				await this.getPublicData({company_id, category: this.category})
+				this.loading = false
 	      	},
 
-			async fetchData (company_id) {
-				this.loading = true
-				const res = await axios.get(`${BASE_API}/api/public/${company_id}/${this.category}`)
-				this.loading = false
-				this.publicData = {
-					high: res.data.data.high,
-					medium: res.data.data.medium,
-					low: res.data.data.low
-				};
-			}
+			split (data) {
+				if (data) {
+					return data.split(';') 
+				}
+				return []
+			},
 	    },
 
 	    props: {
@@ -507,6 +490,10 @@
 	      company: {
 	      	type: String,
 	      	default: ''
+	      },
+	      mode: {
+	      	type: Boolean,
+	      	default: false
 	      }
 	  	}	
 	}
@@ -555,6 +542,10 @@
 	img {
 		width: 100%;
 		height: auto;
+	}
+
+	.show-btns {
+	  color: rgba(255, 255, 255, 1) !important;
 	}
 
 </style>

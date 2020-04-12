@@ -384,6 +384,14 @@ export const get_json = (val) => {
   return res
 }
 
+export const parse_array = (val) => {
+  let res = []
+  try {
+    res = JSON.parse(val.answer)
+  } catch(e) {}
+  return res
+}
+
 export const beautifyEmail = (email) => {
   if (validEmail(email)) {
     return `<a href="mailto:${email}">${email}</a>`
@@ -430,4 +438,16 @@ export const getTableName = (val) => {
   }
 
   return name
+}
+
+export const hexEncode = (str) =>  {
+  var hex, i;
+
+  var result = "";
+  for (i=0; i < str.length; i++) {
+      hex = str.charCodeAt(i).toString(16);
+      result += (":"+hex).slice(-4);
+  }
+
+  return result.slice(1, result.length-2)
 }

@@ -42,3 +42,30 @@ export const fetchPublicData = async (companyId) => {
 	const res = await axios.get(`${BASE_API}/api/public/${companyId}/data`)
     return res.data.data
 }
+
+export const updateAnswer = async (data) => {
+	let value = []
+
+	try {
+		const res = await axios({
+			url: `${BASE_API}/api/public/update`,
+			data: data,
+			method: 'POST'
+		})
+		value = {
+			high: res.data.data.high,
+			medium: res.data.data.medium,
+			low: res.data.data.low
+		};
+	} catch(e) {}
+
+	return value
+}
+
+export const deleteAnswer = async (data) => {
+	return await updateAnswer(data)
+}
+
+export const createAnswer = async (data) => {
+	return await updateAnswer(data)
+}

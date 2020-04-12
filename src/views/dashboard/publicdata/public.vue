@@ -429,7 +429,7 @@
 
 <script>
 	import { BASE_API, fetchPublicData, getCompanyId } from '../../../api'
-	import { validEmail } from '../../../util'
+	import { validEmail, hexEncode } from '../../../util'
 	import axios from 'axios'
 
 	import JQuery from 'jquery'
@@ -536,6 +536,8 @@
 		},
 
 		methods: {
+			hexEncode,
+
 			determinGrateClass (grade) {
 				let color = 'black'
 				switch (grade) {
@@ -559,18 +561,6 @@
 			getPageNum (_page) {
 		        localStorage.setItem('page', _page)
 	      	},
-
-			hexEncode (str) {
-			    var hex, i;
-
-			    var result = "";
-			    for (i=0; i < str.length; i++) {
-			        hex = str.charCodeAt(i).toString(16);
-			        result += (":"+hex).slice(-4);
-			    }
-
-			    return result.slice(1, result.length-2)
-			},
 
 			checkSPFPossible (possible) {
 				if (possible.includes('Spoofing possible')) {
