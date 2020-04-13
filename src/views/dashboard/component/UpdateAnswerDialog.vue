@@ -15,7 +15,16 @@
 	                  v-model="formValid"
 	                >
 	                  	<v-row>
-	                  		<v-col cols="12" md="12">
+                  		 	<v-col cols="12" md="4">
+			                    <v-select
+		                            v-model="editedItem.risk"
+		                            label="Risk" 
+		                            :items="riskItems"
+		                            @input="changeRisk"
+	                            >
+	                          	</v-select>
+                         	</v-col>
+                  			<v-col cols="12" md="12">
 		                      	<v-textarea
 			                        v-model="editedItem.question"
 			                        label="Question" 
@@ -26,7 +35,10 @@
 		                        >
 		                      	</v-textarea>
 		                    </v-col>
-		                    <v-col cols="12" md="12">
+		                    <v-col v-if="uploadBtn" cols="12" md="12">
+								<file-reader @load="readFileContent"></file-reader>
+	                  		</v-col>
+		                    <v-col v-if="!staticField" cols="12" md="12">
 		                      	<v-textarea
 			                        v-model="editedItem.answer"
 			                        label="Answer" 
@@ -34,18 +46,11 @@
 			                        rows="1"
 			                        hide-details="auto"
 			                        required
+			                        class="max-400"
 		                        >
 		                      	</v-textarea>
 		                    </v-col>
-		                    <v-col cols="12" md="4">
-			                    <v-select
-		                            v-model="editedItem.risk"
-		                            label="Risk" 
-		                            :items="riskItems"
-		                            @input="changeRisk"
-	                            >
-	                          	</v-select>
-                         	</v-col>
+		                   
 		                </v-row>
 		            </v-form>
 		        </v-container>
@@ -69,10 +74,16 @@
 			],
 		}),
 
+		components: {
+	      	FileReader: () => import('./FileReader')
+		},
+
 		computed: {
     		...mapState('publicdata', {
 	    		publicItem: state => state.publicItem,
-	    		updateAnswerDialog: state => state.updateAnswerDialog
+	    		updateAnswerDialog: state => state.updateAnswerDialog,
+	    		uploadBtn: state => state.uploadBtn,
+	    		staticField: state => state.staticField,
 	    	}),
 	    	show: {
 	    		set () {
@@ -100,15 +111,6 @@
 	    	}
     	},
 
-		watch: {
-			publicItem: {
-				deep: true,
-			    handler(val) {
-			    	
-			    }
-			}
-		},
-
 		props: {
 			loading: {
 				type: Boolean,
@@ -117,8 +119,27 @@
 		},
 
 		methods: {
-			closeDialog () {
-				this.$emit('close-dialog', false)
+			...mapActions('publicdata', ['setPublicItem', 'showUpdateAnswerDialog']),
+
+			readFileContent (val) {
+				var allTextLines = val.split(/\r\n|\n/);
+			    var headers = allTextLines[0].split(',');
+			    var lines = [];
+
+			    for (var i=1; i<allTextLines.length; i++) {
+
+			        var data = allTextLines[i].split(',');
+			        if (data.length == headers.length) {
+			            var row = {};
+			            for (var j=0; j< headers.length; j++) {
+			               row[headers[j].trim()] = data[j].trim();
+
+			            }
+			            lines.push(row);
+			        }
+			    }
+				this.editedItem.answer = JSON.stringify(lines)
+				this.setPublicItem(this.editedItem)
 			},
 
 			changeRisk (value) {
@@ -127,9 +148,21 @@
 				this.editedItem.low = value == 'Low' ? 1 : 0
 			},
 
+			closeDialog () {
+				this.showUpdateAnswerDialog(false)
+			},
+
 			updateAnswer () {
 				this.$emit('update-answer', this.editedItem)
 			}
 		},
 	}
 </script>
+
+<style>
+	.max-400 {
+		max-height: 400px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+</style>

@@ -3,8 +3,7 @@
 		v-if="data"
 	>
 		<v-expansion-panel-header>
-			<v-row>
-				<b class="display-2 d-block">{{data.question}}</b>
+			<v-row align="center">
 				<div v-if="mode" class="align-self-center">
                   <v-btn
                     color="success"
@@ -18,6 +17,7 @@
                     </v-icon>
                   </v-btn>
                 </div>
+				<b class="display-2 d-block">{{data.question}}</b>
             </v-row>
 		</v-expansion-panel-header>
 			</v-hover>
@@ -26,7 +26,6 @@
 			<update-answer-dialog 
 				v-if="mode"
 				:loading="loading"
-				@close-dialog="closeUpdateAnswerDialog"
 				@update-answer="updateItem"
 			/>
 		</v-expansion-panel-content>
@@ -65,13 +64,15 @@
       		},
       	},
       	methods: {
-      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'closeUpdateAnswerDialog']),
+      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'showUploadBtn', 'setStaticField']),
 
 	    	removeQuotes,
 
 	    	showDialog () {
+	    		this.showUploadBtn(false)
+	    		this.setStaticField(false)
 	    		this.setPublicItem(this.data)
-	    		this.showUpdateAnswerDialog()
+	    		this.showUpdateAnswerDialog(true)
 	    	},
 
 			async updateItem (item) {
@@ -79,7 +80,7 @@
 				await this.updateAnswer(item)
 				this.loading = false
 
-				this.closeUpdateAnswerDialog()
+				this.showUpdateAnswerDialog(false)
 				this.updateComponentKey()
 			}
       	},

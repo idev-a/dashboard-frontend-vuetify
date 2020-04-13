@@ -124,9 +124,11 @@
 	        </v-row>
 	      	<v-tabs
 		      class="elevation-2 mt-4"
-		      dark
+		      color="white"
+		      light
 		      centered
 		      grow
+		      show-arrows
 		    >
 		      <v-tabs-slider class="blue darken-3"></v-tabs-slider>
 				
@@ -220,7 +222,22 @@
 								v-if="result.ctfr_subdomain"
 							>
 								<v-expansion-panel-header>
-	                    			<b class="display-2 d-block">{{result.ctfr_subdomain.question}}</b>
+									<v-row align="center">
+										<div v-if="mode" class="align-self-center">
+						                  <v-btn
+						                    color="success"
+						                    icon
+						                    @click="_showUpdateDialog(result.ctfr_subdomain)"
+						                  >
+						                    <v-icon
+						                      color="success"
+						                    >
+						                      mdi-pencil
+						                    </v-icon>
+						                  </v-btn>
+						                </div>
+		                    			<b class="display-2 d-block">{{result.ctfr_subdomain.question}}</b>
+		                    		</v-row>
 	                    		</v-expansion-panel-header>
 	                    		<v-expansion-panel-content>
 				                    <div class="d-flex flex-wrap">
@@ -234,7 +251,22 @@
 								v-if="result.builtwith"
 							>
 								<v-expansion-panel-header>
-	                    			<b class="display-2 d-block">{{result.builtwith.question}}</b>
+									<v-row align="center">
+	                    				<div v-if="mode" class="align-self-center">
+						                  <v-btn
+						                    color="success"
+						                    icon
+						                    @click="_showUpdateDialog(result.builtwith)"
+						                  >
+						                    <v-icon
+						                      color="success"
+						                    >
+						                      mdi-pencil
+						                    </v-icon>
+						                  </v-btn>
+						                </div>
+	                    				<b class="display-2 d-block">{{result.builtwith.question}}</b>
+						            </v-row>
 	                    		</v-expansion-panel-header>
 	                    		<v-expansion-panel-content>
 	                    			<vue-friendly-iframe
@@ -252,7 +284,22 @@
 								v-if="result.dnstwist"
 							>
 								<v-expansion-panel-header>
-	                				<b class="display-2 d-block">{{result.dnstwist.question}}</b>
+									<v-row  align="center">
+	                					<div v-if="mode" class="align-self-center">
+						                  <v-btn
+						                    color="success"
+						                    icon
+						                    @click="_showUpdateDialog(result.dnstwist)"
+						                  >
+						                    <v-icon
+						                      color="success"
+						                    >
+						                      mdi-pencil
+						                    </v-icon>
+						                  </v-btn>
+						                </div>
+	                					<b class="display-2 d-block">{{result.dnstwist.question}}</b>
+						            </v-row>
 	                			</v-expansion-panel-header>
 	                			<v-expansion-panel-content>
 							      	<v-data-table
@@ -268,21 +315,39 @@
 
 							<public-data-shodan
 								:data="result.shodan"
+								:mode="mode"
 							/>
 
 							<public-data-whoxy
 								:data="result.whoxy_history"
+								:mode="mode"
 							/>
 
 							<public-item-hibp 
 								:data="result.business_hibp"
+								:mode="mode"
 							/>
 
 							<v-expansion-panel
 								v-if="result.ssllabs"
 							>
 								<v-expansion-panel-header>
-	                				<b class="display-2 d-block">{{result.ssllabs.question}}</b>
+									<v-row  align="center">
+	                					<div v-if="mode" class="align-self-center">
+						                  <v-btn
+						                    color="success"
+						                    icon
+						                    @click="_showUpdateDialog(result.dnstwist)"
+						                  >
+						                    <v-icon
+						                      color="success"
+						                    >
+						                      mdi-pencil
+						                    </v-icon>
+						                  </v-btn>
+						                </div>
+	                					<b class="display-2 d-block">{{result.ssllabs.question}}</b>
+						            </v-row>
 	                			</v-expansion-panel-header>
 	                			<v-expansion-panel-content>
 				                	<div class="mb-3">Assessed on:  {{beautifyDateTime(get_json(result.ssllabs).last_update)}}</div>
@@ -299,20 +364,18 @@
 							      		<template v-slot:item.grade="{ item }">
 						                   <div class="display-3 font-weight-bold" :class="determinGrateClass(item.grade)">{{item.grade}}</div>
 						                </template>
-						                <!-- <template v-slot:item.details="{ item }">
-						                   <div class="body-1">{{beautifyDateTimeFromUnix(item.details.hostStartTime)}}</div>
-						                   <div class="body-2">Duration: {{beautifyDuration(item.duration)}}</div>
-						                </template> -->
 								    </v-data-table>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 
 							<public-data-panel-item
 								:data="result.wpscan"
+								:mode="mode"
 	                    	/>
 	                		
 	                		<public-item-urlscan
 								:data="result.urlscan"
+								:mode="mode"
 	                		/>
 
 	                		<!-- Personal data -->
@@ -371,7 +434,6 @@
 	  <update-answer-dialog 
 		v-if="mode"
 		:loading="updateLoading"
-		@close-dialog="closeUpdateAnswerDialog"
 		@update-answer="updateItem"
 	  />
 	</div>
@@ -493,7 +555,7 @@
 	    },
 
 	    methods: {
-	    	...mapActions('publicdata', ['getPublicData', 'updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'closeUpdateAnswerDialog']),
+	    	...mapActions('publicdata', ['getPublicData', 'updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'setStaticField']),
 
 	    	removeQuotes,
 
@@ -513,7 +575,14 @@
 
 			showUpdateDialog (data) {
 				this.setPublicItem(data)
-	    		this.showUpdateAnswerDialog()
+				this.setStaticField(false)
+	    		this.showUpdateAnswerDialog(true)
+	    	},
+
+	    	_showUpdateDialog () {
+	    		this.setStaticField(true)
+	    		this.setPublicItem(data)
+	    		this.showUpdateAnswerDialog(true)
 	    	},
 
 			async updateItem (item) {
@@ -521,7 +590,7 @@
 				await this.updateAnswer(item)
 				this.updateLoading = false
 
-				this.closeUpdateAnswerDialog()
+				this.showUpdateAnswerDialog(false)
 				this.updateComponentKey()
 			},
 

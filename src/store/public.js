@@ -9,7 +9,9 @@ export default {
   	publicData: {},
     componentkey: 1,
     publicItem: {},
-    updateAnswerDialog: false
+    updateAnswerDialog: false,
+    uploadBtn: false,
+    staticField: false,
   },
   mutations: {
   	setPublicData(state, e) {
@@ -21,12 +23,15 @@ export default {
     setPublicItem(state, e) {
       state.publicItem = e
     },
-    showUpdateAnswerDialog(state) {
-      state.updateAnswerDialog = true
+    showUpdateAnswerDialog(state, e) {
+      state.updateAnswerDialog = e
     },
-    closeUpdateAnswerDialog(state) {
-      state.updateAnswerDialog = false
+    showUploadBtn(state, e) {
+      state.uploadBtn = e
     },
+    setStaticField(state, e) {
+      state.staticField = e
+    }
   },
   actions: {
   	async getPublicData({ commit }, payload) {
@@ -56,12 +61,16 @@ export default {
       commit('setPublicItem', payload)
     },
 
-    closeUpdateAnswerDialog({ commit }) {
-      commit('closeUpdateAnswerDialog')
+    showUpdateAnswerDialog({ commit }, payload) {
+      commit('showUpdateAnswerDialog', payload)
     },
 
-    showUpdateAnswerDialog({ commit }) {
-      commit('showUpdateAnswerDialog')
+    showUploadBtn({ commit }, payload) {
+      commit('showUploadBtn', payload)
+    },
+
+    setStaticField({ commit }, payload) {
+      commit('setStaticField', payload)
     }
   },
 };

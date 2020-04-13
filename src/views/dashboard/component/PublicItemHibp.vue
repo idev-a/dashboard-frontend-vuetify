@@ -3,9 +3,8 @@
 		v-if="data"
 	>
 		<v-expansion-panel-header>
-			<v-row>
-				<b class="display-2 d-block">{{data.question}}</b>
-				<div class="align-self-center">
+			<v-row align="center">
+				<div  v-if="mode" class="align-self-center">
                   <v-btn
                     color="success"
                     icon
@@ -18,6 +17,7 @@
                     </v-icon>
                   </v-btn>
                 </div>
+				<b class="display-2 d-block">{{data.question}}</b>
             </v-row>
 		</v-expansion-panel-header>
 		<v-expansion-panel-content>
@@ -34,10 +34,8 @@
 	                </template>
 			    </v-data-table>
 				<update-answer-dialog 
-					:dialog="dialog"
+					v-if="mode"
 					:loading="loading"
-					:item="data" 
-					@close-dialog="closeDialog"
 					@update-answer="updateItem"
 				/>
 			</template>
@@ -58,15 +56,8 @@
     	components: {
 	      	UpdateAnswerDialog: () => import('./UpdateAnswerDialog'),
 		},
-
-		computed: {
-			page () {
-		        return Number(localStorage.getItem('page')) || 5
-	      	}, 
-	    },
-
+		
     	data: () => ({
-    		dialog: false,
     		loading: false,
     		hibpHeaders: [
 			 	{
@@ -84,9 +75,20 @@
 	      	data: {
 		        type: Object,
       		},
+      		mode: {
+      			type: Boolean,
+      			default: false
+      		},
       	},
+
+      	computed: {
+			page () {
+		        return Number(localStorage.getItem('page')) || 5
+	      	}, 
+	    },
+
       	methods: {
-      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey']),
+      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'showUploadBtn']),
 	    	parse_array,
 			beautifyEmail,
 
@@ -95,19 +97,17 @@
 	      	},
 
 	    	showDialog () {
-	    		this.dialog = true
+	    		this.showUploadBtn(true)
+	    		this.setPublicItem(this.data)
+	    		this.showUpdateAnswerDialog(true)
 	    	},
-
-	    	closeDialog () {
-				this.dialog = false
-			},
 
 			async updateItem (item) {
 				this.loading = true
 				await this.updateAnswer(item)
 				this.loading = false
 
-				this.closeDialog ()
+				this.showUpdateAnswerDialog(false)
 				this.updateComponentKey()
 			}
       	},
