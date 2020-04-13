@@ -45,21 +45,14 @@ export const fetchPublicData = async (companyId) => {
 
 export const updateAnswer = async (data) => {
 	let value = []
-
 	try {
-		const res = await axios({
+		await axios({
 			url: `${BASE_API}/api/public/update`,
 			data: data,
 			method: 'POST'
 		})
-		value = {
-			high: res.data.data.high,
-			medium: res.data.data.medium,
-			low: res.data.data.low
-		};
+		
 	} catch(e) {}
-
-	return value
 }
 
 export const deleteAnswer = async (data) => {

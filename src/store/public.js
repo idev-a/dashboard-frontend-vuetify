@@ -34,9 +34,7 @@ export default {
     },
 
     async updateAnswer({ commit }, payload) {
-      let value = await updateAnswer(payload)
-
-      commit('setPublicData', value);
+      await updateAnswer(payload)
     },
 
     updateComponentKey({ commit }) {
