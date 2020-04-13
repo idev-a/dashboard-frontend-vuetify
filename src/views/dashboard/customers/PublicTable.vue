@@ -45,6 +45,7 @@
 				:banner="banner"
 				:company="company"
 				:key="componentkey"
+				:mode="mode"
 			>
 		  	</public-data>
 		</v-card>
@@ -61,6 +62,7 @@
 	    name: 'PublicDataTable',
 
 	    data: () => ({
+	      mode: true,
 	      loading: true,
 	      loadingUsers: true,
 	      search: '',
@@ -110,7 +112,7 @@
 	    	await this.fetchUsers()
 	    },
 
-	    methods: {
+	    methods: {	    	
 	    	_email (email) {
 	    		return email.split('@')[1]
 	    	},

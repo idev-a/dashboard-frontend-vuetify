@@ -40,39 +40,88 @@
 		    </div>
 
 		    <!-- General Personal Data -->
-		    <div
+	    	<v-row
 				v-if="category=='personal'"
-		    >
-		    	<v-row>
-		            <v-col
-		              v-if="publicData.high.name"
-		              cols="12"
-		              sm="6"
-		              md="4"
-		            >
-		                <b class="mr-2">Name:</b>
-		                <span class="display-1">{{publicData.high.name.answer}}</span>
-		            </v-col>
-		            <v-col
-		              v-if="publicData.high.email"
-		              cols="12"
-		              sm="6"
-		              md="4"
-		            >
-		                <b class="mr-2">Email:</b>
-		                <span class="display-1" v-html="beautifyEmail(publicData.high.email.answer)"></span>
-		            </v-col>
-		            <v-col
-		              v-if="publicData.high.dob"
-		              cols="12"
-		              sm="6"
-		              md="4"
-		            >
-		                <b class="mr-2">Birthday:</b>
-		                <span class="display-1">{{publicData.high.dob.answer}}</span>
-		            </v-col>
-		        </v-row>
-		    </div>
+	    	>
+	            <v-col
+	              v-if="publicData.high.name"
+	              cols="12"
+	              sm="6"
+	              md="4"
+	            >
+	            	<v-row align="center">
+	                	<div v-if="mode" class="align-self-center">
+		                  <v-btn
+		                    color="success"
+		                    icon
+		                    @click="showUpdateDialog(publicData.high.name)"
+		                  >
+		                    <v-icon
+		                      color="success"
+		                    >
+		                      mdi-pencil
+		                    </v-icon>
+		                  </v-btn>
+		                </div>
+		                <div>
+		                	<b class="mr-2">Name:</b>
+			                <span class="display-1">{{publicData.high.name.answer}}</span>
+			            </div>
+		            </v-row>
+	            </v-col>
+	            <v-col
+	              v-if="publicData.high.email"
+	              cols="12"
+	              sm="6"
+	              md="4"
+	            >
+	            	<v-row align="center">
+		               	<div v-if="mode" class="align-self-center">
+		                  <v-btn
+		                    color="success"
+		                    icon
+		                    @click="showUpdateDialog(publicData.high.email)"
+		                  >
+		                    <v-icon
+		                      color="success"
+		                    >
+		                      mdi-pencil
+		                    </v-icon>
+		                  </v-btn>
+		                </div>
+		                <div>
+			                <b class="mr-2">Email:</b>
+			                <span class="display-1" v-html="beautifyEmail(publicData.high.email.answer)"></span>
+			            </div>
+		            </v-row>
+	            </v-col>
+	            <v-col
+	              v-if="publicData.high.dob"
+	              cols="12"
+	              sm="6"
+	              md="4"
+	            >
+	            	<v-row align="center">
+		                <div v-if="mode" class="align-self-center">
+		                  <v-btn
+		                    color="success"
+		                    icon
+		                    @click="showUpdateDialog(publicData.high.dob)"
+		                  >
+		                    <v-icon
+		                      color="success"
+		                    >
+		                      mdi-pencil
+		                    </v-icon>
+		                  </v-btn>
+		                </div>
+		                <div>
+			                <b class="mr-2">Birthday:</b>
+			                <span class="display-1">{{publicData.high.dob.answer}}</span>
+			            </div>
+		            </v-row>
+	            </v-col>
+	        </v-row>
 	      	<v-tabs
 		      class="elevation-2 mt-4"
 		      dark
@@ -108,51 +157,63 @@
 							<!-- Manual information -->
 	                    	<public-data-panel-item-pre
 								:data="result.business_observations"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.email_provider"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.name_associated"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.website_type"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.business_geo"
+								:mode="mode"
 	                    	/>
 	
 							<public-data-panel-item-pre
 								:data="result.business_google_search_results"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.business_other"
+								:mode="mode"
 	                    	/>
 
 							<public-data-panel-item-pre
 								:data="result.linkedin_data"
+								:mode="mode"
 	                    	/>
 
 							<!-- Automation result from public_data.py -->
 	                    	<public-data-panel-item-pre
 								:data="result.spf_record"
+								:mode="mode"
 	                    	/>
 
 				            <public-data-panel-item-pre
 								:data="result.spf_dmarc"
+								:mode="mode"
 	                    	/>
 
 	                    	<public-data-panel-item-pre
 								:data="result.spf_record_more"
+								:mode="mode"
 	                    	/>
 
 				            <public-data-panel-item-pre
 								:data="result.spf_spoofing_possible"
+								:mode="mode"
 	                    	/>
 
 							<v-expansion-panel
@@ -256,40 +317,49 @@
 
 	                		<!-- Personal data -->
 	                		<!-- Manual data -->
-							<public-data-panel-item-pre
+							<!-- <public-data-panel-item-pre
 								:data="result.email"
-	                		/>
+								:mode="mode"
+	                		/> -->
 
 	                		<public-data-panel-item-pre
 								:data="result.personal_geo"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.personal_observations"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.facebook"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.instagram"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.twitter"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.other_social_media"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.personal_google_search_results"
+								:mode="mode"
 	                		/>
 
 	                		<public-data-panel-item-pre
 								:data="result.images"
+								:mode="mode"
 	                		/>
 						</v-expansion-panels>
 		            </v-row>
@@ -298,6 +368,12 @@
 		    </v-tabs>
   		</div>
 	  </v-card>
+	  <update-answer-dialog 
+		v-if="mode"
+		:loading="updateLoading"
+		@close-dialog="closeUpdateAnswerDialog"
+		@update-answer="updateItem"
+	  />
 	</div>
 </template>
 
@@ -321,6 +397,8 @@
 		name: 'DashboardPublicCommonData',
 
 		data: () => ({
+			updateDialog: false,
+			updateLoading: false,
 			loading: false,
 			bgColor: {
 				high: 'red accent-3',
@@ -411,10 +489,11 @@
 	      PublicDataWhoxy: () => import('../component/PublicItemWhoxy'),
 	      PublicItemUrlscan: () => import('../component/PublicItemUrlscan'),
 	      PublicItemHibp: () => import('../component/PublicItemHibp'),
+	      UpdateAnswerDialog: () => import('./UpdateAnswerDialog'),
 	    },
 
 	    methods: {
-	    	...mapActions('publicdata', ['getPublicData']),
+	    	...mapActions('publicdata', ['getPublicData', 'updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'closeUpdateAnswerDialog']),
 
 	    	removeQuotes,
 
@@ -431,6 +510,20 @@
 	    	beautifyDate,
 
 			beautifyEmail,
+
+			showUpdateDialog (data) {
+				this.setPublicItem(data)
+	    		this.showUpdateAnswerDialog()
+	    	},
+
+			async updateItem (item) {
+				this.updateLoading = true
+				await this.updateAnswer(item)
+				this.updateLoading = false
+
+				this.closeUpdateAnswerDialog()
+				this.updateComponentKey()
+			},
 
 			determinGrateClass (grade) {
 				let color = 'black'

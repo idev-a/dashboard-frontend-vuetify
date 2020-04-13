@@ -7,7 +7,9 @@ export default {
   namespaced: true,	
   state: {
   	publicData: {},
-    componentkey: 1
+    componentkey: 1,
+    publicItem: {},
+    updateAnswerDialog: false
   },
   mutations: {
   	setPublicData(state, e) {
@@ -15,7 +17,16 @@ export default {
   	},
     updateComponentKey(state) {
       state.componentkey += 1
-    }
+    },
+    setPublicItem(state, e) {
+      state.publicItem = e
+    },
+    showUpdateAnswerDialog(state) {
+      state.updateAnswerDialog = true
+    },
+    closeUpdateAnswerDialog(state) {
+      state.updateAnswerDialog = false
+    },
   },
   actions: {
   	async getPublicData({ commit }, payload) {
@@ -39,6 +50,18 @@ export default {
 
     updateComponentKey({ commit }) {
       commit('updateComponentKey')
+    },
+
+    setPublicItem({ commit }, payload) {
+      commit('setPublicItem', payload)
+    },
+
+    closeUpdateAnswerDialog({ commit }) {
+      commit('closeUpdateAnswerDialog')
+    },
+
+    showUpdateAnswerDialog({ commit }) {
+      commit('showUpdateAnswerDialog')
     }
   },
 };

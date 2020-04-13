@@ -1,12 +1,12 @@
 <template>
-	<v-dialog  v-model="show" max-width="1024px" @click:outside="closeDialog">
+	<v-dialog v-model="show" max-width="1024px" @click:outside="closeDialog">
       	<v-card :loading="loading">
             <v-card-title>
             	<v-row>
-              		<div class="headline" style="margin: 0 auto;">{{item.question}}</div>
+              		<div class="headline" style="margin: 0 auto;">Update the Question & Answer</div>
 	              	<v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
 	              	<v-btn :disabled="loading" color="blue darken-1" text @click="updateAnswer">Save</v-btn>
-	              </v-row>
+              	</v-row>
             </v-card-title>
             <v-card-text>
               	<v-container>
@@ -15,7 +15,18 @@
 	                  v-model="formValid"
 	                >
 	                  	<v-row>
-		                    <v-col cols="12" md="4">
+	                  		<v-col cols="12" md="12">
+		                      	<v-textarea
+			                        v-model="editedItem.question"
+			                        label="Question" 
+			                        auto-grow
+			                        rows="1"
+			                        hide-details="auto"
+			                        required
+		                        >
+		                      	</v-textarea>
+		                    </v-col>
+		                    <v-col cols="12" md="12">
 		                      	<v-textarea
 			                        v-model="editedItem.answer"
 			                        label="Answer" 
@@ -45,55 +56,64 @@
 </template>
 
 <script>
+	import { mapState, mapActions } from 'vuex';
 	export default {
 		name: 'UpdateAnswerDialog',
 
 		data: () => ({
-			show: true,
 			formValid: false,
 			riskItems: [
 				'High',
 				'Medium',
 				'Low'
 			],
-			editedItem: {
-		        risk: 'High'
-	      	},
 		}),
 
+		computed: {
+    		...mapState('publicdata', {
+	    		publicItem: state => state.publicItem,
+	    		updateAnswerDialog: state => state.updateAnswerDialog
+	    	}),
+	    	show: {
+	    		set () {
+
+	    		},
+	    		get () {
+	    			return this.updateAnswerDialog
+	    		}
+	    	},
+	    	editedItem: {
+	    		get () {
+	    			let val = Object.assign({}, this.publicItem)
+	    			if (val.high) {
+						val.risk = 'High'
+					} else if (val.medium) {
+						val.risk = 'Medium'
+					} if (val.low) {
+						val.risk = 'Low'
+					} 
+	    			return val
+	    		},
+	    		set () {
+	    			
+	    		}
+	    	}
+    	},
+
 		watch: {
-			dialog: {
+			publicItem: {
 				deep: true,
-			    handler(newVal, oldVal) {
-					this.show = this.dialog
+			    handler(val) {
+			    	
 			    }
 			}
 		},
 
 		props: {
-			item: {
-				type: Object,
-				default: {}
-			},
-			dialog: {
-				type: Boolean,
-				default: false
-			},
 			loading: {
 				type: Boolean,
 				default: false
 			}
-		},
-
-		mounted() {
-			this.editedItem = Object.assign({}, this.item)
-			if (this.item.high) {
-				this.editedItem.risk = 'High'
-			} else if (this.item.medium) {
-				this.editedItem.risk = 'Medium'
-			} if (this.item.low) {
-				this.editedItem.risk = 'Low'
-			} 
 		},
 
 		methods: {
@@ -108,7 +128,6 @@
 			},
 
 			updateAnswer () {
-				
 				this.$emit('update-answer', this.editedItem)
 			}
 		},

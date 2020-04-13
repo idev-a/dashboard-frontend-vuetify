@@ -5,7 +5,7 @@
 		<v-expansion-panel-header>
 			<v-row>
 				<b class="display-2 d-block">{{data.question}}</b>
-				<div class="align-self-center">
+				<div v-if="mode" class="align-self-center">
                   <v-btn
                     color="success"
                     icon
@@ -24,10 +24,9 @@
 		<v-expansion-panel-content>
 			<div class="pre-strim">{{removeQuotes(data.answer)}}</div>
 			<update-answer-dialog 
-				:dialog="dialog"
+				v-if="mode"
 				:loading="loading"
-				:item="data" 
-				@close-dialog="closeDialog"
+				@close-dialog="closeUpdateAnswerDialog"
 				@update-answer="updateItem"
 			/>
 		</v-expansion-panel-content>
@@ -49,34 +48,38 @@
 		},
 
     	data: () => ({
-    		dialog: false,
     		loading: false,
     	}),
+
+    	mounted () {
+    		this.setPublicItem(this.data)
+    	},
 
     	props: {
 	      	data: {
 		        type: Object,
       		},
+      		mode: {
+      			type: Boolean,
+      			default: false
+      		},
       	},
       	methods: {
-      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey']),
+      		...mapActions('publicdata', ['updateAnswer', 'updateComponentKey', 'setPublicItem', 'showUpdateAnswerDialog', 'closeUpdateAnswerDialog']),
 
 	    	removeQuotes,
 
 	    	showDialog () {
-	    		this.dialog = true
+	    		this.setPublicItem(this.data)
+	    		this.showUpdateAnswerDialog()
 	    	},
-
-	    	closeDialog () {
-				this.dialog = false
-			},
 
 			async updateItem (item) {
 				this.loading = true
 				await this.updateAnswer(item)
 				this.loading = false
 
-				this.closeDialog ()
+				this.closeUpdateAnswerDialog()
 				this.updateComponentKey()
 			}
       	},
