@@ -24,8 +24,25 @@
 		              sm="6"
 		              md="6"
 		            >
-		                <b class="mr-2">Domain:</b>
-		                <span class="display-1">{{removeQuotes(publicData.high.domain.answer)}}</span>
+		            	<v-row align="center">
+		                	<div v-if="mode" class="align-self-center">
+			                  <v-btn
+			                    color="success"
+			                    icon
+			                    @click="showUpdateDialog(publicData.high.domain)"
+			                  >
+			                    <v-icon
+			                      color="success"
+			                    >
+			                      mdi-pencil
+			                    </v-icon>
+			                  </v-btn>
+			                </div>
+			                <div>
+				                <b class="mr-2">Domain:</b>
+				                <span class="display-1">{{removeQuotes(publicData.high.domain.answer)}}</span>
+				            </div>
+				        </v-row>
 		            </v-col>
 		            <v-col
 		              v-if="publicData.high.website_ip"
@@ -33,8 +50,25 @@
 		              sm="6"
 		              md="6"
 		            >
-		                <b class="mr-2">IP:</b>
-		                <span class="display-1">{{removeQuotes(publicData.high.website_ip.answer)}}</span>
+		            	<v-row align="center">
+		                	<div v-if="mode" class="align-self-center">
+			                  <v-btn
+			                    color="success"
+			                    icon
+			                    @click="showUpdateDialog(publicData.high.website_ip)"
+			                  >
+			                    <v-icon
+			                      color="success"
+			                    >
+			                      mdi-pencil
+			                    </v-icon>
+			                  </v-btn>
+			                </div>
+			                <div>
+				                <b class="mr-2">IP:</b>
+				                <span class="display-1">{{removeQuotes(publicData.high.website_ip.answer)}}</span>
+				            </div>
+				        </v-row>
 		            </v-col>
 		        </v-row>
 		    </div>
