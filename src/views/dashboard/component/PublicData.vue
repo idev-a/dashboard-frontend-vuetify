@@ -613,7 +613,7 @@
 	    		this.showUpdateAnswerDialog(true)
 	    	},
 
-	    	_showUpdateDialog () {
+	    	_showUpdateDialog (data) {
 	    		this.setStaticField(true)
 	    		this.setPublicItem(data)
 	    		this.showUpdateAnswerDialog(true)
