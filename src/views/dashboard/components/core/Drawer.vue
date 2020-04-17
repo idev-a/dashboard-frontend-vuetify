@@ -94,14 +94,14 @@
           to: '/',
         },
         {
-          group: '/customers',
+          group: '/admin',
           icon: 'mdi-account-multiple',
           title: 'Admin',
           is_admin: true,
           children: [
             {
               title: 'Customers',
-              to: 'all',
+              to: 'customers',
             },
             {
               title: 'Daily Tips',
@@ -114,6 +114,10 @@
             {
               title: 'Apps & Users',
               to: 'appusers',
+            },
+            {
+              title: 'Query Board',
+              to: 'sql',
             },
           ]
         },

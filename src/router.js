@@ -77,8 +77,8 @@ let router = new Router({
         },
         {
           name: 'Customers',
-          path: 'customers/all',
-          component: () => import('@/views/dashboard/customers/customer'),
+          path: 'admin/customers',
+          component: () => import('@/views/dashboard/admin/customer'),
           meta: {
             is_admin: true,
             requiresAuth: true
@@ -86,8 +86,8 @@ let router = new Router({
         },
         {
           name: 'Daily Tips',
-          path: 'customers/dailytips',
-          component: () => import('@/views/dashboard/customers/DailyTips'),
+          path: 'admin/dailytips',
+          component: () => import('@/views/dashboard/admin/DailyTips'),
           meta: {
             is_admin: true,
             requiresAuth: true
@@ -95,8 +95,8 @@ let router = new Router({
         },
         {
           name: 'DB (security_questions & security_answers table)',
-          path: 'customers/publictable',
-          component: () => import('@/views/dashboard/customers/PublicTable'),
+          path: 'admin/publictable',
+          component: () => import('@/views/dashboard/admin/PublicTable'),
           meta: {
             is_admin: true,
             requiresAuth: true
@@ -104,8 +104,17 @@ let router = new Router({
         },
         {
           name: 'Apps & Users',
-          path: 'customers/appusers',
-          component: () => import('@/views/dashboard/customers/AppUsers'),
+          path: 'admin/appusers',
+          component: () => import('@/views/dashboard/admin/AppUsers'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Query Board',
+          path: 'admin/sql',
+          component: () => import('@/views/dashboard/admin/QueryBoard'),
           meta: {
             is_admin: true,
             requiresAuth: true
