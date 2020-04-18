@@ -48,7 +48,24 @@
           			v-model="selectedHeaders"
           			@input="updateHeaders"
               	>
-              		
+          		 	<template v-slot:selection="{ attrs, item, parent, selected }">
+				        <v-chip
+				          v-if="item === Object(item)"
+				          v-bind="attrs"
+				          :color="`${item.color} lighten-3`"
+				          :input-value="selected"
+				          label
+				          small
+				        >
+				          <span class="pr-2">
+				            {{ item.text }}
+				          </span>
+				          <v-icon
+				            small
+				            @click="parent.selectItem(item)"
+				          >mdi-close</v-icon>
+				        </v-chip>
+				      </template>
 	            </v-select>
           	</v-card-title>
 	    	<v-data-table
