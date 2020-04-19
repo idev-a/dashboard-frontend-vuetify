@@ -121,6 +121,15 @@ let router = new Router({
           }
         },
         {
+          name: 'RSS Board',
+          path: 'admin/rss',
+          component: () => import('@/views/dashboard/admin/RSS'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),

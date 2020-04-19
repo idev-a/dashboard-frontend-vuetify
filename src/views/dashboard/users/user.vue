@@ -206,7 +206,6 @@
       snack: false,
       snackColor: '',
       snackText: '',
-      pagination: {},
       user: false,
       currentUser: '',
       singleExpand: true,

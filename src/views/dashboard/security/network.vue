@@ -1,6 +1,6 @@
 <template>
   <category-risk
-    category="netowrk"
+    category="network"
     title="Network Security"
     :banner="banner"
   />

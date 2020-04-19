@@ -119,6 +119,10 @@
               title: 'Query Board',
               to: 'sql',
             },
+            {
+              title: 'RSS Board',
+              to: 'rss',
+            },
           ]
         },
         {
