@@ -279,9 +279,8 @@
     },
 
     methods: {
-      levelColor (level) {
-        return levelColor(level)
-      },
+      levelColor,
+      
       getPageNum (_page) {
         localStorage.setItem('page', _page)
       },

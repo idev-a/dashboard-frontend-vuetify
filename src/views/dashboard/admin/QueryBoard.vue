@@ -10,7 +10,7 @@
 	    	<v-card-title>
 		        Query Board
 		        <v-spacer></v-spacer>
-		        <v-btn :loading="loading" :disabled="loading" @click="runQuery" color="success">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="success">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 	      	</v-card-title>
 	    	<v-row
 	    	>
