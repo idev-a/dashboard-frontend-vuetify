@@ -57,6 +57,9 @@
 		        <template v-slot:item.content="{ item }">
 		            <span class="content" v-html="item.content" />
 		        </template>
+		        <template v-slot:item.date="{ item }">
+		            {{ beautifyDate(item.date) }}
+		        </template>
 		  	</v-data-table>
 	    </v-card>
 
@@ -119,7 +122,10 @@
                 required
                 >
               </v-textarea>
-        	  <v-chip v-if="mode == 'View'" :color="levelColor(rss.high_risk)" dark>
+          	  <span class="mr-3" v-if="mode == 'View'">
+          	  	{{ beautifyDate(rss.date) }}
+          	  </span>
+          	  <v-chip v-if="mode == 'View'" :color="levelColor(rss.high_risk)" dark>
 	            <div class="subtitle-2">{{ levelValue(rss.high_risk) }}</div>
           	  </v-chip>
           	  <v-select
@@ -210,7 +216,7 @@
 	     	   	{
 	     	   		text: 'Feed',
 	     	   		value: 'feed',
-	     	   		width: 180
+	     	   		width: 150
 	     	   	},
 	     	   	{
 	     	   		text: 'Content',
@@ -221,9 +227,14 @@
 	     	   		value: 'link',
 	     	   	},
 	     	   	{
+	     	   		text: 'Date',
+	     	   		value: 'date',
+	     	   		width: 80
+	     	   	},
+	     	   	{
 	     	   		text: 'Risk',
 	     	   		value: 'high_risk'
-	     	   	}
+	     	   	},
      	   	],
 			snackbar: false,
 			snackText: '',
@@ -249,6 +260,10 @@
       	},
 
       	methods: {
+      		beautifyDate (date) {
+      			return this.$moment(date).format('MMM DD, YYYY')
+  			},
+
       		levelColor (level) {
       			return level == 1 ? 'red darken-4' : 'green darken-1'
       		},

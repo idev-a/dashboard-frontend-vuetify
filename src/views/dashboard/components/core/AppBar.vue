@@ -215,7 +215,7 @@
       ],
       profile: [
         { title: 'Profile', name: 'My Profile' },
-        { title: 'Settings', name: 'Settings' },
+        // { title: 'Settings', name: 'Settings' },
         { divider: true },
         { title: 'Log out', name: 'Login' },
       ],
