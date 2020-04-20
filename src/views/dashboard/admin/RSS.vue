@@ -28,6 +28,14 @@
 		            />
 		    	</v-col>
 		    </v-row>
+		    <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                class="mb-3"
+                single-line
+                hide-details
+          	></v-text-field>
 		    <v-data-table
 		        :loading="loading"
 		        :headers="headers"
@@ -62,7 +70,7 @@
 	      max-width="1024"
 	    >
 	      <v-card>
-	        <v-card-title v-if="mode == 'View'" class="headline">{{rss.feed}}</v-card-title>
+	        <v-card-title v-if="mode == 'View'" class="headline"><b>{{rss.feed}}</b></v-card-title>
 	        <v-card-title>
 		        <v-textarea
 		            v-if="mode == 'Edit'"
@@ -76,8 +84,11 @@
 	                required
 	                >
               	</v-textarea>
-          </v-card-title>
-	        <v-card-title v-if="mode == 'View'" class="subtitle-2 text--gray">{{rss.title}}</v-card-title>
+          	</v-card-title>
+	        <v-card-subtitle v-if="mode == 'View'" class="subtitle-2 text-center">
+	        	<!-- <img v-if="rss.image" :src="rss.image"></img> -->
+	        	{{rss.title}}
+	        </v-card-subtitle>
 
 	        <v-card-text>
 	          <span v-if="mode == 'View'" class="content dialog" v-html="rss.content" />
@@ -125,6 +136,7 @@
 	            v-if="mode == 'Edit'"
 	            color="primary"
 	            text
+	            :loading="loading"
 	            @click="updateFeed"
 	          >
 	            Update
@@ -133,13 +145,15 @@
 	            v-if="mode == 'Edit'"
 	            color="primary"
 	            text
-	            @click="deleteFeed"
+	            :loading="loading"
+	            @click="modal=true"
 	          >
 	            Delete
 	          </v-btn>
 	          <v-btn
 	            color="primary"
 	            text
+	            :loading="loading"
 	            @click="toggleMode"
 	          >
 	            {{ btnLabel }}
@@ -147,6 +161,7 @@
 	          <v-btn
 	            color="info"
 	            text
+	            :loading="loading"
 	            @click="dialog = false"
 	          >
 	            Close
@@ -154,6 +169,18 @@
 	        </v-card-actions>
 	      </v-card>
 		</v-dialog>
+
+		<v-dialog v-model="modal" max-width="290">
+	      <v-card>
+	        <v-card-title class="text-center"><b>WARNING</b></v-card-title>
+	        <v-card-text>Are you sure?</v-card-text>
+	        <v-card-actions>
+	          <v-spacer></v-spacer>
+	          <v-btn color="red darken-1" text @click="modal = false">Disagree</v-btn>
+	          <v-btn color="green darken-1" text @click="deleteFeed()">Agree</v-btn>
+	        </v-card-actions>
+	      </v-card>
+	    </v-dialog>
 	</v-container>
 </template>
 
@@ -167,6 +194,7 @@
 		data: () =>({
 			loading: false,
 			dialog: false,
+			modal: false,
 			readOnly: true,
 			mode: 'View',
 			link: '',
@@ -199,7 +227,7 @@
      	   	],
 			snackbar: false,
 			snackText: '',
-			snackColor: 'success',
+			snackColor: 'warning',
 			items: [],
 			rules: {
 		        required: value => !!value || 'This field is required.',
@@ -248,6 +276,7 @@
       		},
 
       		showDetails (item) {
+      			this.mode = 'View'
       			this.rss = item
       			this.defaultIndex = this.items.indexOf(item)
       			this.editItem = Object.assign({}, item)
@@ -256,8 +285,8 @@
       		},
 
       		async deleteFeed () {
+      			this.modal = false
       			this.loading = true
-      			this.editItem.high_risk = this.editItem.risk == 'High' ? 1 : 0
 		    	try {
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/rss/delete`,
@@ -267,7 +296,8 @@
 	      			this.snackText = data.data.message
 	      			this.snackColor = data.data.status
 	      			if (data.data.status == 'success') {
-	      				this.items.splice(defaultIndex, 1)
+	      				this.items.splice(this.defaultIndex, 1)
+	      				this.dialog = false
 	      			}
 		    	} catch(e) {
 		    		this.snackText = 'Something wrong happened on the server.'
