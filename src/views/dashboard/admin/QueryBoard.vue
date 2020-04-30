@@ -4,8 +4,6 @@
 	    fluid
 	    tag="section"
   	>
-  		select * from gsuite_users
-
 	    <v-card
 	      class="pa-5"
 	    >
@@ -39,8 +37,8 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-              	<v-btn :loading="loading" :disabled="true" @click="getProspects" color="success">Hunter & FindEmails <v-icon  size="16" dark>mdi-send</v-icon></v-btn>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="getProspects" color="success">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
               <v-card-title>
               	<v-select
@@ -74,29 +72,16 @@
 	            </v-select>
           	</v-card-title>
 	    	<v-data-table
+	    		v-model="selectedItems"
 		        :loading="loading"
 		        :headers="filteredHeaders"
-		        :items="items"
+		        :items="indexedItems"
 		        :items-per-page="page"
-		        item-key="id"
+		        item-key="_id"
 		        :search="search"
+		        show-select
 		        @update:items-per-page="getPageNum"
 		      > 
-		     <!--  <template v-slot:item.data-table-select="{ item, isSelected, select }">
-		      	{{isSelected}}
-		      	<v-checkbox
-		      	  v-model="selectedItems.includes(item)"
-			      @change="updateSelectedItem(item)"
-			      label=""
-			    ></v-checkbox>
-		      </template>
-		      <template v-slot:header.data-table-select="{ value, indeterminate }">
-		      	<v-checkbox
-			      value="value"
-			      @change="updateSelectedHeader"
-			      label=""
-			    ></v-checkbox>
-		      </template> -->
 		  </v-data-table>
 		</v-card>
 		<v-snackbar
@@ -113,6 +98,41 @@
 		        Close
 	      	</v-btn>
       	</v-snackbar>
+
+      	<v-dialog v-model="modal" max-width="1024">
+	      	<v-card>
+	       	 	<v-card-title><b>Propspects</b></v-card-title>
+	      		<v-row class="px-3 pl-8">
+	      			<v-col cols="12" md="8">
+				    	<v-text-field
+			                v-model="prospectSearch"
+			                append-icon="mdi-magnify"
+			                label="Search"
+			                class="mb-5"
+			                single-line
+			                hide-details
+		              	></v-text-field>
+	              	</v-col>
+	              	<v-col cols="auto">
+		              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedProspects.length)" @click="downloadProspectCSV" color="success">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+	              	</v-col>
+	          	</v-row>
+	          	<v-card-text>
+		       	 	<v-data-table
+			    		v-model="selectedProspects"
+				        :loading="loading"
+				        :headers="prospectsHeaders"
+				        :items="indexedProspects"
+				        :items-per-page="page"
+				        item-key="_id"
+				        :search="prospectSearch"
+				        show-select
+				        @update:items-per-page="getPageNum"
+				      > 
+				  </v-data-table>
+				</v-card-text>
+		    </v-card>
+		</v-dialog>
 	</v-container>
 </template>
 
@@ -126,13 +146,42 @@
 
 	    data: () => ({
 	      loading: false,
+	      modal: false,
 	      search: '',
+	      prospectSearch: '',
 	      query: '',
 	      items: [],
 	      selectedItems: [],
+	      selectedProspects: [],
 	      headers: [],
 	      selectedHeaders: [],
 	      filteredHeaders: [],
+	      prospectsHeaders: [
+	      	{
+	      		text: 'Domain',
+	      		value: 'domain'
+	      	},
+	      	{
+	      		text: 'First Name',
+	      		value: 'first_name'
+	      	},
+	      	{
+	      		text: 'Last Name',
+	      		value: 'last_name'
+	      	},
+	      	{
+	      		text: 'Email',
+	      		value: 'email'
+	      	},
+	      	{
+	      		text: 'Title',
+	      		value: 'title'
+	      	},
+	      	{
+	      		text: 'Run at',
+	      		value: 'run_at'
+	      	}
+	      ],
 	      prospects: [],
 	      snackbar: false,
 	      message: '',
@@ -145,23 +194,22 @@
       	computed: {
       		page () {
 		        return Number(localStorage.getItem('page')) || 5
-		     }, 
+	     	}, 
+	     	indexedItems () {
+		      return this.items.map((item, index) => ({
+		        _id: index,
+		        ...item
+		      }))
+		    },
+		    indexedProspects () {
+		    	return this.prospects.map((item, index) => ({
+			        _id: index,
+			        ...item
+		      	}))
+		    }
       	},
 
       	methods: {
-      		updateSelectedHeader () {
-
-      		},
-
-      		updateSelectedItem (item) {
-      			if (!this.selectedItems.includes(item)) {
-	      			this.selectedItems.push(item)
-      			} else {
-      				this.selectedItems.splice(item, 1)
-      			}
-      			console.log(this.selectedItems)
-      		},
-
       		async getProspects () {
       			this.loading = true
 		    	try {
@@ -173,6 +221,7 @@
 		      		this.prospects = data.data.prospects
 	      			this.message = data.data.message
 	      			this.color = data.data.status
+	      			this.modal = true
 		    	} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
 		    	} finally {
@@ -186,6 +235,14 @@
       				downloadCSV(this.selectedItems)
       			} else {
       				downloadCSV(this.items)
+      			}
+      		},
+
+      		downloadProspectCSV () {
+      			if (this.selectedProspects.length) {
+      				downloadCSV(this.selectedProspects)
+      			} else {
+      				downloadCSV(this.prospects)
       			}
       		},
 
