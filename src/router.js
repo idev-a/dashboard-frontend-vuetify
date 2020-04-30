@@ -103,6 +103,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Public Data (Run)',
+          path: 'admin/publicdata/run',
+          component: () => import('@/views/dashboard/admin/PublicDataList'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Apps & Users',
           path: 'admin/appusers',
           component: () => import('@/views/dashboard/admin/AppUsers'),

@@ -1,6 +1,6 @@
 <template>
 	<v-container
-	    id="query-board"
+	    id="rss-board"
 	    fluid
 	    tag="section"
   	>
@@ -14,7 +14,7 @@
 		        <v-btn :loading="loading" :disabled="loading || !link" @click="populateRss" color="success">Populate<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 	      	</v-card-title>
 		    <v-row
-		    	>
+	    	>
 	    		<v-col
 					cols='12'
 	    		>
@@ -50,9 +50,9 @@
 		            <a class="subtitle-2" :href="item.link" target="_blank">{{ item.link }}</a>
 		        </template>
 		        <template v-slot:item.high_risk="{ item }">
-			          <v-chip :color="levelColor(item.high_risk)" dark>
+		          	<v-chip :color="levelColor(item.high_risk)" dark>
 			            <div class="subtitle-2">{{ levelValue(item.high_risk) }}</div>
-			          </v-chip>
+		          	</v-chip>
 		        </template>
 		        <template v-slot:item.content="{ item }">
 		            <span class="content" v-html="item.content" />

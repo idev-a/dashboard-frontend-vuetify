@@ -112,6 +112,10 @@
               to: 'publictable',
             },
             {
+              title: 'Public Data(Run)',
+              to: 'publicdata/run',
+            },
+            {
               title: 'Apps & Users',
               to: 'appusers',
             },
