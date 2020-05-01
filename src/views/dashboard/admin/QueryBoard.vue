@@ -27,6 +27,22 @@
 		            />
 		    	</v-col>
 		    </v-row>
+		    <v-spacer></v-spacer>
+		    <v-row
+	    	>
+	    		<v-col
+					cols='12'
+	    		>
+		    		<v-textarea
+		                v-model="website"
+		                label="Website for hunter.io & findemails.com" 
+		                hint="Shift + Enter to run api"
+		                rows="3"
+		                outlined
+		                @keyup.shift.13="keyDownOnAPI"
+		            />
+		    	</v-col>
+		    </v-row>
 	    	<v-card-title>
 		    	<v-text-field
 	                v-model="search"
@@ -37,7 +53,7 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="getProspects" color="success">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length && !website)" @click="_getProspectsFromTable" color="success">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
               	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
               <v-card-title>
@@ -182,6 +198,7 @@
 	      		value: 'run_at'
 	      	}
 	      ],
+	      website: '',
 	      prospects: [],
 	      snackbar: false,
 	      message: '',
@@ -210,12 +227,12 @@
       	},
 
       	methods: {
-      		async getProspects () {
+      		async getProspects (websites) {
       			this.loading = true
 		    	try {
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/getprospects`,
-		      			data: { items: this.selectedItems },
+		      			data: { items: websites },
 		      			method: 'POST'
 		      		})
 		      		this.prospects = data.data.prospects
@@ -228,6 +245,21 @@
 	      			this.loading = false
 	      			this.snackbar = true
 		    	}
+      		},
+
+      		_getProspectsFromTable () {
+      			let websites = []
+      			this.selectedItems.map(item => {
+      				if (item['website']) {
+	      				websites.push(item['website'].trim().replace('https://', '').replace('www.', ''))
+      				}
+      			})
+      			if (this.website) {
+      				this.website.trim().split(',').map(item => {
+	      				websites.push(item)
+      				})
+      			}
+      			this.getProspects(websites)
       		},
 
       		downloadCSV () {
@@ -243,6 +275,12 @@
       				downloadCSV(this.selectedProspects)
       			} else {
       				downloadCSV(this.prospects)
+      			}
+      		},
+
+      		keyDownOnAPI () {
+      			if (this.website) {
+      				this.getProspects(this.website.trim().split(','))
       			}
       		},
 
