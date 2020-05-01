@@ -227,8 +227,13 @@
       	},
 
       	methods: {
+      		cleanWebsite (string) {
+      			return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
+      		},
+
       		async getProspects (websites) {
       			this.loading = true
+      			this.selectedProspects = []
 		    	try {
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/getprospects`,
@@ -251,15 +256,21 @@
       			let websites = []
       			this.selectedItems.map(item => {
       				if (item['website']) {
-	      				websites.push(item['website'].trim().replace('https://', '').replace('www.', ''))
+      					if (this.cleanWebsite(item['website'])) {
+		      				websites.push(this.cleanWebsite(item['website']))
+      					}
+	      				
       				}
       			})
       			if (this.website) {
-      				this.website.trim().split(',').map(item => {
-	      				websites.push(item)
+      				this.website.trim().split('\n').map(item => {
+      					if (this.cleanWebsite(item)) {
+		      				websites.push(this.cleanWebsite(item))
+      					}
       				})
       			}
-      			this.getProspects(websites)
+      			// this.getProspects(websites)
+      			console.log(websites)
       		},
 
       		downloadCSV () {
@@ -280,7 +291,11 @@
 
       		keyDownOnAPI () {
       			if (this.website) {
-      				this.getProspects(this.website.trim().split(','))
+      				let websites = []
+      				this.website.trim().split('\n').map(item => {
+	      				websites.push(this.cleanWebsite(item))
+      				})
+      				this.getProspects(websites)
       			}
       		},
 
@@ -305,6 +320,8 @@
 		    async runQuery () {
 		    	this.loading = true
 		    	this.headers = []
+		    	this.selectedItems = []
+
 		    	try {
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/query`,
