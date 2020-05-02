@@ -127,6 +127,10 @@
               title: 'RSS Board',
               to: 'rss',
             },
+            {
+              title: 'Meraki Board',
+              to: 'meraki',
+            },
           ]
         },
         {

@@ -98,7 +98,7 @@
 		        show-select
 		        @update:items-per-page="getPageNum"
 		      > 
-		  </v-data-table>
+		  	</v-data-table>
 		</v-card>
 		<v-snackbar
       		v-model="snackbar"
@@ -158,7 +158,7 @@
 	import axios from 'axios'
 
   	export default {
-	    name: 'DashboardApplications',
+	    name: 'QueryBoard',
 
 	    data: () => ({
 	      loading: false,

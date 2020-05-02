@@ -130,6 +130,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Meraki Board (meraki_devices)',
+          path: 'admin/meraki',
+          component: () => import('@/views/dashboard/admin/Meraki'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'RSS Board',
           path: 'admin/rss',
           component: () => import('@/views/dashboard/admin/RSS'),
