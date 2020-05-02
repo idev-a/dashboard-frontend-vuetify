@@ -131,7 +131,7 @@
 	              	</v-col>
 	              	<v-col cols="auto">
 		              	<v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="success">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-	              	</v-col>
+	              	</v-col> 
 	          	</v-row>
 	          	<v-card-text>
 		       	 	<v-data-table
