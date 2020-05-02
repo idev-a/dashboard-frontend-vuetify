@@ -85,6 +85,21 @@
 		      > 
 		  	</v-data-table>
       	</v-card>
+
+      	<v-snackbar
+      		v-model="snackbar"
+      		bottom
+      		:color="color"
+      		>
+      		{{ message }}
+      		<v-btn
+		        dark
+		        text
+		        @click="snackbar = false"
+	      	>
+		        Close
+	      	</v-btn>
+      	</v-snackbar>
   	</v-container>
 </template>
 <script>
@@ -108,6 +123,9 @@
 	      ],
 	      items: [
 	      ],
+	      snackbar: false,
+	      message: '',
+	      color: 'success'
       	}),
 
       	computed: {
@@ -152,15 +170,15 @@
       		async getDevices () {
       			this.loading = true
 		    	try {
-			    	const data = await axios({
+			    	const res = await axios({
 		      			url: `${BASE_API}/api/admin/meraki/devices`,
 		      			data: { apiKey: this.apiKey, orgId: this.orgId },
 		      			method: 'POST'
 		      		})
-		      		this.items = data.data.devices
+		      		this.items = res.data.devices
 		      		this.parseHeader(this.items)
-	      			this.message = data.data.message
-	      			this.color = data.data.status
+	      			this.message = res.data.message
+	      			this.color = res.data.status
 	      			this.modal = true
 		    	} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
@@ -190,8 +208,8 @@
 		      			data: { data },
 		      			method: 'POST'
 		      		})
-	      			this.message = data.data.message
-	      			this.color = data.data.status
+	      			this.message = res.data.message
+	      			this.color = res.data.status
 	      			this.modal = true
 		    	} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
@@ -204,15 +222,15 @@
       		async readAll () {
       			this.loading = true
 		    	try {
-			    	const data = await axios({
+			    	const res = await axios({
 		      			url: `${BASE_API}/api/admin/meraki/devices/read`,
 		      			data: { org_id: this.orgId },
 		      			method: 'POST'
 		      		})
-		      		this.items = data.data.devices
+		      		this.items = res.data.devices
 		      		this.parseHeader(this.items)
-	      			this.message = data.data.message
-	      			this.color = data.data.status
+	      			this.message = res.data.message
+	      			this.color = res.data.status
 	      			this.modal = true
 		    	} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
