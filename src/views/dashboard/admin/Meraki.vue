@@ -11,6 +11,7 @@
 		        Meraki Board
 		        <v-spacer></v-spacer>
 		        <v-btn :loading="loading" :disabled="loading || !apiKey || !orgId" @click="getDevices" color="success">Get Devices <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !items.length" @click="items = []" color="success">Refresh <v-icon  size="16" right dark>mdi-refresh</v-icon></v-btn>
 	      	</v-card-title>
 	      	<v-card-text>
 	      		<v-row
@@ -136,9 +137,7 @@
       		indexedItems () {
 		      return this.items.map((item, index) => ({
 		        _id: index,
-		        ...item,
-		      	org_id: this.orgId,
-		      	run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+		        ...item
 		      }))
 		    },
       	},
@@ -175,7 +174,11 @@
 		      			data: { apiKey: this.apiKey, orgId: this.orgId },
 		      			method: 'POST'
 		      		})
-		      		this.items = res.data.devices
+		      		this.items = res.data.devices.map((item, index) => ({
+				        ...item,
+				      	org_id: this.orgId,
+				      	run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+			      	}))
 		      		this.parseHeader(this.items)
 	      			this.message = res.data.message
 	      			this.color = res.data.status
