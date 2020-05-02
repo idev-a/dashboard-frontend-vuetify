@@ -117,7 +117,7 @@
 
       	<v-dialog v-model="modal" max-width="1024">
 	      	<v-card>
-	       	 	<v-card-title><b>Propspects</b></v-card-title>
+	       	 	<v-card-title>Propspects</v-card-title>
 	      		<v-row class="px-3 pl-8">
 	      			<v-col cols="12" md="8">
 				    	<v-text-field
@@ -130,7 +130,7 @@
 		              	></v-text-field>
 	              	</v-col>
 	              	<v-col cols="auto">
-		              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedProspects.length)" @click="downloadProspectCSV" color="success">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+		              	<v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="success">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
 	              	</v-col>
 	          	</v-row>
 	          	<v-card-text>
