@@ -194,6 +194,10 @@
 	      		value: 'title'
 	      	},
 	      	{
+	      		text: 'Source',
+	      		value: 'source'
+	      	},
+	      	{
 	      		text: 'Run at',
 	      		value: 'run_at'
 	      	}
