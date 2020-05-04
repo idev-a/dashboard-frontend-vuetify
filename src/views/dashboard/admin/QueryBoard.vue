@@ -235,20 +235,47 @@
       			return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
       		},
 
+      	// 	async getProspects (websites) {
+      	// 		this.loading = true
+      	// 		this.selectedProspects = []
+		    	// try {
+			    // 	const data = await axios({
+		     //  			url: `${BASE_API}/api/admin/getprospects`,
+		     //  			data: { items: websites },
+		     //  			method: 'POST',
+		     //  			crossDomain: true
+		     //  		})
+		     //  		this.prospects = data.data.prospects
+	      // 			this.message = data.data.message
+	      // 			this.color = data.data.status
+	      // 			this.modal = true
+		    	// } catch(e) {
+		    	// 	this.message = 'Something wrong happened on the server.'
+		    	// } finally {
+	      // 			this.loading = false
+	      // 			this.snackbar = true
+		    	// }
+      	// 	},
+
       		async getProspects (websites) {
       			this.loading = true
       			this.selectedProspects = []
-		    	try {
-			    	const data = await axios({
-		      			url: `${BASE_API}/api/admin/getprospects`,
-		      			data: { items: websites },
-		      			method: 'POST'
-		      		})
-		      		this.prospects = data.data.prospects
-	      			this.message = data.data.message
-	      			this.color = data.data.status
+      			try {
+	      			const res = await fetch(`${BASE_API}/api/admin/getprospects/`, {
+			          credentials: 'same-origin', // <-- includes cookies in the request
+			          headers: {
+			              'Content-Type': 'application/json'
+			          },
+			          method: 'POST',
+			          body: JSON.stringify({ items: websites }),
+			          mode: 'cors'
+		      	 	})
+			        .then(response => response.json())
+			      	this.prospects = res.prospects
+	      			this.message = res.message
+	      			this.color = res.status
 	      			this.modal = true
-		    	} catch(e) {
+      			} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
 		    	} finally {
 	      			this.loading = false
