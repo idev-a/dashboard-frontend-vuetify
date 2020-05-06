@@ -24,8 +24,8 @@
 		              sm="6"
 		              md="6"
 		            >
-		            	<v-row align="center">
-		                	<div v-if="mode" class="align-self-center">
+		            	<v-row align="center" class="mx-0">
+		                	<div v-if="false" class="align-self-center">
 			                  <v-btn
 			                    color="success"
 			                    icon
@@ -50,8 +50,8 @@
 		              sm="6"
 		              md="6"
 		            >
-		            	<v-row align="center">
-		                	<div v-if="mode" class="align-self-center">
+		            	<v-row align="center" class="mx-0">
+		                	<div v-if="false" class="align-self-center">
 			                  <v-btn
 			                    color="success"
 			                    icon

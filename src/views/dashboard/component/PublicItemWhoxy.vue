@@ -35,12 +35,12 @@
 		                  <v-card shaped outlined class="my-0 pa-4 p-relative whoxy-block">
 		                  	<v-chip v-if="item.registrant_contact" class="whoxy-date secondary mb-2">{{beautifyDate(item.registrant_contact.query_time)}}</v-chip>
 		                    <div class="mb-2"><b>Owner:</b> <span>{{item.registrant_contact.full_name}}</span></div>
-		                    <div class="mb-2"><b>Company:</b> <span>{{item.administrative_contact.company_name}}</span></div>
-		                    <div class="mb-2"><b>Domain:</b> <span>{{item.domain_registrar.registrar_name}}</span></div>
-		                    <div class="mb-2"><b>Geolocation:</b> <span>{{item.registrant_contact.city_name}}, {{item.registrant_contact.state_name}} {{item.registrant_contact.zip_code}}, {{item.registrant_contact.country_name}}</span></div>
-		                    <div class="mb-2"><b>Email:</b> <span>{{item.administrative_contact.email_address}}</span></div>
-		                    <div class="mb-2"><b>Phone:</b> <span>{{item.administrative_contact.phone_number}}</span></div>
-		                    <div class="mb-2"><b>Email:</b> <span v-html="beautifyEmail(item.administrative_contact.email_address)"></span></div>
+		                    <div class="mb-2"><b>Company:</b> <span>{{getField(item.administrative_contact, 'company_name')}}</span></div>
+		                    <div class="mb-2"><b>Domain:</b> <span>{{getField(item.domain_registrar, 'registrar_name')}}</span></div>
+		                    <div class="mb-2"><b>Geolocation:</b> <span>{{getField(item.registrant_contact,'city_name')}}, {{getField(item.registrant_contact, 'state_name')}} {{getField(item.registrant_contact, 'zip_code')}}, {{getField(item.registrant_contact, 'country_name')}}</span></div>
+		                    <div class="mb-2"><b>Email:</b> <span>{{getField(item.administrative_contact, 'email_address')}}</span></div>
+		                    <div class="mb-2"><b>Phone:</b> <span>{{getField(item.administrative_contact, 'phone_number')}}</span></div>
+		                    <div class="mb-2"><b>Email:</b> <span v-html="beautifyEmail(getField(item.administrative_contact, 'email_address'))"></span></div>
 		                    <div class="mb-2"><b>Nameservers:</b> <span>{{item.name_servers.join(', ')}}</span></div>
 		                    <div class="mb-2"><b>Status:</b> <span>{{item.domain_status[0]}}</span></div>
 		                  </v-card>
@@ -100,6 +100,14 @@
 
 		        this.showUpdateAnswerDialog(false)
 		        this.updateComponentKey()
+	      	},
+
+	      	getField(item, attr) {
+	      		if (item) {
+	      			return item[attr]
+	      		} else {
+	      			return ''
+	      		}
 	      	}
 		}
 	}
