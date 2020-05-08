@@ -95,4 +95,12 @@
   .min-50 {
     min-height: 50px;
   }
+
+  .max-height-300 {
+    max-height: 300px;
+  }
+
+  .max-width-300 {
+    max-width: 300px;
+  }
 </style>

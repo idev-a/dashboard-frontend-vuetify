@@ -24,7 +24,7 @@
 				<div class="mb-4 text-uppercase display-1 font-weight-bold">{{todayTip.title_text}}</div>
 				<p>{{todayTip.full_text}} </p>
 			</v-sheet>
-			<v-btn :loading="sendLoading" :disabled="sendLoading" color="success" @click="showAlert(todayTip.id)">Send Now<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			<v-btn :loading="sendLoading" :disabled="sendLoading || !todayTip.title_text" color="success" @click="showAlert(todayTip.id)">Send Now<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 			<!-- <v-chip
 		      class="ma-2 float-right"
 		    >

@@ -10,7 +10,18 @@
 	    	<v-card-title>
 		        Meraki Board
 		        <v-spacer></v-spacer>
-		        <v-btn :loading="loading" :disabled="loading || !apiKey || !orgId" @click="getDevices" color="success">Get Devices <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-select
+		          v-model="endpoint"
+			  	  chips
+		          :items="endpoints"
+		          class="mr-5 max-width-300"
+		          label="Select an endpoint"
+		          hint="Select an endpoint that you want to fetch from meraki"
+		          :error="error"
+		          :error-messages="errorMessages"
+		          @input="changeEndpoint"
+		        ></v-select>
+		        <v-btn :loading="loading" :disabled="!runnable" @click="runAPI" color="success">Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		        <v-btn :loading="loading" :disabled="loading || !items.length" @click="items = []" color="success">Refresh <v-icon  size="16" right dark>mdi-refresh</v-icon></v-btn>
 	      	</v-card-title>
 	      	<v-card-text>
@@ -18,7 +29,7 @@
 		    	>
 		    		<v-col
 						cols='12'
-						md="6"
+						md="5"
 		    		>
 						<v-text-field
 			              v-model="apiKey"
@@ -27,23 +38,48 @@
 			              class="mb-2"
 			              label="Please enter api key"
 			              prepend-icon="mdi-key"
+			              @input="changeInput"
 			            />
 			    	</v-col>
 			    	<v-col
 						cols='12'
-						md="6"
+						md="5"
 		    		>
 						<v-text-field
 			              v-model="orgId"
 			              :loading="loading"
 			              hide-details="auto"
 			              class="mb-2"
-			              label="Please enter organization id"
+			              label="please enter Org Id"
 			              prepend-icon="mdi-identifier"
+			              @input="changeInput"
+			            />
+			    	</v-col>
+			    </v-row>
+			    <v-row>
+			    	<v-col
+						cols='12'
+						md="5"
+		    		>
+			            <v-textarea
+			                v-model="networkId"
+			                :loading="loading"
+			                class="max-height-300"
+			                label="Please enter network Id(s)"
+			                hint="A list of network ids seperated by new line"
+			                rows="3"
+			                outlined
+			                @input="changeInput"
 			            />
 			    	</v-col>
 			    </v-row>
 	      	</v-card-text>
+
+	      	<v-spacer></v-spacer>
+
+	      	<v-card-title>
+	      		Results ({{ endpoint.toUpperCase() }})
+	      	</v-card-title>
 	      	<v-card-title>
 		    	<v-text-field
 	                v-model="search"
@@ -56,7 +92,7 @@
               	<v-spacer></v-spacer>
               	<v-tooltip top>
 		            <template v-slot:activator="{ on }">
-	              		<v-btn :loading="loading" :disabled="loading || !orgId" @click="readAll" color="success">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+	              		<v-btn :loading="loading" :disabled="loading || !endpoint || !orgId" @click="readAll" color="success">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
 	              	</template>
 	              	<span>Read Meraki Devices Data from Database</span>
               	</v-tooltip>
@@ -116,7 +152,11 @@
 	      modal: false,
 	      tooltip: true,
 	      search: '',
+	      error: false,
+	      errorMessages: '', 
 	      orgId: '',
+	      networkId: '',
+	      networkIds: [],
 	      apiKey: '',
 	      headers: [
 	      ],
@@ -124,10 +164,32 @@
 	      ],
 	      items: [
 	      ],
+	      endpoint: '',
+	      endpoints: [
+	      	'devices',
+	      	'clients'
+	      ],
 	      snackbar: false,
 	      message: '',
-	      color: 'success'
+	      color: 'failure',
+	      runnable: false,
       	}),
+
+      	watch: {
+      		selectedItems () {
+      			if (this.selectedItems.length > 0) {
+      				const _endpoint = this.endpoint
+      				this.selectedItems.map(item => {
+      					if (item.networkId) {
+      						this.endpoint = 'clients'
+      					} else {
+      						this.endpoint = _endpoint
+      					}
+      				})
+      				this.changeInput('')
+      			} 
+      		}
+      	},
 
       	computed: {
       		page () {
@@ -147,44 +209,102 @@
 		        localStorage.setItem('page', _page)
 		    },
 
+		    buildNetworkIds () {
+	     		let networkIds = []
+      			if (this.selectedItems.length > 0 && this.selectedItems[0].networkId) {
+      				this.selectedItems.map(item => {
+      					if (item.networkId) {
+      						networkIds.push(item.networkId)
+      					}
+      				})
+      			}
+      			if (this.networkId) {
+      				this.networkId.split('\n').map(_networkId => {
+      					if (!networkIds.includes(_networkId)) {
+		      				networkIds.push(_networkId)
+      					}
+      				})
+      			}
+      			this.networkIds = networkIds
+	     	},
+
+		    changeEndpoint (val) {
+		    	this.endpoint = val
+		    	this.changeInput()
+		    },
+
+		    changeInput (val) {
+		    	this.error = false
+		    	this.errorMessages = ''
+	     		if ( this.endpoint == 'clients') {
+	     			this.buildNetworkIds()
+  					if (!this.loading && this.apiKey && this.orgId && this.networkIds.length ) {
+	      				this.runnable = true
+      				} else {
+	      				this.runnable = false
+	      				this.error = true
+				    	this.errorMessages = 'Please input the api key and at least one network Id from input or bunch of them from devices'
+	      			}
+  				} else {
+  					if (!this.loading && this.apiKey && this.orgId && this.endpoint) {
+	      				this.runnable = true
+      				} else {
+	      				this.runnable = false
+	      				this.error = true
+	      				this.errorMessages = 'Please input an api key and org id'
+	      			}
+  				}
+	     	},
+
 		    parseHeader (items) {
 				if (items.length) {
-		      		Object.keys(items[0]).map(val => {
-		      			this.headers.push({
-		      				text: val.toUpperCase(),
+					let _headers = []
+		      		Object.keys(items[0]).map((val,i) => {
+		      			_headers.push({
+		      				text: val[0].toUpperCase() + val.slice(1),
 		      				value: val
 		      			})
 		      		})
-		      		this.headers.push({
-		      			text: 'ORG ID',
-		      			value: 'org_id'
-		      		})
-		      		this.headers.push({
-		      			text: 'Run At',
-		      			value: 'run_at'
-		      		})
+		      		this.headers = _headers
 	      		}
 		    },
 
-      		async getDevices () {
+      		async runAPI () {
       			this.loading = true
+      			this.selectedItems = []
+
+      			const data = { apiKey: this.apiKey, orgId: this.orgId, networkIds: this.networkIds }
+      			console.log(`${BASE_API}/api/admin/meraki/${this.endpoint}`, data)
 		    	try {
 			    	const res = await axios({
-		      			url: `${BASE_API}/api/admin/meraki/devices`,
-		      			data: { apiKey: this.apiKey, orgId: this.orgId },
+		      			url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
+		      			data,
 		      			method: 'POST'
 		      		})
-		      		this.items = res.data.devices.map((item, index) => ({
-				        ...item,
-				      	org_id: this.orgId,
-				      	run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
-			      	}))
+		      		this.items = res.data.data.map((item, index) => {
+		      			if (Object.keys(item).includes('org_id')) { 
+			      			return {
+						        ...item,
+						      	run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+					      	}
+				      	} else {
+				      		return {
+						        ...item,
+						      	org_id: this.orgId,
+						      	run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+					      	}
+				      	}
+			      	})
 		      		this.parseHeader(this.items)
 	      			this.message = res.data.message
 	      			this.color = res.data.status
 	      			this.modal = true
 		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
+		    		if (e.response && e.response.data) {
+		    			this.message = e.response.data.message	
+		    		} else {
+			    		this.message = 'Something wrong happened on the server.'
+		    		}
 		    	} finally {
 	      			this.loading = false
 	      			this.snackbar = true
@@ -207,7 +327,7 @@
       			}
 		    	try {
 			    	const res = await axios({
-		      			url: `${BASE_API}/api/admin/meraki/devices/populate`,
+		      			url: `${BASE_API}/api/admin/meraki/${this.endpoint}/populate`,
 		      			data: { data },
 		      			method: 'POST'
 		      		})
@@ -215,7 +335,7 @@
 	      			this.color = res.data.status
 	      			this.modal = true
 		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
+		    		this.message = e.response.data.message || 'Something wrong happened on the server.'
 		    	} finally {
 	      			this.loading = false
 	      			this.snackbar = true
@@ -226,15 +346,14 @@
       			this.loading = true
 		    	try {
 			    	const res = await axios({
-		      			url: `${BASE_API}/api/admin/meraki/devices/read`,
+		      			url: `${BASE_API}/api/admin/meraki/${this.endpoint}/read`,
 		      			data: { org_id: this.orgId },
 		      			method: 'POST'
 		      		})
-		      		this.items = res.data.devices
+		      		this.items = res.data.data
 		      		this.parseHeader(this.items)
 	      			this.message = res.data.message
 	      			this.color = res.data.status
-	      			this.modal = true
 		    	} catch(e) {
 		    		this.message = 'Something wrong happened on the server.'
 		    	} finally {
