@@ -272,6 +272,7 @@
       		async runAPI () {
       			this.loading = true
       			this.selectedItems = []
+      			this.items = []
 
       			const data = { apiKey: this.apiKey, orgId: this.orgId, networkIds: this.networkIds }
       			console.log(`${BASE_API}/api/admin/meraki/${this.endpoint}`, data)
@@ -344,6 +345,9 @@
 
       		async readAll () {
       			this.loading = true
+      			this.items = []
+      			this.selectedItems = []
+      			
 		    	try {
 			    	const res = await axios({
 		      			url: `${BASE_API}/api/admin/meraki/${this.endpoint}/read`,
