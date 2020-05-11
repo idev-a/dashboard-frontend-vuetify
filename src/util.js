@@ -79,7 +79,56 @@ export const validEmail = (email) => {
   return pattern.test(email)
 }
 
-// Pie chart 
+export const pieChart = (title, data, total) => {
+  return {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        height: '100%'
+    },
+    title: {
+      text: title
+    },
+    subtitle: {
+      text: `Total ${total}`
+    },
+    tooltip: {
+        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
+    },
+    accessibility: {
+      announceNewData: {
+            enabled: true
+      },
+      point: {
+          valueSuffix: '%'
+      }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false,
+                format: '{point.y:.1f} %',
+                distance: '-20%',
+            },
+            showInLegend: true,
+            center: ['50%', '50%']
+        },
+    },
+    series:  [{
+      name: '',
+      colorByPoint: true,
+      size: '90%',
+      innerSize: '80%',
+      data,
+    }]
+  }
+}
+
+// Risk Pie chart  template
 const riskPieChart = (high, medium, low, title, high_label='High', medium_label='Medium', low_label="Low") => {
   return {
     chart: {
@@ -146,8 +195,8 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
   }
 }
 
-// Bar Chart
-const barchart = (title, subtitle, yLabel, data, interval=1) => {
+// Bar Chart template
+export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
   return {
     chart: {
         type: 'column'
@@ -253,9 +302,10 @@ export const appRiskChart = (high, medium, low) => {
 }
 
 export const CIAChart = (high, medium, low) => {
-  return riskPieChart(high, medium, low, 'CIA', 'Confidetiality', 'Availability')
+  return riskPieChart(high, medium, low, 'CIA', 'Confidetiality', 'Availability', 'Integrity')
 }
 
+// donut chart template
 export const scoreDonutChart = (score) => {
   let label = 'High Risk';
   let color = 'red';

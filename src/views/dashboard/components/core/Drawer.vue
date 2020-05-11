@@ -131,6 +131,10 @@
               title: 'Meraki Board',
               to: 'meraki',
             },
+            {
+              title: 'Chart Board',
+              to: 'chart',
+            },
           ]
         },
         {

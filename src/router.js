@@ -148,6 +148,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Chart Board',
+          path: 'admin/chart',
+          component: () => import('@/views/dashboard/admin/ChartBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),
