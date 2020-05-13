@@ -145,6 +145,51 @@
           <highcharts v-if="!loadingCard" :updateArgs="[true, false]" :options="ciaCategoryChart" :highcharts="ciaCategoryChartIns"></highcharts>
         </v-card>
       </v-col>
+      <v-col>
+        <v-card
+          class="py-4"
+        >
+          <v-card-title>
+            Custom Charts
+          </v-card-title>
+          <v-card-text>
+            <v-col
+              cols='12'
+              md="6"
+            >
+              <v-select
+                v-model="custom_id"
+                :loading="loadingCard"
+                :items="customCharts"
+                item-value="id"
+                item-text="label"
+                class=""
+                label="Select a custom chart"
+                hint="Select a custom chart"
+                @input="selectCustomChart"
+              ></v-select>
+            </v-col>
+            <v-row>
+              <v-col
+                cols='12'
+                md="4"
+              >
+                <v-sheet class="min-50">
+                  <highcharts v-if="!loading && donePie" :options="pieChart"></highcharts>
+                </v-sheet>
+              </v-col>
+              <v-col
+            cols='12'
+            md="6"
+            >
+              <v-sheet class="min-50">
+                  <highcharts v-if="!loading && doneBar" :options="barChart"></highcharts>
+                </v-sheet>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
@@ -155,7 +200,18 @@
 
 <script>
   import { BASE_API } from '../../../api'
-  import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart,appUsersChart, highriskCategoryChart, ciaCategoryChart } from '../../../util'
+  import { 
+    riskLevelChart,
+    userRiskChart,
+    appRiskChart,
+    CIAChart,
+    scoreDonutChart,
+    appUsersChart,
+    highriskCategoryChart,
+    ciaCategoryChart,
+    pieChart,
+    barchart
+  } from '../../../util'
   import axios from 'axios'
   import Highcharts from 'highcharts'
 
@@ -164,6 +220,9 @@
 
     data: () => ({
       loadingCard: true,
+      loading: false,
+      donePie: false,
+      doneBar: false,
       companyId: '',
       snack: false,
       snackColor: '',
@@ -171,7 +230,12 @@
       selectedCategories: [],
       cia_by_categories: [],
       ciaCategoryChartIns: Highcharts,
-      categoryMenu: false
+      categoryMenu: false,
+      customCharts: [],
+      title: '',
+      custom_data: null,
+      total: 0,
+      custom_id: '',
     }),
 
     watch:{
@@ -198,14 +262,16 @@
       },
     },
 
-    mounted () {
+    async mounted () {
       let user = {}
       try {
         user = JSON.parse(localStorage.getItem('user'))
       } catch(e) {}
       this.companyId = user.email.split('@')[1];
 
-      this.fetchCharts()
+      await this.fetchCharts()
+
+      await this.fetchCustomCharts()
     },
 
     computed: {
@@ -239,26 +305,86 @@
 
       ciaCategoryChart () {
         return ciaCategoryChart(this.cia_by_categories, this.selectedCategories)
-      }
+      },
+
+      pieChart () {
+        return pieChart(this.title, this.custom_pie_data, this.total)
+      },
+
+      barChart () {
+        return barchart(this.title, '', '#', this.custom_bar_data)
+      },
     },
 
     methods: {
-      fetchCharts () {
-        const self = this
-        axios(`${BASE_API}/api/charts/${this.companyId}/all`, {
-            method: 'GET',
+      async fetchCharts () {
+        this.loadingCard  = true
+        try {
+          const res = await axios(`${BASE_API}/api/charts/${this.companyId}/all`, {
+              method: 'GET',
           })
-            .then(function (res) {
-              self.charts = res.data.charts
-              self.selectedCategories = self.charts.cia_by_categories.categories
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loadingCard = false
-            })
+          this.charts = res.data.charts
+          this.selectedCategories = res.data.charts.cia_by_categories.categories
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.loadingCard = false
+        }
       },
+
+      async fetchCustomCharts () {
+        this.loadingCard  = true
+        try {
+          const res = await axios({
+            url: `${BASE_API}/api/admin/chart/get`,
+            method: 'GET'
+          })
+          this.customCharts = res.data.data
+          // this.customs = this.customCharts.map(item => )
+        } catch (e){
+          console.log(e)
+        }  finally {
+          this.loadingCard = false
+        }
+      },
+
+      async selectCustomChart (id) {
+        const item = this.customCharts.filter(chart => chart.id == id)[0]
+        this.loading = true
+        this.donePie = false
+        this.doneBar = false
+        try {
+          const data =  { 
+            company_id_field: item.company_id_field,
+            targetTable: item.target_table,
+            condition: item.condition,
+            chartType: item.type,
+            dataLabel: item.data_label,
+            company: this.companyId,
+            label: item.label,
+            title: item.title
+          }
+          const res = await axios({
+            url: `${BASE_API}/api/admin/chart/test`,
+            method: 'POST',
+            data
+          })
+          const chartType = item['type']
+          if (chartType == 'Pie Chart') {
+            this.custom_pie_data = res.data.data[chartType]
+            this.donePie = true
+          } else {
+            this.doneBar = true
+            this.custom_bar_data = res.data.data[chartType]
+          }
+          this.total = res.data.total
+          // this.customs = this.customCharts.map(item => )
+        } catch (e){
+          console.log(e)
+        }  finally {
+          this.loading = false
+        }
+      }
     }
   }
 </script>
