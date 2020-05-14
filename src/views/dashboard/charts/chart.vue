@@ -173,17 +173,19 @@
               <v-col
                 cols='12'
                 md="4"
+                v-if="!loading && donePie"
               >
                 <v-sheet class="min-50">
-                  <highcharts v-if="!loading && donePie" :options="pieChart"></highcharts>
+                  <highcharts  :options="pieChart"></highcharts>
                 </v-sheet>
               </v-col>
               <v-col
-            cols='12'
-            md="6"
-            >
+                cols='12'
+                md="6"
+                v-if="!loading && doneBar" 
+              >
               <v-sheet class="min-50">
-                  <highcharts v-if="!loading && doneBar" :options="barChart"></highcharts>
+                  <highcharts :options="barChart"></highcharts>
                 </v-sheet>
               </v-col>
             </v-row>
@@ -377,6 +379,7 @@
             this.doneBar = true
             this.custom_bar_data = res.data.data[chartType]
           }
+          this.title = item.title
           this.total = res.data.total
           // this.customs = this.customCharts.map(item => )
         } catch (e){

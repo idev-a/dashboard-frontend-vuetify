@@ -19,138 +19,151 @@
 	              ref="form"
 	              v-model="valid"
 	            >
-	      		<v-row
-		    	>
-		    		<v-col
-						cols='12'
-						md='4'
-		    		>
-		    			<v-select
-				          v-model="company"
-				          :rules="[rules.required]"
-					  	  chips
-				          :items="companies"
-				          class=""
-				          label="Select a company"
-				          hint="Select a company you want to get the chart data"
-				          :error="error"
-				          :error-messages="errorMessages"
-				        ></v-select>
-		    		</v-col>
-		    		<v-col
-						cols='12'
-						md='4'
-		    		>
-		    			<v-select
-				          v-model="chartType"
-				          :rules="[rules.required]"
-					  	  chips
-				          :items="chartTypes"
-				          class=""
-				          label="Select a type for the chart"
-				          hint="Select a proper type of chart you want"
-				          :error="error"
-				          :error-messages="errorMessages"
-				        ></v-select>
-		    		</v-col>
-		    		<v-col
-						cols='12'
-						md='4'
-		    		>
-		    			<v-select
-				          v-model="chartGroup"
-				          :rules="[rules.required]"
-					  	  chips
-				          :items="chartGroups"
-				          class=""
-				          label="Select a group"
-				          hint="Select a group"
-				          :error="error"
-				          :error-messages="errorMessages"
-				        ></v-select>
-			    	</v-col>
-		    		
-		    		<v-col
-						cols='12'
-						md="8"
-		    		>
-		    			<v-text-field
-			                v-model="label"
-			                prepend-icon="mdi-clipboard-text"
-			                label="Label of select"
-			                hint="The label appearing on the user side"
+	            <v-card outlined>
+	            	<v-card-title>
+			      		<v-row
+				    	>
+
+				    		<v-col
+								cols='12'
+								md='4'
+				    		>
+				    			<v-select
+						          v-model="company"
+						          :rules="[rules.required]"
+							  	  chips
+						          :items="companies"
+						          class=""
+						          label="Select a company"
+						          hint="Select a company you want to get the chart data"
+						          :error="error"
+						          :error-messages="errorMessages"
+						        ></v-select>
+				    		</v-col>
+				    		<v-col
+								cols='12'
+								md='4'
+				    		>
+				    			<v-select
+						          v-model="chartType"
+						          :rules="[rules.required]"
+							  	  chips
+						          :items="chartTypes"
+						          class=""
+						          label="Select a type for the chart"
+						          hint="Select a proper type of chart you want"
+						          :error="error"
+						          :error-messages="errorMessages"
+						        ></v-select>
+				    		</v-col>
+				    		<v-col
+								cols='12'
+								md='4'
+				    		>
+				    			<v-select
+						          v-model="chartGroup"
+						          :rules="[rules.required]"
+							  	  chips
+						          :items="chartGroups"
+						          class=""
+						          label="Select a group"
+						          hint="Select a group"
+						          :error="error"
+						          :error-messages="errorMessages"
+						        ></v-select>
+					    	</v-col>
+			    		</v-row>
+			    	</v-card-title>
+		    	</v-card>
+		    	<v-card outlined>
+		    		<v-card-title>
+			    		<v-row>
+				    		<v-col
+								cols='12'
+								md="8"
+				    		>
+				    			<v-text-field
+					                v-model="label"
+					                prepend-icon="mdi-clipboard-text"
+					                label="Label of select"
+					                hint="The label appearing on the user side"
+					                :rules="[rules.required]"
+					                single-line
+					                class="mx-3"
+				              	></v-text-field>
+				    		</v-col>
+				    		<v-col
+								cols='12'
+								md='6'
+				    		>
+				    			<v-text-field
+					                v-model="title"
+					                prepend-icon="mdi-clipboard-text"
+					                label="Title of chart"
+					                hint="Title of chart"
+					                :rules="[rules.required]"
+					                single-line
+					                class="mx-3"
+				              	></v-text-field>
+				    		</v-col>
+				    		<v-col
+								cols='12'
+								md="3"
+				    		>
+				    			<v-select
+						          v-model="targetTable"
+						          :rules="[rules.required]"
+							  	  chips
+						          :items="tableNames"
+						          class=""
+						          label="Select a target table"
+						          hint="Select a table you want change chart"
+						        ></v-select>
+					    		<!-- <v-textarea
+					                v-model="testquery"
+					                label="SQL Query" 
+					                hint="Ctrl + Enter to run the query"
+					                rows="3"
+					                outlined
+					                @keyup.ctrl.13="keyDownOnQuery"
+					            /> -->
+					    	</v-col>
+					    	<v-col
+								cols='12'
+								md='3'
+				    		>
+				    			<v-text-field
+					                v-model="company_id_field"
+					                prepend-icon="mdi-clipboard-text"
+					                label="Field name of company_id"
+					                :hint="companyIdHint"
+					                :rules="[rules.required]"
+					                single-line
+					                class="mx-3"
+				              	></v-text-field>
+				    		</v-col>
+				    	</v-row>
+				    </v-card-title>
+			    </v-card>
+			    <v-row>
+			      <v-col cols="12">
+			        <card-list v-model="conditions" #default="{ item }">
+			          <v-row>
+			            <v-col cols="12">
+			              <v-text-field
+			                v-model="item.dataLabel"
 			                :rules="[rules.required]"
-			                single-line
-			                class="mx-3"
-		              	></v-text-field>
-		    		</v-col>
-		    		<v-col
-						cols='12'
-						md='6'
-		    		>
-		    			<v-text-field
-			                v-model="title"
-			                prepend-icon="mdi-clipboard-text"
-			                label="Title of chart"
-			                hint="Title of chart"
-			                :rules="[rules.required]"
-			                single-line
-			                class="mx-3"
-		              	></v-text-field>
-		    		</v-col>
-		    		<v-col
-						cols='12'
-						md="3"
-		    		>
-		    			<v-select
-				          v-model="targetTable"
-				          :rules="[rules.required]"
-					  	  chips
-				          :items="tableNames"
-				          class=""
-				          label="Select a target table"
-				          hint="Select a table you want change chart"
-				        ></v-select>
-			    		<!-- <v-textarea
-			                v-model="testquery"
-			                label="SQL Query" 
-			                hint="Ctrl + Enter to run the query"
-			                rows="3"
-			                outlined
-			                @keyup.ctrl.13="keyDownOnQuery"
-			            /> -->
-			    	</v-col>
-			    	<v-col
-						cols='12'
-						md='3'
-		    		>
-		    			<v-text-field
-			                v-model="company_id_field"
-			                prepend-icon="mdi-clipboard-text"
-			                label="Field name of company_id"
-			                :hint="companyIdHint"
-			                :rules="[rules.required]"
-			                single-line
-			                class="mx-3"
-		              	></v-text-field>
-		    		</v-col>
-			    	<v-col
-						cols='12'
-						md="6"
-		    		>
-		    			<v-text-field
-			                v-model="dataLabel"
 			                prepend-icon="mdi-magnify"
 			                label="What kind of data do you want to display (Data Label)"
 			                hint="Data label appeared on the charts"
 			                single-line
-		              	></v-text-field>
-		    		</v-col>
-			    	<v-col
-						cols='12'
-		    		>
-		    			<v-textarea
-			                v-model="condition"
+		              		></v-text-field>
+			            </v-col>
+			          </v-row>
+			          <v-row>
+			            <v-col cols="12">
+			              <v-textarea
+			                v-model="item.condition"
 			                :rules="[rules.required]"
 			                prepend-icon="mdi-magnify"
 			                label="What kind of data do you want to display (Query Where Condition)"
@@ -159,29 +172,87 @@
 			                auto-grow
 			                @keyup.ctrl.13="keyDownOnTest"
 		              	></v-textarea>
-		    		</v-col>
+			            </v-col>
+			          </v-row>
+			        </card-list>
+			      </v-col>
 			    </v-row>
 				</v-form>
+			    <v-row>
+			      <v-col cols="auto" class="py-0 mx-auto">
+			        <v-btn @click="add" text>
+			          <v-icon>
+			            mdi-plus
+			          </v-icon>
+			          Add Condition
+			        </v-btn>
+			      </v-col>
+			    </v-row>
 	      	</v-card-text>
-	      	<v-spacer></v-spacer>
-	      	<v-row>
-	      		<v-col
-					cols='12'
-					md="4"
-	    		>
-	    			<v-sheet class="min-50">
-	      				<highcharts v-if="!loading && done" :options="pieChart"></highcharts>
-	      			</v-sheet>
-	      		</v-col>
-	      		<v-col
-					cols='12'
-					md="6"
-	    		>
-	    			<v-sheet class="min-50">
-	      				<highcharts v-if="!loading && done" :options="barChart"></highcharts>
-	      			</v-sheet>
-	      		</v-col>
-	      	</v-row>
+	      	<v-card outlined class="mt-0 mx-3">
+	      		<v-card-title>
+					Charts <small class="ml-2">(Results)</small>
+				</v-card-title>
+	      		<v-card-text>
+			      	<v-row>
+			      		<v-col
+							cols='12'
+							md="6"
+						 	v-if="!loading && done" 
+			    		>
+			    			<v-sheet class="min-50">
+			      				<highcharts :options="barChart"></highcharts>
+			      			</v-sheet>
+			      		</v-col>
+			      		<v-col
+							cols='12'
+							md="5"
+							v-if="!loading && done && data['Pie Chart'] && data['Pie Chart'].length" 
+			    		>
+			    			<v-sheet class="min-50">
+			      				<highcharts :options="pieChart"></highcharts>
+			      			</v-sheet>
+			      		</v-col>
+			      	</v-row>
+		      	</v-card-text>
+			</v-card>
+	      	<v-card outlined class="mx-3">
+				<v-card-title>
+					Chart Data <small class="ml-2">(click to see the details)</small>
+	              	<v-spacer></v-spacer>
+			    	<v-text-field
+		                v-model="search"
+		                append-icon="mdi-magnify"
+		                label="Search"
+		                class="mb-5 mr-3"
+		                single-line
+		                hide-details
+	              	></v-text-field>
+	              	<v-btn @click="deleteChartTableData" :disabled="selectedChartTableData.length == 0" text icon color="red">
+	              		<v-icon>
+			            	mdi-delete
+			          	</v-icon>
+			      	</v-btn>
+	            </v-card-title>
+	            <v-card-text>
+			      	<v-data-table
+			      		v-model="selectedChartTableData"
+				        :loading="loading"
+				        :headers="headers"
+				        :items="chartTableData"
+				        :items-per-page="page"
+				        item-key="id"
+				        :search="search"
+				        show-select
+				        @update:items-per-page="getPageNum"
+			          	@click:row="showDetails"
+				      > 
+				      	<template v-slot:item.conditions="{ item }">
+		                  <div v-for=" cond,x in item.conditions"><b>{{ x + 1 }}.</b> {{ cond.condition }}</div>
+		                </template>
+				  	</v-data-table>
+				  </v-card-text>
+			</v-card>
       	</v-card>
 	    <v-snackbar
       		v-model="snackbar"
@@ -209,6 +280,7 @@
 
 	    data: () => ({
 	      loading: false,
+	      search: '',
 	      valid: true,
 	      tab: null,
 	      done: false,
@@ -240,9 +312,9 @@
 	      errorMessages: '',
 	      title: '',
 	      label: '',
-	      items: [],
+	      chartTableData: [],
+	      selectedChartTableData: [],
 	      targetTable: '',
-	      condition: '',
 	      tableNames: [],
 	      data: [],
 	      total: 0,
@@ -253,16 +325,50 @@
 	          required: value => {
 	            return !!value || 'This field is required.'
 	          },
-	      }
+	      },
+	      conditions: [
+		      {
+		        id: 1,
+		        dataLabel: '',
+		        condition: ''
+		      },
+		    ],
+		    counter: 10,
+		    headers: [
+		    	{
+		    		text: 'Type',
+		    		value: 'type'
+		    	},
+		    	{
+		    		text: 'Title',
+		    		value: 'title'
+		    	},
+		    	{
+		    		text: 'Conditions',
+		    		value: 'conditions'
+		    	},
+		    	{
+		    		text: 'Table Name',
+		    		value: 'target_table'
+		    	},
+		    ]
 	    }),
 
+	    components: {
+	    	CardList: () => import('../component/ConditionList'),
+	    },
+
 	    computed: {
+      		page () {
+		        return Number(localStorage.getItem('page')) || 5
+	     	}, 
+
 	    	pieChart () {
 	    		return pieChart(this.title, this.data['Pie Chart'], this.total)
 	    	},
 
 	    	barChart () {
-	    		return barchart(this.title, '', '#', this.data['Bar Chart'])
+	    		return barchart(this.title, `Total ${this.total}`, '#', this.data['Bar Chart'])
 	    	},
 
 	    	companyIdHint () {
@@ -277,6 +383,46 @@
 	    },
 
 	    methods: {
+	    	getPageNum (_page) {
+		        localStorage.setItem('page', _page)
+		    },
+
+	    	add () {
+		      this.conditions.push({ id: this.counter++ })
+		    },
+
+		    async deleteChartTableData () {
+		    	this.loading = true
+		    	const ids = this.selectedChartTableData.map(item => item.id)
+      			try {
+			    	const res = await axios({
+		      			url: `${BASE_API}/api/admin/chart/delete`,
+		      			method: 'POST',
+		      			data: { ids }
+		      		})
+		      		this.chartTableData = this.chartTableData.filter(item => !ids.includes(item.id))
+	      			this.message = res.data.message
+	      			this.color = res.data.status
+		    	} catch(e) {
+		    		this.message = e.response.data.message
+		    	} finally {
+	      			this.loading = false
+	      			this.snackbar = true
+		    	}
+		    },
+
+		    showDetails (item) {
+		    	this.title = item.title
+		    	this.chartType = item.type
+		    	this.chartGroup = item.group
+		    	this.label = item.label
+		    	this.conditions = item.conditions
+		    	this.targetTable = item.target_table
+		    	this.company_id_field = item.company_id_field
+
+		    	this.done = false
+		    },
+
 	    	async fetchUsers () {
 	    		this.loading = true
 	      		let res = await axios.get(`${BASE_API}/api/users/all`)
@@ -308,6 +454,24 @@
 		    	}
       		},
 
+      		async readAll () {
+      			this.loading = true
+      			try {
+			    	const res = await axios({
+		      			url: `${BASE_API}/api/admin/chart/readall`,
+		      			method: 'GET'
+		      		})
+		      		this.chartTableData = res.data.data
+	      			this.message = res.data.message
+	      			this.color = res.data.status
+		    	} catch(e) {
+		    		this.message = e.response.data.message
+		    	} finally {
+	      			this.loading = false
+	      			this.snackbar = true
+		    	}
+      		},
+
       		keyDownOnTest () {
       			if (this.condition && this.targetTable) {
       				this.testChart()
@@ -326,7 +490,7 @@
 		    	const data =  { 
       				company_id_field: this.company_id_field,
       				targetTable: this.targetTable,
-      				condition: this.condition,
+      				conditions: this.conditions,
       				chartType: this.chartType,
       				dataLabel: this.dataLabel,
       				company: this.company,
@@ -363,7 +527,7 @@
 		    	const data =  { 
       				company_id_field: this.company_id_field,
       				targetTable: this.targetTable,
-      				condition: this.condition,
+      				conditions: this.conditions,
       				chartType: this.chartType,
       				dataLabel: this.dataLabel,
       				company: this.company,
