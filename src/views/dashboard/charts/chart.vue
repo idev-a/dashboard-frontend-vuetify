@@ -172,7 +172,7 @@
             <v-row>
               <v-col
                 cols='12'
-                md="4"
+                md="5"
                 v-if="!loading && donePie"
               >
                 <v-sheet class="min-50">
@@ -338,7 +338,7 @@
         this.loadingCard  = true
         try {
           const res = await axios({
-            url: `${BASE_API}/api/admin/chart/get`,
+            url: `${BASE_API}/api/admin/chart/readall`,
             method: 'GET'
           })
           this.customCharts = res.data.data
@@ -359,7 +359,7 @@
           const data =  { 
             company_id_field: item.company_id_field,
             targetTable: item.target_table,
-            condition: item.condition,
+            conditions: item.conditions,
             chartType: item.type,
             dataLabel: item.data_label,
             company: this.companyId,
