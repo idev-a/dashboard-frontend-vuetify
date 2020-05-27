@@ -361,7 +361,7 @@ export const scoreDonutChart = (score) => {
                     value: 'Score'
                 },
             },
-             borderWidth: 3
+            borderWidth: 3
         },
         series: {
           animation: false

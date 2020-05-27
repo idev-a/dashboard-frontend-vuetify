@@ -163,7 +163,7 @@
                   md="3"
                   sm="3"
                 >
-                    <b class="display-1">Login URL</b>
+                    <b class="display-1 mr-2">Login URL</b>
                     <a :href="currentApp.login_url" target="_blank" class="text--red">GoTo</a>
                 </v-col>
                 <v-col

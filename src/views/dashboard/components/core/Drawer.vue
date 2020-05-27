@@ -135,6 +135,10 @@
               title: 'Chart Board',
               to: 'chart',
             },
+            {
+              title: 'GSuite Board',
+              to: 'gsuite',
+            },
           ]
         },
         {

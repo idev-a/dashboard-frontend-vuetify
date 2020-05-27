@@ -243,15 +243,6 @@
                     this.file = null
 			    	try {
 				    	const res = await axios.post(`${BASE_API}/api/admin/publicdata/run`, formData)
-			      		// parse header
-			      		// if (res.data.csv_data.length > 1) {
-			      		// 	Object.keys(res.data.csv_data[0]).map(key => {
-				      	// 		this.csvHeaders.push({
-				      	// 			text: key,
-				      	// 			value: key
-				      	// 		})
-			      		// 	})
-			      		// }
 			      		this.csvData = res.data.csv_data
 		      			this.message = res.data.message
 		      			this.color = res.data.status
