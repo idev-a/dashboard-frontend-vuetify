@@ -144,7 +144,6 @@
 		      			data: { SLACK_CLIENT_ID: this.slackClientId, SLACK_CLIENT_SECRET: this.slackClientSecret },
 		      			method: 'POST'
 		      		})
-		      		console.log(res)
       			} catch (e) {
       				console.log(e.response)
       			}
