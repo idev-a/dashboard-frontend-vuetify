@@ -166,6 +166,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Slack Board',
+          path: 'admin/slack',
+          component: () => import('@/views/dashboard/admin/SlackBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),

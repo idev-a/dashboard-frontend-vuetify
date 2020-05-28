@@ -139,6 +139,10 @@
               title: 'GSuite Board',
               to: 'gsuite',
             },
+            {
+              title: 'Slack Board',
+              to: 'slack',
+            },
           ]
         },
         {
