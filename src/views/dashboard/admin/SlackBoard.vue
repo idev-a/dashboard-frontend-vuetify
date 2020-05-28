@@ -8,12 +8,12 @@
 	      class="pa-5"
 	    >
 	    	<v-card-title>
-		        GSuite Board
+		        Slack Board
 		        <v-spacer></v-spacer>
 		        <v-btn text :href="slackAuthorizeUrl" @click="redirectSlack" :disabled="!importable" target="_blank">
 		    		<v-img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" ></v-img>
 		    	</v-btn>
-	        	<v-btn :loading="loading" :disabled="!importable" @click="runScript" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn v-if="false" :loading="loading" :disabled="!importable" @click="runScript" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>
@@ -24,8 +24,7 @@
 			                prepend-icon="mdi-email"
 			                :loading="loading"
 			                label="Client Id"
-			                hint="Ctrl + Enter to get the scope"
-			                single-line
+			                hint="Ctrl + Enter to get the list"
 			                hide-details="auto"
 			                @keyup.ctrl.13="keyDownOnScope"
 		              	></v-text-field>
@@ -37,8 +36,7 @@
 			                prepend-icon="mdi-email"
 			                :loading="loading"
 			                label="Client Secret"
-			                hint="Ctrl + Enter to get the scope"
-			                single-line
+			                hint="Ctrl + Enter to get the list"
 			                hide-details="auto"
 			                @keyup.ctrl.13="keyDownOnScope"
 		              	></v-text-field>
@@ -54,6 +52,7 @@
 				          :items="scopes"
 				          label="Select an scope"
 				          hint="Select an scope to retrieve user info"
+				          readonly
 				        ></v-select>
 		    		</v-col>
 		    	</v-row>
@@ -90,8 +89,8 @@
 				done: false,
 				loading: false,
 				email: '',
-				slackClientId: '151682192533.952129878438',
-				slackClientSecret: '18ba8bc9142dd77e94e76917bdc30167',
+				slackClientId: ' ',
+				slackClientSecret: ' ',
 				snackbar: false,
 		      	message: '',
 		      	color: 'success',
