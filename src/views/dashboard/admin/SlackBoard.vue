@@ -90,8 +90,8 @@
 				done: false,
 				loading: false,
 				email: '',
-				slackClientId: '151682192533.952129878438',
-				slackClientSecret: '18ba8bc9142dd77e94e76917bdc30167',
+				slackClientId: '',
+				slackClientSecret: '',
 				snackbar: false,
 		      	message: '',
 		      	color: 'success',
@@ -122,7 +122,7 @@
 				return !this.loading && this.slackClientId && this.slackClientSecret && this.scope.length
 			},
 			slackAuthorizeUrl () {
-				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId}&redirect_uri=http://localhost:5000/api/callback`
+				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId}&redirect_uri=https://urinotsecure.revampcybersecurity.com/api/callback`
 			}
 		},
 
