@@ -10,7 +10,7 @@
 	    	<v-card-title>
 		        GSuite Board
 		        <v-spacer></v-spacer>
-		        <v-btn text :href="slackAuthorizeUrl" :disabled="!importable" target="_blank">
+		        <v-btn text :href="slackAuthorizeUrl" @click="redirectSlack" :disabled="!importable" target="_blank">
 		    		<v-img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" ></v-img>
 		    	</v-btn>
 	        	<v-btn :loading="loading" :disabled="!importable" @click="runScript" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
@@ -90,8 +90,8 @@
 				done: false,
 				loading: false,
 				email: '',
-				slackClientId: '',
-				slackClientSecret: '',
+				slackClientId: '151682192533.952129878438',
+				slackClientSecret: '18ba8bc9142dd77e94e76917bdc30167',
 				snackbar: false,
 		      	message: '',
 		      	color: 'success',
@@ -122,7 +122,7 @@
 				return !this.loading && this.slackClientId && this.slackClientSecret && this.scope.length
 			},
 			slackAuthorizeUrl () {
-				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId}&redirect_uri=https://urinotsecure.revampcybersecurity.com/api/callback`
+				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId}&redirect_uri=${BASE_API}/api/callback`
 			}
 		},
 
@@ -137,8 +137,17 @@
 
       		},
 
-      		redirectSlack () {
-      			location.href = this.slackAuthorizeUrl
+      		async redirectSlack () {
+      			try {
+      				const res = await axios({
+		      			url: `${BASE_API}/api/admin/slack_init`,
+		      			data: { SLACK_CLIENT_ID: this.slackClientId, SLACK_CLIENT_SECRET: this.slackClientSecret },
+		      			method: 'POST'
+		      		})
+		      		console.log(res)
+      			} catch (e) {
+      				console.log(e.response)
+      			}
       		}
       	}
   	}
