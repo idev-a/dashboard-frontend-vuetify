@@ -118,10 +118,10 @@
 
 		computed: {
 			importable () {
-				return !this.loading && this.slackClientId && this.slackClientSecret && this.scope.length
+				return !this.loading && this.slackClientId.trim() && this.slackClientSecret.trim() && this.scope.length
 			},
 			slackAuthorizeUrl () {
-				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId}&redirect_uri=${BASE_API}/api/callback`
+				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId.trim()}&redirect_uri=${BASE_API}/api/callback`
 			}
 		},
 
@@ -140,7 +140,7 @@
       			try {
       				const res = await axios({
 		      			url: `${BASE_API}/api/admin/slack_init`,
-		      			data: { SLACK_CLIENT_ID: this.slackClientId, SLACK_CLIENT_SECRET: this.slackClientSecret },
+		      			data: { SLACK_CLIENT_ID: this.slackClientId.trim(), SLACK_CLIENT_SECRET: this.slackClientSecret.trim() },
 		      			method: 'POST'
 		      		})
       			} catch (e) {
