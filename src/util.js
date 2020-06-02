@@ -1,7 +1,14 @@
 const moment = require('moment');
+const Highcharts = require('highcharts');
 import Papa from "papaparse";
 
 import { companyId } from './api'
+
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});
 
 export const DOMAIN_LIST = [
   /* Default domains included */
@@ -450,6 +457,20 @@ export const beautifyEmail = (email) => {
   } else {
     return `${email}`
   }
+}
+
+export const beautifyEmails = (emails) => {
+  let res = ''
+  const list = emails.split(';')
+  list.map(email => {
+    if (validEmail(email)) {
+      res += `<a href="mailto:${email}">${email}</a><br />`
+    } else {
+      res += `${email} <br />`
+    }
+  })
+
+  return res
 }
 
 export const beautifyDuration = (duration) => {

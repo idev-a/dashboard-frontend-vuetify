@@ -95,7 +95,7 @@
 		      	message: '',
 		      	color: 'success',
 		      	scope: ['users:read', 'users.profile:read', 'users:read.email'],
-		      	scopes: ['users:read', 'users.profile:read', 'users:read.email', 'admin', 'admin.users:read'],
+		      	scopes: ['users:read', 'users.profile:read', 'users:read.email', 'admin'],
 				errorMessages: {
 					email: {
 			            required: false,

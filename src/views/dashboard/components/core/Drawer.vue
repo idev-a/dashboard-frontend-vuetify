@@ -143,6 +143,10 @@
               title: 'Slack Board',
               to: 'slack',
             },
+            {
+              title: 'Extension Board',
+              to: 'chromeext',
+            },
           ]
         },
         {

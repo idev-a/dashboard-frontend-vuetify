@@ -175,6 +175,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Chrome Extension Board',
+          path: 'admin/chromeext',
+          component: () => import('@/views/dashboard/admin/ChromeExtBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),

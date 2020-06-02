@@ -275,7 +275,6 @@
       			this.items = []
 
       			const data = { apiKey: this.apiKey, orgId: this.orgId, networkIds: this.networkIds }
-      			console.log(`${BASE_API}/api/admin/meraki/${this.endpoint}`, data)
 		    	try {
 			    	const res = await axios({
 		      			url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
