@@ -103,15 +103,26 @@
       <v-list
         :tile="false"
         nav
+        two-line
+        dense
+        height="300"
+        min-width="400"
+        light
       >
-        <div>
-          <app-bar-item
-            v-for="(n, i) in notifications"
-            :key="`item-${i}`"
-          >
-            <v-list-item-title v-text="n" />
-          </app-bar-item>
-        </div>
+        <v-list-item-group>
+          <template v-for="(item, index) in notifications">
+            <v-list-item :key="index">
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-subtitle class="text--primary" v-text="item.msg"></v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-icon class="mb-2">mdi-clock</v-icon>
+                <v-list-item-action-text v-text="item.time"></v-list-item-action-text>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-menu>
 
@@ -237,7 +248,11 @@
           if (data.user_id == user_id) {
             this.notification = data.msg
             this.snackbar = true
-            this.addNotification(this.notification)
+            this.addNotification({
+              title: 'GSuite Drive',
+              msg: this.notification,
+              time: this.$moment().format('MM:DD HH:mm')
+            })
           }
         } catch (e) {}
       }
