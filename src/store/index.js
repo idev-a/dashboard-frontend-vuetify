@@ -11,6 +11,10 @@ export default new Vuex.Store({
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg',
     drawer: null,
+    connected: false,
+    error: '',
+    message: '',
+    notifications: []
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -22,9 +26,29 @@ export default new Vuex.Store({
     SET_SCRIM (state, payload) {
       state.barColor = payload
     },
+    SOCKET_CONNECT(state) {
+      state.connected = true
+    },
+    SOCKET_DISCONNECT(state) {
+      state.connected = false
+    },
+    SOCKET_MESSAGE(state, message) {
+      state.message = message
+    },
+    SOCKET_NOTIFICATION(state, message) {
+      state.message = message
+    },
+    SOCKET_ERROR(state, message) {
+      state.error = message.error
+    },
+    ADD_NOTIFICATION (state, payload) {
+      state.notifications.push(payload)
+    }
   },
   actions: {
-
+    addNotification({ commit }, payload) {
+      commit('ADD_NOTIFICATION', payload)
+    },
   },
   modules: { 
     publicdata

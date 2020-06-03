@@ -71,7 +71,7 @@
       <v-icon>mdi-lock-open-outline</v-icon>
     </v-btn>
 
-    <!-- <v-menu
+    <v-menu
       bottom
       left
       offset-y
@@ -92,7 +92,7 @@
             bordered
           >
             <template v-slot:badge>
-              <span>5</span>
+              <span>{{ notifications.length }}</span>
             </template>
 
             <v-icon>mdi-bell</v-icon>
@@ -113,7 +113,7 @@
           </app-bar-item>
         </div>
       </v-list>
-    </v-menu> -->
+    </v-menu>
 
     <v-menu
       bottom
@@ -159,6 +159,20 @@
         </template>
       </v-list>
     </v-menu>
+    <v-snackbar
+      v-model="snackbar"
+      bottom
+      color="success"
+      >
+      {{ notification }}
+      <v-btn
+        dark
+        text
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app-bar>
 </template>
 
@@ -167,7 +181,7 @@
   import { VHover, VListItem } from 'vuetify/lib'
 
   // Utilities
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState, mapMutations, mapActions } from 'vuex'
 
   export default {
     name: 'DashboardCoreAppBar',
@@ -205,14 +219,27 @@
       },
     },
 
+    watch: {
+      connected () {
+        console.log('store socket', this.connected)
+      },
+
+      message () {
+        console.log(this.message[0])
+        try {
+          const user_id = JSON.parse(localStorage.getItem('user')).id
+          if (this.message[0].user_id == user_id) {
+            this.notification = this.message[0].msg
+            this.snackbar = true
+            this.addNotification(this.notification)
+          }
+        } catch (e) {}
+      }
+    },
+
     data: () => ({
-      notifications: [
-        'Mike John Responded to your email',
-        'You have 5 new tasks',
-        'You\'re now friends with Andrew',
-        'Another Notification',
-        'Another one',
-      ],
+      snackbar: false,
+      notification: '',
       profile: [
         { title: 'Profile', name: 'My Profile' },
         // { title: 'Settings', name: 'Settings' },
@@ -222,13 +249,15 @@
     }),
 
     computed: {
-      ...mapState(['drawer']),
+      ...mapState(['drawer', 'connected', 'message', 'notifications']),
     },
 
     methods: {
       ...mapMutations({
-        setDrawer: 'SET_DRAWER',
+        setDrawer: 'SET_DRAWER'
       }),
+
+      ...mapActions(['addNotification']),
 
       goTo (name) {
         if (name === 'Login') {

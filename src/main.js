@@ -23,6 +23,9 @@ import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import IdleVue from 'idle-vue'
 import VueFriendlyIframe from 'vue-friendly-iframe';
+import VueSocketio  from 'vue-socket.io'
+
+import { BASE_API } from './api.js'
 
 Vue.config.productionTip = false
 
@@ -43,3 +46,5 @@ Vue.use(IdleVue, {
 
 Vue.use(VueFriendlyIframe);
 Vue.use(require('vue-moment'));
+
+Vue.use(VueSocketio, `${BASE_API}/notification`, store);

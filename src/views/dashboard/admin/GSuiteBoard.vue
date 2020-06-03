@@ -125,6 +125,10 @@
 						value: 'email'
 					},
 					{
+						text: 'Status',
+						value: 'status'
+					},
+					{
 						text: 'Folder Id',
 						value: 'folder_id'
 					},
@@ -253,7 +257,8 @@
                 }
 
                 const data = {
-                	'emails': this.emails
+                	'emails': this.emails,
+                	'user_id': JSON.parse(localStorage.getItem('user')).id
                 }
 
                 const json = JSON.stringify(data);
