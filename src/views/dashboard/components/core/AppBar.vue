@@ -219,17 +219,23 @@
       },
     },
 
-    watch: {
-      connected () {
-        console.log('store socket', this.connected)
+    sockets: {
+      connect() {
+        // Fired when the socket connects.
+        console.log('store socket connected')
       },
 
-      message () {
-        console.log(this.message[0])
+      disconnect() {
+        console.log('store socket disconnected')
+      },
+
+      // Fired when the server sends something on the "messageChannel" channel.
+      notification(data) {
+        console.log('message', data)
         try {
           const user_id = JSON.parse(localStorage.getItem('user')).id
-          if (this.message[0].user_id == user_id) {
-            this.notification = this.message[0].msg
+          if (data.user_id == user_id) {
+            this.notification = data.msg
             this.snackbar = true
             this.addNotification(this.notification)
           }

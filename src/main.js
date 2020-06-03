@@ -23,7 +23,9 @@ import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import IdleVue from 'idle-vue'
 import VueFriendlyIframe from 'vue-friendly-iframe';
-import VueSocketio  from 'vue-socket.io'
+import socketio from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
+
 
 import { BASE_API } from './api.js'
 
@@ -47,4 +49,7 @@ Vue.use(IdleVue, {
 Vue.use(VueFriendlyIframe);
 Vue.use(require('vue-moment'));
 
-Vue.use(VueSocketio, `${BASE_API}/notification`, store);
+export const SocketInstance = socketio(`${BASE_API}/notification`);
+
+Vue.use(VueSocketIO, SocketInstance)
+// Vue.use(VueSocketio, `${BASE_API}/notification`, store);
