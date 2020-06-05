@@ -519,9 +519,9 @@
       } catch(e) {}
       this.companyId = user.email.split('@')[1];
 
-      await this.fetchChartsData()
+      this.fetchChartsData()
       
-      await this.fetchAllCardData()
+      this.fetchAllCardData()
     },
 
     methods: {
