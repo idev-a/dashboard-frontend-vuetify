@@ -461,9 +461,14 @@ export const beautifyEmail = (email) => {
 
 export const beautifyEmails = (emails) => {
   let res = ''
-  const list = emails.split(';')
+  let list = []
+  if (emails.includes(';')) {
+    list = emails.split(';')
+  } else {
+    list = emails.split('\n')
+  }
   list.map(email => {
-    if (validEmail(email)) {
+    if (validEmail(email.trim())) {
       res += `<a href="mailto:${email}">${email}</a><br />`
     } else {
       res += `${email} <br />`
@@ -486,6 +491,10 @@ export const beautifyDateTime = (date) => {
 
 export const beautifyDate = (date) => {
   return moment(date).format('DD MMM YYYY')
+}
+
+export const formatDate = (date) => {
+  return moment(date).format('MM/DD/YYYY')
 }
 
 export const beautifyDateZ = (date) => {

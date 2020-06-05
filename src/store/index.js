@@ -14,7 +14,8 @@ export default new Vuex.Store({
     connected: false,
     error: '',
     message: '',
-    notifications: []
+    notifications: [],
+    confirmModal: false
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -43,12 +44,18 @@ export default new Vuex.Store({
     },
     ADD_NOTIFICATION (state, payload) {
       state.notifications.push(payload)
+    },
+    SHOW_CONFIRM_MODAL (state, payload) {
+      state.confirmModal = payload
     }
   },
   actions: {
     addNotification({ commit }, payload) {
       commit('ADD_NOTIFICATION', payload)
     },
+    showConfirm({ commit }, payload = true) {
+      commit('SHOW_CONFIRM_MODAL', payload)
+    }
   },
   modules: { 
     publicdata

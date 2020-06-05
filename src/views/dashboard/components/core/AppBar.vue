@@ -105,8 +105,8 @@
         nav
         two-line
         dense
-        height="300"
-        min-width="400"
+        min-height="50"
+        min-width="350"
         light
       >
         <v-list-item-group>

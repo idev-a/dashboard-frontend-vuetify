@@ -28,12 +28,13 @@
         :headers="headers"
         :items="users"
         item-key="_id"
-        :items-per-page="5"
+        :items-per-page="page"
         :search="search"
         :single-expand="singleExpand"
         show-expand
         :expanded.sync="expanded"
         @click:row="showDetails"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:item.email="{ item }">
           <span v-html="beautifyEmail(item.email)"></span>
@@ -166,13 +167,19 @@
                   md="6"
                   sm="6"
                 >
-                  <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
-                    <b class="display-1">Notes</b>
-                    <div class="text--secondary">{{currentUser.notes}}</div>
-                  <!-- </v-card> -->
+                  <b class="display-1">Notes</b>
+                  <div class="text--secondary">{{currentUser.notes}}</div>
                 </v-col>
                 <v-col
                   cols="12"
+                  md="3"
+                  sm="6"
+                >
+                  <div class="display-1 mb-2">Mobile Devices</div>
+                  <v-btn outlined rounded small @click="showMobileDevices">Show Devices</v-btn>
+                </v-col>
+                <v-col
+                  cols="9"
                 >
                   <!-- <v-card  shaped outlined class="my-0 pa-2"> -->
                     <b class="display-1">Applications</b>
@@ -185,10 +192,44 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-      {{ snackText }}
-      <v-btn text @click="snack = false">Close</v-btn>
+    <v-snackbar bottom v-model="snackbar" :timeout="3000" :color="color">
+      {{ message }}
+      <v-btn text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <v-dialog
+      v-model="deviceDialog"
+    >
+      <v-card
+        >
+        <div class="d-flex py-3 px-5 align-center">
+          <div class="display-1 ml-4">Mobile Devices ({{ currentUser.email }})</div>
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="deviceSearch"
+            append-icon="mdi-magnify"
+            label="Search"
+            class="mb-5 mr-3"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-btn @click="deviceDialog = false" icon><v-icon>mdi-close</v-icon></v-btn>
+        </div>
+        <v-card-text>
+          <v-data-table
+            v-model="selectedDevices"
+            :loading="loading"
+            :headers="deviceHeaders"
+            :items="devices"
+            :items-per-page="page"
+            item-key="id"
+            :search="deviceSearch"
+            show-select
+            @update:items-per-page="getPageNum"
+          > 
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -203,9 +244,11 @@
     data: () => ({
       loading: false,
       search: '',
-      snack: false,
-      snackColor: '',
-      snackText: '',
+      deviceSearch: '',
+      deviceDialog: false,
+      snackbar: false,
+      color: '',
+      message: '',
       user: false,
       currentUser: '',
       singleExpand: true,
@@ -239,15 +282,64 @@
         },
         { text: 'Actions', value: 'action', sortable: false },
       ],
-      users: [
-      ],
+      users: [],
+      devices: [],
+      selectedDevices: [],
+      deviceHeaders: [
+        {
+          text: 'Device Id',
+          value: 'deviceId'
+        },
+        {
+          text: 'Model',
+          value: 'model'
+        },
+        {
+          text: 'OS',
+          value: 'os'
+        },
+        {
+          text: 'Type',
+          value: 'type'
+        },
+        {
+          text: 'Status',
+          value: 'status'
+        },
+        {
+          text: 'Hardware Id',
+          value: 'hardwareId'
+        },
+        {
+          text: 'First Sync',
+          value: 'firstsync'
+        },
+        {
+          text: 'Last Sync',
+          value: 'lastsync'
+        },
+        {
+          text: 'User Agent',
+          value: 'useragent'
+        },
+      ]
     }),
 
     mounted () {
       this.fetchUsers()
     },
 
+    computed: {
+        page () {
+          return Number(localStorage.getItem('page')) || 5
+      }, 
+    },
+
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
+
       beautifyApps (apps) {
         let appList = ''
         apps.map(app => {
@@ -291,6 +383,24 @@
               self.loading = false
             })
       },
+
+      async showMobileDevices () {
+        this.loading = true
+        this.devices = []
+        this.deviceDialog = true
+        this.selectdDevices = []
+        try {
+          const res = await axios.get(`${BASE_API}/api/admin/gsuite/mobile/${this.currentUser.email}`)
+          this.devices = res.data.items
+          this.message = res.data.message
+          this.color = res.data.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      }
     }
   }
 </script>
