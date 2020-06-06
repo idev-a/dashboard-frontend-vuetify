@@ -144,6 +144,10 @@
               to: 'slack',
             },
             {
+              title: 'O365 Board',
+              to: 'o365',
+            },
+            {
               title: 'Extension Board',
               to: 'chromeext',
             },

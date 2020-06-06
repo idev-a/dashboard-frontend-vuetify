@@ -175,6 +175,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Office365 Board',
+          path: 'admin/o365',
+          component: () => import('@/views/dashboard/admin/O365Board'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Chrome Extension Board',
           path: 'admin/chromeext',
           component: () => import('@/views/dashboard/admin/ChromeExtBoard'),

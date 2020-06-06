@@ -15,7 +15,8 @@ export default new Vuex.Store({
     error: '',
     message: '',
     notifications: [],
-    confirmModal: false
+    confirmModal: false,
+    cronDialog: false
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
     },
     SHOW_CONFIRM_MODAL (state, payload) {
       state.confirmModal = payload
+    },
+    SHOW_CRON_DIALOG (state, payload) {
+      state.cronDialog = payload
     }
   },
   actions: {
@@ -55,6 +59,9 @@ export default new Vuex.Store({
     },
     showConfirm({ commit }, payload = true) {
       commit('SHOW_CONFIRM_MODAL', payload)
+    },
+    showCronDialog({ commit }, payload = true) {
+      commit('SHOW_CRON_DIALOG', payload)
     }
   },
   modules: { 

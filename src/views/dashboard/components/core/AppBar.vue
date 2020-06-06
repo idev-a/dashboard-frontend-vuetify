@@ -249,8 +249,8 @@
             this.notification = data.msg
             this.snackbar = true
             this.addNotification({
-              title: 'GSuite Drive',
-              msg: this.notification,
+              title: data.title,
+              msg: data.msg,
               time: this.$moment().format('MM:DD HH:mm')
             })
           }

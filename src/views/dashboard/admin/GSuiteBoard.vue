@@ -14,7 +14,7 @@
 			    </div>
 		        <v-spacer></v-spacer>
 	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCronDialog" color="success">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="success">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-row>
 		    	<v-col>
@@ -91,77 +91,27 @@
 	      	</v-btn>
       	</v-snackbar>
 
-		<confirm-dialog @callback="runCallback"></confirm-dialog>
-
       	<!-- Cron job dialog -->
-      	<v-dialog
-			v-model="cronDialog"
-      	>
-      		<v-card
-      		>
-      			<div class="d-flex flex-row align-center justify-center pa-4 ">
-      				<div class="display-1 ml-4">Cron Jobs (Weekly basis)</div>
-      				<v-spacer></v-spacer>
-      				<v-text-field
-			          v-model="searchCron"
-			          append-icon="mdi-magnify"
-			          label="Search"
-			          class="mb-3 mr-3"
-			          single-line
-			          hide-details
-			        ></v-text-field>
-	  				<v-btn :loading="loading" :disabled="loading" @click="readAllCrons" icon><v-icon color="success" size="24">mdi-refresh</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="resumeCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-play</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="pauseCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-pause</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="deleteCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="primary" size="24">mdi-delete</v-icon></v-btn>
-	  				<v-btn class="ml-3" @click="cronDialog = false" icon><v-icon>mdi-close</v-icon></v-btn>
-	  			</div>
-	  			<v-card-text>
-		      		<v-data-table
-			    		v-model="selectedCrons"
-				        :loading="loading"
-				        :headers="cronHeaders"
-				        :items="crons"
-				        :items-per-page="page"
-				        item-key="id"
-				        :search="searchCron"
-				        show-select
-				        @update:items-per-page="getPageNum"
-			      	> 
-				      	<template v-slot:item.data="{ item }">
-		                  	<span v-html="beautifyEmails(item.data.emails)"></span>
-		                </template>
-		                <template v-slot:item.run_at="{ item }">
-		                  	<span v-html="beautifyDate(item.run_at)"></span>
-		                </template>
-		                <template v-slot:item.nextRun="{ item }">
-		                  	<span v-html="showNextRun(item)"></span>
-		                </template>
-				  	</v-data-table>
-			  	</v-card-text>
-		  	</v-card>
-      	</v-dialog>
+      	<cron-dialog type="GSuite Drive" interval="Weekly" />
 	</v-container>
 </template>
 
 <script>
 	import axios from 'axios'
 	import { BASE_API } from '../../../api'
-	import { downloadCSV, beautifyEmail, beautifyEmails, beautifyDate } from '../../../util'
+	import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
 	import { mapState, mapActions } from 'vuex';
 
 	export default {
 		name: 'GsuiteBoard',
 
 		components: {
-			ConfirmDialog: () => import('../component/Confirm')
+			CronDialog: () => import('../component/CronDialog')
 		},
 
 		data () {
 			return {
 				done: false,
-				cronDialog: false,
-				callback: null,
 				loading: false,
 				emails: '',
 				file: null,
@@ -212,26 +162,6 @@
 		      	],
 	      		selectedItems: [],
 		      	items: [],
-		      	selectedCrons: [],
-		      	crons: [],
-		      	cronHeaders: [
-		      		{
-		      			text: 'Emails',
-		      			value: 'data'
-		      		},
-		      		{
-		      			text: 'Status',
-		      			value: 'status'
-		      		},
-		      		{
-		      			text: 'Run At',
-		      			value: 'run_at'
-		      		},
-		      		{
-		      			text: 'Next Run',
-		      			value: 'nextRun'
-		      		},
-		      	],
 			 	rules: {
 		          required: value => {
 		            this.errorMessages.emails.required = !!value
@@ -257,11 +187,10 @@
 		},
 
 		methods: {
-			...mapActions(['showConfirm']),
+			...mapActions(['showConfirm', 'showCronDialog']),
 
 			beautifyEmail,
 			beautifyEmails,
-			beautifyDate,
 
 			getPageNum (_page) {
 		        localStorage.setItem('page', _page)
@@ -361,131 +290,9 @@
 			},
 
 			// Cron jobs
-			showCronDialog () {
-      			this.cronDialog = true
-      			this.readAllCrons()
+			showCron () {
+      			this.showCronDialog()
       		},
-
-      		async readAllCrons () {
-  			 	this.loading = true
-  			 	this.selectedCrons = []
-      			this.crons = []
-		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/cron/read`, { type: 'GSuite Drive'})
-		      		this.crons = res.data.crons
-	      			this.message = res.data.message
-	      			this.color = res.data.status
-		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
-		    	} finally {
-	      			this.loading = false
-	      			this.snackbar = true
-		    	}
-      		},
-
-      		pauseCrons () {
-      			this.callback = this._pauseCrons
-      			this.showConfirm()
-      		},
-
-      		async _pauseCrons () {
-  			 	const ids = this.selectedCrons.map(cron => cron.job_id)
-  			 	this.loading = true
-  			 	let data = { 
-  			 		ids,
-  			 		type: 'GSuite Drive' 
-  			 	}
-  			 	console.log(data)
-		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/cron/pause`, data)
-			    	this.selectedCrons = []
-			    	this.crons.map(cron => {
-			    		if (data.ids.includes(cron.job_id)) {
-			    			cron.status = 'paused'
-			    		}
-			    	})
-	      			this.message = res.data.message
-	      			this.color = res.data.status
-
-		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
-		    	} finally {
-	      			this.loading = false
-	      			this.snackbar = true
-		    	}
-      		},
-
-      		resumeCrons () {
-      			this.callback = this._resumeCrons
-      			this.showConfirm()
-      		},
-
-      		async _resumeCrons () {
-  			 	this.loading = true
-  			 	const ids = this.selectedCrons.map(cron => cron.job_id)
-  			 	let data = { 
-  			 		ids,
-  			 		type: 'GSuite Drive' 
-  			 	}
-		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/cron/resume`, data)
-			    	this.selectedCrons = []
-			    	this.crons.map(cron => {
-			    		if (data.ids.includes(cron.job_id)) {
-			    			cron.status = 'active'
-			    		}
-			    	})
-			    	console.log(this.crons)
-	      			this.message = res.data.message
-	      			this.color = res.data.status
-		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
-		    	} finally {
-	      			this.loading = false
-	      			this.snackbar = true
-		    	}
-      		},
-
-      		deleteCrons () {
-      			this.callback = this._deleteCrons
-      			this.showConfirm()
-      		},
-
-      		async _deleteCrons () {
-  			 	this.loading = true
-  			 	const ids = this.selectedCrons.map(cron => cron.job_id)
-  			 	let data = { 
-  			 		ids,
-  			 		type: 'GSuite Drive' 
-  			 	}
-		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/cron/delete`, data)
-			    	this.crons = this.crons.filter(cron => !data.ids.includes(cron.job_id))
-			    	this.selectedCrons = []
-	      			this.message = res.data.message
-	      			this.color = res.data.status
-		    	} catch(e) {
-		    		this.message = 'Something wrong happened on the server.'
-		    	} finally {
-	      			this.loading = false
-	      			this.snackbar = true
-		    	}
-      		},
-
-      		showNextRun (item) {
-      			let nextRun = '-'
-      			if (item.status == 'done' || item.status == 'active') {
-      				nextRun = this.$moment().add(1, 'weeks').startOf('week').format('DD MMM YYYY')
-      			}
-
-      			return nextRun
-      		},
-
-      		runCallback () {
-      			if (this.callback) {
-      				this.callback()
-      			}
-      		}
 		}
 	}
 </script>

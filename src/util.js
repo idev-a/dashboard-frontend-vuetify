@@ -460,6 +460,9 @@ export const beautifyEmail = (email) => {
 }
 
 export const beautifyEmails = (emails) => {
+  if (!emails) {
+    return
+  }
   let res = ''
   let list = []
   if (emails.includes(';')) {
