@@ -35,12 +35,14 @@ export default new Vuex.Store({
       state.connected = false
     },
     SOCKET_MESSAGE(state, message) {
+      console.log(message)
       state.message = message
     },
     SOCKET_NOTIFICATION(state, message) {
       state.message = message
     },
     SOCKET_ERROR(state, message) {
+      console.log(message)
       state.error = message.error
     },
     ADD_NOTIFICATION (state, payload) {

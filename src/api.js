@@ -1,6 +1,8 @@
 import axios from 'axios'
+import dotenv from 'dotenv';
+dotenv.config();
 
-// export const BASE_API = process.env.VUE_APP_BACKEND_URL
+// export const BASE_API = process.env.BASE_API
 // export const BASE_API = 'http://localhost:5000'
 export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
 

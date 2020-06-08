@@ -254,7 +254,9 @@
               time: this.$moment().format('MM:DD HH:mm')
             })
           }
-        } catch (e) {}
+        } catch (e) {
+          console.log(e)
+        }
       }
     },
 

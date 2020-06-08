@@ -148,6 +148,10 @@
               to: 'o365',
             },
             {
+              title: 'Zoom Board',
+              to: 'zoom',
+            },
+            {
               title: 'Extension Board',
               to: 'chromeext',
             },

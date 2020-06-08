@@ -184,6 +184,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Zoom Board',
+          path: 'admin/zoom',
+          component: () => import('@/views/dashboard/admin/ZoomBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Chrome Extension Board',
           path: 'admin/chromeext',
           component: () => import('@/views/dashboard/admin/ChromeExtBoard'),
