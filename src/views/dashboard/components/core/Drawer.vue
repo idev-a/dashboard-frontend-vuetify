@@ -152,6 +152,10 @@
               to: 'zoom',
             },
             {
+              title: 'Atlassian Board',
+              to: 'atlassian',
+            },
+            {
               title: 'Extension Board',
               to: 'chromeext',
             },

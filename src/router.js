@@ -193,6 +193,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Atlassian Board',
+          path: 'admin/atlassian',
+          component: () => import('@/views/dashboard/admin/AtlassianBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Chrome Extension Board',
           path: 'admin/chromeext',
           component: () => import('@/views/dashboard/admin/ChromeExtBoard'),
