@@ -43,6 +43,14 @@ let router = new Router({
             requiresAuth: false
           }
         },
+        {
+          name: 'Extension',
+          path: 'extension/:email',
+          component: () => import('@/views/pages/Extension'),
+          meta: {
+            requiresAuth: false
+          }
+        },
       ],
     },
     {
