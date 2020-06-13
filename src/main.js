@@ -26,7 +26,6 @@ import VueFriendlyIframe from 'vue-friendly-iframe';
 import socketio from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io';
 
-
 import { BASE_API } from './api.js'
 
 Vue.config.productionTip = false
@@ -49,7 +48,7 @@ Vue.use(IdleVue, {
 Vue.use(VueFriendlyIframe);
 Vue.use(require('vue-moment'));
 
-export const SocketInstance = socketio(`${BASE_API}/notification`);
+// export const SocketInstance = socketio(`${BASE_API}/notification`);
 
-Vue.use(VueSocketIO, SocketInstance)
+// Vue.use(VueSocketIO, SocketInstance)
 // Vue.use(VueSocketio, `${BASE_API}/notification`, store);

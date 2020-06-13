@@ -27,13 +27,12 @@
         :loading="loading"
         :headers="headers"
         :items="users"
-        item-key="_id"
+        item-key="email"
         :items-per-page="page"
         :search="search"
-        :single-expand="singleExpand"
-        show-expand
-        :expanded.sync="expanded"
+        single-expand
         @click:row="showDetails"
+        :expanded.sync="expanded"
         @update:items-per-page="getPageNum"
       >
         <template v-slot:item.email="{ item }">
@@ -249,7 +248,6 @@
       snackbar: false,
       color: '',
       message: '',
-      user: false,
       currentUser: '',
       singleExpand: true,
       expanded: [],
@@ -330,8 +328,8 @@
     },
 
     computed: {
-        page () {
-          return Number(localStorage.getItem('page')) || 5
+      page () {
+        return Number(localStorage.getItem('page')) || 5
       }, 
     },
 
@@ -346,9 +344,11 @@
 
         })
       },
+
       levelColor (level) {
         return levelColor(level)
       },
+
       beautifyEmail (email) {
         if (validEmail(email)) {
           return `<a href="mailto:${email}">${email}</a>`
@@ -358,7 +358,7 @@
       },
       showDetails (item) {
         this.currentUser = item
-        this.user = true
+        // this.user = true
         this.expanded = []
         this.expanded.push(item)
       },

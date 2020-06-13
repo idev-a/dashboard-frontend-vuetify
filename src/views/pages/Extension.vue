@@ -1,13 +1,11 @@
 <template>
  	<v-container
 	    id="extension"
-	    class="fill-height justify-center"
+	    class="fill-height"
 	    tag="section"
   	>
 	  	<v-row
 	      align="center"
-	      class="text-center"
-	      justify="center"
 	    >
 	      <v-col		
 	        class="mb-10"

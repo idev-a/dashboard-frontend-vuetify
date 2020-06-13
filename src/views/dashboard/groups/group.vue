@@ -34,6 +34,7 @@
         show-expand
         :expanded.sync="expanded"
         @click:row="showDetails"
+        @update:items-per-page="getPageNum"
       >
         <template v-slot:item.email="{ item }">
           <span v-html="beautifyEmail(item.email)"></span>
@@ -154,6 +155,10 @@
     },
 
     methods: {
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
+
       beautifyEmail (emails) {
         if (!emails) {
           return
