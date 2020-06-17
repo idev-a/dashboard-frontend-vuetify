@@ -159,6 +159,10 @@
               title: 'Extension Board',
               to: 'chromeext',
             },
+            {
+              title: 'Security Q&A Board',
+              to: 'securityqa',
+            },
           ]
         },
         {

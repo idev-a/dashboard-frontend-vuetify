@@ -80,6 +80,12 @@ export const levelColor = (level) => {
   return color
 }
 
+export const addKey = (items) => {
+  return items.map((item, i) => ({
+    ...item,
+    _id: i
+  }))
+}
 
 export const validEmail = (email) => {
   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

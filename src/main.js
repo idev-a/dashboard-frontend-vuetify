@@ -23,12 +23,25 @@ import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import IdleVue from 'idle-vue'
 import VueFriendlyIframe from 'vue-friendly-iframe';
-import socketio from 'socket.io-client';
-import VueSocketIO from 'vue-socket.io';
+import VueSocketIO from 'vue-socket.io'
 
 import { BASE_API } from './api.js'
 
 Vue.config.productionTip = false
+
+// Vue.use(new VueSocketIO({
+//     debug: true,
+//     connection: `${BASE_API}/notification`, //options object is Optional
+//     vuex: {
+//       store,
+//       actionPrefix: 'SOCKET_',
+//         mutationPrefix: 'SOCKET_',
+//       options: {
+//         useConnectionNamespace: true
+// 	  }
+//     }
+//   })
+// );
 
 const eventsHub = new Vue({
   router,
@@ -51,4 +64,4 @@ Vue.use(require('vue-moment'));
 // export const SocketInstance = socketio(`${BASE_API}/notification`);
 
 // Vue.use(VueSocketIO, SocketInstance)
-// Vue.use(VueSocketio, `${BASE_API}/notification`, store);
+// Vue.use(VueSocketIO, `${BASE_API}/notification`, store);

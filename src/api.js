@@ -2,8 +2,8 @@ import axios from 'axios'
 
 
 // export const BASE_API = process.env.VUE_APP_BACKEND_URL
-export const BASE_API = 'http://localhost:5000'
-// export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
+// export const BASE_API = 'http://localhost:5000'
+export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
 
 // rea
 export const getCompanyId = () => {

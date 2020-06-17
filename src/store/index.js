@@ -29,6 +29,7 @@ export default new Vuex.Store({
       state.barColor = payload
     },
     SOCKET_CONNECT(state) {
+      console.log('socket', state)
       state.connected = true
     },
     SOCKET_DISCONNECT(state) {
@@ -39,6 +40,7 @@ export default new Vuex.Store({
       state.message = message
     },
     SOCKET_NOTIFICATION(state, message) {
+      console.log(message)
       state.message = message
     },
     SOCKET_ERROR(state, message) {
@@ -64,6 +66,10 @@ export default new Vuex.Store({
     },
     showCronDialog({ commit }, payload = true) {
       commit('SHOW_CRON_DIALOG', payload)
+    },
+    SOCKET_notification({ commit }, payload) {
+      console.log('notifications', payload)
+      commit('SOCKET_NOTIFICATION', payload)
     }
   },
   modules: { 

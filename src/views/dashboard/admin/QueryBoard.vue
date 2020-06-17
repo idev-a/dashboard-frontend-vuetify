@@ -57,35 +57,31 @@
               	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
               <v-card-title>
-              	<v-select
-              		:loading="loading"
-              		label="Table Columns"
-					:items="headers"
-					multiple
-					attach
-          			small-chips
-          			v-model="selectedHeaders"
-          			@input="updateHeaders"
-              	>
-          		 	<template v-slot:selection="{ attrs, item, parent, selected }">
-				        <v-chip
-				          v-if="item === Object(item)"
-				          v-bind="attrs"
-				          :color="`${item.color} lighten-3`"
-				          :input-value="selected"
-				          label
-				          small
-				        >
-				          <span class="pr-2">
-				            {{ item.text }}
-				          </span>
-				          <v-icon
-				            small
-				            @click="parent.selectItem(item)"
-				          >mdi-close</v-icon>
-				        </v-chip>
-				      </template>
-	            </v-select>
+              	<v-autocomplete
+			      :loading="loading"
+	              v-model="selectedHeaders"
+	              :disabled="loading"
+	              :items="headers"
+	              chips
+	              label="Table Columns"
+	              multiple
+	              item-value="value"
+	              item-text="text"
+	              hide-selected
+      			  @input="updateHeaders"
+	            >
+	              <template v-slot:selection="data">
+	                <v-chip
+	                  v-bind="data.attrs"
+	                  :input-value="data.selected"
+	                  close
+	                  @click="data.select"
+	                  @click:close="remove(data.item)"
+	                >
+	                  {{ data.item.text }}
+	                </v-chip>
+	              </template>
+	            </v-autocomplete>
           	</v-card-title>
 	    	<v-data-table
 	    		v-model="selectedItems"
@@ -233,6 +229,14 @@
       	methods: {
       		cleanWebsite (string) {
       			return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
+      		},
+
+      		remove (item) {
+      			this.selectedHeaders.map((header, i) => {
+	      			if (header == item) {
+	      				this.selectedHeaders.splice(i, 1)
+	      			}
+	      		})
       		},
 
       		async getProspects (websites) {
