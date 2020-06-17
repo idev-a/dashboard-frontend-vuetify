@@ -433,11 +433,12 @@
 		      		{
 			            text: 'Question',
 			            value: 'question',
+			            width: 350
 		          	},
 		          	{
 			            text: 'Answer',
 			            value: 'answer',
-			            width: '200'
+			            width: 400
 		          	},
 		          	{ text: 'Actions', value: 'action', sortable: false }
 		      	],
