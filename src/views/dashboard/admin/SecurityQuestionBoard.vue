@@ -133,6 +133,9 @@
 	      max-width="1024"
 	    >
 	    	<v-card>
+	    		<v-card-title>
+	    			Answer a question
+	    		</v-card-title>
 	      		<v-card-text>
 	      			<v-form
 		              ref="form"
@@ -269,6 +272,7 @@
 		      	<question-detail v-if="mode == 'View'" :currentQuestion="currentQuestion"></question-detail>
 		      	<v-form
 	              ref="form"
+	              class="mt-4"
 	              v-model="valid"
 	            >
 			      	<div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
