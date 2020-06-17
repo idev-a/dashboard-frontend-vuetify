@@ -233,10 +233,12 @@
 
       		remove (item) {
       			this.selectedHeaders.map((header, i) => {
-	      			if (header == item) {
+	      			if (header == item.value) {
 	      				this.selectedHeaders.splice(i, 1)
 	      			}
 	      		})
+
+	      		this.updateHeaders(this.selectedHeaders)
       		},
 
       		async getProspects (websites) {
@@ -342,7 +344,7 @@
       			if (data.length) {
       				this.filteredHeaders = this.headers.filter(header => data.includes(header.value))
       			} else {
-      				this.filteredHeaders = []
+      				this.filteredHeaders = this.headers
       			}
       		},
 
@@ -367,7 +369,7 @@
 		      				value: header
 		      			})
 		      		})
-		      		this.filteredHeaders = this.selectedHeaders = this.headers
+		      		this.filteredHeaders = this.headers
 		      		this.items = data.data.items
 	      			this.message = data.data.message
 	      			this.color = data.data.status

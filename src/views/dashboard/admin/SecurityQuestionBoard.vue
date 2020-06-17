@@ -54,6 +54,7 @@
 	              attach
 	              label="Select a category"
 	              multiple
+	              @input="changeCategory"
 	            >
 	              <template v-slot:selection="data">
 	                <v-chip
@@ -440,6 +441,11 @@
 			            value: 'answer',
 			            width: 400
 		          	},
+		          	{
+			            text: 'Category',
+			            value: 'category',
+			            width: 180
+		          	},
 		          	{ text: 'Actions', value: 'action', sortable: false }
 		      	],
 		      	rules: {
@@ -501,6 +507,8 @@
 	      				this.selectedCategories.splice(i, 1)
 	      			}
 	      		})
+
+	      		this.changeCategory(this.selectedCategories)
 	      	},
 
 	      	showDetails(item) {
@@ -578,7 +586,7 @@
       			}
   			},
 	      	
-	      	updateData (data) {
+	      	changeCategory (data) {
 	      		this.selectedItems = []
 		        if (data.length) {
 		          this.items = this.risksOrigin.filter(risk => data.includes(risk.category))
