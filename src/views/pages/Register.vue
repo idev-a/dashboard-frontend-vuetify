@@ -22,20 +22,16 @@
     </v-snackbar>
     <v-row justify="center">
       <v-slide-y-transition appear>
-        <base-material-card
-          color="light-blue accent-3"
+        <v-card
           light
           max-width="100%"
           width="400"
           class="px-5 py-3"
         >
-          <template v-slot:heading>
-            <div class="text-center">
-              <div class="display-2 font-weight-bold">
-                Register to Secure Dashboard
-              </div>
-            </div>
-          </template>
+         
+          <v-card-title class="justify-center display-2">
+            Register to Secure Dashboard
+          </v-card-title>
 
           <div
             ref="form"
@@ -46,7 +42,7 @@
               v-model="form.email"
               :rules="[rules.required, rules.email]"
               :loading="loading"
-              class="mt-5 mb-7"
+              class="mt-5 mb-10"
               hide-details="auto"
               color="secondary"
               label="Please enter your email address."
@@ -67,7 +63,7 @@
               :loading="loading"
               color="primary"
               class="display-1"
-              :diabled="formHasErrors"
+              :disabled="formHasErrors || loading"
               @click="submit"
             >
               Submit
@@ -76,7 +72,7 @@
               If you already have an account, please <a href="javascript:;" @click="gotoLogin">login</a>
             </div>
           </div>
-        </base-material-card>
+        </v-card>
       </v-slide-y-transition>
     </v-row>
   </v-container>
@@ -149,7 +145,7 @@
 
     computed: {
       formHasErrors () {
-        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid
+        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !form.email
       }
     },
 
@@ -174,7 +170,6 @@
       async submit () {
         this.$refs.email.validate(true)
         
-        console.log(this.formHasErrors)
         if (!this.formHasErrors) {
           this.loading = true
           const self = this

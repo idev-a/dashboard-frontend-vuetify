@@ -3,6 +3,7 @@
 	    id="meraki-board"
 	    fluid
 	    tag="section"
+	    class="px-0"
   	>
 	    <v-card
 	      class="ma-0"
@@ -14,13 +15,19 @@
 		        <v-spacer></v-spacer>
 		        <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="createModal" class="mr-2"  color="success"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="createModal" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
 			      </template>
 			      <span>Create Answer</span>
 			    </v-tooltip>
+			    <v-tooltip bottom>
+			      <template v-slot:activator="{ on, attrs }">
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="refreshData" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-refresh</v-icon></v-btn>
+			      </template>
+			      <span>Refresh</span>
+			    </v-tooltip>
         	 	<v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
 			      </template>
 			      <span>Download Data</span>
 			    </v-tooltip>
@@ -430,7 +437,8 @@
 				defaultIndex: -1,
 				defaultItem: {
 					link: '',
-					tag: ''
+					tag: '',
+					risk: 'High'
 				},
 				tags: [],
 				valid: true,
@@ -495,9 +503,7 @@
 	    },  
 
 		mounted () {
-	      this.fetchUsers()
-
-	      this.fetchQuestions()
+	      this.refreshData()
     	},
 
 		methods: {
@@ -600,6 +606,12 @@
 		          this.items = this.risksOrigin
 		        }
 	      	},
+
+	      	refreshData () {
+	      		this.fetchQuestions()
+	      		this.fetchUsers()
+	      	},
+
 	      	downloadCSV () {
       			if (this.selectedItems.length) {
       				downloadCSV(this.selectedItems)

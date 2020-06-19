@@ -3,6 +3,7 @@
 	    id="meraki-board"
 	    fluid
 	    tag="section"
+	    class="px-0"
   	>
 	    <v-card
 	      tile
@@ -14,19 +15,19 @@
 		        <v-spacer></v-spacer>
 		        <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="showCreate" class="mr-2"  color="#2a9be7"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="showCreate" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
 			      </template>
 			      <span>Create Question</span>
 			    </v-tooltip>
 			    <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="fetchQuestions" class="mr-2"  color="#2a9be7"><v-icon  size="16"  dark>mdi-database</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="fetchQuestions" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-database</v-icon></v-btn>
 			      </template>
 			      <span>Read Questions</span>
 			    </v-tooltip>
 			    <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="#2a9be7"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
 			      </template>
 			      <span>Download Data</span>
 			    </v-tooltip>

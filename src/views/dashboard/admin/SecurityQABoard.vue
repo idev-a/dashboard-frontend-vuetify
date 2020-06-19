@@ -6,18 +6,21 @@
   	>
 	    <v-card
 	      class="pa-5"
+	      tile
+	      flat
 	    >
 	    	<v-card-title>
 		        Security Q&A Board
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-tabs
-			      class="elevation-2 mt-4"
+			      class="mt-4 border"
 			      background-color="success"
 			      color="white"
 			      light
 			      centered
 			      grow
+			      flat
 			      show-arrows
 			    >
 			      <v-tabs-slider class="blue darken-3"></v-tabs-slider>

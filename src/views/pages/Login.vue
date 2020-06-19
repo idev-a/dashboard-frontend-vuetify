@@ -21,21 +21,14 @@
     </v-snackbar>
     <v-row justify="center">
       <v-slide-y-transition appear>
-        <base-material-card
-          color="light-blue accent-3"
-          light
+        <v-card
           max-width="100%"
           width="400"
           class="px-5 py-3"
         >
-          <template v-slot:heading>
-            <div class="text-center">
-              <h1 class="display-2 font-weight-bold">
-                Login
-              </h1>
-             
-            </div>
-          </template>
+          <v-card-title class="justify-center display-3">
+            Login
+          </v-card-title>
 
           <v-card-text
             ref="form"
@@ -59,6 +52,7 @@
               class="ma-1 mt-4 mb-6"
               color="primary"
               :loading="loading"
+              :disabled="loading || formHasErrors"
               @click="request"
             >
               Request Code
@@ -88,6 +82,7 @@
               class="ma-1 mt-1"
               color="primary"
               :loading="loading"
+              :disabled="!code || loading"
               @click="submit"
             >
               Login
@@ -96,7 +91,7 @@
               If you don't have any account, please <a href="javascript:;" @click="gotoSignup" class="">sign up</a>
             </div>
           </v-card-text>
-        </base-material-card>
+        </v-card>
       </v-slide-y-transition>
     </v-row>
   </v-container>
