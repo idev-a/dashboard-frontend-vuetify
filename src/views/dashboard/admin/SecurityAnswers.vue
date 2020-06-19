@@ -5,14 +5,16 @@
 	    tag="section"
   	>
 	    <v-card
-	      class="pa-5"
+	      class="ma-0"
+	      tile
+	      flat
 	    >
 	    	<v-card-title>
-		        Security Q&A Board ({{items.length}})
+		        Security Answers ({{items.length}})
 		        <v-spacer></v-spacer>
 		        <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="createModal"  color="success"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="createModal" class="mr-2"  color="success"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
 			      </template>
 			      <span>Create Answer</span>
 			    </v-tooltip>
@@ -396,7 +398,7 @@
 	import { mapState, mapActions } from 'vuex';
 
 	export default {
-		name: 'SecurityQuestionBoard',
+		name: 'SecurityAnswers',
 
 		data () {
 			return {

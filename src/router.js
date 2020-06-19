@@ -221,7 +221,7 @@ let router = new Router({
         {
           name: 'Security Q&A Board',
           path: 'admin/securityqa',
-          component: () => import('@/views/dashboard/admin/SecurityQuestionBoard'),
+          component: () => import('@/views/dashboard/admin/SecurityQABoard'),
           meta: {
             is_admin: true,
             requiresAuth: true
