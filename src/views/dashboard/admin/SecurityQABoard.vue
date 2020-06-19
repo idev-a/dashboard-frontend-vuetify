@@ -13,6 +13,7 @@
 		    <v-card-text>
 		    	<v-tabs
 			      class="elevation-2 mt-4"
+			      background-color="success"
 			      color="white"
 			      light
 			      centered
@@ -25,7 +26,6 @@
 			      	v-for="(data, key) in QAs"
 			      	:key="data.key"
 			      	:href="`#${data.key}`"
-			      	:class="data.bgColor"
 			      >
 			        {{data.title}}
 			      </v-tab>
@@ -55,12 +55,12 @@ export default {
 			QAs: [
 				{
 					key: 'questions',
-					bgColor: '#2a9be7',
+					bgColor: 'success',
 					title: 'Questions'
 				},
 				{
 					key: 'answers',
-					bgColor: '#2a9be7',
+					bgColor: 'orange accent-3',
 					title: 'Answers'
 				}
 			],
