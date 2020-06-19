@@ -102,16 +102,16 @@
 	              class="mt-4"
 	              v-model="valid"
 	      		>
-		      		<v-textarea
+	              	<v-combobox
 		                v-model="editedItem.Question"
 		                label="Question" 
-		                auto-grow
-		                rows="1"
+		                item-value="id"
+		                item-text="Question"
 		                :rules="[rules.required]"
-		                hide-details="auto"
-		                class="mb-3"
-	                >
-	              	</v-textarea>
+		                :items="items"
+		                required
+		                >
+		              </v-combobox>
 	              	<v-textarea
 		                v-model="editedItem.Description"
 		                label="Description" 
