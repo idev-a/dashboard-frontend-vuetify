@@ -26,7 +26,13 @@ export default {
 			Object.assign(state.questions[payload.editedIndex], payload.editedItem)
 		},
 		deleteQuestion(state, payload) {
-			state.questions.splice(payload.defaultIndex, 1)
+			let index = -1
+			state.questions.map( (ques, idx) => {
+				if (ques.id == payload.editedItem.id) {
+					index = idx
+				}
+			})
+			state.questions.splice(index, 1)
 		},
 		setAnswers(state, payload) {
 			state.answers = payload
@@ -132,7 +138,7 @@ export default {
 	    	commit('showDialog', false)
 		},
 
-		async createQuestion({commit}, payload) {
+		async createQuestion({commit, dispatch}, payload) {
 			commit('setLoading', true)
 	    	try {
 		    	const data = await axios({
@@ -143,7 +149,7 @@ export default {
       			color = data.data.status
 		    	message = data.data.message
 		    	if (data.data.status == 'success') {
-		    		fetchQuestions()
+		    		dispatch('fetchQuestions', payload)
 		    	}
 	    	} catch(e) {
 	    		message = 'Something wrong happened on the server.'

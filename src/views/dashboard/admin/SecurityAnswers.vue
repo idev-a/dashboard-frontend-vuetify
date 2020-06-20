@@ -279,9 +279,9 @@
 	      	<v-card-text>
 		      	<question-detail v-if="mode == 'View'" :currentQuestion="currentQuestion"></question-detail>
 		      	<v-form
-	              ref="form"
+	              ref="updateForm"
 	              class="mt-4"
-	              v-model="valid"
+	              v-model="updateValid"
 	            >
 			      	<div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
 			        <v-textarea
@@ -443,6 +443,7 @@
 				},
 				tags: [],
 				valid: true,
+				updateValid: true,
 				editItem: {},
 				callback: null,
 		      	headers: [
@@ -579,6 +580,7 @@
 	      	createModal () {
 	      		this.editItem = Object.assign({}, this.defaultItem)
 	      		this.mode = 'Edit'
+	      		this.valid = true
 	      		this.createDialog = true
 	      	},
 
@@ -591,6 +593,7 @@
       			this.editItem.cia = this.toGroups(item, this.cias)
       			this.editItem.Ts = this.toGroups(item, this.tList)
       			this.editItem.risk = this.toLisks(item)
+      			this.updateValid = true
 	      		this.updateDialog = true
 	      	},	
 
@@ -689,8 +692,9 @@
 	      	},
 
 	      	async updateAnswer () {
-	      		this.$refs.form.validate()
-	      		if (!this.valid) {
+	      		this.$refs.updateForm.validate()
+	      		if (!this.updateValid) {
+	      			console.log('Invalid')
 	      			return
 	      		}
 	      		const self = this
