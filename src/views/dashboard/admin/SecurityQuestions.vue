@@ -11,7 +11,7 @@
 	      class="ma-0"
 	    >
 	    	<v-card-title>
-		        Security Questions ({{ items.length }})
+		        Security Questions ({{ questions.length }})
 		        <v-spacer></v-spacer>
 		        <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
@@ -27,7 +27,7 @@
 			    </v-tooltip>
 			    <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!questions.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
 			      </template>
 			      <span>Download Data</span>
 			    </v-tooltip>
@@ -47,7 +47,7 @@
 		    		v-model="selectedItems"
 			        :loading="loading"
 			        :headers="headers"
-			        :items="items"
+			        :items="questions"
 			        :items-per-page="page"
 			        item-key="id"
 			        :search="search"
@@ -75,7 +75,7 @@
 			                text 
 			                icon 
 			                v-on="on"
-			                @click.stop="deleteQuestion(item)"
+			                @click.stop="_deleteQuestion(item)"
 			              >
 			                <v-icon>mdi-delete</v-icon>
 			              </v-btn>
@@ -90,6 +90,7 @@
 		<!-- Crud dialog -->
 		<v-dialog
 	      v-model="dialog"
+	      @click:outside="showDialog(false)"
 	      max-width="1024"
 	    >
 	      <v-card>
@@ -108,7 +109,7 @@
 		                item-value="id"
 		                item-text="Question"
 		                :rules="[rules.required]"
-		                :items="items"
+		                :items="questions"
 		                required
 		                >
 		              </v-combobox>
@@ -147,7 +148,7 @@
 	            color="primary"
 	            text
 	            :loading="loading"
-	            @click="createQuestion"
+	            @click="_createQuestion"
 	          >
 	            Create
 	          </v-btn>
@@ -156,7 +157,7 @@
 	            color="primary"
 	            text
 	            :loading="loading"
-	            @click="editQuestion"
+	            @click="_updateQuestion"
 	          >
 	            Update
 	          </v-btn>
@@ -165,7 +166,7 @@
 	            color="danger"
 	            text
 	            :loading="loading"
-	            @click="deleteQuestion"
+	            @click="_deleteQuestion(editedItem)"
 	          >
 	            Delete
 	          </v-btn>
@@ -173,7 +174,7 @@
 	            color="success"
 	            text
 	            :loading="loading"
-	            @click="dialog = false"
+	            @click="showDialog(false)"
 	          >
 	            Close
 	          </v-btn>
@@ -181,14 +182,10 @@
 	      </v-card>
 	    </v-dialog>
 
-		<!-- confirm dialog -->
-		<confirm-dialog @callback="runCallback"></confirm-dialog>
 	</v-container>
 </template>
 
 <script>
-import axios from 'axios'
-import { BASE_API } from '../../../api'
 import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
 import { mapState, mapActions } from 'vuex';
 
@@ -198,15 +195,12 @@ export default {
 	data () {
 		return {
 			done: false,
-			loading: false,
 			search: '',
 			valid: true,
-			dialog: false,
 			defaultIndex: -1,
 			editedIndex: -1,
 			editedItem: {},
 			defaultItem: {},
-			items: [],
 	      	selectedItems: [],
 	      	expanded: [],
 			headers: [
@@ -243,9 +237,8 @@ export default {
 	},
 
 	computed: {
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
+		...mapState('security', ['questions', 'loading', 'dialog']),
+    	...mapState(['page']),
 
       formTitle () {
         return this.editedIndex === -1 ? 'New Question' : 'Edit Question'
@@ -260,8 +253,8 @@ export default {
  	  },
  	  categories () {
  	  	const cats = []
- 	  	if (this.items.length) {
- 	  		this.items.map(item => {
+ 	  	if (this.questions.length) {
+ 	  		this.questions.map(item => {
  	  			if (!cats.includes(item)) {
  	  				cats.push(item.Category)
  	  			}
@@ -278,132 +271,98 @@ export default {
  	methods: {
 		...mapActions(['showConfirm', 'showCronDialog']),
 
+		...mapActions('security', ['fetchQuestions', 'createQuestion', 'updateQuestion', 'deleteQuestion', 'setLoading', 'showDialog']),
+
 		getPageNum (_page) {
 	        localStorage.setItem('page', _page)
       	},
 
       	showEdit(item) {
-      		this.editedIndex = this.items.indexOf(item)
+      		this.editedIndex = this.questions.indexOf(item)
 	        this.editedItem = Object.assign({}, item)
-	        this.dialog = true
+	        this.showDialog()
       	},
 
       	showCreate() {
       	  this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
-          this.dialog = true
-      	},
-
-      	createQuestion () {
-      		this.$refs.form.validate()
-      		if (!this.valid) {
-      			return
-      		}
-      		this.callback = this._createQuestion
-      		this.showConfirm()
-      	},
-
-      	editQuestion (item) {
-      		this.$refs.form.validate()
-      		if (!this.valid) {
-      			return
-      		}
-      		this.callback = this._editQuestion
-      		this.showConfirm()
-      	},
-
-      	deleteQuestion (item) {
-      		this.editedItem = item
-      		this.callback = this._deleteQuestion
-      		this.showConfirm()
+          this.showDialog()
       	},
 
       	async _createQuestion () {
-          	this.showConfirm(false)
-  			this.loading = true
-	    	try {
-		    	const data = await axios({
-	      			url: `${BASE_API}/api/admin/risks/questions/create`,
-	      			data: this.editedItem,
-	      			method: 'POST'
-	      		})
-      			this.message = data.data.message
-      			this.color = data.data.status
-      			this.dialog = false
-	    	} catch(e) {
-	    		this.message = 'Something wrong happened on the server.'
-	    	} finally {
-      			this.loading = false
-      			this.snackbar = true
-	    	}
-        },
-
-      	async _editQuestion () {
-      		this.showConfirm(false)
-  			this.loading = true
-	    	try {
-		    	const data = await axios({
-	      			url: `${BASE_API}/api/admin/risks/questions/update`,
-	      			data: this.editedItem,
-	      			method: 'POST'
-	      		})
-      			this.message = data.data.message
-      			this.color = data.data.status
-      			this.dialog = false
-	    	} catch(e) {
-	    		this.message = 'Something wrong happened on the server.'
-	    	} finally {
-      			this.loading = false
-      			this.snackbar = true
-	    	}
-      	},
-
-      	async _deleteQuestion () {
-      		this.showConfirm(false)
-  			this.loading = true
-	    	try {
-		    	const data = await axios({
-	      			url: `${BASE_API}/api/admin/risks/questions/delete`,
-	      			data: this.editedItem,
-	      			method: 'POST'
-	      		})
-      			this.message = data.data.message
-      			this.color = data.data.status
-      			if (data.data.status == 'success') {
-      				this.items.splice(this.defaultIndex, 1)
-      				this.dialog = false
-      			}
-	    	} catch(e) {
-	    		this.message = 'Something wrong happened on the server.'
-	    	} finally {
-      			this.loading = false
-      			this.snackbar = true
-	    	}
-      	},
-
-      	runCallback () {
-      		if (this.callback) {
-      			this.callback()
+      		this.$refs.form.validate()
+      		if (!this.valid) {
+      			return
       		}
+      		const self = this
+      		await this.$dialog.confirm({
+			    text: 'Do you really want to create a new question?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self.createQuestion({
+			          	editedItem: self.editedItem,
+			          })
+			        }
+			      }
+			    }
+		    })
       	},
 
-      	async fetchQuestions () {
-  			this.loading = true
-  			try {
-		    	const data = await axios.get(`${BASE_API}/api/admin/risks/questions`)
-		    	this.items = data.data.questions
-	    	} catch(e) {
-	    		console.log(e.response)
-	    	} finally {
-      			this.loading = false
-	    	}
-  		},
+      	async _updateQuestion () {
+      		this.$refs.form.validate()
+      		if (!this.valid) {
+      			return
+      		}
+      		const self = this
+      		await this.$dialog.confirm({
+			    text: 'Do you really want to delete this question?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self.updateQuestion({
+			          	editedItem: this.editedItem,
+			          	editedIndex: self.editedIndex
+			          })
+			        }
+			      }
+			    }
+		    })
+      	},
+
+      	async _deleteQuestion (item) {
+      		const self = this
+      		await this.$dialog.confirm({
+			    text: 'Do you really want to delete this question?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self.deleteQuestion({
+			          	editedItem: item,
+			          })
+			        }
+			      }
+			    }
+		    })
+      	},
 
   		downloadCSV () {
   			if (this.selectedItems.length) {
   				downloadCSV(this.selectedItems)
   			} else {
-  				downloadCSV(this.items)
+  				downloadCSV(this.questions)
   			}
   		},
     }

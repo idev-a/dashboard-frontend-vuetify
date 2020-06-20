@@ -27,11 +27,12 @@
 		},
 
 		methods: {
-			...mapActions(['showConfirm']),
+			...mapActions(['showConfirm', 'setConfirmed']),
 
 			agree () {
-				this.showConfirm(false)
-				this.$emit('callback')
+				// this.showConfirm(false)
+				// this.$emit('callback')
+				this.setConfirmed()
 			}
 		}
 	}

@@ -76,11 +76,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(['cronDialog']),
-
-  		page () {
-	        return Number(localStorage.getItem('page')) || 5
-     	}, 
+		...mapState(['cronDialog', 'page']),
     },
 
 	data () {

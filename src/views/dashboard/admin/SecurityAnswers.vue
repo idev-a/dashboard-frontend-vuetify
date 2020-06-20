@@ -142,7 +142,7 @@
 	      max-width="1024"
 	    >
 	    	<v-card>
-	    		<v-card-title>
+	    		<v-card-title class="display-2">
 	    			Answer a question
 	    		</v-card-title>
 	      		<v-card-text>
@@ -198,7 +198,6 @@
 	              	 	<v-combobox
 	              	 	  v-if="mode == 'Edit'"
 				          v-model="editItem.tag"
-				          :items="tags"
 				          label="tag"
 				          multiple
 				          chips
@@ -385,13 +384,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 
 		<confirm-dialog @callback="runCallback"></confirm-dialog>
@@ -433,7 +435,6 @@
 				updateDialog: false,
 				addDialog: false,
 				mode: 'View',
-				questions: [],
 				defaultIndex: -1,
 				defaultItem: {
 					link: '',
@@ -480,6 +481,7 @@
 		},
 
 		computed: {
+			...mapState('security', ['questions']),
 	      page () {
 	        return Number(localStorage.getItem('page')) || 5
 	      }, 
@@ -508,6 +510,8 @@
 
 		methods: {
 			...mapActions(['showConfirm', 'showCronDialog']),
+
+			...mapActions('security', ['fetchQuestions']),
 
 			getPageNum (_page) {
 		        localStorage.setItem('page', _page)
@@ -620,18 +624,6 @@
       			}
       		},
 
-      		async fetchQuestions () {
-      			this.loading = true
-      			try {
-			    	const data = await axios.get(`${BASE_API}/api/admin/risks/questions`)
-			    	this.questions = data.data.questions
-		    	} catch(e) {
-		    		console.log(e.response)
-		    	} finally {
-	      			this.loading = false
-		    	}
-      		},
-
 	      	fetchRisks () {
 		        const self = this
 		        self.loading = true
@@ -674,27 +666,66 @@
 	      		}
 	      	},
 
-	      	createAnswer () {
+	      	async createAnswer () {
 	      		this.$refs.form.validate()
 	      		if (!this.valid) {
 	      			return
 	      		}
-	      		this.callback = this._createAnswer
-	      		this.showConfirm()
+	      		const self = this
+	      		await this.$dialog.confirm({
+				    text: 'Do you really want to create a new answer?',
+				    title: 'Warning',
+				    actions: {
+				      false: 'No',
+				      true: {
+				        color: 'red',
+				        text: 'Yes',
+				        handle: () => {
+				          self._createAnswer()
+				        }
+				      }
+				    }
+			    })
 	      	},
 
-	      	updateAnswer () {
+	      	async updateAnswer () {
 	      		this.$refs.form.validate()
 	      		if (!this.valid) {
 	      			return
 	      		}
-	      		this.callback = this._updateAnswer
-	      		this.showConfirm()
+	      		const self = this
+	      		await this.$dialog.confirm({
+				    text: 'Do you really want to update this answer?',
+				    title: 'Warning',
+				    actions: {
+				      false: 'No',
+				      true: {
+				        color: 'red',
+				        text: 'Yes',
+				        handle: () => {
+				          self._updateAnswer()
+				        }
+				      }
+				    }
+			    })
 	      	},
 
-	      	deleteAnswer () {
-	      		this.callback = this._deleteAnswer
-	      		this.showConfirm()
+	      	async deleteAnswer () {
+	      		const self = this
+	      		await this.$dialog.confirm({
+				    text: 'Do you really want to update this answer?',
+				    title: 'Warning',
+				    actions: {
+				      false: 'No',
+				      true: {
+				        color: 'red',
+				        text: 'Yes',
+				        handle: () => {
+				          self._deleteAnswer()
+				        }
+				      }
+				    }
+			    })
 	      	},
 
 	      	async _createAnswer () {
@@ -720,7 +751,6 @@
 	      	},
 
 	      	async _deleteAnswer () {
-	      		this.showConfirm(false)
       			this.loading = true
 		    	try {
 			    	const data = await axios({
@@ -743,7 +773,6 @@
       		},
 
       		async _updateAnswer () {
-      			this.showConfirm(false)
       			this.loading = true
 		    	try {
 		    		this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)

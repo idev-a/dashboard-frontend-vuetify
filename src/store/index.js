@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import publicdata from './public'
+import security from './security'
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -16,7 +17,9 @@ export default new Vuex.Store({
     message: '',
     notifications: [],
     confirmModal: false,
-    cronDialog: false
+    confirmCallback: null,
+    showCronDialog: false,
+    page: Number(localStorage.getItem('page')) || 5
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -51,7 +54,14 @@ export default new Vuex.Store({
       state.notifications.push(payload)
     },
     SHOW_CONFIRM_MODAL (state, payload) {
-      state.confirmModal = payload
+      state.confirmModal = payload.modal
+      state.confirmCallback = payload.callback
+    },
+    SET_CONFIRMED(state, payload) {
+      state.confirmModal = false
+      if (state.confirmCallback) {
+        state.confirmCallback()
+      }
     },
     SHOW_CRON_DIALOG (state, payload) {
       state.cronDialog = payload
@@ -61,8 +71,11 @@ export default new Vuex.Store({
     addNotification({ commit }, payload) {
       commit('ADD_NOTIFICATION', payload)
     },
-    showConfirm({ commit }, payload = true) {
+    showConfirm({ commit }, payload) {
       commit('SHOW_CONFIRM_MODAL', payload)
+    },
+    setConfirmed({ commit }, payload) {
+      commit('SET_CONFIRMED', payload)
     },
     showCronDialog({ commit }, payload = true) {
       commit('SHOW_CRON_DIALOG', payload)
@@ -73,6 +86,7 @@ export default new Vuex.Store({
     }
   },
   modules: { 
-    publicdata
+    publicdata,
+    security
   },
 })

@@ -46,10 +46,30 @@
 		  		</v-tabs>
 		    </v-card-text>
 		</v-card>
+
+		<v-snackbar
+      		v-model="snackbar"
+      		bottom
+      		:color="color"
+      		@input="hideSnackbar()"
+      		>
+      		{{ message }}
+      	 	<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="hideSnackbar()"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
+      	</v-snackbar>
 	</v-container>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
 	name: 'QABoard',
 
@@ -70,9 +90,17 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapState('security', ['snackbar', 'message', 'color'])
+	},
+
 	components: {
 		SecurityQuestions: () => import('./SecurityQuestions'),
 		SecurityAnswers: () => import('./SecurityAnswers')
 	},
+
+	methods: {
+		...mapActions('security', ['hideSnackbar'])
+	}
 }
 </script>
