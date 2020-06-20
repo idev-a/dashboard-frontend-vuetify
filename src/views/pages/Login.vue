@@ -24,7 +24,7 @@
         <v-card
           max-width="100%"
           width="400"
-          class="px-5 py-3"
+          class="px-5 mt-10 py-5"
         >
           <v-card-title class="justify-center display-3">
             Login
@@ -50,7 +50,7 @@
 
             <v-btn
               class="ma-1 mt-4 mb-6"
-              color="primary"
+              color="main"
               :loading="loading"
               :disabled="loading || formHasErrors"
               @click="request"
@@ -80,7 +80,7 @@
 
             <v-btn
               class="ma-1 mt-1"
-              color="primary"
+              color="main"
               :loading="loading"
               :disabled="!code || loading"
               @click="submit"
@@ -105,9 +105,6 @@
   export default {
     name: 'PagesLogin',
 
-    components: {
-    },
-
     data () {
       const defaultForm = Object.freeze({
         email: '',
@@ -115,7 +112,6 @@
 
       return {
         loading: false,
-        formHasErrors: false,
         errorMessages: {
           email: {
             required: false,
@@ -158,6 +154,9 @@
     },
 
     computed: {
+      formHasErrors () {
+        return !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.form.email
+      }
     },
 
     watch: {
@@ -175,10 +174,8 @@
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
-        this.formHasErrors = false
       },
       request () {
-        this.formHasErrors = !this.errorMessages.email.required || !this.errorMessages.email.invalid
 
         if (!this.formHasErrors) {
           this.loading = true
@@ -211,12 +208,9 @@
       },
 
       submit () {
-        this.formHasErrors = false
-
-        if (!this.code) this.formHasErrors = true
         this.$refs['code'].validate(true)
 
-        if (!this.formHasErrors) {
+        if (this.code) {
           this.loading = true
           const self = this
           const data = {

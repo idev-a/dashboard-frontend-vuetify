@@ -11,7 +11,7 @@
         <div class="display-2">DAILY TIPS</div> 
 
         <v-btn :loading="cronLoading" :disabled="cronLoading" v-if="cronStatus == 'active'" @click="manageCron('pause')" class="red darken-2 float-right">Pause</v-btn>
-        <v-btn :loading="cronLoading" :disabled="cronLoading" v-if="cronStatus == 'paused'" @click="manageCron('active')" class="success float-right">Start</v-btn>
+        <v-btn :loading="cronLoading" :disabled="cronLoading" v-if="cronStatus == 'paused'" @click="manageCron('active')" class="main float-right">Start</v-btn>
       </div>
 
       <v-row>
@@ -24,7 +24,7 @@
 				<div class="mb-4 text-uppercase display-1 font-weight-bold">{{todayTip.title_text}}</div>
 				<p>{{todayTip.full_text}} </p>
 			</v-sheet>
-			<v-btn :loading="sendLoading" :disabled="sendLoading || !todayTip.title_text" color="success" @click="showAlert(todayTip.id)">Send Now<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			<v-btn :loading="sendLoading" :disabled="sendLoading || !todayTip.title_text" color="main" @click="showAlert(todayTip.id)">Send Now<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 			<!-- <v-chip
 		      class="ma-2 float-right"
 		    >
@@ -129,6 +129,7 @@
 	        item-key="id"
 	        :items-per-page="page"
 	        @update:items-per-page="getPageNum"
+	        @click:row="editItem"
 	      >
 	      	<template v-slot:top>
           		<v-toolbar flat color="white">
@@ -144,7 +145,7 @@
 		            <v-spacer></v-spacer>
 		            <v-dialog v-model="dialog" max-width="720px">
 		              <template v-slot:activator="{ on }">
-		                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New Tip</v-btn>
+		                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New Tip</v-btn>
 		              </template>
 		              <v-card>
 		                <v-card-title>

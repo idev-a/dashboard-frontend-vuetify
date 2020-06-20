@@ -30,7 +30,7 @@
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
+                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -90,8 +90,8 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="create">Save</v-btn>
+                  <v-btn color="main" text @click="close">Cancel</v-btn>
+                  <v-btn color="main" text @click="create">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>

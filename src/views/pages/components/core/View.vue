@@ -16,7 +16,6 @@
     </v-img> -->
     <v-responsive
       :style="styles"
-      min-height="100vh"
       class="d-flex align-center"
     >
       <router-view />

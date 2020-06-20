@@ -26,11 +26,11 @@
           light
           max-width="100%"
           width="400"
-          class="px-5 py-3"
+          class="px-5 mt-10 py-5"
         >
          
           <v-card-title class="justify-center display-2">
-            Register to Secure Dashboard
+            Register
           </v-card-title>
 
           <div
@@ -42,7 +42,7 @@
               v-model="form.email"
               :rules="[rules.required, rules.email]"
               :loading="loading"
-              class="mt-5 mb-10"
+              class="mt-5 mb-3"
               hide-details="auto"
               color="secondary"
               label="Please enter your email address."
@@ -61,8 +61,8 @@
 
             <v-btn
               :loading="loading"
-              color="primary"
-              class="display-1"
+              color="main"
+              class="display-1 mt-6"
               :disabled="formHasErrors || loading"
               @click="submit"
             >
@@ -145,7 +145,7 @@
 
     computed: {
       formHasErrors () {
-        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !form.email
+        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.form.email
       }
     },
 

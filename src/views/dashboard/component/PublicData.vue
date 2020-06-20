@@ -27,7 +27,7 @@
 		            	<v-row align="center" class="mx-0">
 		                	<div v-if="false" class="align-self-center">
 			                  <v-btn
-			                    color="success"
+			                    color="main"
 			                    icon
 			                    @click="showUpdateDialog(publicData.high.domain)"
 			                  >
@@ -53,7 +53,7 @@
 		            	<v-row align="center" class="mx-0">
 		                	<div v-if="false" class="align-self-center">
 			                  <v-btn
-			                    color="success"
+			                    color="main"
 			                    icon
 			                    @click="showUpdateDialog(publicData.high.website_ip)"
 			                  >
@@ -86,7 +86,7 @@
 	            	<v-row align="center">
 	                	<div v-if="mode" class="align-self-center">
 		                  <v-btn
-		                    color="success"
+		                    color="main"
 		                    icon
 		                    @click="showUpdateDialog(publicData.high.name)"
 		                  >
@@ -112,7 +112,7 @@
 	            	<v-row align="center">
 		               	<div v-if="mode" class="align-self-center">
 		                  <v-btn
-		                    color="success"
+		                    color="main"
 		                    icon
 		                    @click="showUpdateDialog(publicData.high.email)"
 		                  >
@@ -138,7 +138,7 @@
 	            	<v-row align="center">
 		                <div v-if="mode" class="align-self-center">
 		                  <v-btn
-		                    color="success"
+		                    color="main"
 		                    icon
 		                    @click="showUpdateDialog(publicData.high.dob)"
 		                  >
@@ -259,7 +259,7 @@
 									<v-row align="center">
 										<div v-if="mode" class="align-self-center">
 						                  <v-btn
-						                    color="success"
+						                    color="main"
 						                    icon
 						                    @click="_showUpdateDialog(result.ctfr_subdomain)"
 						                  >
@@ -288,7 +288,7 @@
 									<v-row align="center">
 	                    				<div v-if="mode" class="align-self-center">
 						                  <v-btn
-						                    color="success"
+						                    color="main"
 						                    icon
 						                    @click="_showUpdateDialog(result.builtwith)"
 						                  >
@@ -321,7 +321,7 @@
 									<v-row  align="center">
 	                					<div v-if="mode" class="align-self-center">
 						                  <v-btn
-						                    color="success"
+						                    color="main"
 						                    icon
 						                    @click="_showUpdateDialog(result.dnstwist)"
 						                  >
@@ -369,7 +369,7 @@
 									<v-row  align="center">
 	                					<div v-if="mode" class="align-self-center">
 						                  <v-btn
-						                    color="success"
+						                    color="main"
 						                    icon
 						                    @click="_showUpdateDialog(result.dnstwist)"
 						                  >
