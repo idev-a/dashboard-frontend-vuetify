@@ -830,7 +830,7 @@
     async mounted () {
       this.loading = true
       await this.fetchDashboardUsers()
-      this.appDetails = await fetchApps('%')
+      this.appDetails = await fetchApps('all')
       const res = await axios.get(`${BASE_API}/api/applications/all`)
       if (res.data) {
         this.apps = res.data.apps
