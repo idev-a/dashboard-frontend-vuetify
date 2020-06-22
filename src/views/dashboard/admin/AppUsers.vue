@@ -946,7 +946,7 @@
         this.loading = true
         let company = this.company
         if (company.length == 0) {
-          company = 'all'
+          company = 'total'
         }
         this.users = await fetchAppUsers(item.users_table_name, company)
         this.loading = false
