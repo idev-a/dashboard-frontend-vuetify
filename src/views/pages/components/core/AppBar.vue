@@ -3,7 +3,7 @@
     absolute
     color="transparent"
     flat
-    height="105"
+    height="85"
   >
     <v-container class="px-0 ">
       <v-toolbar-title
@@ -12,7 +12,7 @@
       />
 
 
-      <div class="display-2 d-flex justify-center w-100 font-weight-medium">Welcome to the Secure Dashboard</div>
+      <!-- <div class="display-2 d-flex justify-center w-100 font-weight-medium">Welcome to the Secure Dashboard</div> -->
 
       <v-btn
         v-for="(item, i) in items"
