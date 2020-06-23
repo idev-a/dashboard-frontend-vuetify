@@ -6,13 +6,20 @@
     height="85"
   >
     <v-container class="px-0 ">
-      <v-toolbar-title
+      <!-- <v-toolbar-title
         class="font-weight-light hidden-xs-only"
         v-text="title"
-      />
+      /> -->
+      <v-img
+        class="hidden-xs-only"
+        width="200"
+          :src="require(`@/assets/rc-logo.png`)"
+        >
+      </v-img>
 
-
-      <!-- <div class="display-2 d-flex justify-center w-100 font-weight-medium">Welcome to the Secure Dashboard</div> -->
+      <div class="center-title hidden-sm-and-down display-2 font-weight-medium">
+        Welcome to the Secure Dashboard
+      </div>
 
       <v-btn
         v-for="(item, i) in items"
@@ -98,3 +105,11 @@
     },
   }
 </script>
+
+<style type="SCSS">
+.center-title {
+  position: absolute;
+  top: 31px;
+  left: calc(50% - 175px);  
+}
+</style>
