@@ -10,8 +10,8 @@
 	    	<v-card-title>
 		        RSS Board
 		        <v-spacer></v-spacer>
-		        <v-btn :loading="loading" :disabled="loading" @click="readRss" color="success">Read All<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
-		        <v-btn :loading="loading" :disabled="loading || !link" @click="populateRss" color="success">Populate<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading" @click="readRss" color="main">Read All<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !link" @click="populateRss" color="main">Populate<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 	      	</v-card-title>
 		    <v-row
 	    	>
@@ -65,7 +65,16 @@
 
 	    <v-snackbar v-model="snackbar" :timeout="3000" :color="snackColor">
 	      {{ snackText }}
-	      <v-btn text @click="snackbar = false">Close</v-btn>
+	      <template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
 	    </v-snackbar>
 
      	<v-dialog

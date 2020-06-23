@@ -10,11 +10,11 @@
 	    	<v-card-title>
 		        Office365 Board (office_365_users)
 		        <v-spacer></v-spacer>
-		        <v-btn class="success" :loading="loading" @click="redirectO365" :disabled="!importable">
+		        <v-btn class="main" :loading="loading" @click="redirectO365" :disabled="!importable">
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
-		    	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="success">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		    	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>

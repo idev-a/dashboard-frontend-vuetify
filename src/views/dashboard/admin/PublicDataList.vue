@@ -10,8 +10,8 @@
 	    	<v-card-title>
 		        Public Data (Run)
 		        <v-spacer></v-spacer>
-		        <v-btn  :disabled="loadingBulk" class="mb-2" @click="done=true;getBulkData()" color="success">Check Progress<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
-		        <v-btn :loading="loading" :disabled="loading || !file"  class="mb-2" @click="importCSV" color="success">Import & Run<v-icon  size="16" right dark>mdi-database-import</v-icon></v-btn>
+		        <v-btn  :disabled="loadingBulk" class="mb-2" @click="done=true;getBulkData()" color="main">Check Progress<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !file"  class="mb-2" @click="importCSV" color="main">Import & Run<v-icon  size="16" right dark>mdi-database-import</v-icon></v-btn>
 		        <v-spacer></v-spacer>
 		        <v-file-input
 				    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
@@ -103,13 +103,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 	</v-container>
 </template>

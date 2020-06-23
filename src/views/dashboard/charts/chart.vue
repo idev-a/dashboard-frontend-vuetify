@@ -117,7 +117,7 @@
                 <template v-slot:activator="{ on: tooltip }">
                   <v-btn
                     class="ml-2 mb-2"
-                    color="success"
+                    color="main"
                     dark
                     v-on="{ ...tooltip, ...menu }"
                   >Filter by Categories</v-btn>

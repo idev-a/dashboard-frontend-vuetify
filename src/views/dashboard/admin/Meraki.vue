@@ -21,8 +21,8 @@
 		          :error-messages="errorMessages"
 		          @input="changeEndpoint"
 		        ></v-select>
-		        <v-btn :loading="loading" :disabled="!runnable" @click="runAPI" color="success">Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-		        <v-btn :loading="loading" :disabled="loading || !items.length" @click="items = []" color="success">Refresh <v-icon  size="16" right dark>mdi-refresh</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="!runnable" @click="runAPI" color="main">Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !items.length" @click="items = []" color="main">Refresh <v-icon  size="16" right dark>mdi-refresh</v-icon></v-btn>
 	      	</v-card-title>
 	      	<v-card-text>
 	      		<v-row
@@ -92,19 +92,19 @@
               	<v-spacer></v-spacer>
               	<v-tooltip top>
 		            <template v-slot:activator="{ on }">
-	              		<v-btn :loading="loading" :disabled="loading || !endpoint || !orgId" @click="readAll" color="success">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+	              		<v-btn :loading="loading" :disabled="loading || !endpoint || !orgId" @click="readAll" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
 	              	</template>
 	              	<span>Read Meraki Devices Data from Database</span>
               	</v-tooltip>
 	            <v-tooltip bottom>
 		            <template v-slot:activator="{ on }">
-		              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="populateData" color="success">Populate <v-icon  size="16" right dark>mdi-database-export</v-icon></v-btn>
+		              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="populateData" color="main">Populate <v-icon  size="16" right dark>mdi-database-export</v-icon></v-btn>
 	              	</template>
 	              	<span>Populate Data from API into Database</span>
 		        </v-tooltip>
 		        <v-tooltip bottom>
 		            <template v-slot:activator="{ on }">
-              			<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              			<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
               		</template>
               		<span>Download Data as CSV</span>
               	</v-tooltip>
@@ -129,13 +129,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
   	</v-container>
 </template>

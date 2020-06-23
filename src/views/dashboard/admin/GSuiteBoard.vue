@@ -13,8 +13,8 @@
 			        <v-subheader>Find External shared links</v-subheader>
 			    </div>
 		        <v-spacer></v-spacer>
-	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="success">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-row>
 		    	<v-col>
@@ -52,9 +52,9 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-          	  	<v-btn :loading="loading" :disabled="loading" @click="readAllShared" color="success">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-          	  	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="success">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSVForShared" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+          	  	<v-btn :loading="loading" :disabled="loading" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+          	  	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSVForShared" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
 		    <v-data-table
 	    		v-model="selectedItems"
@@ -82,13 +82,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 
       	<!-- Cron job dialog -->

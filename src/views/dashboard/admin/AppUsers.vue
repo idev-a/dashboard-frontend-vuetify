@@ -58,7 +58,7 @@
             <!-- Dialog for applications table -->
             <v-dialog v-model="appDialog" max-width="1024px">
               <template v-slot:activator="{ on }">
-                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App</v-btn>
+                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -165,8 +165,8 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeAppDialog">Cancel</v-btn>
-                  <v-btn :disabled="!appValid" color="blue darken-1" text @click="createApp">Save</v-btn>
+                  <v-btn color="main" text @click="closeAppDialog">Cancel</v-btn>
+                  <v-btn :disabled="!appValid" color="main" text @click="createApp">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -261,7 +261,7 @@
                     <!-- Dialog for app_users table -->
                     <v-dialog v-model="userDialog" max-width="1024px">
                       <template v-slot:activator="{ on }">
-                        <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App User</v-btn>
+                        <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App User</v-btn>
                       </template>
                       <v-card>
                         <v-card-title>
@@ -312,8 +312,8 @@
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="closeUserDialog">Cancel</v-btn>
-                          <v-btn color="blue darken-1" text @click="createUser">Save</v-btn>
+                          <v-btn color="main" text @click="closeUserDialog">Cancel</v-btn>
+                          <v-btn color="main" text @click="createUser">Save</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
@@ -399,7 +399,7 @@
             <!-- Dialog for company_applications table -->
             <v-dialog v-model="detailDialog" max-width="1024px">
               <template v-slot:activator="{ on }">
-                <v-btn color="success" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New Company App</v-btn>
+                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New Company App</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -526,8 +526,8 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDetailDialog">Cancel</v-btn>
-                  <v-btn :disabled="!detailValid" color="blue darken-1" text @click="createDetail">Save</v-btn>
+                  <v-btn color="main" text @click="closeDetailDialog">Cancel</v-btn>
+                  <v-btn :disabled="!detailValid" color="main" text @click="createDetail">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -649,7 +649,16 @@
 
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
-      <v-btn text @click="snack = false">Close</v-btn>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snack = false"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
 
     <v-dialog v-model="modal" max-width="290">

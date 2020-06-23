@@ -10,11 +10,11 @@
 	    	<v-card-title>
 		        Alassian Board (atlassian_users)
 		        <v-spacer></v-spacer>
-		        <v-btn class="success" @click="authZoom" :loading="loading" :disabled="!importable">
+		        <v-btn class="main" @click="authZoom" :loading="loading" :disabled="!importable">
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
-		    	<v-btn :loading="loading"  :disabled="loading" @click="showCron" color="success">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		    	<v-btn :loading="loading"  :disabled="loading" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>
@@ -64,13 +64,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 		<cron-dialog type="Atlassian Users"  interval="Daily" />
 	</v-container>

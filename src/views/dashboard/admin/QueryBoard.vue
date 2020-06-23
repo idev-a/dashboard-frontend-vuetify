@@ -10,7 +10,7 @@
 	    	<v-card-title>
 		        Query Board
 		        <v-spacer></v-spacer>
-		        <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="success">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="main">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 	      	</v-card-title>
 	    	<v-row
 	    	>
@@ -53,8 +53,8 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length && !website)" @click="_getProspectsFromTable" color="success">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="success">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length && !website)" @click="_getProspectsFromTable" color="main">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
               <v-card-title>
               	<v-autocomplete
@@ -102,13 +102,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 
       	<v-dialog v-model="modal" max-width="1024">
@@ -126,7 +129,7 @@
 		              	></v-text-field>
 	              	</v-col>
 	              	<v-col cols="auto">
-		              	<v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="success">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+		              	<v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="main">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
 	              	</v-col> 
 	          	</v-row>
 	          	<v-card-text>

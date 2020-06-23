@@ -10,7 +10,7 @@
 	    	<v-card-title>
 		        Chrome Extension Board
 		        <v-spacer></v-spacer>
-	        	<v-btn :loading="loading" :disabled="loading" @click="runAction" color="success">Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn :loading="loading" :disabled="loading" @click="runAction" color="main">Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-title>
 		    	<v-text-field
@@ -44,13 +44,16 @@
       		:color="color"
       		>
       		{{ message }}
-      		<v-btn
-		        dark
-		        text
-		        @click="snackbar = false"
-	      	>
-		        Close
-	      	</v-btn>
+      		<template v-slot:action="{ attrs }">
+		        <v-btn
+		          dark
+		          text
+		          v-bind="attrs"
+		          @click="snackbar = false"
+		        >
+		          Close
+		        </v-btn>
+	      	</template>
       	</v-snackbar>
 	</v-container>
 </template>
