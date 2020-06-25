@@ -163,6 +163,10 @@
               title: 'Security Q&A Board',
               to: 'securityqa',
             },
+            {
+              title: 'Calendar Board',
+              to: 'calendar-event',
+            },
           ]
         },
         {

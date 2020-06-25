@@ -11,7 +11,7 @@
         v-text="title"
       /> -->
       <v-img
-        class="hidden-xs-only"
+        class="hidden-xs-only mt-3"
         width="200"
           :src="require(`@/assets/rc-logo.png`)"
         >

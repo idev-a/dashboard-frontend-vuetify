@@ -13,7 +13,7 @@
           class="text-center mb-sm-0 mb-5 mx-2"
           cols="auto"
         >
-          <v-btn icon color="indigo" fab outlined :href="social.href">
+          <v-btn icon color="main" fab outlined :href="social.href">
             <v-icon size="25">{{social.icon}}</v-icon>
           </v-btn>
         </v-col>
@@ -40,7 +40,7 @@
       <v-row class="mt-7" align="center" justify="center">
         <div class="body-1 font-weight-light pt-6 pt-md-0 text-center">
           &copy; 2019, copyright
-          by <a href="https://revampcybersecurity.com/">RevampCyberSecurity</a>
+          by <a color="main" href="https://revampcybersecurity.com/">RevampCyberSecurity</a>
         </div>
       </v-row>
     </v-container>

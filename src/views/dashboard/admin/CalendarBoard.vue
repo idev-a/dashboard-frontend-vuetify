@@ -1,6 +1,6 @@
 <template>
 	<v-container
-	    id="meraki-board"
+	    id="calendar-board"
 	    fluid
 	    tag="section"
   	>
@@ -9,12 +9,11 @@
 	    >
 	    	<v-card-title>
 	    		<div>
-			        <div>GSuite Board (gsuite_drive_shared)</div>
-			        <v-subheader>Find External shared links</v-subheader>
+			        <div>Calendar Board (calendar_events)</div>
+			        <v-subheader>Find Google Calendar Events</v-subheader>
 			    </div>
 		        <v-spacer></v-spacer>
 	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-row>
 		    	<v-col cols='12' md="4">
@@ -22,17 +21,26 @@
 		                v-model="emails"
 		                :rules="[rules.required]"
 		                :loading="loading"
-		                label="Owner Emails"
-		                hint="Ctrl + Enter to run the google drive script"
+		                label="Event Ids"
+		                hint="Ctrl + Enter to run the calenar event script"
 		                rows="3"
 		                outlined
 		                @keyup.ctrl.13="keyDownOnImport"
 		            />
 		    	</v-col>
+		    	<v-col md="4" cols='12'>
+	              	<v-text-field
+		                v-model="user_email"
+		                :rules="[rules.required, rules.email]"
+		                :loading="loading"
+		                label="Service Email"
+		                outlined
+		            />
+		    	</v-col>
 		    	<v-col cols='12' md="4">
 	    		  	<v-file-input
 					    accept=".json"
-					    placeholder="Import GSuite private key file (.json file)"
+					    placeholder="Import GSuite service key file (.json file)"
 					    prepend-icon="mdi-database-import"
 					    label="Private key"
 					    ref="myfile" 
@@ -114,14 +122,13 @@
 
 		data () {
 			return {
-				done: false,
 				loading: false,
 				emails: '',
+				user_email: '',
 				file: null,
 				snackbar: false,
 		      	message: '',
 		      	search: '',
-		      	searchCron: '',
 		      	color: 'success',
 				errorMessages: {
 					emails: {
@@ -135,28 +142,20 @@
 						value: 'email'
 					},
 					{
-						text: 'Status',
+						text: 'Summary',
+						value: 'summary'
+					},
+					{
+						text: 'Statue',
 						value: 'status'
 					},
 					{
-						text: 'Folder Id',
-						value: 'folder_id'
+						text: 'Start',
+						value: 'start_datetime'
 					},
 					{
-						text: 'Folder Name',
-						value: 'folder_name'
-					},
-					{
-						text: 'File Id',
-						value: 'file_id'
-					},
-					{
-						text: 'File Name',
-						value: 'file_name'
-					},
-					{
-						text: 'users',
-						value: 'users'
+						text: 'End',
+						value: 'end_datetime'
 					},
 					{
 						text: 'Run At',
@@ -185,12 +184,12 @@
 	     	}, 
 
 			importable () {
-				return !this.loading && this.file && this.emails && !this.errorMessages.emails.invalid
+				return !this.loading && this.file && this.emails && this.user_email
 			}
 		},
 
 		methods: {
-			...mapActions(['showConfirm', 'showCronDialog']),
+			...mapActions(['showConfirm']),
 
 			beautifyEmail,
 			beautifyEmails,
@@ -210,7 +209,7 @@
   			 	this.selectedItems = []
       			this.items = []
 		    	try {
-			    	const res = await axios.get(`${BASE_API}/api/admin/gsuite/read`)
+			    	const res = await axios.get(`${BASE_API}/api/admin/calendar/read`)
 		      		this.items = res.data.items
 	      			this.message = res.data.message
 	      			this.color = res.data.status
@@ -244,7 +243,7 @@
 
                 this.loading = true
 		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/gsuite/send`, data)
+			    	const res = await axios.post(`${BASE_API}/api/admin/calendar/send`, data)
 	      			this.message = res.data.message
 	      			this.color = res.data.status
 		    	} catch(e) {
@@ -256,16 +255,13 @@
       		},
 
 			async importKey () {
-				if (!this.emails || !this.file) {
-					return
-				}
-
 				let formData = new FormData()
 	        	for (let file of this.file) {
                 	formData.append("file", file, file.name);
                 }
 
                 const data = {
+                	'user_email': this.user_email,
                 	'emails': this.emails,
                 	'user_id': JSON.parse(localStorage.getItem('user')).id
                 }
@@ -280,7 +276,7 @@
                 this.loading = true
                 this.file = null
 		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/gsuite/run`, formData)
+			    	const res = await axios.post(`${BASE_API}/api/admin/calendar/run`, formData)
 		      		this.csvData = res.data.csv_data
 	      			this.message = res.data.message
 	      			this.color = res.data.status
@@ -291,11 +287,6 @@
 	      			this.snackbar = true
 		    	}
 			},
-
-			// Cron jobs
-			showCron () {
-      			this.showCronDialog()
-      		},
 		}
 	}
 </script>
