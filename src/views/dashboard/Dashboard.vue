@@ -13,8 +13,9 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskPage"
         >
-          <highcharts v-if="!loadingCard" :options="scoreChart"></highcharts>
+          <highcharts  v-if="!loadingCard" :options="scoreChart"></highcharts>
         </v-card>
       </v-col>
 
@@ -39,6 +40,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskUsersPage"
         >
           <highcharts v-if="!loadingCard" :options="highRiskUsers"></highcharts>
         </v-card>
@@ -52,6 +54,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskAppsPage"
         >
           <highcharts v-if="!loadingCard" :options="highRiskApps"></highcharts>
         </v-card>
@@ -537,6 +540,25 @@
         this.smallCards = res.data
         this.loading = false
       },
+
+      gotoRiskPage () {
+        console.log(this.org_score)
+        if (this.charts.org_score < 3) {
+          this.$router.push({ name: 'Low Risks'})
+        } else if (this.charts.org_score == 3) {
+          this.$router.push({ name: 'Medium Risks'})
+        } else {
+          this.$router.push({ name: 'High Risks'})
+        }
+      },
+
+      gotoRiskUsersPage () {
+        this.$router.push({ name: 'Users' })
+      },
+
+      gotoRiskAppsPage () {
+        this.$router.push({ name: 'Application Risk' })
+      }
     },
   }
 </script>

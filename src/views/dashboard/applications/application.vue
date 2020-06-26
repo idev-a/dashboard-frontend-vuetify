@@ -24,12 +24,21 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
+        <v-select
+          v-model="filteredRisks"
+          :items="risks"
+          multiple
+          class="max-100"
+          label="Risk Level"
+          chips
+          deletable-chips
+        >
+        </v-select>
       </v-card-title>
       <v-data-table
-        v-if="apps.length > 0"
         :loading="loading"
         :headers="appHeaders"
-        :items="apps"
+        :items="filteredApps"
         :items-per-page="page"
         item-key="id"
         :search="search"
@@ -220,6 +229,12 @@
       user: false,
       details: false,
       pagination: {},
+      risks: [
+        'High',
+        'Medium',
+        'Low'
+      ],
+      filteredRisks:['High'], 
       appHeaders: [
         {
           text: 'Name',
@@ -276,6 +291,26 @@
       page () {
         return Number(localStorage.getItem('page')) || 5
       }, 
+      filteredApps () {
+        return this.apps.filter(app => {
+          if (this.filteredRisks.length == 0) {
+            return app
+          } else {
+            let pattern = app.risk || 'low'
+            if (pattern == 'medium') {
+              pattern = /medium/i
+            } else if (pattern == 'high') {
+              pattern = /high/i
+            } else {
+              pattern = /low/i
+            }
+            const risks = this.filteredRisks.join('')
+            if (risks.match(pattern)) {
+              return app
+            }
+          }
+        })
+      }
     },
 
     methods: {
@@ -317,3 +352,8 @@
     }
   }
 </script>
+<style scoped>
+.max-100 {
+  max-width: 300px;
+}
+</style>

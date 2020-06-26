@@ -11,6 +11,7 @@
     >
       <v-card-title>
         Users
+        
       </v-card-title>
       <v-card-title>
         <v-text-field
@@ -22,11 +23,21 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
+        <v-select
+          v-model="filteredRisks"
+          :items="risks"
+          multiple
+          class="max-100"
+          label="Risk Level"
+          chips
+          deletable-chips
+        >
+        </v-select>
       </v-card-title>
       <v-data-table
         :loading="loading"
         :headers="headers"
-        :items="users"
+        :items="filteredUsers"
         item-key="email"
         :items-per-page="page"
         :search="search"
@@ -251,6 +262,12 @@
       currentUser: '',
       singleExpand: true,
       expanded: [],
+      risks: [
+        'High',
+        'Medium',
+        'Low'
+      ],
+      filteredRisks:['High'], 
       actions: [
         {
           color: 'info',
@@ -331,9 +348,31 @@
       page () {
         return Number(localStorage.getItem('page')) || 5
       }, 
+      filteredUsers () {
+        return this.users.filter(user => {
+          if (this.filteredRisks.length == 0) {
+            return user
+          } else {
+            let pattern = user.risk_level || 'low'
+            if (pattern == 'medium') {
+              pattern = /medium/i
+            } else if (pattern == 'high') {
+              pattern = /high/i
+            } else {
+              pattern = /low/i
+            }
+            const risks = this.filteredRisks.join('')
+            if (risks.match(pattern)) {
+              return user
+            }
+          }
+        })
+      }
     },
 
     methods: {
+      levelColor,
+
       getPageNum (_page) {
         localStorage.setItem('page', _page)
       },
@@ -343,10 +382,6 @@
         apps.map(app => {
 
         })
-      },
-
-      levelColor (level) {
-        return levelColor(level)
       },
 
       beautifyEmail (email) {
@@ -404,3 +439,8 @@
     }
   }
 </script>
+<style scoped>
+.max-100 {
+  max-width: 300px;
+}
+</style>

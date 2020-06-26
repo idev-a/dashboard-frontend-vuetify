@@ -38,6 +38,17 @@
           hide-details
         ></v-text-field>
         <v-spacer></v-spacer>
+        <v-select
+          v-model="filteredRisks"
+          :items="riskItems"
+          multiple
+          class="max-100"
+          label="Risk Level"
+          chips
+          deletable-chips
+          @input="updateData"
+        >
+        </v-select>
       </v-card-title>
       <v-card-title>
         <v-select
@@ -45,8 +56,9 @@
           v-if="category == 'all'"
           v-model="select"
           :items="categories"
-          attach
           chips
+          dense
+          deletable-chips
           label="Select a cetegory"
           multiple
           @input="updateData"
@@ -118,6 +130,12 @@
       ],
       risks: [
       ],
+      riskItems: [
+        'High',
+        'Medium',
+        'Low'
+      ],
+      filteredRisks:['High'], 
       risksOrigin: []
     }),
 
@@ -158,9 +176,29 @@
     },
 
     methods: {
-      updateData (data) {
-        if (data.length) {
-          this.risks = this.risksOrigin.filter(risk => data.includes(risk.category))
+      updateData () {
+        if (this.select.length || this.filteredRisks.length) {
+          if (this.select.length) {
+            this.risks = this.risksOrigin.filter(risk => this.select.includes(risk.category))
+          }
+          if (this.filteredRisks.length) {
+            this.risks = this.risks.filter(risk => {
+              let pattern = /low/i
+              if (risk.medium) {
+                pattern = /medium/i
+              } 
+              if (risk.high) {
+                pattern = /high/i
+              } 
+              if (risk.low) {
+                pattern = /low/i
+              }
+              const risks = this.filteredRisks.join('')
+              if (risks.match(pattern)) {
+                return risk
+              }
+            })
+          }
         } else {
           this.risks = this.risksOrigin
         }
@@ -219,3 +257,8 @@
     }
   }
 </script>
+<style scoped>
+.max-100 {
+  max-width: 300px;
+}
+</style>
