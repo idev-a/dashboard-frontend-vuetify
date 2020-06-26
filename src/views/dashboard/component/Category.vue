@@ -198,7 +198,7 @@
                 return risk
               }
             })
-          }
+        }
         } else {
           this.risks = this.risksOrigin
         }

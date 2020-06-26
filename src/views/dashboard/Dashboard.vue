@@ -27,6 +27,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoAnswersPage"
         >
           <highcharts v-if="!loadingCard" :options="riskLevelCharts"></highcharts>
         </v-card>
@@ -558,6 +559,10 @@
 
       gotoRiskAppsPage () {
         this.$router.push({ name: 'Application Risk' })
+      },
+
+      gotoAnswersPage () {
+        this.$router.push({ name: 'Category' })
       }
     },
   }
