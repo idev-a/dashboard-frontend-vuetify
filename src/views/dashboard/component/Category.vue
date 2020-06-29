@@ -39,6 +39,7 @@
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-select
+          v-if="isLevelVisible"
           v-model="filteredRisks"
           :items="riskItems"
           multiple
@@ -59,7 +60,7 @@
           chips
           dense
           deletable-chips
-          label="Select a cetegory"
+          label="Select a category"
           multiple
           @input="updateData"
         ></v-select>
@@ -165,6 +166,9 @@
         headers.push({ text: 'Actions', value: 'action', sortable: false })
         return headers
       },
+      isLevelVisible () {
+        return !['high', 'medium', 'low'].includes(this.category)
+      }
     },
 
     mounted () {
@@ -217,6 +221,9 @@
         this.expanded.push(item)
       },
       fetchRisks () {
+        if (!this.isLevelVisible) {
+          this.filteredRisks = []
+        }
         let user = {}
         try {
           user = JSON.parse(localStorage.getItem('user'))
@@ -253,7 +260,7 @@
       banner: {
         type: Object,
         default: undefined
-      }
+      },
     }
   }
 </script>

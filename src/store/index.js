@@ -18,7 +18,7 @@ export default new Vuex.Store({
     notifications: [],
     confirmModal: false,
     confirmCallback: null,
-    showCronDialog: false,
+    cronDialog: false,
     page: Number(localStorage.getItem('page')) || 5
   },
   mutations: {

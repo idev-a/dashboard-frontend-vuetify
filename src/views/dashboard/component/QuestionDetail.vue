@@ -258,7 +258,7 @@
 
 		computed: {
 			risk () {
-	      		let risk = ''
+	      		let risk = 'Low'
 	      		if (this.currentQuestion.high) {
 	      			risk = 'High'
 	      		}
