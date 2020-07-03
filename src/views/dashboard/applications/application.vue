@@ -214,6 +214,7 @@
 <script>
   import { fetchApps, fetchAppUsers } from '../../../api'
   import { validEmail, levelColor } from '../../../util'
+  import { mapState, mapActions } from 'vuex';
 
   export default {
     name: 'DashboardApplications',
@@ -280,6 +281,8 @@
     },
 
     computed: {
+      ...mapState(['companyId', 'page']),
+
       usersTitle () {
         return 'Users'
         if (this.currentApp) {
@@ -288,9 +291,6 @@
           return 'Users'
         }
       },
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
       filteredApps () {
         return this.apps.filter(app => {
           if (this.filteredRisks.length == 0) {

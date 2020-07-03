@@ -268,7 +268,6 @@
                             <v-form
                               ref="userForm"
                               v-model="userValid"
-                              
                             >
                               <v-row>
                                 <v-col cols="12" md="4">
@@ -309,7 +308,7 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn color="main" text @click="closeUserDialog">Cancel</v-btn>
-                          <v-btn color="main" text @click="createUser">Save</v-btn>
+                          <v-btn :disabled="!userValid" color="main" text @click="createUser">Save</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
@@ -463,6 +462,7 @@
                         </v-col>
                         <v-col cols="12" md="4">
                           <v-text-field
+                            type="number"
                             v-model="editedDetailItem.price"
                             label="Price"
                             prefix="$"
@@ -515,6 +515,12 @@
                             hide-details="auto"
                             >
                           </v-textarea>
+                        </v-col>
+                        <v-col cols="12" md="8">
+                          <v-text-field
+                            v-model="editedDetailItem.login_url"
+                            label="Login Url"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-form>
@@ -698,9 +704,9 @@
       snack: false,
       snackColor: '',
       snackText: '',
-      appValid: false,
-      userValid: false,
-      detailValid: false,
+      appValid: true,
+      userValid: true,
+      detailValid: true,
       currentApp: '',
       delApp: '',
       user: '',
@@ -897,15 +903,6 @@
         },
         deep: true
       },
-
-      editedDetailItem: {
-        handler(val){
-          if (this.$refs.detailForm) {
-            this.$refs.detailForm.validate()
-          }
-        },
-        deep: true
-      }
     },
 
     methods: {
@@ -1039,6 +1036,10 @@
       },
 
       async createDetail() {
+        this.$refs.detailForm.validate()
+        if (!this.detailValid) {
+          return
+        }
         const item = Object.assign({}, this.editedDetailItem)
         let res
         if (this.defaultDetailIndex > -1) {
@@ -1061,6 +1062,10 @@
       },
 
       async createUser () {
+        this.$refs.userForm.validate()
+        if (!this.userValid) {
+          return
+        }
         const item = Object.assign({}, this.editedUserItem)
         let res
         if (this.defaultUserIndex > -1) {

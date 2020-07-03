@@ -115,6 +115,7 @@
 <script>
   import { BASE_API } from '../../../api'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'CategoryRisk',
@@ -141,9 +142,8 @@
     }),
 
     computed: {
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
+      ...mapState(['page', 'companyId']),
+      
       headers () {
         let headers = [
           {
@@ -224,14 +224,9 @@
         if (!this.isLevelVisible) {
           this.filteredRisks = []
         }
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/risks/${this.category}/${companyId}`, {
+        axios(`${BASE_API}/api/risks/${this.category}/${this.companyId}`, {
             method: 'GET',
           })
             .then(function (res) {

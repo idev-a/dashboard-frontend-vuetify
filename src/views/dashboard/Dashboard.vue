@@ -423,6 +423,7 @@
   import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart, appUsersChart, highriskCategoryChart, ciaCategoryChart } from '../../util'
   import axios from 'axios'
   import Highcharts from 'highcharts'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardDashboard',
@@ -431,7 +432,6 @@
       return {
         loading: true,
         loadingCard: true,
-        companyId: '',
         smallCards: {
           high_risk: '0',
           medium_risk: '0',
@@ -483,6 +483,8 @@
     },
 
     computed: {
+      ...mapState(['companyId']),
+      
       riskLevelCharts () {
         return riskLevelChart(this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk)
       },
@@ -517,12 +519,6 @@
     },
 
     async mounted () {
-      let user = {}
-      try {
-        user = JSON.parse(localStorage.getItem('user'))
-      } catch(e) {}
-      this.companyId = user.email.split('@')[1];
-
       this.fetchChartsData()
       
       this.fetchAllCardData()

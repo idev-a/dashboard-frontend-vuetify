@@ -28,7 +28,7 @@
         :headers="headers"
         :items="groups"
         item-key="_id"
-        :items-per-page="5"
+        :items-per-page="page"
         :search="search"
         :single-expand="singleExpand"
         show-expand
@@ -106,6 +106,7 @@
   import { BASE_API } from '../../../api'
   import { validEmail } from '../../../util'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardCompanyGroups',
@@ -150,11 +151,16 @@
       ],
     }),
 
+    computed: {
+      ...mapState(['page', 'companyId']),
+    },
+
     mounted () {
       this.fetchGroups()
     },
 
     methods: {
+
       getPageNum (_page) {
         localStorage.setItem('page', _page)
       },
@@ -198,14 +204,9 @@
         this.expanded.push(item)
       },
       fetchGroups () {
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/groups/${companyId}/all`, {
+        axios(`${BASE_API}/api/groups/${this.companyId}/all`, {
             method: 'GET',
           })
             .then(function (res) {

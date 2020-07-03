@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 import publicdata from './public'
 import security from './security'
+import { companyId } from '../api'
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     confirmModal: false,
     confirmCallback: null,
     cronDialog: false,
-    page: Number(localStorage.getItem('page')) || 5
+    page: Number(localStorage.getItem('page')) || 5,
+    companyId: companyId
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {

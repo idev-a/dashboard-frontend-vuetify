@@ -14,6 +14,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskPage"
         >
           <highcharts v-if="!loadingCard" :options="scoreChart"></highcharts>
         </v-card>
@@ -26,6 +27,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoAnswersPage"
         >
           <highcharts v-if="!loadingCard" :options="riskLevelCharts"></highcharts>
         </v-card>
@@ -39,6 +41,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskUsersPage"
         >
           <highcharts v-if="!loadingCard" :options="highRiskUsers"></highcharts>
         </v-card>
@@ -52,6 +55,7 @@
         <v-card
           class="pt-3 min-50"
           :loading="loadingCard"
+          @click="gotoRiskAppsPage"
         >
           <highcharts v-if="!loadingCard" :options="highRiskApps"></highcharts>
         </v-card>
@@ -216,6 +220,7 @@
   } from '../../../util'
   import axios from 'axios'
   import Highcharts from 'highcharts'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardChart',
@@ -225,7 +230,6 @@
       loading: false,
       donePie: false,
       doneBar: false,
-      companyId: '',
       snack: false,
       snackColor: '',
       snackText: '',
@@ -265,18 +269,14 @@
     },
 
     async mounted () {
-      let user = {}
-      try {
-        user = JSON.parse(localStorage.getItem('user'))
-      } catch(e) {}
-      this.companyId = user.email.split('@')[1];
-
       await this.fetchCharts()
 
       await this.fetchCustomCharts()
     },
 
     computed: {
+      ...mapState(['companyId']),
+
       riskLevelCharts () {
         return riskLevelChart(this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk)
       },
@@ -387,6 +387,29 @@
         }  finally {
           this.loading = false
         }
+      },
+
+      gotoRiskPage () {
+        console.log(this.org_score)
+        if (this.charts.org_score < 3) {
+          this.$router.push({ name: 'Low Risks'})
+        } else if (this.charts.org_score == 3) {
+          this.$router.push({ name: 'Medium Risks'})
+        } else {
+          this.$router.push({ name: 'High Risks'})
+        }
+      },
+
+      gotoRiskUsersPage () {
+        this.$router.push({ name: 'Users' })
+      },
+
+      gotoRiskAppsPage () {
+        this.$router.push({ name: 'Application Risk' })
+      },
+
+      gotoAnswersPage () {
+        this.$router.push({ name: 'Category' })
       }
     }
   }

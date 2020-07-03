@@ -29,53 +29,67 @@
             </v-card-title>
             <v-card-text>
               <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-text-field 
-                      :rules="[rules.required, rules.email]"
-                      v-model="editedItem.email"
-                      label="Email"
-                      required
-                      :readonly="emailReadonly"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-select
-                      v-model="editedItem.role"
-                      :rules="[rules.required]"
-                      :items="userRoleList"
-                      label="Role"
-                      class="mt-2"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-select
-                      v-model="editedItem.status"
-                      :rules="[rules.required]"
-                      :items="userStatusList"
-                      label="Status"
-                      class="mt-2"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-select
-                      v-model="editedItem.daily_tips_opt_out"
-                      :items="userOptoutList"
-                      label="Daily Tips Optout"
-                      class="mt-2"
-                      required
-                    >
-                      <template v-slot:selection="{ item, index }">
-                        <span>{{ item ? 'Yes' : 'No' }}</span>
-                      </template>
-                      <template v-slot:item="{ item }">
-                        <span>{{ item ? 'Yes' : 'No' }}</span>
-                      </template>
-                    </v-select>
-                  </v-col>
-                </v-row>
+                <v-form 
+                  ref="form"
+                  v-model="valid"
+                >
+                  <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field 
+                        :rules="[rules.required, rules.email]"
+                        v-model="editedItem.email"
+                        label="Email"
+                        required
+                        :readonly="emailReadonly"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="editedItem.role"
+                        :rules="[rules.required]"
+                        :items="userRoleList"
+                        label="Role"
+                        class="mt-2"
+                        required
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="editedItem.status"
+                        :rules="[rules.required]"
+                        :items="userStatusList"
+                        label="Status"
+                        class="mt-2"
+                        required
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="editedItem.daily_tips_opt_out"
+                        :items="userOptoutList"
+                        label="Daily Tips Optout"
+                        class="mt-2"
+                        required
+                      >
+                        <template v-slot:selection="{ item, index }">
+                          <span>{{ item ? 'Yes' : 'No' }}</span>
+                        </template>
+                        <template v-slot:item="{ item }">
+                          <span>{{ item ? 'Yes' : 'No' }}</span>
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field 
+                        :rules="[rules.required]"
+                        v-model="editedItem.company_id"
+                        label="Company"
+                        required
+                        :readonly="emailReadonly"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-form>
               </v-container>
             </v-card-text>
 
@@ -152,6 +166,7 @@
 
     data: () => ({
       loading: false,
+      valid: true,
       search: '',
       snack: false,
       snackColor: '',
@@ -289,12 +304,16 @@
         }, 300)
       },
       create () {
+        this.$refs.form.validate()
+        if (!this.valid) {
+          return
+        }
         if (this.editedIndex > -1) {
-          Object.assign(this.users[this.editedIndex], this.editedItem)
           this.updateUser(this.editedItem)
+          Object.assign(this.users[this.editedIndex], this.editedItem)
         } else {
-          this.users.push(this.editedItem)
           this.createUser(this.editedItem)
+          this.users.push(this.editedItem)
         }
         this.close()
       },
@@ -349,12 +368,12 @@
               } else {
                 self.snackColor = 'error'
               }
-              self.snack = true
             })
             .catch(error => {
               console.log(error)
             })
             .finally(() => {
+              self.snack = true
               self.loading = false
             })
       },

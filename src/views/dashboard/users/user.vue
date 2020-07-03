@@ -247,6 +247,7 @@
   import { BASE_API } from '../../../api'
   import { validEmail, levelColor } from '../../../util'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardCompanyUsers',
@@ -345,9 +346,8 @@
     },
 
     computed: {
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
+      ...mapState(['page', 'companyId']),
+
       filteredUsers () {
         return this.users.filter(user => {
           if (this.filteredRisks.length == 0) {
@@ -398,14 +398,9 @@
         this.expanded.push(item)
       },
       fetchUsers () {
-        let user = {}
-        try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch(e) {}
-        const companyId = user.email.split('@')[1];
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/users/${companyId}/all`, {
+        axios(`${BASE_API}/api/users/${this.companyId}/all`, {
             method: 'GET',
           })
             .then(function (res) {
