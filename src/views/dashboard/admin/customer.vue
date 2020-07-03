@@ -19,6 +19,7 @@
           class="mt-5"
         ></v-text-field>
         <v-spacer></v-spacer>
+        <v-btn color="main" @click="fetchUsers" dark class="mb-2 mr-2"><v-icon size="16" left dark>mdi-refresh</v-icon>Refresh</v-btn>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
             <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
@@ -82,7 +83,7 @@
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field 
                         :rules="[rules.required]"
-                        v-model="editedItem.company_id"
+                        v-model.trim="editedItem.company_id"
                         label="Company"
                         required
                       ></v-text-field>
@@ -201,7 +202,7 @@
         },
         {
           text: 'Company',
-          value: 'companyId',
+          value: 'company_id',
         },
         {
           text: 'Last Login',
@@ -384,7 +385,8 @@
             data: {
               status: item.status,
               role: item.role,
-              daily_tips_opt_out: item.daily_tips_opt_out
+              daily_tips_opt_out: item.daily_tips_opt_out,
+              company_id: item.company_id
             },
             method: 'PUT',
           })

@@ -10,7 +10,7 @@ export const getCompanyId = () => {
 	try {
 		user = JSON.parse(localStorage.getItem('user'))
 	} catch(e) {}
-	return user && user.companyId || '';
+	return user && user.company_id || '';
 }
 
 export const companyId = getCompanyId();
