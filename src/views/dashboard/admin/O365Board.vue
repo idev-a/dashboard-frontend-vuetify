@@ -131,12 +131,8 @@
 		      			value: 'email'
 		      		},
 		      		{
-		      			text: 'First Name',
-		      			value: 'first_name'
-		      		},
-		      		{
-		      			text: 'Last Name',
-		      			value: 'last_name'
+		      			text: 'Name',
+		      			value: 'fullname'
 		      		},
 		      		{
 		      			text: 'Type',
