@@ -142,7 +142,7 @@
     </v-card>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
-      <<template v-slot:action="{ attrs }">
+      <template v-slot:action="{ attrs }">
             <v-btn
               dark
               text
@@ -199,10 +199,10 @@
           text: 'Status',
           value: 'status',
         },
-        // {
-        //   text: 'IP',
-        //   value: 'ip',
-        // },
+        {
+          text: 'Company',
+          value: 'companyId',
+        },
         {
           text: 'Last Login',
           value: 'last_login',
