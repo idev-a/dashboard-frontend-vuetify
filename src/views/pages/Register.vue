@@ -176,6 +176,7 @@
           const data = {
             username: this.form.username,
             email: this.form.email,
+            company_id: this.form.email.split('@')[1],
             daily_tips_opt_out: !this.form.opt_out
           }
           axios({

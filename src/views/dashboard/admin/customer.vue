@@ -85,7 +85,6 @@
                         v-model="editedItem.company_id"
                         label="Company"
                         required
-                        :readonly="emailReadonly"
                       ></v-text-field>
                     </v-col>
                   </v-row>
