@@ -8,7 +8,7 @@
 	  	>
 	  		<v-card
 	  		>
-	  			<div class="d-flex flex-row align-center justify-center pa-4 ">
+	  			<div class="d-flex flex-wrap flex-row align-center justify-center pa-4 ">
 	  				<div class="display-1 ml-4">Cron Jobs ({{ type }} - {{ interval }})</div>
 	  				<v-spacer></v-spacer>
 	  				<v-text-field
@@ -19,10 +19,12 @@
 			          single-line
 			          hide-details
 			        ></v-text-field>
-	  				<v-btn :loading="loading" :disabled="loading" @click="readAllCrons" icon><v-icon color="success" size="24">mdi-refresh</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="resumeCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-play</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="pauseCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-pause</v-icon></v-btn>
-	  				<v-btn :loading="loading" @click="deleteCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="primary" size="24">mdi-delete</v-icon></v-btn>
+			        <div>
+		  				<v-btn :loading="loading" :disabled="loading" @click="readAllCrons" icon><v-icon color="success" size="24">mdi-refresh</v-icon></v-btn>
+		  				<v-btn :loading="loading" @click="resumeCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-play</v-icon></v-btn>
+		  				<v-btn :loading="loading" @click="pauseCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="success" size="24">mdi-pause</v-icon></v-btn>
+		  				<v-btn :loading="loading" @click="deleteCrons" :disabled="selectedCrons.length == 0 || loading" icon><v-icon color="primary" size="24">mdi-delete</v-icon></v-btn>
+		  			</div>
 	  				<v-btn class="ml-3" @click="hideDialog" icon><v-icon>mdi-close</v-icon></v-btn>
 	  			</div>
 	  			<v-card-text>
@@ -32,19 +34,19 @@
 				        :headers="cronHeaders"
 				        :items="crons"
 				        :items-per-page="page"
-				        item-key="id"
+				        item-key="job_id"
 				        :search="searchCron"
 				        show-select
 				        @update:items-per-page="getPageNum"
 			      	> 
-				      	<template v-slot:item.data="{ item }">
-		                  	<span v-html="beautifyEmails(item.data.emails)"></span>
+				      	<template v-slot:item.emails="{ item }">
+		                  	<span v-html="beautifyEmails(item.emails)"></span>
 		                </template>
 		                <template v-slot:item.run_at="{ item }">
 		                  	<span v-html="beautifyDateTime(item.run_at)"></span>
 		                </template>
 		                <template v-slot:item.nextRun="{ item }">
-		                  	<span v-html="showNextRun(item)"></span>
+		                  	<span v-html="showNextRun(item.nextRun)"></span>
 		                </template>
 				  	</v-data-table>
 			  	</v-card-text>
@@ -79,6 +81,12 @@ export default {
 		...mapState(['cronDialog', 'page']),
     },
 
+    watch: {
+    	type() {
+    		this.readAllCrons()
+    	}
+    },
+
 	data () {
 		return {
 			loading: false,
@@ -87,17 +95,17 @@ export default {
 			selectedCrons: [],
 	      	crons: [],
 	      	cronHeaders: [
+	      		{
+	      			text: 'Emails',
+	      			value: 'emails'
+	      		},
       			{
-	      			text: 'Job',
-	      			value: 'job_id'
+	      			text: 'Company',
+	      			value: 'company_id'
 	      		},
 	      		{
 	      			text: 'Status',
 	      			value: 'status'
-	      		},
-	      		{
-	      			text: 'Run At',
-	      			value: 'run_at'
 	      		},
 	      		{
 	      			text: 'Trigger',
@@ -112,12 +120,6 @@ export default {
 	},
 
 	mounted () {
-		if (this.type == 'GSuite Drive') {
-			this.cronHeaders.unshift({
-      			text: 'Emails',
-      			value: 'data'
-      		})
-		}
 		this.readAllCrons()
 	},
 
@@ -148,9 +150,22 @@ export default {
 	    	}
   		},
 
-  		pauseCrons () {
-  			this.callback = this._pauseCrons
-  			this.showConfirm()
+  		async pauseCrons () {
+  			const self = this
+  			await this.$dialog.confirm({
+			    text: 'Do you really want to pause crons?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self._pauseCrons()
+			        }
+			      }
+			    }
+		    })
   		},
 
   		async _pauseCrons () {
@@ -160,13 +175,13 @@ export default {
 		 		ids,
 		 		type: this.type 
 		 	}
-		 	console.log(data)
 	    	try {
 		    	const res = await axios.post(`${BASE_API}/api/admin/cron/pause`, data)
 		    	this.selectedCrons = []
 		    	this.crons.map(cron => {
 		    		if (data.ids.includes(cron.job_id)) {
-		    			cron.status = 'paused'
+		    			cron.status = 'Paused'
+		    			cron.nextRun = '-'
 		    		}
 		    	})
       			this.message = res.data.message
@@ -180,9 +195,22 @@ export default {
 	    	}
   		},
 
-  		resumeCrons () {
-  			this.callback = this._resumeCrons
-  			this.showConfirm()
+  		async resumeCrons () {
+  			const self = this
+  			await this.$dialog.confirm({
+			    text: 'Do you really want to resume crons?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self._resumeCrons()
+			        }
+			      }
+			    }
+		    })
   		},
 
   		async _resumeCrons () {
@@ -197,10 +225,9 @@ export default {
 		    	this.selectedCrons = []
 		    	this.crons.map(cron => {
 		    		if (data.ids.includes(cron.job_id)) {
-		    			cron.status = 'active'
+		    			cron.status = 'Active'
 		    		}
 		    	})
-		    	console.log(this.crons)
       			this.message = res.data.message
       			this.color = res.data.status
 	    	} catch(e) {
@@ -211,9 +238,22 @@ export default {
 	    	}
   		},
 
-  		deleteCrons () {
-  			this.callback = this._deleteCrons
-  			this.showConfirm()
+  		async deleteCrons () {
+  			const self = this
+  			await this.$dialog.confirm({
+			    text: 'Do you really want to delete crons?',
+			    title: 'Warning',
+			    actions: {
+			      false: 'No',
+			      true: {
+			        color: 'red',
+			        text: 'Yes',
+			        handle: () => {
+			          self._deleteCrons()
+			        }
+			      }
+			    }
+		    })
   		},
 
   		async _deleteCrons () {
@@ -239,17 +279,20 @@ export default {
 
   		showNextRun (item) {
   			let nextRun = '-'
-  			if (item.status == 'done' || item.status == 'active') {
-  				if (this.type == 'GSuite Drive') {
-	  				nextRun = this.$moment().add(1, 'weeks').startOf('week').format('YYYY MMM DD')
-  				} else if (this.type == 'Office 365') {
-  					if (item.interval == '0 5 * * *') {
-		  				nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 05:00'
-  					} else {
-		  				nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 20:00'
-  					}
-  				}
+  			if (item) {
+  				nextRun = item
   			}
+  			// if (item.status == 'done' || item.status == 'active') {
+  			// 	if (this.type == 'GSuite Drive') {
+	  		// 		nextRun = this.$moment().add(1, 'weeks').startOf('week').format('YYYY MMM DD')
+  			// 	} else if (this.type == 'Office 365') {
+  			// 		if (item.interval == '0 5 * * *') {
+		  	// 			nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 05:00'
+  			// 		} else {
+		  	// 			nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 20:00'
+  			// 		}
+  			// 	}
+  			// }
 
   			return nextRun
   		},

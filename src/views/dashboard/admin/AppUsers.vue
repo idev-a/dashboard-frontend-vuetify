@@ -28,7 +28,133 @@
       class="px-5 py-3"
     >
       <v-card-title>
-        Apps & Users (applications)
+        Apps & Users (applications & {app}_users)
+      </v-card-title>
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          class="mb-3"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-spacer></v-spacer>
+        <!-- Dialog for applications table -->
+        <v-dialog v-model="appDialog" max-width="1024px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ appFormTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-form
+                  ref="appForm"
+                  v-model="appValid"
+                >
+                  <v-row>
+                    <v-col cols="12" md="4">
+                      <v-textarea
+                        v-model="editedAppItem.application_name"
+                        label="Name" 
+                        auto-grow
+                        rows="1"
+                        :rules="[rules.required, uniqueApp]"
+                        hide-details="auto"
+                        required
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="8">
+                      <v-textarea
+                        v-model="editedAppItem.purpose"
+                        label="Purpose" 
+                        auto-grow
+                        rows="1"
+                        :rules="[rules.required]"
+                        hide-details="auto"
+                        required
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-textarea
+                        v-model="editedAppItem.application_logo"
+                        label="Logo" 
+                        auto-grow
+                        rows="1"
+                        hide-details="auto"
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-textarea
+                        v-model="editedAppItem.login_url"
+                        label="Login url" 
+                        auto-grow
+                        rows="1"
+                        hide-details="auto"
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-textarea
+                        v-model="editedAppItem.authentication_method"
+                        label="Authentication Method" 
+                        auto-grow
+                        rows="1"
+                        hide-details="auto"
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-select
+                        v-model="editedAppItem.risk"
+                        label="Risk" 
+                        :items="riskItems"
+                        >
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-textarea
+                        v-model="editedAppItem.notes"
+                        label="Notes" 
+                        auto-grow
+                        rows="1"
+                        hide-details="auto"
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-textarea
+                        v-model="editedAppItem.soc2"
+                        label="SoC2" 
+                        auto-grow
+                        rows="1"
+                        hide-details="auto"
+                        >
+                      </v-textarea>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-text-field
+                        v-model="editedAppItem.users_table_name"
+                        label="Users tablename"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="main" text @click="closeAppDialog">Cancel</v-btn>
+              <v-btn :disabled="!appValid" color="main" text @click="createApp">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card-title>
       <v-data-table
         :loading="loading"
@@ -42,136 +168,6 @@
         :expanded.sync="expanded"
         @update:items-per-page="getPageNum"
       > 
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-toolbar-title>
-               <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                class="mb-3"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <!-- Dialog for applications table -->
-            <v-dialog v-model="appDialog" max-width="1024px">
-              <template v-slot:activator="{ on }">
-                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New App</v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ appFormTitle }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-form
-                      ref="appForm"
-                      v-model="appValid"
-                    >
-                      <v-row>
-                        <v-col cols="12" md="4">
-                          <v-textarea
-                            v-model="editedAppItem.application_name"
-                            label="Name" 
-                            auto-grow
-                            rows="1"
-                            :rules="[rules.required, uniqueApp]"
-                            hide-details="auto"
-                            required
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="8">
-                          <v-textarea
-                            v-model="editedAppItem.purpose"
-                            label="Purpose" 
-                            auto-grow
-                            rows="1"
-                            :rules="[rules.required]"
-                            hide-details="auto"
-                            required
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <v-textarea
-                            v-model="editedAppItem.application_logo"
-                            label="Logo" 
-                            auto-grow
-                            rows="1"
-                            hide-details="auto"
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <v-textarea
-                            v-model="editedAppItem.login_url"
-                            label="Login url" 
-                            auto-grow
-                            rows="1"
-                            hide-details="auto"
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-textarea
-                            v-model="editedAppItem.authentication_method"
-                            label="Authentication Method" 
-                            auto-grow
-                            rows="1"
-                            hide-details="auto"
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-select
-                            v-model="editedAppItem.risk"
-                            label="Risk" 
-                            :items="riskItems"
-                            >
-                          </v-select>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-textarea
-                            v-model="editedAppItem.notes"
-                            label="Notes" 
-                            auto-grow
-                            rows="1"
-                            hide-details="auto"
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-textarea
-                            v-model="editedAppItem.soc2"
-                            label="SoC2" 
-                            auto-grow
-                            rows="1"
-                            hide-details="auto"
-                            >
-                          </v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="editedAppItem.users_table_name"
-                            label="Users tablename"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-form>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="main" text @click="closeAppDialog">Cancel</v-btn>
-                  <v-btn :disabled="!appValid" color="main" text @click="createApp">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
         <template v-slot:item.risk="{ item }">
           <v-chip :color="levelColor(item.risk)" dark>
             <div class="subtitle-2">{{ item.risk ? item.risk : 'low' }}</div>

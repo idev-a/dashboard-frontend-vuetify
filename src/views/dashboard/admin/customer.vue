@@ -7,6 +7,86 @@
     <v-card
       class="px-5 py-3"
     >
+      <v-card-title>
+        Customers
+      </v-card-title>
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          class="mt-5"
+        ></v-text-field>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field 
+                      :rules="[rules.required, rules.email]"
+                      v-model="editedItem.email"
+                      label="Email"
+                      required
+                      :readonly="emailReadonly"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-select
+                      v-model="editedItem.role"
+                      :rules="[rules.required]"
+                      :items="userRoleList"
+                      label="Role"
+                      class="mt-2"
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-select
+                      v-model="editedItem.status"
+                      :rules="[rules.required]"
+                      :items="userStatusList"
+                      label="Status"
+                      class="mt-2"
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-select
+                      v-model="editedItem.daily_tips_opt_out"
+                      :items="userOptoutList"
+                      label="Daily Tips Optout"
+                      class="mt-2"
+                      required
+                    >
+                      <template v-slot:selection="{ item, index }">
+                        <span>{{ item ? 'Yes' : 'No' }}</span>
+                      </template>
+                      <template v-slot:item="{ item }">
+                        <span>{{ item ? 'Yes' : 'No' }}</span>
+                      </template>
+                    </v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="main" text @click="close">Cancel</v-btn>
+              <v-btn color="main" text @click="create">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-card-title>
       <v-data-table
         :loading="loading"
         :headers="headers"
@@ -16,87 +96,6 @@
         :items-per-page="page"
         @update:items-per-page="getPageNum"
       >
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-toolbar-title>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-              ></v-text-field>
-            </v-toolbar-title>
-    
-            <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on }">
-                <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-text-field 
-                          :rules="[rules.required, rules.email]"
-                          v-model="editedItem.email"
-                          label="Email"
-                          required
-                          :readonly="emailReadonly"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-select
-                          v-model="editedItem.role"
-                          :rules="[rules.required]"
-                          :items="userRoleList"
-                          label="Role"
-                          class="mt-2"
-                          required
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-select
-                          v-model="editedItem.status"
-                          :rules="[rules.required]"
-                          :items="userStatusList"
-                          label="Status"
-                          class="mt-2"
-                          required
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-select
-                          v-model="editedItem.daily_tips_opt_out"
-                          :items="userOptoutList"
-                          label="Daily Tips Optout"
-                          class="mt-2"
-                          required
-                        >
-                          <template v-slot:selection="{ item, index }">
-                            <span>{{ item ? 'Yes' : 'No' }}</span>
-                          </template>
-                          <template v-slot:item="{ item }">
-                            <span>{{ item ? 'Yes' : 'No' }}</span>
-                          </template>
-                        </v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="main" text @click="close">Cancel</v-btn>
-                  <v-btn color="main" text @click="create">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">

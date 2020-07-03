@@ -15,7 +15,7 @@
 		    <v-card-text>
 		    	<v-tabs
 			      class="mt-4 border"
-			      background-color="success"
+			      background-color="main"
 			      color="white"
 			      light
 			      centered
@@ -48,7 +48,7 @@
 		</v-card>
 
 		<v-snackbar
-      		v-model="snackbar"
+      		:value="snackbar"
       		bottom
       		:color="color"
       		@input="hideSnackbar()"

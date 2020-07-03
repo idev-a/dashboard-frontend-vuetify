@@ -10,9 +10,9 @@
 	    	<v-card-title class="mb-4">
 		        Chart Board
 	      		<v-spacer></v-spacer>
-		        <v-btn :loading="loading" :disabled="!runnable" @click="testChart" color="success" class="mr-3">Test Chart<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-      			<v-btn :loading="loading" :disabled="tested != 'success'" @click="saveChart" color="success">Save Charts<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-      			<v-btn :loading="loading" :disabled="loading" @click="readAll" color="success">Read All<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
+		        <v-btn :loading="loading" :disabled="!runnable" @click="testChart" color="main" class="mr-3">Test Chart<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+      			<v-btn :loading="loading" :disabled="tested != 'success'" @click="saveChart" color="main">Save Charts<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+      			<v-btn :loading="loading" :disabled="loading" @click="readAll" color="main">Read All<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
 	      	</v-card-title>
 	      	<v-card-text>
 	      		<v-form
@@ -119,14 +119,6 @@
 						          label="Select a target table"
 						          hint="Select a table you want change chart"
 						        ></v-select>
-					    		<!-- <v-textarea
-					                v-model="testquery"
-					                label="SQL Query" 
-					                hint="Ctrl + Enter to run the query"
-					                rows="3"
-					                outlined
-					                @keyup.ctrl.13="keyDownOnQuery"
-					            /> -->
 					    	</v-col>
 					    	<v-col
 								cols='12'

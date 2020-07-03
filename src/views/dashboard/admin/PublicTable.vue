@@ -7,6 +7,9 @@
 	    <v-card
 	      class="pa-5"
 	    >
+	    	<v-card-title>
+	    		Public Data
+	    	</v-card-title>
 	    	<v-row
 	    	>
 	    		<v-col

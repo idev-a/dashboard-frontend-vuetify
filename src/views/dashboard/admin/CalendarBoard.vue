@@ -14,9 +14,10 @@
 			    </div>
 		        <v-spacer></v-spacer>
 	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 		    </v-card-title>
 		    <v-row>
-		    	<v-col cols='12' md="4">
+		    	<v-col cols='12' md="3">
 	              	<v-textarea
 		                v-model="emails"
 		                :rules="[rules.required]"
@@ -28,7 +29,7 @@
 		                @keyup.ctrl.13="keyDownOnImport"
 		            />
 		    	</v-col>
-		    	<v-col md="4" cols='12'>
+		    	<v-col md="3" cols='12'>
 	              	<v-text-field
 		                v-model="user_email"
 		                :rules="[rules.required, rules.email]"
@@ -37,7 +38,7 @@
 		                outlined
 		            />
 		    	</v-col>
-		    	<v-col cols='12' md="4">
+		    	<v-col cols='12' md="3">
 	    		  	<v-file-input
 					    accept=".json"
 					    placeholder="Import GSuite service key file (.json file)"
@@ -48,6 +49,15 @@
 					    :loading="loading"
 					    multiple 
 				  	></v-file-input>
+		    	</v-col>
+		    	<v-col md="3" cols='12'>
+	              	<v-text-field
+		                v-model="company_id"
+		                :rules="[rules.required, rules.email]"
+		                :loading="loading"
+		                label="Company Name"
+		                outlined
+		            />
 		    	</v-col>
 		    </v-row>
 		    <v-card-title>
@@ -60,9 +70,9 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-          	  	<v-btn :loading="loading" :disabled="loading" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+          	  	<v-btn :loading="loading" :disabled="loading" @click="readAll" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
           	  	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSVForShared" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
 		    <v-data-table
 	    		v-model="selectedItems"
@@ -103,7 +113,7 @@
       	</v-snackbar>
 
       	<!-- Cron job dialog -->
-      	<cron-dialog type="GSuite Drive" interval="Weekly" />
+      	<cron-dialog type="run_calendar" interval="Weekly" />
 	</v-container>
 </template>
 
@@ -125,6 +135,7 @@
 				loading: false,
 				emails: '',
 				user_email: '',
+				company_id: 'grove.co',
 				file: null,
 				snackbar: false,
 		      	message: '',
@@ -146,7 +157,7 @@
 						value: 'summary'
 					},
 					{
-						text: 'Statue',
+						text: 'Status',
 						value: 'status'
 					},
 					{
@@ -156,6 +167,10 @@
 					{
 						text: 'End',
 						value: 'end_datetime'
+					},
+					{
+						text: 'Company',
+						value: 'company_id'
 					},
 					{
 						text: 'Run At',
@@ -184,12 +199,12 @@
 	     	}, 
 
 			importable () {
-				return !this.loading && this.file && this.emails && this.user_email
+				return !this.loading && this.file && this.emails && this.user_email && this.company_id
 			}
 		},
 
 		methods: {
-			...mapActions(['showConfirm']),
+			...mapActions(['showConfirm', 'showCronDialog']),
 
 			beautifyEmail,
 			beautifyEmails,
@@ -198,13 +213,17 @@
 		        localStorage.setItem('page', _page)
 		    },
 
+		    showCron () {
+      			this.showCronDialog()
+      		},
+
 			keyDownOnImport () {
       			if (this.query) {
       				this.importKey()
       			}
       		},
 
-      		async readAllShared () {
+      		async readAll () {
   			 	this.loading = true
   			 	this.selectedItems = []
       			this.items = []
@@ -221,7 +240,7 @@
 		    	}
       		},
 
-      		downloadCSVForShared () {
+      		downloadCSV () {
       			if (this.selectedItems.length) {
       				downloadCSV(this.selectedItems)
       			} else {
@@ -261,9 +280,10 @@
                 }
 
                 const data = {
-                	'user_email': this.user_email,
-                	'emails': this.emails,
-                	'user_id': JSON.parse(localStorage.getItem('user')).id
+                	user_email: this.user_email,
+                	emails: this.emails,
+                	user_id: JSON.parse(localStorage.getItem('user')).id,
+                	company_id: this.company_id
                 }
 
                 const json = JSON.stringify(data);

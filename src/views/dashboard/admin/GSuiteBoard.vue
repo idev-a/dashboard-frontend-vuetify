@@ -4,77 +4,206 @@
 	    fluid
 	    tag="section"
   	>
-	    <v-card
+  		<v-card
 	      class="pa-5"
 	    >
 	    	<v-card-title>
-	    		<div>
-			        <div>GSuite Board (gsuite_drive_shared)</div>
-			        <v-subheader>Find External shared links</v-subheader>
-			    </div>
-		        <v-spacer></v-spacer>
-	        	<v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-	        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		        GSuite Board
 		    </v-card-title>
-		    <v-row>
-		    	<v-col cols='12' md="4">
-	              	<v-textarea
-		                v-model="emails"
-		                :rules="[rules.required]"
-		                :loading="loading"
-		                label="Owner Emails"
-		                hint="Ctrl + Enter to run the google drive script"
-		                rows="3"
-		                outlined
-		                @keyup.ctrl.13="keyDownOnImport"
-		            />
-		    	</v-col>
-		    	<v-col cols='12' md="4">
-	    		  	<v-file-input
-					    accept=".json"
-					    placeholder="Import GSuite private key file (.json file)"
-					    prepend-icon="mdi-database-import"
-					    label="Private key"
-					    ref="myfile" 
-					    v-model="file"
-					    :loading="loading"
-					    multiple 
-				  	></v-file-input>
-		    	</v-col>
-		    </v-row>
-		    <v-card-title>
-		    	<v-text-field
-	                v-model="search"
-	                append-icon="mdi-magnify"
-	                label="Search"
-	                class="mb-5"
-	                single-line
-	                hide-details
-              	></v-text-field>
-              	<v-spacer></v-spacer>
-          	  	<v-btn :loading="loading" :disabled="loading" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-          	  	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSVForShared" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-          	</v-card-title>
-		    <v-data-table
-	    		v-model="selectedItems"
-		        :loading="loading"
-		        :headers="headers"
-		        :items="items"
-		        :items-per-page="page"
-		        item-key="id"
-		        :search="search"
-		        show-select
-		        @update:items-per-page="getPageNum"
-		      > 
-		      	<template v-slot:item.users="{ item }">
-                  	<span v-html="beautifyEmails(item.users)"></span>
-                </template>
-                <template v-slot:item.email="{ item }">
-                  	<span v-html="beautifyEmail(item.email)"></span>
-                </template>
-		  	</v-data-table>
+		    <v-card-text>
+		    	<v-tabs
+			      class="mt-4 border"
+			      background-color="main"
+			      color="white"
+			      light
+			      centered
+			      grow
+			      flat
+			      show-arrows
+			    >
+			      <v-tabs-slider class="blue darken-3"></v-tabs-slider>
+					
+			      <v-tab
+			      	v-for="(data, key) in gsuites"
+			      	:key="data.key"
+			      	:href="`#${data.key}`"
+			      	@change="changeTab(`${data.key}`)"
+			      >
+			        {{data.title}}
+			      </v-tab>
+
+			      <v-tab-item
+			      	value="google_drive_shared"
+			      >
+				    	<v-card-title>
+				    		<div>
+						        <div>gsuite_drive_shared</div>
+						        <v-subheader>Find external shared links</v-subheader>
+						    </div>
+					        <v-spacer></v-spacer>
+				        	<v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+				        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_g_drive_share', 'Weekly')" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+					    </v-card-title>
+					    <v-row>
+					    	<v-col cols='12' md="4">
+				              	<v-textarea
+					                v-model="emails"
+					                :rules="[rules.required]"
+					                :loading="loading"
+					                label="Owner Emails"
+					                hint="Ctrl + Enter to run the google drive script"
+					                outlined
+					                rows="2"
+					                auto-grow
+					                @keyup.ctrl.13="keyDownOnImport"
+					            />
+					    	</v-col>
+					    	<v-col cols='12' md="4">
+				    		  	<v-file-input
+								    accept=".json"
+								    placeholder="Import GSuite private key file (.json file)"
+								    prepend-icon="mdi-database-import"
+								    label="Private key"
+								    ref="myfile" 
+								    v-model="file"
+								    :loading="loading"
+								    multiple 
+							  	></v-file-input>
+					    	</v-col>
+					    	<v-col cols='12' md="4">
+					    		<v-textarea
+					                v-model="company_id"
+					                :rules="[rules.required]"
+					                prepend-icon="mdi-email"
+					                :loading="loading"
+					                label="Company Name"
+					                auto-grow
+			                    	rows="1"
+					                hide-details="auto"
+				              	></v-textarea>
+					    	</v-col>
+					    </v-row>
+					    <v-card-title>
+					    	<v-text-field
+				                v-model="search"
+				                append-icon="mdi-magnify"
+				                label="Search"
+				                class="mb-5"
+				                single-line
+				                hide-details
+			              	></v-text-field>
+			              	<v-spacer></v-spacer>
+			          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+			          	  	<v-btn :loading="loading" class="mr-2" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+			          	</v-card-title>
+					    <v-data-table
+				    		v-model="selectedItems"
+					        :loading="loading"
+					        :headers="driveHeaders"
+					        :items="items"
+					        :items-per-page="page"
+					        item-key="id"
+					        :search="search"
+					        show-select
+					        @update:items-per-page="getPageNum"
+					      > 
+					      	<template v-slot:item.users="{ item }">
+			                  	<span v-html="beautifyEmails(item.users)"></span>
+			                </template>
+			                <template v-slot:item.email="{ item }">
+			                  	<span v-html="beautifyEmail(item.email)"></span>
+			                </template>
+					  	</v-data-table>
+		  		  </v-tab-item>
+		  		  <v-tab-item
+			      	value="gsuite_users"
+			      >
+					<v-card-title>
+			    		<div>
+					        <div>gsuite_users, google_groups</div>
+					        <v-subheader>Find gsuite users and groups</v-subheader>
+					    </div>
+				        <v-spacer></v-spacer>
+			        	<v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			        	<v-btn :loading="loading" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_users', 'Daily')" color="main">Crons (Users)<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_gsuite_groups', 'Daily')" color="main">Crons (Groups)<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+				    </v-card-title>
+				    <v-row>
+				    	<v-col cols='12' md="4">
+			              	<v-text-field
+				                v-model="emails"
+				                :rules="[rules.required]"
+				                :loading="loading"
+				                label="Owner Email"
+				                hint="Ctrl + Enter to run the gsuite_users script"
+				                rows="3"
+				                outlined
+				                @keyup.ctrl.13="keyDownOnImport"
+				            />
+				    	</v-col>
+				    	<v-col cols='12' md="4">
+			    		  	<v-file-input
+							    accept=".json"
+							    placeholder="Import GSuite private key file (.json file)"
+							    prepend-icon="mdi-database-import"
+							    label="Private key"
+							    ref="myfile" 
+							    v-model="file"
+							    :loading="loading"
+							    multiple 
+						  	></v-file-input>
+				    	</v-col>
+				    	<v-col cols='12' md="4">
+				    		<v-textarea
+				                v-model="company_id"
+				                :rules="[rules.required]"
+				                prepend-icon="mdi-email"
+				                :loading="loading"
+				                label="Company Name"
+				                auto-grow
+		                    	rows="1"
+				                hide-details="auto"
+			              	></v-textarea>
+				    	</v-col>
+				    </v-row>
+				    <v-card-title>
+				    	<v-text-field
+			                v-model="search"
+			                append-icon="mdi-magnify"
+			                label="Search"
+			                class="mb-5"
+			                single-line
+			                hide-details
+		              	></v-text-field>
+		              	<v-spacer></v-spacer>
+		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_users')" color="main">Read (Users)<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('google_groups')" color="main">Read (Groups)<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+		          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+		          	</v-card-title>
+				    <v-data-table
+			    		v-model="selectedItems"
+				        :loading="loading"
+				        :headers="gsuiteHeaders"
+				        :items="items"
+				        :items-per-page="page"
+				        item-key="id"
+				        :search="search"
+				        show-select
+				        @update:items-per-page="getPageNum"
+				      > 
+				      	<template v-slot:item.users="{ item }">
+		                  	<span v-html="beautifyEmails(item.users)"></span>
+		                </template>
+		                <template v-slot:item.email="{ item }">
+		                  	<span v-html="beautifyEmail(item.email)"></span>
+		                </template>
+				  	</v-data-table>
+		  		  </v-tab-item>
+		  		</v-tabs>
+		    </v-card-text>
 		</v-card>
+	    
 
 		<v-snackbar
       		v-model="snackbar"
@@ -95,7 +224,7 @@
       	</v-snackbar>
 
       	<!-- Cron job dialog -->
-      	<cron-dialog type="GSuite Drive" interval="Weekly" />
+      	<cron-dialog :type="cronType" :interval="cronInterval" />
 	</v-container>
 </template>
 
@@ -118,18 +247,32 @@
 				loading: false,
 				emails: '',
 				file: null,
+				company_id: 'grove.co',
 				snackbar: false,
 		      	message: '',
 		      	search: '',
 		      	searchCron: '',
 		      	color: 'success',
+		      	importUrl: `${BASE_API}/api/admin/gsuite/drive/run`,
+		      	gsuites: [
+					{
+						key: 'google_drive_shared',
+						bgColor: 'success',
+						title: 'Google Drive(Shared)'
+					},
+					{
+						key: 'gsuite_users',
+						bgColor: 'orange accent-3',
+						title: 'GSuite'
+					},
+		      	],
 				errorMessages: {
 					emails: {
 			            required: false,
 			            invalid: false,
 			        },
 				},
-				headers: [	
+				driveHeaders: [	
 					{
 						text: 'Email',
 						value: 'email'
@@ -155,16 +298,71 @@
 						value: 'file_name'
 					},
 					{
-						text: 'users',
+						text: 'Users',
 						value: 'users'
+					},
+					{
+						text: 'Company',
+						value: 'company_id'
 					},
 					{
 						text: 'Run At',
 						value: 'run_at'
 					},
 		      	],
+		      	usersHeaders: [
+		      		{
+						text: 'Email',
+						value: 'email'
+					},
+					{
+						text: 'Username',
+						value: 'firstname_lastname'
+					},
+					{
+						text: 'Org Unit Path',
+						value: 'org_unit_path'
+					},
+					{
+						text: 'Recovery Email',
+						value: 'recovery_email'
+					},
+					{
+						text: 'Suspended',
+						value: 'suspended'
+					},
+					{
+						text: 'Company',
+						value: 'company_id'
+					},
+					{
+						text: 'Run At',
+						value: 'run_at'
+					},
+		      	],
+		      	groupHeaders: [
+			        {
+			          text: 'Name',
+			          value: 'name',
+			        },
+			        {
+			          text: 'Email',
+			          value: 'email',
+			        },
+			        {
+						text: 'Company',
+						value: 'company_id'
+					},
+					{
+						text: 'Run At',
+						value: 'run_at'
+					},
+		        ],
+		      	gsuiteHeaders: [],
 	      		selectedItems: [],
 		      	items: [],
+		      	cronType: 'GSuite Drive',
+		      	cronInterval: 'Weekly',
 			 	rules: {
 		          required: value => {
 		            this.errorMessages.emails.required = !!value
@@ -185,7 +383,7 @@
 	     	}, 
 
 			importable () {
-				return !this.loading && this.file && this.emails && !this.errorMessages.emails.invalid
+				return !this.loading && this.file && this.emails && !this.errorMessages.emails.invalid && this.company_id
 			}
 		},
 
@@ -199,18 +397,29 @@
 		        localStorage.setItem('page', _page)
 		    },
 
+		    changeTab (href) {
+		    	// initialize the vars
+		    	this.emails = ''
+		    	if (href == 'gsuite_users') {
+			    	this.importUrl = `${BASE_API}/api/admin/gsuite/users/run`
+			    	this.gsuiteHeaders = this.usersHeaders
+		    	} else {
+			    	this.importUrl = `${BASE_API}/api/admin/gsuite/drive/run`
+		    	}
+		    },
+
 			keyDownOnImport () {
       			if (this.query) {
       				this.importKey()
       			}
       		},
 
-      		async readAllShared () {
-  			 	this.loading = true
+      		async readAll (url) {
+      			this.loading = true
   			 	this.selectedItems = []
       			this.items = []
 		    	try {
-			    	const res = await axios.get(`${BASE_API}/api/admin/gsuite/read`)
+			    	const res = await axios.get(url)
 		      		this.items = res.data.items
 	      			this.message = res.data.message
 	      			this.color = res.data.status
@@ -222,7 +431,20 @@
 		    	}
       		},
 
-      		downloadCSVForShared () {
+      		async readAllShared () {
+  			 	this.readAll(`${BASE_API}/api/admin/google_drive/read`)
+      		},
+
+      		async readAllGSuite (type="users") {
+  			 	this.readAll(`${BASE_API}/api/admin/${type}/read`)
+  			 	if (type == "users") {
+  			 		this.gsuiteHeaders = this.usersHeaders
+  			 	} else {
+  			 		this.gsuiteHeaders = this.groupHeaders
+  			 	}
+      		},
+
+      		downloadCSV () {
       			if (this.selectedItems.length) {
       				downloadCSV(this.selectedItems)
       			} else {
@@ -266,8 +488,9 @@
                 }
 
                 const data = {
-                	'emails': this.emails,
-                	'user_id': JSON.parse(localStorage.getItem('user')).id
+                	emails: this.emails,
+                	user_id: JSON.parse(localStorage.getItem('user')).id,
+                	company_id: this.company_id
                 }
 
                 const json = JSON.stringify(data);
@@ -280,7 +503,7 @@
                 this.loading = true
                 this.file = null
 		    	try {
-			    	const res = await axios.post(`${BASE_API}/api/admin/gsuite/run`, formData)
+			    	const res = await axios.post(this.importUrl, formData)
 		      		this.csvData = res.data.csv_data
 	      			this.message = res.data.message
 	      			this.color = res.data.status
@@ -293,7 +516,9 @@
 			},
 
 			// Cron jobs
-			showCron () {
+			showCron (type, interval) {
+				this.cronType = type
+				this.cronInterval = interval
       			this.showCronDialog()
       		},
 		}

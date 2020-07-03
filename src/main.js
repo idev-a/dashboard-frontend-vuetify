@@ -26,7 +26,8 @@ import VueFriendlyIframe from 'vue-friendly-iframe';
 import VueSocketIO from 'vue-socket.io'
 import VuetifyDialog from 'vuetify-dialog'
 import 'vuetify-dialog/dist/vuetify-dialog.css'
- 
+import VueTheMask from 'vue-the-mask'
+
 import { BASE_API } from './api.js'
 
 Vue.config.productionTip = false
@@ -68,6 +69,9 @@ Vue.use(VuetifyDialog, {
     vuetify
   }
 })
+
+Vue.use(VueTheMask)
+
 
 // export const SocketInstance = socketio(`${BASE_API}/notification`);
 
