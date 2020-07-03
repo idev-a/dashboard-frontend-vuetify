@@ -227,7 +227,7 @@
 		      				apiKey: this.apiKey.trim(),
 		      				apiSecret: this.apiSecret.trim(),
 		      				user_id: JSON.parse(localStorage.getItem('user')).id,
-		      				company_id: this.company_id
+		      				company_id: this.company_id.trim()
 		      			},
 		      			method: 'POST'
 		      		})

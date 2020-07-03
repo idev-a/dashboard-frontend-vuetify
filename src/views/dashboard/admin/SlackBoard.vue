@@ -258,7 +258,7 @@
 		      			data: { 
 		      				SLACK_CLIENT_ID: this.slackClientId.trim(),
 		      				SLACK_CLIENT_SECRET: this.slackClientSecret.trim(),
-		      				SLACK_COMPANY_ID: this.company_id,
+		      				SLACK_COMPANY_ID: this.company_id.trim(),
 		      				SLACK_USER_ID: JSON.parse(localStorage.getItem('user')).id,
 		      			},
 		      			method: 'POST'

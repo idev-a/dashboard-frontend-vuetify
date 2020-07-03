@@ -220,7 +220,7 @@
 		      				O365_CLIENT_SECRET: this.o365ClientSecret.trim(),
 		      				scope: this.scope.join(','),
 		      				user_id: JSON.parse(localStorage.getItem('user')).id,
-		      				company_id: this.company_id
+		      				company_id: this.company_id.trim()
 		      			},
 		      			method: 'POST'
 		      		})

@@ -53,7 +53,7 @@
 		    	<v-col md="3" cols='12'>
 	              	<v-text-field
 		                v-model="company_id"
-		                :rules="[rules.required, rules.email]"
+		                :rules="[rules.required]"
 		                :loading="loading"
 		                label="Company Name"
 		                outlined
@@ -283,7 +283,7 @@
                 	user_email: this.user_email,
                 	emails: this.emails,
                 	user_id: JSON.parse(localStorage.getItem('user')).id,
-                	company_id: this.company_id
+                	company_id: this.company_id.trim()
                 }
 
                 const json = JSON.stringify(data);

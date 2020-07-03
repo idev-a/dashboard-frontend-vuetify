@@ -435,9 +435,9 @@
   			 	this.readAll(`${BASE_API}/api/admin/google_drive/read`)
       		},
 
-      		async readAllGSuite (type="users") {
+      		async readAllGSuite (type="gsuite_users") {
   			 	this.readAll(`${BASE_API}/api/admin/${type}/read`)
-  			 	if (type == "users") {
+  			 	if (type == "gsuite_users") {
   			 		this.gsuiteHeaders = this.usersHeaders
   			 	} else {
   			 		this.gsuiteHeaders = this.groupHeaders
@@ -490,7 +490,7 @@
                 const data = {
                 	emails: this.emails,
                 	user_id: JSON.parse(localStorage.getItem('user')).id,
-                	company_id: this.company_id
+                	company_id: this.company_id.trim()
                 }
 
                 const json = JSON.stringify(data);
