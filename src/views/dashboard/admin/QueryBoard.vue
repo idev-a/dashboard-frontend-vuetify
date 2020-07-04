@@ -359,6 +359,8 @@
 		    	this.loading = true
 		    	this.headers = []
 		    	this.selectedItems = []
+		    	this.selectedHeaders = []
+		    	this.filteredHeaders = []
 
 		    	try {
 			    	const data = await axios({

@@ -15,7 +15,7 @@
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
-		    	<v-btn :loading="loading"  :disabled="loading" @click="showCron" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		    	<v-btn :loading="loading"  :disabled="loading" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>

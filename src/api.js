@@ -1,8 +1,9 @@
 import axios from 'axios'
+require('dotenv').config()
 
-// export const BASE_API = process.env.VUE_APP_BACKEND_URL
+export const BASE_API = process.env.VUE_APP_BACKEND_URL
 // export const BASE_API = 'http://localhost:5000'
-export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
+// export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
 
 // rea
 export const getCompanyId = () => {
@@ -13,7 +14,16 @@ export const getCompanyId = () => {
 	return user && user.company_id && user.company_id.trim() || '';
 }
 
+const getUserId = () => {
+	let user = {}
+	try {
+		user = JSON.parse(localStorage.getItem('user'))
+	} catch(e) {}
+	return user && user.id || '';
+}
+
 export const companyId = getCompanyId();
+export const userId = getUserId()
 
 /* 
   API methods

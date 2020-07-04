@@ -237,6 +237,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Dropbox Board',
+          path: 'admin/dropbox',
+          component: () => import('@/views/dashboard/admin/DropboxBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),

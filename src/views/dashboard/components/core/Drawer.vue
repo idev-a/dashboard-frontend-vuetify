@@ -167,6 +167,10 @@
               title: 'Calendar Board',
               to: 'calendar-event',
             },
+            {
+              title: 'Dropbox Board',
+              to: 'dropbox',
+            },
           ]
         },
         {

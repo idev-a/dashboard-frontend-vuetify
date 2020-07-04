@@ -473,8 +473,12 @@ export const beautifyEmails = (emails) => {
   let list = []
   if (emails.includes(';')) {
     list = emails.split(';')
-  } else {
+  } else if (emails.includes('\n')) {
     list = emails.split('\n')
+  } else if (emails.includes(',')) {
+    list = emails.split(',')
+  } else {
+    list = [emails]
   }
   list.map(email => {
     if (validEmail(email.trim())) {

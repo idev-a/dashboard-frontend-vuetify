@@ -42,7 +42,7 @@
 						    </div>
 					        <v-spacer></v-spacer>
 				        	<v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-				        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_g_drive_share', 'Weekly')" color="main">CronJobs<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+				        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_g_drive_share', 'Weekly')" color="main">Google Drives<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
 					    </v-card-title>
 					    <v-row>
 					    	<v-col cols='12' md="4">
@@ -108,11 +108,8 @@
 					        show-select
 					        @update:items-per-page="getPageNum"
 					      > 
-					      	<template v-slot:item.users="{ item }">
-			                  	<span v-html="beautifyEmails(item.users)"></span>
-			                </template>
 			                <template v-slot:item.email="{ item }">
-			                  	<span v-html="beautifyEmail(item.email)"></span>
+			                  	<span v-html="beautifyEmails(item.email)"></span>
 			                </template>
 					  	</v-data-table>
 		  		  </v-tab-item>
@@ -121,13 +118,29 @@
 			      >
 					<v-card-title>
 			    		<div>
-					        <div>gsuite_users, google_groups</div>
-					        <v-subheader>Find gsuite users and groups</v-subheader>
+					        <div>gsuite_users, google_groups, gsuite_devices</div>
+					        <v-subheader>Find gsuite users, groups and devices</v-subheader>
 					    </div>
 				        <v-spacer></v-spacer>
 			        	<v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-			        	<v-btn :loading="loading" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_users', 'Daily')" color="main">Crons (Users)<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-			        	<v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_gsuite_groups', 'Daily')" color="main">Crons (Groups)<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+			        	<v-tooltip bottom>
+					      <template v-slot:activator="{ on, attrs }">
+					        <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_users', 'Daily')" color="main">Users<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+					      </template>
+					      <span>Crons for Gsuite Users</span>
+					    </v-tooltip>
+					    <v-tooltip bottom>
+					      <template v-slot:activator="{ on, attrs }">
+					        <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_groups', 'Daily')" color="main">Groups<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+					      </template>
+					      <span>Crons for Google Groups</span>
+					    </v-tooltip>
+			        	<v-tooltip bottom>
+					      <template v-slot:activator="{ on, attrs }">
+					        <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="" @click="showCron('run_gsuite_devices', 'Daily')" color="main">Devices<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+					      </template>
+					      <span>Crons for GSuite Devices</span>
+					    </v-tooltip>
 				    </v-card-title>
 				    <v-row>
 				    	<v-col cols='12' md="4">
@@ -177,8 +190,9 @@
 			                hide-details
 		              	></v-text-field>
 		              	<v-spacer></v-spacer>
-		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_users')" color="main">Read (Users)<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('google_groups')" color="main">Read (Groups)<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_users')" color="main">Users<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('google_groups')" color="main">Groups<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+		          	  	<v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_devices')" color="main">Devices<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
 		          	 	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
 		          	</v-card-title>
 				    <v-data-table
@@ -358,6 +372,36 @@
 						value: 'run_at'
 					},
 		        ],
+		        deviceHeaders: [
+		        	{
+			          text: 'Name',
+			          value: 'name',
+			        },
+			        {
+			          text: 'Email',
+			          value: 'email',
+			        },
+			        {
+			          text: 'Model',
+			          value: 'model',
+			        },
+			        {
+			          text: 'OS',
+			          value: 'os',
+			        },
+			        {
+			          text: 'Type',
+			          value: 'type',
+			        },
+		        	{
+						text: 'Company',
+						value: 'company_id'
+					},
+					{
+						text: 'Run At',
+						value: 'run_at'
+					},
+		        ],
 		      	gsuiteHeaders: [],
 	      		selectedItems: [],
 		      	items: [],
@@ -439,8 +483,10 @@
   			 	this.readAll(`${BASE_API}/api/admin/${type}/read`)
   			 	if (type == "gsuite_users") {
   			 		this.gsuiteHeaders = this.usersHeaders
-  			 	} else {
+  			 	} else if (type == 'google_groups') {
   			 		this.gsuiteHeaders = this.groupHeaders
+  			 	} else if (type == 'gsuite_devices') {
+  			 		this.gsuiteHeaders = this.deviceHeaders
   			 	}
       		},
 

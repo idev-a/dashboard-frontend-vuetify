@@ -1,6 +1,6 @@
 <template>
 	<v-container
-	    id="meraki-board"
+	    id="calendar-board"
 	    fluid
 	    tag="section"
   	>
@@ -8,41 +8,32 @@
 	      class="pa-5"
 	    >
 	    	<v-card-title>
-		        Alassian Board (atlassian_users)
-		        <v-spacer></v-spacer>
-		        <v-btn class="main" @click="authZoom" :loading="loading" :disabled="!importable">
+	    		<div>
+			        <div>Dropbox Board (dropbox_users)</div>
+			        <v-subheader>Find Dropbox Users</v-subheader>
+			    </div>
+			    <v-spacer></v-spacer>
+		        <v-btn class="main" @click="authDropbox" :loading="loading" :disabled="!importable">
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
-		    	<v-btn :loading="loading"  :disabled="loading" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+		    	<v-btn :loading="loading"  :disabled="loading" @click="showCronDialog" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>
-			    	<v-col cols='12' md="4">
+			    	<v-col cols='12' md="8">
 			    		<v-textarea
-			                v-model="apiKey"
+			                v-model="access_token"
 			                :rules="[rules.required]"
 			                prepend-icon="mdi-email"
 			                :loading="loading"
-			                label="API Key"
+			                label="Acess token"
 			                auto-grow
                         	rows="1"
 			                hide-details="auto"
 		              	></v-textarea>
 			    	</v-col>
-			    	<v-col cols='12' md="4">
-			    		<v-textarea
-			                v-model="orgId"
-			                :rules="[rules.required]"
-			                prepend-icon="mdi-email"
-			                :loading="loading"
-			                label="Organization Id"
-			                auto-grow
-                        	rows="1"
-			                hide-details="auto"
-		              	></v-textarea>
-			    	</v-col>
-			    	<v-col cols='12' md="4">
+			    	<v-col cols='12' md="3">
 			    		<v-textarea
 			                v-model="company_id"
 			                :rules="[rules.required]"
@@ -50,7 +41,7 @@
 			                :loading="loading"
 			                label="Company Name"
 			                auto-grow
-                        	rows="1"
+	                    	rows="1"
 			                hide-details="auto"
 		              	></v-textarea>
 			    	</v-col>
@@ -79,11 +70,8 @@
 			        show-select
 			        @update:items-per-page="getPageNum"
 			      > 
-			      	<template v-slot:item.users="{ item }">
-	                  	<span v-html="beautifyEmails(item.users)"></span>
-	                </template>
 	                <template v-slot:item.email="{ item }">
-	                  	<span v-html="beautifyEmail(item.email)"></span>
+	                  	<span v-html="beautifyEmails(item.email)"></span>
 	                </template>
 			  	</v-data-table>
 		    </v-card-text>
@@ -106,18 +94,18 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-		<cron-dialog type="run_atlassian"  interval="Daily" />
+		<cron-dialog type="run_dropbox"  interval="Daily" />
 	</v-container>
 </template>
 
 <script>
 	import axios from 'axios'
 	import { BASE_API } from '../../../api'
-	import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
+	import { downloadCSV, beautifyEmails } from '../../../util'
 	import { mapState, mapActions } from 'vuex';
 
 	export default {
-		name: 'AtlassianBoard',
+		name: 'DropboxBoard',
 
 		components: {
 			CronDialog: () => import('../component/CronDialog')
@@ -126,8 +114,7 @@
 		data () {
 			return {
 				loading: false,
-				apiKey: '5ud2KvbbqP5KohPIGSGb',
-				orgId: 'c6da411c-59d4-431e-a49a-f624edd2c345',
+				access_token: 'ZcleRNk2k4AAAAAAAArSgBy0XndfW9vszf0WGF9RaifVAeOgNE77P3fZjkFyA94Y',
 				company_id: 'grove.co',
 				snackbar: false,
 		      	message: '',
@@ -141,16 +128,20 @@
 		      			value: 'email'
 		      		},
 		      		{
-		      			text: 'Active',
-		      			value: 'active'
+		      			text: 'Display Name',
+		      			value: 'display_name'
 		      		},
 		      		{
-		      			text: 'Billable',
-		      			value: 'access_billable'
+		      			text: 'Status',
+		      			value: 'status'
 		      		},
 		      		{
-		      			text: 'Type',
-		      			value: 'account_type'
+		      			text: 'Group Name',
+		      			value: 'group_name'
+		      		},
+		      		{
+		      			text: 'Membership Type',
+		      			value: 'membership_type'
 		      		},
 		      		{
 		      			text: 'Company',
@@ -170,17 +161,16 @@
 	    },
 
 	    computed: {
-	    	...mapState(['page']),
+	    	...mapState(['page', 'userId']),
 
 			importable () {
-				return !this.loading && this.apiKey.trim() && this.orgId.trim() && this.company_id.trim()
+				return !this.loading && this.access_token.trim() && this.company_id.trim()
 			},
 		},
 
 		methods: {
 			...mapActions(['showCronDialog']),
 
-      		beautifyEmail,
 			beautifyEmails,
 
 			downloadCSV () {
@@ -190,13 +180,13 @@
       				downloadCSV(this.items)
       			}
       		},
-
+      		
       		getPageNum (_page) {
 		        localStorage.setItem('page', _page)
 		    },
 
-      		async readAll () {
-		    	var url = `${BASE_API}/api/admin/atlassian_users/read`
+		    async readAll () {
+		    	var url = `${BASE_API}/api/admin/dropbox_users/read`
       			this.loading = true
   			 	this.selectedItems = []
       			this.items = []
@@ -213,19 +203,14 @@
 		    	}
       		},
 
-  			showCron () {
-      			this.showCronDialog()
-      		},
-
-      		async authZoom () {
+      		async authDropbox () {
       			this.loading = true
       			try {
       				const res = await axios({
-		      			url: `${BASE_API}/api/admin/atlassianauth`,
+		      			url: `${BASE_API}/api/admin/dropbox/run`,
 		      			data: { 
-		      				api_key: this.apiKey.trim(),
-		      				org_id: this.orgId.trim(),
-		      				user_id: JSON.parse(localStorage.getItem('user')).id,
+		      				access_token: this.access_token.trim(),
+		      				user_id: this.userId,
 		      				company_id: this.company_id.trim()
 		      			},
 		      			method: 'POST'
