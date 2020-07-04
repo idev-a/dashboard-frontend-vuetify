@@ -131,7 +131,7 @@
 					    </v-tooltip>
 					    <v-tooltip bottom>
 					      <template v-slot:activator="{ on, attrs }">
-					        <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_groups', 'Daily')" color="main">Groups<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+					        <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_google_groups', 'Daily')" color="main">Groups<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
 					      </template>
 					      <span>Crons for Google Groups</span>
 					    </v-tooltip>
