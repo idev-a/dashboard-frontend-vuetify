@@ -246,6 +246,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Bamboo Board',
+          path: 'admin/bamboo',
+          component: () => import('@/views/dashboard/admin/BambooBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),

@@ -210,7 +210,7 @@
 		                  	<span v-html="beautifyEmails(item.users)"></span>
 		                </template>
 		                <template v-slot:item.email="{ item }">
-		                  	<span v-html="beautifyEmail(item.email)"></span>
+		                  	<span v-html="beautifyEmails(item.email)"></span>
 		                </template>
 				  	</v-data-table>
 		  		  </v-tab-item>

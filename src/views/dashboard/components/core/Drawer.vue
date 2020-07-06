@@ -171,6 +171,10 @@
               title: 'Dropbox Board',
               to: 'dropbox',
             },
+            {
+              title: 'Bamboo Board',
+              to: 'bamboo',
+            },
           ]
         },
         {

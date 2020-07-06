@@ -1,6 +1,6 @@
 <template>
 	<v-container
-	    id="dropbox-board"
+	    id="bamboo-board"
 	    fluid
 	    tag="section"
   	>
@@ -9,11 +9,11 @@
 	    >
 	    	<v-card-title>
 	    		<div>
-			        <div>Dropbox Board (dropbox_users)</div>
-			        <v-subheader>Find Dropbox Users</v-subheader>
+			        <div>Bamboo Board (general_bamboo)</div>
+			        <v-subheader>Find Bamboo Users</v-subheader>
 			    </div>
 			    <v-spacer></v-spacer>
-		        <v-btn class="main" @click="authDropbox" :loading="loading" :disabled="!importable">
+		        <v-btn class="main" @click="authBamboo" :loading="loading" :disabled="!importable">
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
@@ -27,7 +27,7 @@
 			                :rules="[rules.required]"
 			                prepend-icon="mdi-email"
 			                :loading="loading"
-			                label="Acess token"
+			                label="API Key"
 			                auto-grow
                         	rows="1"
 			                hide-details="auto"
@@ -94,7 +94,7 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-		<cron-dialog type="run_dropbox"  interval="Daily" />
+		<cron-dialog type="run_bamboo"  interval="Daily" />
 	</v-container>
 </template>
 
@@ -105,7 +105,7 @@
 	import { mapState, mapActions } from 'vuex';
 
 	export default {
-		name: 'DropboxBoard',
+		name: 'BambooBoard',
 
 		components: {
 			CronDialog: () => import('../component/CronDialog')
@@ -114,7 +114,7 @@
 		data () {
 			return {
 				loading: false,
-				access_token: 'ZcleRNk2k4AAAAAAAArSgBy0XndfW9vszf0WGF9RaifVAeOgNE77P3fZjkFyA94Y',
+				access_token: '139900df2e12f70421f818da5b80a21388a99e30',
 				company_id: 'grove.co',
 				snackbar: false,
 		      	message: '',
@@ -124,24 +124,24 @@
 		      	items: [],
 		      	headers: [
 		      		{
+		      			text: 'Name',
+		      			value: 'name'
+		      		},
+		      		{
 		      			text: 'Email',
 		      			value: 'email'
 		      		},
 		      		{
-		      			text: 'Display Name',
-		      			value: 'display_name'
+		      			text: 'Department',
+		      			value: 'department'
 		      		},
 		      		{
-		      			text: 'Status',
-		      			value: 'status'
+		      			text: 'Job',
+		      			value: 'job_title'
 		      		},
 		      		{
-		      			text: 'Group Name',
-		      			value: 'group_name'
-		      		},
-		      		{
-		      			text: 'Membership Type',
-		      			value: 'membership_type'
+		      			text: 'Location',
+		      			value: 'location'
 		      		},
 		      		{
 		      			text: 'Company',
@@ -186,7 +186,7 @@
 		    },
 
 		    async readAll () {
-		    	var url = `${BASE_API}/api/admin/dropbox_users/read`
+		    	var url = `${BASE_API}/api/admin/general_bamboo/read`
       			this.loading = true
   			 	this.selectedItems = []
       			this.items = []
@@ -203,11 +203,11 @@
 		    	}
       		},
 
-      		async authDropbox () {
+      		async authBamboo () {
       			this.loading = true
       			try {
       				const res = await axios({
-		      			url: `${BASE_API}/api/admin/dropbox/run`,
+		      			url: `${BASE_API}/api/admin/bamboo/run`,
 		      			data: { 
 		      				access_token: this.access_token.trim(),
 		      				user_id: this.userId,
