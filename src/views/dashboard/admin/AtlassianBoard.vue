@@ -106,7 +106,6 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-		<cron-dialog type="run_atlassian"  interval="Daily" />
 	</v-container>
 </template>
 
@@ -118,10 +117,6 @@
 
 	export default {
 		name: 'AtlassianBoard',
-
-		components: {
-			CronDialog: () => import('../component/CronDialog')
-		},
 
 		data () {
 			return {
@@ -214,7 +209,7 @@
       		},
 
   			showCron () {
-      			this.showCronDialog()
+      			this.showCronDialog({dialog: true, type: 'run_atlassian', interval: 'Daily'})
       		},
 
       		async authZoom () {

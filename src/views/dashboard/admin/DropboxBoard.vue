@@ -17,7 +17,7 @@
 		    		Authenticate
 		    		<v-icon right>mdi-send</v-icon>
 		    	</v-btn>
-		    	<v-btn :loading="loading"  :disabled="loading" @click="showCronDialog" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+		    	<v-btn :loading="loading"  :disabled="loading" @click="showCronDialog({dialog: true, type: 'run_dropbox', interval: 'Daily'})" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
 		    </v-card-title>
 		    <v-card-text>
 		    	<v-row>
@@ -94,7 +94,6 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-		<cron-dialog type="run_dropbox"  interval="Daily" />
 	</v-container>
 </template>
 
@@ -106,10 +105,6 @@
 
 	export default {
 		name: 'DropboxBoard',
-
-		components: {
-			CronDialog: () => import('../component/CronDialog')
-		},
 
 		data () {
 			return {

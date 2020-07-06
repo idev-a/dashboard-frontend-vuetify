@@ -22,8 +22,17 @@ const getUserId = () => {
 	return user && user.id || '';
 }
 
+const getAdminRole = () => {
+	let user = {}
+	try {
+		user = JSON.parse(localStorage.getItem('user'))
+	} catch(e) {}
+	return user && user.role || 'Customer';
+}
+
 export const companyId = getCompanyId();
 export const userId = getUserId()
+export const isAdmin = getAdminRole() == 'Admin'
 
 /* 
   API methods

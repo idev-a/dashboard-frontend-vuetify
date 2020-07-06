@@ -236,9 +236,6 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-
-      	<!-- Cron job dialog -->
-      	<cron-dialog :type="cronType" :interval="cronInterval" />
 	</v-container>
 </template>
 
@@ -250,10 +247,6 @@
 
 	export default {
 		name: 'GsuiteBoard',
-
-		components: {
-			CronDialog: () => import('../component/CronDialog')
-		},
 
 		data () {
 			return {
@@ -563,9 +556,7 @@
 
 			// Cron jobs
 			showCron (type, interval) {
-				this.cronType = type
-				this.cronInterval = interval
-      			this.showCronDialog()
+      			this.showCronDialog({dialog: true, type, interval })
       		},
 		}
 	}

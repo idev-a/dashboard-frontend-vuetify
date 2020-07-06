@@ -3,13 +3,13 @@
 		<confirm-dialog @callback="runCallback"></confirm-dialog>
 
 		<v-dialog
-			:value="cronDialog"
+			:value="cron.dialog"
 			@click:outside="hideDialog"
 	  	>
 	  		<v-card
 	  		>
 	  			<div class="d-flex flex-wrap flex-row align-center justify-center pa-4 ">
-	  				<div class="display-1 ml-4">Cron Jobs ({{ type }} - {{ interval }})</div>
+	  				<div class="display-1 ml-4">Cron Jobs ({{ _name(cron.type) }} - {{ cron.interval }})</div>
 	  				<v-spacer></v-spacer>
 	  				<v-text-field
 			          v-model="searchCron"
@@ -39,6 +39,9 @@
 				        show-select
 				        @update:items-per-page="getPageNum"
 			      	> 
+			      		<template v-slot:item.name="{ item }">
+		                  	<span v-if="item.name">{{_name(item.name)}}</span>
+		                </template>
 				      	<template v-slot:item.emails="{ item }">
 		                  	<span v-html="beautifyEmails(item.emails)"></span>
 		                </template>
@@ -63,27 +66,45 @@ import { downloadCSV, beautifyEmail, beautifyEmails, beautifyDateTime } from '..
 export default {
 	name: 'CronDialog',
 
-	props: {
-		type: {
-			type: String,
-		},
-		interval: {
-			type: String,
-			default: 'Weekly'
-		}
-	},
+	// props: {
+	// 	type: {
+	// 		type: String,
+	// 		default: '*'
+	// 	},
+	// 	interval: {
+	// 		type: String,
+	// 		default: 'Weekly'
+	// 	}
+	// },
 
 	components: {
 		ConfirmDialog: () => import('../component/Confirm')
 	},
 
 	computed: {
-		...mapState(['cronDialog', 'page']),
+		...mapState(['cron', 'page']),
     },
 
     watch: {
-    	type() {
-    		this.readAllCrons()
+    	cron: {
+    		deep: true,
+
+    		handler () {
+    			if (this.cron.type == 'All') {
+					this.cronHeaders = [
+						{
+			      			text: 'Name',
+			      			value: 'name',
+			      			width: 150
+			      		},
+						...this.cronHeadersDefault
+					]
+				} else {
+					this.cronHeaders = this.cronHeadersDefault
+				}
+				this.crons = this.selectedCrons = []
+				this.readAllCrons()
+    		}
     	}
     },
 
@@ -94,7 +115,8 @@ export default {
 			callback: null,
 			selectedCrons: [],
 	      	crons: [],
-	      	cronHeaders: [
+	      	cronHeaders: [],
+	      	cronHeadersDefault: [
 	      		{
 	      			text: 'Emails',
 	      			value: 'emails'
@@ -120,7 +142,7 @@ export default {
 	},
 
 	mounted () {
-		this.readAllCrons()
+		
 	},
 
 	methods: {
@@ -128,6 +150,25 @@ export default {
 
 		beautifyEmails,
 		beautifyDateTime,
+
+		_name(val) {
+			const readableNames = {
+				All: 'All',
+				run_daily_tips: 'Daily Tips',
+				run_calendar: 'Google Calendar Events',
+				run_gsuite_users: 'GSuite Users',
+				run_gsuite_devices: 'GSuite Mobiles',
+				run_google_groups: 'Google Groups',
+				run_slack: 'Slack Users',
+				run_zoom: 'Zoom Users',
+				run_bamboo: 'General Bamboo',
+				run_o365: 'Office 365 Users',
+				run_dropbox: 'Dropbox Users',
+				run_atlassian: 'Atlassian Users',
+				run_g_drive_share: 'Google Drive Shared Folders',
+			}
+			return readableNames[val]
+		},
 
 		getPageNum (_page) {
 	        localStorage.setItem('page', _page)
@@ -138,7 +179,7 @@ export default {
 		 	this.selectedCrons = []
   			this.crons = []
 	    	try {
-		    	const res = await axios.post(`${BASE_API}/api/admin/cron/read`, { type: this.type})
+		    	const res = await axios.post(`${BASE_API}/api/admin/cron/read`, { type: this.cron.type})
 	      		this.crons = res.data.crons
       			this.message = res.data.message
       			this.color = res.data.status
@@ -173,7 +214,7 @@ export default {
 		 	this.loading = true
 		 	let data = { 
 		 		ids,
-		 		type: this.type 
+		 		type: this.cron.type 
 		 	}
 	    	try {
 		    	const res = await axios.post(`${BASE_API}/api/admin/cron/pause`, data)
@@ -218,7 +259,7 @@ export default {
 			 	const ids = this.selectedCrons.map(cron => cron.job_id)
 			 	let data = { 
 			 		ids,
-			 		type: this.type
+			 		type: this.cron.type
 			 	}
 	    	try {
 		    	const res = await axios.post(`${BASE_API}/api/admin/cron/resume`, data)
@@ -261,7 +302,7 @@ export default {
 			 	const ids = this.selectedCrons.map(cron => cron.job_id)
 			 	let data = { 
 			 		ids,
-			 		type: this.type
+			 		type: this.cron.type
 			 	}
 	    	try {
 		    	const res = await axios.post(`${BASE_API}/api/admin/cron/delete`, data)
@@ -298,7 +339,7 @@ export default {
   		},
 
   		hideDialog () {
-  			this.showCronDialog(false)
+  			this.showCronDialog({ dialog: false })
   		},
 
   		runCallback () {

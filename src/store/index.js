@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 import publicdata from './public'
 import security from './security'
-import { companyId, userId } from '../api'
+import { companyId, userId, isAdmin } from '../api'
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -19,10 +19,15 @@ export default new Vuex.Store({
     notifications: [],
     confirmModal: false,
     confirmCallback: null,
-    cronDialog: false,
+    cron: {
+      dialog: false,
+      type: 'All',
+      interval: 'Daily'
+    },
     page: Number(localStorage.getItem('page')) || 5,
     companyId,
-    userId
+    userId,
+    isAdmin
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -67,7 +72,7 @@ export default new Vuex.Store({
       }
     },
     SHOW_CRON_DIALOG (state, payload) {
-      state.cronDialog = payload
+      state.cron = payload
     }
   },
   actions: {
@@ -80,7 +85,7 @@ export default new Vuex.Store({
     setConfirmed({ commit }, payload) {
       commit('SET_CONFIRMED', payload)
     },
-    showCronDialog({ commit }, payload = true) {
+    showCronDialog({ commit }, payload) {
       commit('SHOW_CRON_DIALOG', payload)
     },
     SOCKET_notification({ commit }, payload) {

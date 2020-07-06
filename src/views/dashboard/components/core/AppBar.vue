@@ -52,24 +52,54 @@
     </v-text-field> -->
 
     <div class="mx-3" />
+    
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="ml-2"
+          min-width="0"
+          v-bind="attrs"
+          v-on="on"
+          text
+          to="/"
+        >
+          <v-icon>mdi-view-dashboard</v-icon>
+        </v-btn>
+      </template>
+      <span>Dashboard</span>
+    </v-tooltip>
 
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/"
-    >
-      <v-icon>mdi-view-dashboard</v-icon>
-    </v-btn>
-
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/pages/lock"
-    >
-      <v-icon>mdi-lock-open-outline</v-icon>
-    </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          v-if="isAdmin"
+          v-bind="attrs"
+          v-on="on"
+          class="ml-2"
+          min-width="0"
+          text
+          @click="showCronDialog({dialog: true, type: 'All', interval: 'Daily & Weekly'})"
+        >
+          <v-icon>mdi-clock-time-eight-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Crons</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="ml-2"
+          min-width="0"
+          v-bind="attrs"
+          v-on="on"
+          text
+          to="/pages/lock"
+        >
+          <v-icon>mdi-lock-open-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Lock Screen</span>
+    </v-tooltip>
 
     <v-menu
       bottom
@@ -184,6 +214,7 @@
         Close
       </v-btn>
     </v-snackbar>
+    <cron-dialog type="All"  interval="Daily & Weekly" />
   </v-app-bar>
 </template>
 
@@ -198,6 +229,8 @@
     name: 'DashboardCoreAppBar',
 
     components: {
+      CronDialog: () => import('../../component/CronDialog'),
+
       AppBarItem: {
         render (h) {
           return h(VHover, {
@@ -272,7 +305,7 @@
     }),
 
     computed: {
-      ...mapState(['drawer', 'connected', 'message', 'notifications']),
+      ...mapState(['drawer', 'connected', 'message', 'notifications', 'isAdmin']),
     },
 
     methods: {
@@ -280,7 +313,7 @@
         setDrawer: 'SET_DRAWER'
       }),
 
-      ...mapActions(['addNotification']),
+      ...mapActions(['addNotification', 'showCronDialog']),
 
       goTo (name) {
         if (name === 'Login') {

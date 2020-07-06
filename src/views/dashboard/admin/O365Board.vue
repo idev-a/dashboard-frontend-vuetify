@@ -96,8 +96,6 @@
 			  	</v-data-table>
 		    </v-card-text>
 		</v-card>
-
-		<cron-dialog type="run_o365"  interval="Daily" />
 	</v-container>
 </template>
 
@@ -109,10 +107,6 @@
 
 	export default {
 		name: 'GsuiteBoard',
-
-		components: {
-			CronDialog: () => import('../component/CronDialog')
-		},
 
 		data () {
 			return {
@@ -230,7 +224,7 @@
 		    	}
       		},
       		showCron () {
-      			this.showCronDialog()
+      			this.showCronDialog({dialog: true, type: 'run_o365', interval: 'Daily'})
       		}
 		}
 	}

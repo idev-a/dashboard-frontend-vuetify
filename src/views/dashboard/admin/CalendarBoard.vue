@@ -111,9 +111,6 @@
 		        </v-btn>
 	      	</template>
       	</v-snackbar>
-
-      	<!-- Cron job dialog -->
-      	<cron-dialog type="run_calendar" interval="Weekly" />
 	</v-container>
 </template>
 
@@ -125,10 +122,6 @@
 
 	export default {
 		name: 'GsuiteBoard',
-
-		components: {
-			CronDialog: () => import('../component/CronDialog')
-		},
 
 		data () {
 			return {
@@ -214,7 +207,7 @@
 		    },
 
 		    showCron () {
-      			this.showCronDialog()
+      			this.showCronDialog({dialog: true, type: 'run_calendar', interval: 'Daily'})
       		},
 
 			keyDownOnImport () {
