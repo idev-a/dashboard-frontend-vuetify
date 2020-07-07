@@ -137,7 +137,7 @@
 				email: '',
 				slackClientId: ' ',
 				slackClientSecret: ' ',
-				company_id: '',
+				company_id: 'grove.co',
 				snackbar: false,
 				search: '',
 		      	message: '',

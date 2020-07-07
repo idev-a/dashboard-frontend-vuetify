@@ -154,7 +154,7 @@ export default {
 		_name(val) {
 			const readableNames = {
 				All: 'All',
-				run_daily_tips: 'Daily Tips',
+				run_daily_tip: 'Daily Tips',
 				run_calendar: 'Google Calendar Events',
 				run_gsuite_users: 'GSuite Users',
 				run_gsuite_devices: 'GSuite Mobiles',

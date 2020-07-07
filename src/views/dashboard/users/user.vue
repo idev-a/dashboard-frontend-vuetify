@@ -204,7 +204,16 @@
     </v-card>
     <v-snackbar bottom v-model="snackbar" :timeout="3000" :color="color">
       {{ message }}
-      <v-btn text @click="snackbar = false">Close</v-btn>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
     <v-dialog
       v-model="deviceDialog"
