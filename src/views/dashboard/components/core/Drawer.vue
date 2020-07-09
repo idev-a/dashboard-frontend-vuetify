@@ -120,6 +120,10 @@
               to: 'appusers',
             },
             {
+              title: 'Users & Groups',
+              to: 'users-groups',
+            },
+            {
               title: 'Query Board',
               to: 'sql',
             },

@@ -1,0 +1,96 @@
+<template>
+	<v-container
+	    id="admin-users-groups-board"
+	    fluid
+	    tag="section"
+  	>
+  		<v-card
+	      class="pa-5"
+	    >
+	    	<v-card-title>
+		       Users & Groups (users & groups)
+		    </v-card-title>
+		    <v-card-text>
+		    	<v-tabs
+			      class="mt-4 border"
+			      background-color="main"
+			      color="white"
+			      light
+			      centered
+			      grow
+			      flat
+			      show-arrows
+			    >
+			      <v-tabs-slider class="blue darken-3"></v-tabs-slider>
+					
+			      <v-tab
+			      	v-for="(data, key) in tabs"
+			      	:key="data.key"
+			      	:href="`#${data.key}`"
+			      >
+			        {{data.title}}
+			      </v-tab>
+
+					<v-tab-item
+						value="users"
+					>
+				    	<user-component :companies="companies" />
+					</v-tab-item>
+					<v-tab-item
+						value="groups"
+					>
+				    	<group-component :companies="companies" />
+					</v-tab-item>
+			    </v-tabs>
+			</v-card-text>
+		</v-card>
+	</v-container>
+</template>
+
+<script>
+	import axios from 'axios'
+	import { BASE_API } from '../../../../api'
+	import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '../../../../util'
+	import { mapState, mapActions } from 'vuex';
+
+	export default {
+		name: 'UsersAndGroups',
+
+		data () {
+			return {
+				companies: [],
+				loading: [],
+				tabs: [
+					{
+						key: 'users',
+						bgColor: 'success',
+						title: 'Users'
+					},
+					{
+						key: 'groups',
+						bgColor: 'orange accent-3',
+						title: 'Groups'
+					},
+		      	],
+			}
+		},
+
+		components: {
+	      UserComponent: () => import('./Users'),
+	      GroupComponent: () => import('./Groups')
+	    },
+
+		async mounted() {
+			await this.fetchCompanyData()
+		},
+
+		methods: {
+			async fetchCompanyData () {
+	      		let res = await axios.get(`${BASE_API}/api/users/all`)
+	      		const companyUsers = res.data.users.filter(user => user.company_id && !DOMAIN_LIST.includes(user.company_id))
+	      		this.companies = companyUsers.map(user => user.company_id )
+	      		
+	      	},
+		}
+	}
+</script>

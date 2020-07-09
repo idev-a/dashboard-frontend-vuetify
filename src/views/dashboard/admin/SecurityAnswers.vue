@@ -483,10 +483,7 @@
 
 		computed: {
 			...mapState('security', ['questions']),
-	      page () {
-	        return Number(localStorage.getItem('page')) || 5
-	      }, 
-
+			...mapState(['page']),
 	      btnLabel () {
      		if (this.mode == 'Edit') {
   				return 'View'
@@ -694,7 +691,6 @@
 	      	async updateAnswer () {
 	      		this.$refs.updateForm.validate()
 	      		if (!this.updateValid) {
-	      			console.log('Invalid')
 	      			return
 	      		}
 	      		const self = this

@@ -129,6 +129,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Users & Groups',
+          path: 'admin/users-groups',
+          component: () => import('@/views/dashboard/admin/users_groups/UsersAndGroups'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Query Board',
           path: 'admin/sql',
           component: () => import('@/views/dashboard/admin/QueryBoard'),

@@ -60,37 +60,7 @@
         </template>
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
-            <div
-              class="px-3 py-1"
-            >
-              <!-- <v-card-title>
-                {{ currentGroup.name }}
-              </v-card-title> -->
-              <v-row>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="6"
-                >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-                    <b class="display-1 d-block">Description</b>
-                    <span class="text--secondary">{{currentGroup.description}}</span>
-                  <!-- </v-card> -->
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="6"
-                >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-                    <b class="display-1 d-block">Members</b>
-                    <div class="d-flex flex-wrap text--secondary" v-html="beautifyEmail(currentGroup.members)">
-                    </div>
-                  <!-- </v-card> -->
-                </v-col>
-                
-              </v-row>
-            </div>
+            <group-detail :currentGroup="currentGroup" />
           </td>
         </template>
       </v-data-table>
@@ -119,6 +89,10 @@
 
   export default {
     name: 'DashboardCompanyGroups',
+
+    components: {
+      GroupDetail: () => import('../component/GroupDetail')
+    },
 
     data: () => ({
       loading: false,
