@@ -172,7 +172,7 @@
 			this.checkInterval = setInterval(function() { self.getBulkData() }, 15000)
 		},
 
-		destroyed() {
+		beforeDestroy () {
 			clearInterval(this.checkInterval)
 		},
 

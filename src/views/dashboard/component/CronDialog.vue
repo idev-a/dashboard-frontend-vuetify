@@ -45,6 +45,9 @@
 				      	<template v-slot:item.emails="{ item }">
 		                  	<span v-html="beautifyEmails(item.emails)"></span>
 		                </template>
+		                <template v-slot:item.attachments="{ item }">
+		                  	<span v-if="item.attachments">{{ item.attachments.length }} attachments</span>
+		                </template>
 		                <template v-slot:item.run_at="{ item }">
 		                  	<span v-html="beautifyDateTime(item.run_at)"></span>
 		                </template>
@@ -90,20 +93,7 @@ export default {
     		deep: true,
 
     		handler () {
-    			if (this.cron.type == 'All') {
-					this.cronHeaders = [
-						{
-			      			text: 'Name',
-			      			value: 'name',
-			      			width: 150
-			      		},
-						...this.cronHeadersDefault
-					]
-				} else {
-					this.cronHeaders = this.cronHeadersDefault
-				}
-				this.crons = this.selectedCrons = []
-				this.readAllCrons()
+    			this.modifyHeaders()
     		}
     	}
     },
@@ -142,7 +132,7 @@ export default {
 	},
 
 	mounted () {
-		
+		this.modifyHeaders()
 	},
 
 	methods: {
@@ -150,6 +140,49 @@ export default {
 
 		beautifyEmails,
 		beautifyDateTime,
+
+		modifyHeaders () {
+			if (this.cron.type == 'All') {
+				this.cronHeaders = [
+					{
+		      			text: 'Name',
+		      			value: 'name',
+		      			width: 150
+		      		},
+					...this.cronHeadersDefault
+				]
+			} else {
+				this.cronHeaders = JSON.parse(JSON.stringify(this.cronHeadersDefault))
+			}
+
+			// Email notification
+			if (this.cron.type == 'run_email_notification') {
+				this.cronHeaders = this.cronHeadersDefault.slice(2, 5)
+				this.cronHeaders = [
+					{
+						text: 'Query',
+						value: 'query',
+						width: 300
+					},
+					{
+						text: 'Title',
+						value: 'title'
+					},
+					{
+						text: 'Message',
+						value: 'message'
+					},
+					{
+						text: 'Attachments',
+						value: 'attachments'
+					},
+					...this.cronHeaders
+				]
+			}
+
+			this.crons = this.selectedCrons = []
+			this.readAllCrons()
+		},
 
 		_name(val) {
 			const readableNames = {
@@ -166,6 +199,7 @@ export default {
 				run_dropbox: 'Dropbox Users',
 				run_atlassian: 'Atlassian Users',
 				run_g_drive_share: 'Google Drive Shared Folders',
+				run_email_notification: 'Email Notification'
 			}
 			return readableNames[val]
 		},
@@ -323,17 +357,6 @@ export default {
   			if (item) {
   				nextRun = item
   			}
-  			// if (item.status == 'done' || item.status == 'active') {
-  			// 	if (this.type == 'GSuite Drive') {
-	  		// 		nextRun = this.$moment().add(1, 'weeks').startOf('week').format('YYYY MMM DD')
-  			// 	} else if (this.type == 'Office 365') {
-  			// 		if (item.interval == '0 5 * * *') {
-		  	// 			nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 05:00'
-  			// 		} else {
-		  	// 			nextRun = this.$moment().add(1, 'day').format('YYYY MMM DD') + ' 20:00'
-  			// 		}
-  			// 	}
-  			// }
 
   			return nextRun
   		},

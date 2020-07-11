@@ -67,7 +67,6 @@
 								    ref="myfile" 
 								    v-model="file"
 								    :loading="loading"
-								    multiple 
 							  	></v-file-input>
 					    	</v-col>
 					    	<v-col cols='12' md="4">

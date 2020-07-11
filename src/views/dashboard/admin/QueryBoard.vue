@@ -10,39 +10,151 @@
 	    	<v-card-title>
 		        Query Board
 		        <v-spacer></v-spacer>
+		        <v-switch
+			      class="mt-0 mr-3"
+			      v-model="findHunter"
+			      label="Hunter.io"
+			    ></v-switch>
+		        <v-switch
+			      class="mt-0 mr-3"
+			      v-model="toggleEmailNotification"
+			      :label="labelEmailNotification"
+			    ></v-switch>
 		        <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="main">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
 	      	</v-card-title>
 	    	<v-row
 	    	>
 	    		<v-col
 					cols='12'
+					md="3"
+	    		>
+		            <v-autocomplete
+						v-model="table"
+						:items="tables"
+						label="Tables"
+						@input="selectTable"
+		            >
+		            </v-autocomplete>
+		        </v-col>
+	    		<v-col
+					cols='12'
+					md="9"
 	    		>
 		    		<v-textarea
 		                v-model="query"
 		                label="SQL Query" 
 		                hint="Ctrl + Enter to run the query"
-		                rows="3"
+		                rows="2"
+		                auto_grow
+		                clearable
 		                outlined
 		                @keyup.ctrl.13="keyDownOnQuery"
 		            />
 		    	</v-col>
 		    </v-row>
-		    <v-spacer></v-spacer>
-		    <v-row
-	    	>
-	    		<v-col
-					cols='12'
-	    		>
-		    		<v-textarea
+			<!-- hunter.io & findemails.com -->
+		    <v-card
+		    	outlined
+		    	tile
+				v-if="findHunter"
+		    >
+		    	<v-card-title class="my-3">
+		    		Find prospects from hunter.io & findemails.com
+		    		<v-spacer />
+		    		<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length && !website)" @click="_getProspectsFromTable" color="main">Run <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+		    	</v-card-title>
+				<v-card-text>
+					<v-textarea
 		                v-model="website"
-		                label="Website for hunter.io & findemails.com" 
+		                label="Multiple websites for hunter.io & findemails.com" 
 		                hint="Shift + Enter to run api"
-		                rows="3"
+		                placeholder="grove.co"
+		                rows="2"
+		                auto-grow
+		                clearable
 		                outlined
 		                @keyup.shift.13="keyDownOnAPI"
 		            />
-		    	</v-col>
-		    </v-row>
+				</v-card-text>
+			</v-card>
+		    
+		    <!-- Email Notification -->
+		    <v-card 
+		    	tile
+		    	outlined
+				v-if="toggleEmailNotification"
+		    >
+				<v-card-title
+		    		class="my-3"
+				>
+					Email Notification 
+					<v-spacer></v-spacer>
+					<v-btn class="main" @click="sendEmailNotification" :loading="loading" :disabled="!notifyPossible">
+						Send
+			    		<v-icon right>mdi-send</v-icon>
+			    	</v-btn>
+					<v-btn :loading="loading" :disabled="loading" @click="showCronDialog({dialog: true, type: 'run_email_notification', interval: 'Daily'})" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+				</v-card-title>
+				<v-card-text>
+					<form 
+						ref="form"
+						v-model="noti.valid"
+					>	
+			            <v-textarea
+			                v-model="noti.title"
+			                label="Title" 
+			                hint="Title of the message"
+			                rows="1"
+			                auto-grow
+			                clearable
+			                :rules="[rules.required]"
+			            />
+			            <v-textarea
+			                v-model="noti.message"
+			                label="Message" 
+			                hint="Content of the message"
+			                :rules="[rules.required]"
+			                auto-grow
+			                clearable
+			                rows="1"
+			            />
+			            <v-file-input
+						    prepend-icon="mdi-file"
+						    label="Attachments"
+						    ref="notiAttach" 
+						    v-model="noti.attach"
+						    :loading="loading"
+						    multiple 
+					  	></v-file-input>
+					  	<v-row>
+					  		<v-col cols="12" md="5">
+							  	<v-text-field
+					                v-model="noti.templateId"
+					                label="Template ID" 
+					                hint="Sendgrid Template Id"
+					                :rules="[rules.required]"
+					            />
+					        </v-col>
+					        <v-col cols="12" md="3">
+					            <v-text-field
+					                v-model="noti.interval"
+					                label="Interval" 
+					                hint="Interval of the crontab"
+					                :rules="[rules.required]"
+					            />
+					        </v-col>
+					        <v-col cols="12" md="4">
+					            <v-text-field
+					                v-model="noti.fromEmail"
+					                label="Sender Email" 
+					                hint="Sender Email"
+					                :rules="[rules.required]"
+					            />
+					        </v-col>
+					    </v-row>
+				 	</form>
+				</v-card-text>
+		    </v-card>
 	    	<v-card-title>
 		    	<v-text-field
 	                v-model="search"
@@ -53,10 +165,11 @@
 	                hide-details
               	></v-text-field>
               	<v-spacer></v-spacer>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length && !website)" @click="_getProspectsFromTable" color="main">Hunter & FindEmails <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              	
+              	<v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
           	</v-card-title>
-              <v-card-title>
+
+          	<v-card-title>
               	<v-autocomplete
 			      :loading="loading"
 	              v-model="selectedHeaders"
@@ -83,11 +196,13 @@
 	              </template>
 	            </v-autocomplete>
           	</v-card-title>
+
 	    	<v-data-table
 	    		v-model="selectedItems"
 		        :loading="loading"
 		        :headers="filteredHeaders"
 		        :items="indexedItems"
+		        fixed-header
 		        :items-per-page="page"
 		        item-key="_id"
 		        :search="search"
@@ -155,6 +270,7 @@
 	import { BASE_API } from '../../../api'
 	import { downloadCSV } from '../../../util'
 	import axios from 'axios'
+	import { mapState, mapActions } from 'vuex';
 
   	export default {
 	    name: 'QueryBoard',
@@ -164,7 +280,9 @@
 	      modal: false,
 	      search: '',
 	      prospectSearch: '',
-	      query: '',
+	      query: "select * from user where email='ideveloper003@gmail.com'",
+	      table: '',
+	      tables: [],
 	      items: [],
 	      selectedItems: [],
 	      selectedProspects: [],
@@ -205,16 +323,32 @@
 	      prospects: [],
 	      snackbar: false,
 	      message: '',
-	      color: 'success'
+	      color: 'success',
+	      findHunter: false,
+	      toggleEmailNotification: false,
+	      noti: {
+	      	valid: true,
+	      	templateId: 'd-403a831fec3b4dcd9da4018a3d534a84',
+	      	fromEmail: 'tips@revampcybercecurity.com',
+      	 	title: '',
+	      	message: '',
+      	 	interval: '0 9 * * *',
+	      	attach: null,
+	      },
+	      rules: {
+	          required: value => {
+	            return !!value || 'This field is required.'
+	          },
+	      }
 	 	}),
 
  	 	mounted () {
+ 	 		this.fetchTables()
       	},
 
       	computed: {
-      		page () {
-		        return Number(localStorage.getItem('page')) || 5
-	     	}, 
+      		...mapState(['page', 'companyId']),
+
 	     	indexedItems () {
 		      return this.items.map((item, index) => ({
 		        _id: index,
@@ -226,10 +360,18 @@
 			        _id: index,
 			        ...item
 		      	}))
+		    },
+		    labelEmailNotification () {
+		    	return this.toggleEmailNotification ? 'Email Notification' : 'Email Notification'
+		    },
+		    notifyPossible () {
+		    	return this.noti.title && this.noti.message && !this.loading && this.query
 		    }
       	},
 
       	methods: {
+      		...mapActions(['showCronDialog']),
+
       		cleanWebsite (string) {
       			return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
       		},
@@ -265,30 +407,6 @@
 	      			this.snackbar = true
 		    	}
       		},
-
-      	// 	async getProspects (websites) {
-      	// 		this.loading = true
-      	// 		this.selectedProspects = []
-      	// 		try {
-	      // 			const res = await fetch(`${BASE_API}/api/admin/getprospects/`, {
-			    //       headers: {
-			    //           'Content-Type': 'application/json'
-			    //       },
-			    //       method: 'POST',
-			    //       body: JSON.stringify({ items: websites }),
-		     //  	 	})
-			    //     .then(response => response.json())
-			    //   	this.prospects = res.prospects
-	      // 			this.message = res.message
-	      // 			this.color = res.status
-	      // 			this.modal = true
-      	// 		} catch(e) {
-		    	// 	this.message = 'Something wrong happened on the server.'
-		    	// } finally {
-	      // 			this.loading = false
-	      // 			this.snackbar = true
-		    	// }
-      	// 	},
 
       		_getProspectsFromTable () {
       			let websites = []
@@ -355,6 +473,22 @@
 		        localStorage.setItem('page', _page)
 		    },
 
+		    selectTable () {
+		    	this.query = `SELECT * FROM \`${this.table}\``
+		    },
+
+		    async fetchTables () {
+		    	try {
+			    	const res = await axios({
+		      			url: `${BASE_API}/api/admin/query/tables`,
+		      			method: 'GET'
+		      		})
+		      		this.tables = res.data.items
+			    } catch (e) {
+			    	console.log(e.response)
+			    }
+		    },
+
 		    async runQuery () {
 		    	this.loading = true
 		    	this.headers = []
@@ -384,7 +518,55 @@
 	      			this.loading = false
 	      			this.snackbar = true
 		    	}
-		    }
+		    },
+
+		    // Email Notification
+		    async sendEmailNotification () {
+		  //   	this.$refs.form && this.$refs.form.validate()
+				// if (!this.notiValid) {
+				// 	return
+				// }
+
+				let formData = new FormData()
+				if (this.noti.attach) {
+		        	for (let file of this.noti.attach) {
+	                	formData.append("files", file, file.name);
+	                }
+				}
+
+                const data = {
+                	title: this.noti.title,
+                	message: this.noti.message,
+                	template_id: this.noti.templateId,
+                	from_email: this.noti.fromEmail,
+                	interval: this.noti.interval,
+                	query: this.query,
+                	company_id: this.companyId,
+                	user_id: JSON.parse(localStorage.getItem('user')).id
+                }
+
+                console.log(data)
+
+                const json = JSON.stringify(data);
+				const blob = new Blob([json], {
+				  type: 'application/json'
+				});
+
+				formData.append("document", blob);
+
+                this.loading = true
+                this.file = null
+		    	try {
+			    	const res = await axios.post(`${BASE_API}/api/admin/email_notification/run`, formData)
+	      			this.message = res.data.message
+	      			this.color = res.data.status
+		    	} catch(e) {
+		    		this.message = 'Something wrong happened on the server.'
+		    	} finally {
+	      			this.loading = false
+	      			this.snackbar = true
+		    	}
+			},
       	}
 	}
 </script>

@@ -1,5 +1,7 @@
 <template>
-  <v-main>
+  <v-main
+    v-if="$store.state.companyId"
+  >
     <router-view />
 
     <dashboard-core-footer />
