@@ -280,7 +280,7 @@
 	      modal: false,
 	      search: '',
 	      prospectSearch: '',
-	      query: "select * from user where email='ideveloper003@gmail.com'",
+	      query: "",
 	      table: '',
 	      tables: [],
 	      items: [],
