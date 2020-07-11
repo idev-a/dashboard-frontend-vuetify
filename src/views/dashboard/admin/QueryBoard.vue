@@ -119,7 +119,7 @@
 			                rows="1"
 			            />
 			            <v-file-input
-						    prepend-icon="mdi-file"
+						    prepend-icon="mdi-attachment"
 						    label="Attachments"
 						    ref="notiAttach" 
 						    v-model="noti.attach"
@@ -365,7 +365,7 @@
 		    	return this.toggleEmailNotification ? 'Email Notification' : 'Email Notification'
 		    },
 		    notifyPossible () {
-		    	return this.noti.title && this.noti.message && !this.loading && this.query
+		    	return this.noti.title && this.noti.message && !this.loading && this.query &&this.items.length
 		    }
       	},
 
@@ -521,7 +521,25 @@
 		    },
 
 		    // Email Notification
-		    async sendEmailNotification () {
+
+		    sendEmailNotification () {
+		    	this.$dialog.confirm({
+				    text: 'Do you really want to setup this email notification? Please double check the leads.',
+				    title: 'Warning',
+				    actions: {
+				      false: 'No',
+				      true: {
+				        color: 'red',
+				        text: 'Yes',
+				        handle: () => {
+				          self._sendEmailNotification()
+				        }
+				      }
+				    }
+			    })
+		    },
+
+		    async _sendEmailNotification () {
 		  //   	this.$refs.form && this.$refs.form.validate()
 				// if (!this.notiValid) {
 				// 	return
@@ -534,6 +552,9 @@
 	                }
 				}
 
+				const _items = this.selectedItems.length ? this.selectedItems : this.items
+				let emails = _items.map(item => item.email)
+
                 const data = {
                 	title: this.noti.title,
                 	message: this.noti.message,
@@ -541,11 +562,10 @@
                 	from_email: this.noti.fromEmail,
                 	interval: this.noti.interval,
                 	query: this.query,
+                	emails,
                 	company_id: this.companyId,
                 	user_id: JSON.parse(localStorage.getItem('user')).id
                 }
-
-                console.log(data)
 
                 const json = JSON.stringify(data);
 				const blob = new Blob([json], {
