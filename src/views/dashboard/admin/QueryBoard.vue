@@ -32,6 +32,7 @@
 						v-model="table"
 						:items="tables"
 						label="Tables"
+						outlined
 						@input="selectTable"
 		            >
 		            </v-autocomplete>
@@ -102,6 +103,7 @@
 					>	
 			            <v-textarea
 			                v-model="noti.title"
+			                prepend-icon="mdi-message"
 			                label="Title" 
 			                hint="Title of the message"
 			                rows="1"
@@ -111,6 +113,7 @@
 			            />
 			            <v-textarea
 			                v-model="noti.message"
+			                prepend-icon="mdi-message"
 			                label="Message" 
 			                hint="Content of the message"
 			                :rules="[rules.required]"
@@ -121,7 +124,7 @@
 			            <v-file-input
 						    prepend-icon="mdi-attachment"
 						    label="Attachments"
-						    ref="notiAttach" 
+						    ref="notiAttach"
 						    v-model="noti.attach"
 						    :loading="loading"
 						    multiple 
@@ -130,6 +133,7 @@
 					  		<v-col cols="12" md="5">
 							  	<v-text-field
 					                v-model="noti.templateId"
+					                prepend-icon="mdi-book-information-variant"
 					                label="Template ID" 
 					                hint="Sendgrid Template Id"
 					                :rules="[rules.required]"
@@ -138,6 +142,7 @@
 					        <v-col cols="12" md="3">
 					            <v-text-field
 					                v-model="noti.interval"
+					                prepend-icon="mdi-clock-outline"
 					                label="Interval" 
 					                hint="Interval of the crontab"
 					                :rules="[rules.required]"
@@ -146,6 +151,7 @@
 					        <v-col cols="12" md="4">
 					            <v-text-field
 					                v-model="noti.fromEmail"
+					                prepend-icon="mdi-email-outline"
 					                label="Sender Email" 
 					                hint="Sender Email"
 					                :rules="[rules.required]"
