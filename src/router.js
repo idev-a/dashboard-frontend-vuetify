@@ -93,6 +93,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Random Data',
+          path: 'admin/random-data',
+          component: () => import('@/views/dashboard/admin/RandomData'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Daily Tips',
           path: 'admin/dailytips',
           component: () => import('@/views/dashboard/admin/DailyTips'),

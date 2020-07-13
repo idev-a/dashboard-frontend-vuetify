@@ -104,6 +104,10 @@
               to: 'customers',
             },
             {
+              title: 'Random Data',
+              to: 'random-data',
+            },
+            {
               title: 'Daily Tips',
               to: 'dailytips',
             },

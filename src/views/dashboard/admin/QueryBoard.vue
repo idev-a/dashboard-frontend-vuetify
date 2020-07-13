@@ -529,6 +529,7 @@
 		    // Email Notification
 
 		    sendEmailNotification () {
+		    	const self = this
 		    	this.$dialog.confirm({
 				    text: 'Do you really want to setup this email notification? Please double check the leads.',
 				    title: 'Warning',
