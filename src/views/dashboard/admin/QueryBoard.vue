@@ -43,7 +43,7 @@
 	    		>
 		    		<v-textarea
 		                v-model="query"
-		                label="SQL Query" 
+		                label="Raw SQL Query" 
 		                hint="Ctrl + Enter to run the query"
 		                rows="2"
 		                auto_grow
@@ -121,16 +121,18 @@
 			                clearable
 			                rows="1"
 			            />
-			            <v-file-input
-						    prepend-icon="mdi-attachment"
-						    label="Attachments"
-						    ref="notiAttach"
-						    v-model="noti.attach"
-						    :loading="loading"
-						    multiple 
-					  	></v-file-input>
-					  	<v-row>
-					  		<v-col cols="12" md="5">
+			            <v-row>
+				            <v-col cols="12" md="5">
+					            <v-file-input
+								    prepend-icon="mdi-attachment"
+								    label="Attachments"
+								    ref="notiAttach"
+								    v-model="noti.attach"
+								    :loading="loading"
+								    multiple 
+							  	></v-file-input>
+							</v-col>
+						  	<v-col cols="12" md="4">
 							  	<v-text-field
 					                v-model="noti.templateId"
 					                prepend-icon="mdi-book-information-variant"
@@ -148,12 +150,18 @@
 					                :rules="[rules.required]"
 					            />
 					        </v-col>
-					        <v-col cols="12" md="4">
-					            <v-text-field
-					                v-model="noti.fromEmail"
+					    </v-row>
+					  	<v-row>
+					        <v-col cols="12">
+					            <v-textarea
+					                v-model.trim="noti.recipients"
 					                prepend-icon="mdi-email-outline"
-					                label="Sender Email" 
-					                hint="Sender Email"
+					                label="Recipients" 
+					                rows="1"
+					                auto-grow
+					                clearable
+					                placeholder="hello@example.com"
+					                hint="Please use comma(,) as a separator"
 					                :rules="[rules.required]"
 					            />
 					        </v-col>
@@ -335,7 +343,7 @@
 	      noti: {
 	      	valid: true,
 	      	templateId: 'd-403a831fec3b4dcd9da4018a3d534a84',
-	      	fromEmail: 'tips@revampcybercecurity.com',
+	      	recipients: '',
       	 	title: '',
 	      	message: '',
       	 	interval: '0 9 * * *',
@@ -566,7 +574,7 @@
                 	title: this.noti.title,
                 	message: this.noti.message,
                 	template_id: this.noti.templateId,
-                	from_email: this.noti.fromEmail,
+                	recipients: this.noti.recipients,
                 	interval: this.noti.interval,
                 	query: this.query,
                 	emails,

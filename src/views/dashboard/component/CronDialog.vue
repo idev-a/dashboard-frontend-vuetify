@@ -45,8 +45,11 @@
 				      	<template v-slot:item.emails="{ item }">
 		                  	<span v-html="beautifyEmails(item.emails)"></span>
 		                </template>
+		                <template v-slot:item.recipients="{ item }">
+		                  	<span v-if="item.recipients" v-html="beautifyEmails(item.recipients)"></span>
+		                </template>
 		                <template v-slot:item.attachments="{ item }">
-		                  	<span v-if="item.attachments">{{ item.attachments.length }} attachments</span>
+		                  	<span v-if="item.attachments">{{ item.attachments.length + 1 }} attachments</span>
 		                </template>
 		                <template v-slot:item.run_at="{ item }">
 		                  	<span v-html="beautifyDateTime(item.run_at)"></span>
@@ -162,15 +165,21 @@ export default {
 					{
 						text: 'Query',
 						value: 'query',
-						width: 300
+						width: 250
 					},
 					{
 						text: 'Title',
-						value: 'title'
+						value: 'title',
+						width: 200
 					},
 					{
 						text: 'Message',
-						value: 'message'
+						value: 'message',
+						width: 400
+					},
+					{
+						text: 'Recipients',
+						value: 'recipients'
 					},
 					{
 						text: 'Attachments',

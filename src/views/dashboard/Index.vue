@@ -88,6 +88,10 @@
     font-weight: 500 !important;
   }
 
+  .v-data-table__mobile-row {
+    display: inline;
+  }
+
   .bg-dead {
     background: #E0E0E;
   }
