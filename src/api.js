@@ -108,7 +108,7 @@ export const fetchCompanies = async () => {
 	const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.company_id))
 	const companies = []
 	companyUsers.map(user => {
-		if (!companies.includes(user.company_id)) {
+		if (user.company_id && !companies.includes(user.company_id)) {
 			companies.push(user.company_id) 
 		}
 	})
