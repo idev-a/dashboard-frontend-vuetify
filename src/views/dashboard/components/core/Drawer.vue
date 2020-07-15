@@ -104,8 +104,8 @@
               to: 'customers',
             },
             {
-              title: 'Random Data',
-              to: 'random-data',
+              title: 'Random Board',
+              to: 'random-board',
             },
             {
               title: 'Daily Tips',

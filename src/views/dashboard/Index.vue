@@ -89,7 +89,11 @@
   }
 
   .v-data-table__mobile-row {
-    display: inline;
+    height: auto !important;
+  }
+
+  .v-data-table__mobile-row .v-data-table__mobile-row__cell {
+    height: auto !important;
   }
 
   .bg-dead {

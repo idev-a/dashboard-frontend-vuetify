@@ -481,10 +481,14 @@ export const beautifyEmails = (emails) => {
     list = [emails]
   }
   list.map(email => {
-    if (validEmail(email.trim())) {
-      res += `<a href="mailto:${email}">${email}</a><br />`
-    } else {
-      res += `${email} <br />`
+    try {
+      if (validEmail(email.trim())) {
+        res += `<a href="mailto:${email}">${email}</a><br />`
+      } else {
+        res += `${email} <br />`
+      }
+    } catch (e) {
+      console.log(email)
     }
   })
 

@@ -266,7 +266,7 @@
 	</v-container>
 </template>
 <script>
-	import { BASE_API } from '../../../api'
+	import { BASE_API, fetchCompanies } from '../../../api'
 	import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '../../../util'
 	import axios from 'axios'
 
@@ -371,13 +371,15 @@
 	    	}
 	    },
 
-	    mounted () {
+	    async mounted () {
 	    	this.getTables()
 
-	    	this.fetchUsers()
+	    	this.companies = await this.fetchCompanies()
 	    },
 
 	    methods: {
+	    	fetchCompanies,
+
 	    	getPageNum (_page) {
 		        localStorage.setItem('page', _page)
 		    },
@@ -418,20 +420,7 @@
 		    	this.done = false
 		    },
 
-	    	async fetchUsers () {
-	    		this.loading = true
-	      		let res = await axios.get(`${BASE_API}/api/users/all`)
-	      		res = res.data.users
-	      		const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.email.split('@')[1]))
-	      		this.companies = []
-	      		const self = this;
-	      		companyUsers.map(user => {
-	      			if (!self.companies.includes(user.email.split('@')[1])) {
-	      				self.companies.push(user.email.split('@')[1]) 
-	      			}
-	      		})
-	      		this.loading = false
-	      	},
+	    	
 
       		async getTables () {
       			const query = 'Show Tables'

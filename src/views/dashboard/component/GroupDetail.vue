@@ -42,7 +42,7 @@
           md="6"
         >
             <b class="display-1 d-block">Members</b>
-            <div class="d-flex flex-wrap text--secondary" v-html="beautifyEmails(currentGroup.members)">
+            <div class="text--secondary" v-html="beautifyEmails(currentGroup.members)">
             </div>
         </v-col>
         <v-col

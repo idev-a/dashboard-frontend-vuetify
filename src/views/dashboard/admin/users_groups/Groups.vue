@@ -399,7 +399,11 @@
 		    },
 
 		    parseItems (val) {
-		    	return val.split(';')
+		    	if (val.includes(';')) {
+		    		return val.split(';')
+		    	} else {
+		    		return val.split(',')
+		    	}
 		    },
 
 		    updateTags(_items) {

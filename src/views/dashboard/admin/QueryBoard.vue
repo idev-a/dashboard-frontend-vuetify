@@ -281,8 +281,8 @@
 </template>
 
 <script>
-	import { BASE_API } from '../../../api'
-	import { downloadCSV } from '../../../util'
+	import { BASE_API, fetchTables } from '../../../api'
+	import { downloadCSV, beautifyEmails } from '../../../util'
 	import axios from 'axios'
 	import { mapState, mapActions } from 'vuex';
 
@@ -386,6 +386,8 @@
       	methods: {
       		...mapActions(['showCronDialog']),
 
+      		beautifyEmails,
+
       		cleanWebsite (string) {
       			return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
       		},
@@ -482,7 +484,6 @@
       				this.filteredHeaders = this.headers
       			}
       		},
-
       		getPageNum (_page) {
 		        localStorage.setItem('page', _page)
 		    },
@@ -492,15 +493,7 @@
 		    },
 
 		    async fetchTables () {
-		    	try {
-			    	const res = await axios({
-		      			url: `${BASE_API}/api/admin/query/tables`,
-		      			method: 'GET'
-		      		})
-		      		this.tables = res.data.items
-			    } catch (e) {
-			    	console.log(e.response)
-			    }
+		    	this.tables = await fetchTables()
 		    },
 
 		    async runQuery () {

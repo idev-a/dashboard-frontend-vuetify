@@ -219,10 +219,10 @@
 		          text: 'Status',
 		          value: 'status'
 		        },
-		        {
-		          text: 'Hardware Id',
-		          value: 'hardwareId'
-		        },
+		        // {
+		        //   text: 'Hardware Id',
+		        //   value: 'hardwareId'
+		        // },
 		        {
 		          text: 'First Sync',
 		          value: 'firstsync'
@@ -231,10 +231,10 @@
 		          text: 'Last Sync',
 		          value: 'lastsync'
 		        },
-		        {
-		          text: 'User Agent',
-		          value: 'useragent'
-		        },
+		        // {
+		        //   text: 'User Agent',
+		        //   value: 'useragent'
+		        // },
 		      ],
 		      snackbar: false,
 		      color: '',

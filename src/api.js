@@ -1,6 +1,8 @@
 import axios from 'axios'
 require('dotenv').config()
 
+import { DOMAIN_LIST } from './util'
+
 export const BASE_API = process.env.VUE_APP_BACKEND_URL
 // export const BASE_API = 'http://localhost:5000'
 // export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
@@ -37,6 +39,82 @@ export const isAdmin = getAdminRole() == 'Admin'
 /* 
   API methods
 */
+
+export const  fetchTables = async () => {
+	let tables = []
+	try {
+    	const res = await axios({
+  			url: `${BASE_API}/api/admin/query/tables`,
+  			method: 'GET'
+  		})
+  		tables = res.data.items
+    } catch (e) {
+    	console.log(e.response)
+    }
+
+    return tables
+}
+
+export const fetchAllApps = async () => {
+	let apps = []
+	try {
+    	const res = await axios({
+  			url: `${BASE_API}/api/applications/all`,
+  			method: 'GET'
+  		})
+  		apps = res.data.apps
+    } catch (e) {
+    	console.log(e.response)
+    }
+
+    return apps
+}
+
+export const fetchUsers = async (company_id) => {
+	let users = []
+	try {
+    	const res = await axios({
+  			url: `${BASE_API}/api/users/${company_id}/all`,
+  			method: 'GET'
+  		})
+  		users = res.data.users
+    } catch (e) {
+    	console.log(e.response)
+    }
+
+    return users
+}
+
+
+export const fetchAllQuestions = async () => {
+	let questions = []
+	try {
+    	const res = await axios({
+  			url: `${BASE_API}/api/risks/questions/all`,
+  			method: 'GET'
+  		})
+  		questions = res.data.questions
+    } catch (e) {
+    	console.log(e.response)
+    }
+
+    return questions
+}
+
+
+export const fetchCompanies = async () => {
+	let res = await axios.get(`${BASE_API}/api/users/all`)
+	res = res.data.users
+	const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.company_id))
+	const companies = []
+	companyUsers.map(user => {
+		if (!companies.includes(user.company_id)) {
+			companies.push(user.company_id) 
+		}
+	})
+
+	return companies
+}
 
 // fetch applications and its users 
 export const fetchApps = async (company_id='') => {
