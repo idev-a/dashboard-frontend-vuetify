@@ -52,7 +52,7 @@
         </v-select>
       </v-card-title>
       <v-card-title>
-        <v-select
+        <v-autocomplete
           :loading="loading"
           v-if="category == 'all'"
           v-model="select"
@@ -63,7 +63,19 @@
           label="Select a category"
           multiple
           @input="updateData"
-        ></v-select>
+        >
+          <template v-slot:selection="data">
+            <v-chip
+              v-bind="data.attrs"
+              :input-value="data.selected"
+              close
+              @click="data.select"
+              @click:close="remove(data.item)"
+            >
+              {{ data.item }}
+            </v-chip>
+          </template>
+        </v-autocomplete>
       </v-card-title> 
       <v-data-table
         :loading="loading"
@@ -181,30 +193,28 @@
 
     methods: {
       updateData () {
-        if (this.select.length || this.filteredRisks.length) {
-          if (this.select.length) {
-            this.risks = this.risksOrigin.filter(risk => this.select.includes(risk.category))
-          }
-          if (this.filteredRisks.length) {
-            this.risks = this.risks.filter(risk => {
-              let pattern = /low/i
-              if (risk.medium) {
-                pattern = /medium/i
-              } 
-              if (risk.high) {
-                pattern = /high/i
-              } 
-              if (risk.low) {
-                pattern = /low/i
-              }
-              const risks = this.filteredRisks.join('')
-              if (risks.match(pattern)) {
-                return risk
-              }
-            })
-        }
+        if (this.select.length) {
+          this.risks = this.risksOrigin.filter(risk => this.select.includes(risk.category))
         } else {
           this.risks = this.risksOrigin
+        }
+        if (this.filteredRisks.length) {
+          this.risks = this.risks.filter(risk => {
+            let pattern = /low/i
+            if (risk.medium) {
+              pattern = /medium/i
+            } 
+            if (risk.high) {
+              pattern = /high/i
+            } 
+            if (risk.low) {
+              pattern = /low/i
+            }
+            const risks = this.filteredRisks.join('')
+            if (risks.match(pattern)) {
+              return risk
+            }
+          })
         }
       },
       getPageNum (_page) {
@@ -240,6 +250,15 @@
             .finally(() => {
               self.loading = false
             })
+      },
+      remove (item) {
+        this.select.map((cat, i) => {
+          if (cat == item) {
+            this.select.splice(i, 1)
+          }
+        })
+
+        this.updateData(this.select)
       },
     },
 
