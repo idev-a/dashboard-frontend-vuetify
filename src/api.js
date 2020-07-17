@@ -85,6 +85,21 @@ export const fetchUsers = async (company_id) => {
     return users
 }
 
+export const fetchDevices = async (company_id='grove.co') => {
+	let devices = []
+	try {
+    	const res = await axios({
+  			url: `${BASE_API}/api/admin/random/gsuite_devices/${company_id}/`,
+  			method: 'GET'
+  		})
+  		devices = res.data.items
+    } catch (e) {
+    	console.log(e.response)
+    }
+
+    return devices
+}
+
 
 export const fetchAllQuestions = async () => {
 	let questions = []

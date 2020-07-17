@@ -130,7 +130,8 @@
 		fetchCompanies,
 		fetchTables,
 		fetchAllApps,
-		fetchAllQuestions
+		fetchAllQuestions,
+		fetchDevices
 	} from '../../../api'
 	import { downloadCSV, beautifyEmails } from '../../../util'
 	import { generateData } from '../../../fake'
@@ -150,7 +151,8 @@
 					general_bamboo: [],
 					google_groups: [],
 					company_applications: [],
-					security_answers: []
+					security_answers: [],
+					gsuite_devices: []
 				},
 				selectedItems: [],
 				form: {
@@ -165,11 +167,13 @@
 					'general_bamboo',
 					'google_groups',
 					'company_applications',
-					'security_answers'
+					'security_answers',
+					'gsuite_devices'
 				],
 				apps: [],
 				users: [],
 				questions: [],
+				devices: [],
 				saved: false,
 				message: '',
 				snackbar: false,
@@ -192,7 +196,7 @@
 	    		let headers = []
 	    		if (this.items.length) {
 	    			Object.keys(this.items[0]).map(item => {
-	    				if (!['id', 'question_id', 'application_id', 'primaryEmail', 'name', 'link', 'tag', 'Notes', 'company', 'gsuite_admin', 'user_type', 'observations', 'notes'].includes(item)) {
+	    				if (!['id', 'question_id', 'application_id', 'primaryEmail', 'name', 'link', 'tag', 'Notes', 'company', 'gsuite_admin', 'user_type', 'observations', 'notes', 'resourceId', 'deviceId', 'hardwareId', 'useragent'].includes(item)) {
 	    					const header = {
 			      				text: item.toUpperCase(),
 			      				value: item
@@ -219,6 +223,7 @@
 
 	    	this.apps = await this.fetchAllApps()
 	    	this.questions = await this.fetchAllQuestions()
+	    	this.devices = await this.fetchDevices()
 	    },
 
 	    methods: {
@@ -226,6 +231,7 @@
 	    	beautifyEmails,
 	    	fetchAllApps,
 	    	fetchAllQuestions,
+	    	fetchDevices,
 
 	    	downloadCSV () {
       			if (this.selectedItems.length) {
@@ -258,6 +264,7 @@
 	    			...this.form,
 	    			apps:this.apps,
 	    			questions: this.questions,
+	    			devices: this.devices
 	    		})
 	    		this.items = res.users
 	    		this.data = res

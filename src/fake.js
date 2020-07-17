@@ -344,12 +344,48 @@ export const generateSecurityAnswers = ({company_id, questions}) => {
 	return answers
 }
 
+export const generateDevices = ({company_id, users, devices}) => {
+	const users_cnt = parseInt(users.length/2)
+	const gsuite_devices = []
+	while (true) {
+		const device_idx = random.int(0, devices.length-1)
+		const random_device = devices[device_idx]
+
+		const user_idx = random.int(0, users.length-1)
+		const random_user = users[user_idx]
+		gsuite_devices.push({
+			kind: random_device.kind,
+			resourceId: random_device.resourceId,
+			deviceId: random_device.deviceId,
+			name: random_user.firstname_lastname,
+			email: random_user.email,
+			model: random_device.model,
+			os: random_device.os,
+			type: random_device.type,
+			status: random_device.status,
+			hardwareId: random_device.hardwareId,
+			firstsync: random_device.firstsync,
+			lastsync: random_device.lastsync,
+			useragent: random_device.useragent,
+			run_at: moment().format('YYYY-MM-DD HH:mm:ss'),
+			company_id: company_id
+		})
+
+		if (gsuite_devices.length > users_cnt) {
+			break
+		}
+	}
+
+	return gsuite_devices
+}
+
 export const generateData = ({
 		userCnt,
 		groupCnt,
 		company_id,
 		apps,
-		questions
+		questions,
+		devices
 	}) => {
 	userCnt = Number(userCnt)
 	groupCnt = Number(groupCnt)
@@ -360,6 +396,7 @@ export const generateData = ({
 	const groups = generateGroups({google_groups})
 	const company_applications = generateCompanyApps({company_id, apps})
 	const security_answers = generateSecurityAnswers({company_id, questions})
+	const gsuite_devices = generateDevices({company_id, users, devices})
 
 	return {
 		users,
@@ -367,6 +404,7 @@ export const generateData = ({
 		general_bamboo,
 		google_groups,
 		company_applications,
-		security_answers
+		security_answers,
+		gsuite_devices
 	}
 }
