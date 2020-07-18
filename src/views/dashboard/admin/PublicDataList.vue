@@ -11,18 +11,37 @@
 		        Public Data (Run)
 		        <v-spacer></v-spacer>
 		        <v-btn  :disabled="loadingBulk" class="mb-2" @click="done=true;getBulkData()" color="main">Check Progress<v-icon  size="16" right dark>mdi-database</v-icon></v-btn>
-		        <v-btn :loading="loading" :disabled="loading || !file"  class="mb-2" @click="importCSV" color="main">Import & Run<v-icon  size="16" right dark>mdi-database-import</v-icon></v-btn>
-		        <v-spacer></v-spacer>
-		        <v-file-input
-				    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-				    placeholder="Import CSV file containing domain list"
-				    prepend-icon="mdi-database-import"
-				    label="CSV file"
-				    ref="myfile" 
-				    v-model="file"
-				    multiple 
-			  	></v-file-input>
+		        <v-btn :loading="loading" :disabled="loading || (!file && !domains)"  class="mb-2" @click="importCSV" color="main">Import & Run<v-icon  size="16" right dark>mdi-database-import</v-icon></v-btn>
+		        
 		    </v-card-title>
+
+		    <v-card-text>
+		    	<v-row>
+		    		<v-col cols="12" md=6>
+		    			<v-textarea
+			                v-model="domains"
+			                label="Public domain list with new line" 
+			                hint="Ctrl + Enter to run the functionality"
+			                rows="2"
+			                auto_grow
+			                clearable
+			                outlined
+			                @keyup.ctrl.13="keyDownOnRun"
+			            />
+		    		</v-col>
+		    		<v-col cols="12" md=6>
+		    			<v-file-input
+						    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+						    placeholder="Import CSV file containing domain field"
+						    prepend-icon="mdi-database-import"
+						    label="CSV file"
+						    ref="myfile" 
+						    v-model="file"
+						    multiple 
+					  	></v-file-input>
+		    		</v-col>
+		    	</v-row>
+		    </v-card-text>
 			
 			<v-spacer></v-spacer>
 			<v-card-title>
@@ -130,6 +149,7 @@
 			loading: false,
 			loadingBulk: false,
 			file: null,
+			domains: '',
 			csvSearch: '',
 			bulkSearch: '',
 		 	snackbar: false,
@@ -214,7 +234,6 @@
 		    },
 
 		    async getBulkData () {
-		    	console.log('getBulkData', this.done)
 		    	if (!this.done || this.loadingBulk) {
 		    		return;
 		    	}
@@ -232,6 +251,12 @@
 		    	}
 		    },
 
+		    keyDownOnRun () {
+      			if (this.domains) {
+      				this.importCSV()
+      			}
+      		},
+
 			async importCSV () {
 				let formData = new FormData()
 				formData.append('userName', 'CSV');
@@ -240,22 +265,32 @@
 		        	for (let file of this.file) {
 	                	formData.append("file", file, file.name);
 	                }
+	            }
 
-	                this.done = true
-                    this.loading = true
-                    this.file = null
-			    	try {
-				    	const res = await axios.post(`${BASE_API}/api/admin/publicdata/run`, formData)
-			      		this.csvData = res.data.csv_data
-		      			this.message = res.data.message
-		      			this.color = res.data.status
-			    	} catch(e) {
-			    		this.message = 'Something wrong happened on the server.'
-			    	} finally {
-		      			this.loading = false
-		      			this.snackbar = true
-			    	}
-		        }
+                const data = {
+                	domains: this.domains
+                }
+                const json = JSON.stringify(data);
+				const blob = new Blob([json], {
+				  type: 'application/json'
+				});
+
+				formData.append("domains", blob);
+
+                this.done = true
+                this.loading = true
+                this.file = null
+		    	try {
+			    	const res = await axios.post(`${BASE_API}/api/admin/publicdata/run`, formData)
+		      		this.csvData = res.data.csv_data
+	      			this.message = res.data.message
+	      			this.color = res.data.status
+		    	} catch(e) {
+		    		this.message = 'Something wrong happened on the server.'
+		    	} finally {
+	      			this.loading = false
+	      			this.snackbar = true
+		    	}
 			}
 		}
 	}
