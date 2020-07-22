@@ -78,11 +78,45 @@
         </v-col>
         <v-col
           cols="auto"
-          class="pt-0"
+          class="mt-0"
         >
-          <!-- <v-card shaped outlined class="my-0 pa-2"> -->
             <span class="text--secondary">{{currentQuestion.description}}</span>
-          <!-- </v-card> -->
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+      >
+        <v-col
+          cols="auto"
+          class="mb-0"
+        >
+          <div class="font-weight-medium">
+            Recommendation
+          </div>
+        </v-col>
+        <v-col
+          cols="auto"
+          class="mt-0"
+        >
+            <span class="text--secondary">{{currentQuestion.recommendation}}</span>
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+      >
+        <v-col
+          cols="auto"
+          class="mb-0"
+        >
+          <div class="font-weight-medium">
+            Impact
+          </div>
+        </v-col>
+        <v-col
+          cols="auto"
+          class="mt-0"
+        >
+            <span class="text--secondary">{{currentQuestion.impact}}</span>
         </v-col>
       </v-row>
       <v-row
@@ -261,11 +295,9 @@
 	      		let risk = 'Low'
 	      		if (this.currentQuestion.high) {
 	      			risk = 'High'
-	      		}
-	      		if (this.currentQuestion.medium) {
+	      		} else if (this.currentQuestion.medium) {
 	      			risk = 'Medium'
-	      		}
-	      		if (this.currentQuestion.low) {
+	      		} else if (this.currentQuestion.low) {
 	      			risk = 'Low'
 	      		}
 	      		return risk

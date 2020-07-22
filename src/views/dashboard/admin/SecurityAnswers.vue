@@ -21,7 +21,7 @@
 			    </v-tooltip>
 			    <v-tooltip bottom>
 			      <template v-slot:activator="{ on, attrs }">
-		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="refreshData" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-refresh</v-icon></v-btn>
+		        	<v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="fetchRisks" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-refresh</v-icon></v-btn>
 			      </template>
 			      <span>Refresh</span>
 			    </v-tooltip>
@@ -179,7 +179,6 @@
 			                label="Notes" 
 			                auto-grow
 			                rows="1"
-			                :rules="[rules.required]"
 			                hide-details="auto"
 			                class="mb-3"
 		                >
@@ -190,7 +189,26 @@
 			                label="Link" 
 			                auto-grow
 			                rows="1"
-			                :rules="[rules.required]"
+			                hide-details="auto"
+			                class="mb-3"
+		                >
+		              	</v-textarea>
+		              	<v-textarea
+				            v-if="mode == 'Edit'"
+			                v-model="editItem.recommendation"
+			                label="Recommendation" 
+			                auto-grow
+			                rows="1"
+			                hide-details="auto"
+			                class="mb-3"
+		                >
+		              	</v-textarea>
+		              	<v-textarea
+				            v-if="mode == 'Edit'"
+			                v-model="editItem.impact"
+			                label="Impact" 
+			                auto-grow
+			                rows="1"
 			                hide-details="auto"
 			                class="mb-3"
 		                >
@@ -307,6 +325,26 @@
 		                class="mb-3"
 	                >
 	              	</v-textarea>
+	              	<v-textarea
+				            v-if="mode == 'Edit'"
+			                v-model="editItem.recommendation"
+			                label="Recommendation" 
+			                auto-grow
+			                rows="1"
+			                hide-details="auto"
+			                class="mb-3"
+		                >
+		              	</v-textarea>
+		              	<v-textarea
+				            v-if="mode == 'Edit'"
+			                v-model="editItem.impact"
+			                label="Impact" 
+			                auto-grow
+			                rows="1"
+			                hide-details="auto"
+			                class="mb-3"
+		                >
+		              	</v-textarea>
 	              	<v-row>
 	              		<v-col class="col-auto">
 			          	  <v-select
@@ -439,7 +477,9 @@
 				defaultItem: {
 					link: '',
 					tag: '',
-					risk: 'High'
+					risk: 'High',
+					cia: [],
+					Ts: []
 				},
 				tags: [],
 				valid: true,
@@ -743,6 +783,7 @@
 	      			this.message = data.data.message
 	      			this.color = data.data.status
 		    	} catch(e) {
+		    		console.log(e)
 		    		this.message = 'Something wrong happened on the server.'
 		    	} finally {
 	      			this.loading = false

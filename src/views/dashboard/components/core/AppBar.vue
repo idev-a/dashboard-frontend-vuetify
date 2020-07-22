@@ -178,26 +178,21 @@
 
       <v-list
         :tile="false"
-        flat
         nav
       >
-        <template v-for="(p, i) in profile">
-          <v-divider
-            v-if="p.divider"
-            :key="`divider-${i}`"
-            class="mb-2 mt-2"
-          />
-
-          <app-bar-item
-            v-else
+        <v-list-item-group v-model="menuItem" color="primary">
+          <v-list-item
+            v-for="(p, i) in profile"
             :key="`item-${i}`"
+            @click="goTo(p.name)"
           >
-            <v-list-item-title 
-              v-text="p.title" 
-              @click="goTo(p.name)"
-            />
-          </app-bar-item>
-        </template>
+            <v-list-item-content>
+              <v-list-item-title 
+                v-text="p.title" 
+              />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
     </v-menu>
     <v-snackbar
@@ -295,11 +290,11 @@
 
     data: () => ({
       snackbar: false,
+      menuItem: '',
       notification: '',
       profile: [
         { title: 'Profile', name: 'My Profile' },
         // { title: 'Settings', name: 'Settings' },
-        { divider: true },
         { title: 'Log out', name: 'Login' },
       ],
     }),

@@ -201,11 +201,11 @@
         if (this.filteredRisks.length) {
           this.risks = this.risks.filter(risk => {
             let pattern = /low/i
-            if (risk.medium) {
-              pattern = /medium/i
-            } 
             if (risk.high) {
               pattern = /high/i
+            } 
+            if (risk.medium) {
+              pattern = /medium/i
             } 
             if (risk.low) {
               pattern = /low/i
