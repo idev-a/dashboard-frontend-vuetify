@@ -233,7 +233,7 @@
       >
         <base-material-stats-card
           :loading="loading"
-          color="black darken-4"
+          color="grey darken-1"
           icon="mdi-alert-outline"
           title="Informational Risks"
           :value="smallCards.informational_risk"
