@@ -81,7 +81,7 @@
         :loading="loading"
         :headers="headers"
         :items="risks"
-        item-key="id"
+        item-key="answer_id"
         :items-per-page="page"
         :search="search"
         single-expand
@@ -255,6 +255,7 @@
         if (!this.isLevelVisible) {
           this.filteredRisks = []
         }
+
         const self = this
         self.loading = true
         axios(`${BASE_API}/api/risks/${this.category}/${this.companyId}`, {
