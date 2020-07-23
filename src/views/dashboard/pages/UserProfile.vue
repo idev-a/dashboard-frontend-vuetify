@@ -20,7 +20,7 @@
             >
               <v-text-field
                 label="Company Name"
-                v-model="user.companyId"
+                v-model="user.company_id"
                 disabled
               />
             </v-col>
