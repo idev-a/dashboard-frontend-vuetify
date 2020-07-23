@@ -78,6 +78,7 @@ export const levelColor = (level) => {
       break
     case 'low':
       color = 'green darken-1'
+      break;
     case 'informational':
       color = 'grey lighten-1'
       break
