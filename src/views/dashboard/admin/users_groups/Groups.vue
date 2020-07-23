@@ -286,20 +286,6 @@
 		      			value: 0
 		      		}
 		      	],
-		      	RISK: [
-		      		{
-		      			text: 'High',
-		      			value: 'high'
-		      		},
-		      		{
-		      			text: 'Medium',
-		      			value: 'medium'
-		      		},
-		      		{
-		      			text: 'Low',
-		      			value: 'low'
-		      		},
-		      	],
 		      	headers: [
 			      	{
 			          text: 'Name',

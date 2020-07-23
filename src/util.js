@@ -67,6 +67,9 @@ export const levelColor = (level) => {
   let color = 'green darken-1'
   level = level ? level.toLowerCase() : 'low'
   switch (level) {
+    case 'critical':
+      color = 'black'
+      break
     case 'high':
       color = 'red darken-4'
       break
@@ -75,6 +78,8 @@ export const levelColor = (level) => {
       break
     case 'low':
       color = 'green darken-1'
+    case 'informational':
+      color = 'grey lighten-1'
       break
   }
   return color
@@ -142,7 +147,60 @@ export const pieChart = (title, data, total) => {
 }
 
 // Risk Pie chart  template
-const riskPieChart = (high, medium, low, title, high_label='High', medium_label='Medium', low_label="Low") => {
+const riskPieChart = ({critical, high, medium, low, informational, title, critical_label='Critical', high_label='High', medium_label='Medium', low_label="Low", informational_level="Informational"}) => {
+  const data = [
+  ]
+  if (critical != undefined) {
+    data.push({
+      name: critical_label,
+      y: parseFloat(critical),
+      sliced: true,
+      selected: true,
+      color: 'black',
+      drilldown: "Critical"
+    })
+  }
+  if (high != undefined) {
+    data.push({
+      name: high_label,
+      y: parseFloat(high),
+      color: 'red',
+      drilldown: "High"
+    })
+  }
+  if (medium != undefined) {
+    data.push({
+      name: medium_label,
+      y: parseFloat(medium),
+      color: 'orange',
+      drilldown: "Medium"
+    })
+  }
+  if (low != undefined) {
+    data.push({
+      name: low_label,
+      y: parseFloat(low),
+      color: 'green',
+      drilldown: "Low"
+    })
+  }
+  if (informational != undefined) {
+    data.push({
+      name: informational_level,
+      y: parseFloat(informational),
+      color: 'gray',
+      drilldown: "Informational"
+    })
+  }
+
+  let total = high+medium+low
+  if (critical) {
+    total += critical
+  }
+  if (informational) {
+    total += informational
+  }
+
   return {
     chart: {
         plotBackgroundColor: null,
@@ -155,7 +213,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
       text: title
     },
     subtitle: {
-      text: `Total ${high+medium+low}`
+      text: `Total ${total}`
     },
     tooltip: {
         pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
@@ -186,24 +244,7 @@ const riskPieChart = (high, medium, low, title, high_label='High', medium_label=
       colorByPoint: true,
       size: '90%',
       innerSize: '80%',
-      data: [{
-          name: high_label,
-          y: parseFloat(high),
-          sliced: true,
-          selected: true,
-          color: 'red',
-          drilldown: "High"
-      }, {
-          name: medium_label,
-          y: parseFloat(medium),
-          color: 'orange',
-          drilldown: "Medium"
-      }, {
-          name: low_label,
-          y: parseFloat(low),
-          color: 'green',
-          drilldown: "Low"
-      }]
+      data
     }]
   }
 }
@@ -302,35 +343,43 @@ export const columnChart = (title, subtitle, yLabel, series, categories, interva
   }
 }
 
-export const riskLevelChart = (high, medium, low) => {
-  return riskPieChart(high, medium, low, 'Risk Levels')
+export const riskLevelChart = (critical, high, medium, low, informational) => {
+  return riskPieChart({critical, high, medium, low, informational, title:'Risk Levels'})
 }
 
-export const userRiskChart = (high, medium, low) => {
-  return riskPieChart(high, medium, low, 'High Risk Users')
+export const userRiskChart = (critical, high, medium, low, informational) => {
+  return riskPieChart({critical, high, medium, low, informational, title:'High Risk Users'})
 }
 
-export const appRiskChart = (high, medium, low) => {
-  return riskPieChart(high, medium, low, 'High Risk Apps')
+export const appRiskChart = (critical, high, medium, low, informational) => {
+  return riskPieChart({critical, high, medium, low, informational, title:'High Risk Apps'})
 }
 
 export const CIAChart = (high, medium, low) => {
-  return riskPieChart(high, medium, low, 'CIA', 'Confidetiality', 'Availability', 'Integrity')
+  return riskPieChart({high, medium, low, title:'CIA', high_label:'Confidetiality', medium_label:'Availability', low_label:'Integrity'})
 }
 
 // donut chart template
 export const scoreDonutChart = (score) => {
-  let label = 'High Risk';
-  let color = 'red';
+  let label = 'Critical Risk';
+  let color = 'black';
   switch (score) {
-    case 4:
     case 5:
-      label = 'High Risk';
+      label = 'Critical Risk';
+      color = 'black';
+      break;
+    case 4:
+      label = 'High Risk'
       color = 'red';
       break;
     case 3:
       label = 'Medium Risk';
       color = 'orange';
+      break;
+    case 2:
+    case 1:
+      label = 'Low Risk';
+      color = 'green';
       break;
     default:
       label = 'Low Risk';

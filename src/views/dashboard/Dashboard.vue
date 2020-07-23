@@ -151,7 +151,25 @@
       </v-col>
     </v-row>
     <v-row>
-       <v-col
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <base-material-stats-card
+          :loading="loading"
+          color="black darken-4"
+          icon="mdi-alert-outline"
+          title="Critical Risks"
+          :value="smallCards.critical_risk"
+          sub-icon="mdi-chevron-triple-right"
+          sub-text="View All Critical Risks"
+          to="Critical Risks"
+          hover
+          ripple
+        />
+      </v-col>
+      <v-col
         cols="12"
         sm="6"
         lg="3"
@@ -203,6 +221,25 @@
           sub-icon="mdi-chevron-triple-right"
           sub-text="View All Low Risks"
           to="Low Risks"
+          hover
+          ripple
+        />
+      </v-col>
+
+      <v-col
+        cols="12"
+        sm="6"
+        lg="3"
+      >
+        <base-material-stats-card
+          :loading="loading"
+          color="black darken-4"
+          icon="mdi-alert-outline"
+          title="Informational Risks"
+          :value="smallCards.informational_risk"
+          sub-icon="mdi-chevron-triple-right"
+          sub-text="View All Informational Risks"
+          to="Informational Risks"
           hover
           ripple
         />
@@ -433,9 +470,11 @@
         loading: true,
         loadingCard: true,
         smallCards: {
+          critical_risk: '0',
           high_risk: '0',
           medium_risk: '0',
           low_risk: '0',
+          informational_risk: '0',
           other: '0',
           applications: '0',
           email_security: '0',
@@ -486,15 +525,15 @@
       ...mapState(['companyId']),
       
       riskLevelCharts () {
-        return riskLevelChart(this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk)
+        return riskLevelChart(this.charts.critical_risk, this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk, this.charts.informational_risk)
       },
 
       highRiskUsers () {
-        return userRiskChart(this.charts.user_high, this.charts.user_medium, this.charts.user_low)
+        return userRiskChart(this.charts.user_critical, this.charts.user_high, this.charts.user_medium, this.charts.user_low, this.charts.user_informational)
       },
 
       highRiskApps () {
-        return appRiskChart(this.charts.app_high, this.charts.app_medium, this.charts.app_low)
+        return appRiskChart(this.charts.app_critical, this.charts.app_high, this.charts.app_medium, this.charts.app_low, this.charts.app_informational)
       },
 
       CIACharts () {

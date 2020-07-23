@@ -231,11 +231,28 @@
       details: false,
       pagination: {},
       risks: [
-        'High',
-        'Medium',
-        'Low'
+        {
+          text: 'Critical',
+          value: 'critical'
+        },
+        {
+          text: 'High',
+          value: 'high'
+        },
+        {
+          text: 'Medium',
+          value: 'medium'
+        },
+        {
+          text: 'Low',
+          value: 'low'
+        },
+        {
+          text: 'Informational',
+          value: 'informational'
+        },
       ],
-      filteredRisks:['High'], 
+      filteredRisks:['critical'], 
       appHeaders: [
         {
           text: 'Name',
@@ -297,13 +314,17 @@
             return app
           } else {
             let pattern = app.risk || 'low'
-            if (pattern == 'medium') {
-              pattern = /medium/i
+            if (pattern == 'critical') {
+              pattern = /critical/i
             } else if (pattern == 'high') {
               pattern = /high/i
-            } else {
+            } else if (pattern == 'medium') {
+              pattern = /medium/i
+            } else if (pattern == 'low') {
               pattern = /low/i
-            }
+            } else if (pattern == 'informational') {
+              pattern = /informational/i
+            } 
             const risks = this.filteredRisks.join('')
             if (risks.match(pattern)) {
               return app

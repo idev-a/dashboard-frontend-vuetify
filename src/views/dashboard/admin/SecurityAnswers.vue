@@ -538,7 +538,28 @@
      	   return ['availability', 'confidentiality', 'integrity']
  	   	  },
  	   	  risks () {
- 	   	  	return ['High', 'Medium', 'Low']
+ 	   	  	return [
+	 	   	  	{
+		          text: 'Critical',
+		          value: 'critical'
+		        },
+		        {
+		          text: 'High',
+		          value: 'high'
+		        },
+		        {
+		          text: 'Medium',
+		          value: 'medium'
+		        },
+		        {
+		          text: 'Low',
+		          value: 'low'
+		        },
+		        {
+		          text: 'Informational',
+		          value: 'informational'
+		        },
+ 	   	  	]
  	   	  }
 	    },  
 

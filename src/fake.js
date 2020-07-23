@@ -11,9 +11,11 @@ const ANSWER_TEMPLATES = [
 ]
 
 const RISK_LEVELS = [
+	'critical',
 	'high',
 	'medium',
-	'low'
+	'low',
+	'informational'
 ]
 
 const ramdomOrg = (limit) => {
@@ -292,9 +294,11 @@ export const generateSecurityAnswers = ({company_id, questions}) => {
 		const Answer = ANSWER_TEMPLATES[idx]
 		const link = ''
 		const tag = ''
+		const critical_risk = Number(faker.random.boolean())
 		const high_risk = Number(faker.random.boolean())
 		const medium_risk = Number(faker.random.boolean())
 		const low_risk = Number(faker.random.boolean())
+		const informational_risk = Number(faker.random.boolean())
 		const Confidentiality = Number(faker.random.boolean())
 		const Integrity = Number(faker.random.boolean())
 		const availability = Number(faker.random.boolean())
@@ -319,9 +323,11 @@ export const generateSecurityAnswers = ({company_id, questions}) => {
 			description: question.Description,
 			link,
 			tag,
+			critical_risk,
 			high_risk,
 			medium_risk,
 			low_risk,
+			informational_risk,
 			Confidentiality,
 			Integrity,
 			availability,

@@ -293,13 +293,17 @@
 		computed: {
 			risk () {
 	      		let risk = 'Low'
-	      		if (this.currentQuestion.high) {
+            if (this.currentQuestion.critical) {
+              risk = 'Critical'
+            } else if (this.currentQuestion.high) {
 	      			risk = 'High'
 	      		} else if (this.currentQuestion.medium) {
 	      			risk = 'Medium'
 	      		} else if (this.currentQuestion.low) {
 	      			risk = 'Low'
-	      		}
+	      		} else if (this.currentQuestion.informational) {
+              risk = 'Informational'
+            }
 	      		return risk
 			},
 		},

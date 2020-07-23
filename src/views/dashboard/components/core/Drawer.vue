@@ -191,6 +191,10 @@
           title: 'Risks',
           children: [
             {
+              title: 'Critical Risks',
+              to: 'critical',
+            },
+            {
               title: 'High Risks',
               to: 'high',
             },
@@ -201,6 +205,10 @@
             {
               title: 'Low Risks',
               to: 'low',
+            },
+            {
+              title: 'Information Risks',
+              to: 'information',
             },
           ]
         },

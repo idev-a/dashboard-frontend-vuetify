@@ -273,6 +273,14 @@ let router = new Router({
           }
         },
         {
+          name: 'Critical Risks',
+          path: 'risks/critical',
+          component: () => import('@/views/dashboard/risks/critical'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
           name: 'High Risks',
           path: 'risks/high',
           component: () => import('@/views/dashboard/risks/high'),
@@ -292,6 +300,14 @@ let router = new Router({
           name: 'Low Risks',
           path: 'risks/low',
           component: () => import('@/views/dashboard/risks/low'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Information Risks',
+          path: 'risks/information',
+          component: () => import('@/views/dashboard/risks/information'),
           meta: {
             requiresAuth: true
           }

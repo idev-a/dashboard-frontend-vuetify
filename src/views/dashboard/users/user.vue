@@ -111,11 +111,28 @@
       singleExpand: true,
       expanded: [],
       risks: [
-        'High',
-        'Medium',
-        'Low'
+        {
+          text: 'Critical',
+          value: 'critical'
+        },
+        {
+          text: 'High',
+          value: 'high'
+        },
+        {
+          text: 'Medium',
+          value: 'medium'
+        },
+        {
+          text: 'Low',
+          value: 'low'
+        },
+        {
+          text: 'Informational',
+          value: 'informational'
+        },
       ],
-      filteredRisks:['High'], 
+      filteredRisks:['critical'], 
       actions: [
         {
           color: 'info',
@@ -165,13 +182,17 @@
             return user
           } else {
             let pattern = user.risk_level || 'low'
-            if (pattern == 'medium') {
-              pattern = /medium/i
+            if (pattern == 'critical') {
+              pattern = /critical/i
             } else if (pattern == 'high') {
               pattern = /high/i
-            } else {
+            } else if (pattern == 'medium') {
+              pattern = /medium/i
+            } else if (pattern == 'low') {
               pattern = /low/i
-            }
+            } else if (pattern == 'informational') {
+              pattern = /informational/i
+            } 
             const risks = this.filteredRisks.join('')
             if (risks.match(pattern)) {
               return user

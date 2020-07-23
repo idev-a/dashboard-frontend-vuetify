@@ -721,7 +721,7 @@
       defaultUserIndex: -1,
       defaultDetailIndex: -1,
       defaultAppItem: {
-        risk: 'High',
+        risk: 'critical',
         application_logo: '',
         purpse: '',
         login_url: '',
@@ -751,7 +751,7 @@
         security_setting_1: ''
       },
       editedAppItem: {
-        risk: 'High'
+        risk: 'critical'
       },
       editedUserItem: {
         has_2fa: 'false',
@@ -830,9 +830,26 @@
         },
       },
       riskItems: [
-        'High',
-        'Medium',
-        'Low'
+        {
+          text: 'Critical',
+          value: 'critical'
+        },
+        {
+          text: 'High',
+          value: 'high'
+        },
+        {
+          text: 'Medium',
+          value: 'medium'
+        },
+        {
+          text: 'Low',
+          value: 'low'
+        },
+        {
+          text: 'Informational',
+          value: 'informational'
+        },
       ],
       renewalDateMenu: false,
       expirationDateMenu: false,

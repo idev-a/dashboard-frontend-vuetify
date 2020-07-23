@@ -144,12 +144,29 @@
       ],
       risks: [
       ],
-      riskItems: [
-        'High',
-        'Medium',
-        'Low'
+      riskItems: [  
+        {
+          text: 'Critical',
+          value: 'critical'
+        },
+        {
+          text: 'High',
+          value: 'high'
+        },
+        {
+          text: 'Medium',
+          value: 'medium'
+        },
+        {
+          text: 'Low',
+          value: 'low'
+        },
+        {
+          text: 'Informational',
+          value: 'informational'
+        },
       ],
-      filteredRisks:['High'], 
+      filteredRisks:['critical'], 
       risksOrigin: []
     }),
 
@@ -179,7 +196,7 @@
         return headers
       },
       isLevelVisible () {
-        return !['high', 'medium', 'low'].includes(this.category)
+        return !['critical', 'high', 'medium', 'low', 'informational'].includes(this.category)
       }
     },
 
@@ -198,24 +215,28 @@
         } else {
           this.risks = this.risksOrigin
         }
-        if (this.filteredRisks.length) {
-          this.risks = this.risks.filter(risk => {
+        this.risks = this.risks.filter(risk => {
+          if (this.filteredRisks.length) {
             let pattern = /low/i
-            if (risk.high) {
+            if (risk.critical) {
+              pattern = /critical/i
+            } else if (risk.high) {
               pattern = /high/i
-            } 
-            if (risk.medium) {
+            } else if (risk.medium) {
               pattern = /medium/i
-            } 
-            if (risk.low) {
+            } else if (risk.low) {
               pattern = /low/i
+            } else if (risk.informational) {
+              pattern = /informational/i
             }
             const risks = this.filteredRisks.join('')
             if (risks.match(pattern)) {
               return risk
             }
-          })
-        }
+          } else {
+            return risk
+          }
+        })
       },
       getPageNum (_page) {
         localStorage.setItem('page', _page)
@@ -243,6 +264,8 @@
               self.risks = res.data.risks
               self.categories = res.data.categories
               self.risksOrigin = res.data.risks
+
+              self.updateData()
             })
             .catch(error => {
               console.log(error)
