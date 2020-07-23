@@ -65,7 +65,7 @@ export const DOMAIN_LIST = [
 
 export const levelColor = (level) => {
   let color = 'green darken-1'
-  level = level ? level.toLowerCase() : 'low'
+  level = level ? level.toLowerCase().trim() : 'low'
   switch (level) {
     case 'critical':
       color = 'black'

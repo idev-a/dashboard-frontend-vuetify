@@ -182,6 +182,7 @@
             return user
           } else {
             let pattern = user.risk_level || 'low'
+            pattern = pattern.trim()
             if (pattern == 'critical') {
               pattern = /critical/i
             } else if (pattern == 'high') {

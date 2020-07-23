@@ -314,6 +314,7 @@
             return app
           } else {
             let pattern = app.risk || 'low'
+            pattern = pattern.trim()
             if (pattern == 'critical') {
               pattern = /critical/i
             } else if (pattern == 'high') {

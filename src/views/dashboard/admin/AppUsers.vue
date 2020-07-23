@@ -1045,7 +1045,7 @@
           res = await this._createApp(item)
           if (res.data.status == 'Ok') {
             this.apps.push(item)
-          } 
+          }
         }
         this.closeAppDialog()
 
