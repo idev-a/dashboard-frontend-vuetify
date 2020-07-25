@@ -26,7 +26,7 @@
         <v-spacer></v-spacer>
         <v-select
           v-model="filteredRisks"
-          :items="risks"
+          :items="riskItems"
           multiple
           class="max-100"
           label="Risk Level"
@@ -48,8 +48,8 @@
         @update:items-per-page="getPageNum"
       >
         <template v-slot:item.risk="{ item }">
-          <v-chip :color="levelColor(item.risk)" dark>
-            <div class="subtitle-2">{{ item.risk ? item.risk : 'low' }}</div>
+          <v-chip :color="levelColor(item.risk_level)" dark>
+            <div class="subtitle-2 text-capitalize">{{ item.risk_level ? item.risk_level : 'low' }}</div>
           </v-chip>
         </template>
         <template v-slot:item.action="{ item }">
@@ -147,7 +147,7 @@
                   md="3"
                 >
                     <b class="display-1">Price</b>
-                    <div class="text--secondary">{{currentApp.price}}</div>
+                    <div class="text--secondary"><b>$</b>{{currentApp.price}}</div>
                 </v-col>
                 <v-col
                   cols="12"
@@ -230,28 +230,6 @@
       user: false,
       details: false,
       pagination: {},
-      risks: [
-        {
-          text: 'Critical',
-          value: 'critical'
-        },
-        {
-          text: 'High',
-          value: 'high'
-        },
-        {
-          text: 'Medium',
-          value: 'medium'
-        },
-        {
-          text: 'Low',
-          value: 'low'
-        },
-        {
-          text: 'Informational',
-          value: 'informational'
-        },
-      ],
       filteredRisks:['critical'], 
       appHeaders: [
         {
@@ -298,7 +276,7 @@
     },
 
     computed: {
-      ...mapState(['companyId', 'page']),
+      ...mapState(['companyId', 'page', 'riskItems']),
 
       usersTitle () {
         return 'Users'
@@ -313,7 +291,7 @@
           if (this.filteredRisks.length == 0) {
             return app
           } else {
-            let pattern = app.risk || 'low'
+            let pattern = app.risk_level || 'low'
             pattern = pattern.toLowerCase().trim()
             if (pattern == 'critical') {
               pattern = /critical/i

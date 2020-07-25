@@ -144,34 +144,12 @@
       ],
       risks: [
       ],
-      riskItems: [  
-        {
-          text: 'Critical',
-          value: 'critical'
-        },
-        {
-          text: 'High',
-          value: 'high'
-        },
-        {
-          text: 'Medium',
-          value: 'medium'
-        },
-        {
-          text: 'Low',
-          value: 'low'
-        },
-        {
-          text: 'Informational',
-          value: 'informational'
-        },
-      ],
       filteredRisks:['critical'], 
       risksOrigin: []
     }),
 
     computed: {
-      ...mapState(['page', 'companyId']),
+      ...mapState(['page', 'companyId', 'riskItems']),
       
       headers () {
         let headers = [
@@ -217,18 +195,19 @@
         }
         this.risks = this.risks.filter(risk => {
           if (this.filteredRisks.length) {
-            let pattern = /low/i
-            if (risk.critical) {
+            let pattern = risk.risk_level || 'low'
+            pattern = pattern.toLowerCase().trim()
+            if (pattern == 'critical') {
               pattern = /critical/i
-            } else if (risk.high) {
+            } else if (pattern == 'high') {
               pattern = /high/i
-            } else if (risk.medium) {
+            } else if (pattern == 'medium') {
               pattern = /medium/i
-            } else if (risk.low) {
+            } else if (pattern == 'low') {
               pattern = /low/i
-            } else if (risk.informational) {
+            } else if (pattern == 'informational') {
               pattern = /informational/i
-            }
+            } 
             const risks = this.filteredRisks.join('')
             if (risks.match(pattern)) {
               return risk

@@ -24,6 +24,28 @@ export default new Vuex.Store({
       type: 'All',
       interval: 'Daily'
     },
+    riskItems: [
+      {
+        text: 'Critical',
+        value: 'critical'
+      },
+      {
+        text: 'High',
+        value: 'high'
+      },
+      {
+        text: 'Medium',
+        value: 'medium'
+      },
+      {
+        text: 'Low',
+        value: 'low'
+      },
+      {
+        text: 'Informational',
+        value: 'informational'
+      },
+    ],
     page: Number(localStorage.getItem('page')) || 5,
     companyId,
     userId,

@@ -25,7 +25,7 @@
         <v-spacer></v-spacer>
         <v-select
           v-model="filteredRisks"
-          :items="risks"
+          :items="riskItems"
           multiple
           class="max-100"
           label="Risk Level"
@@ -110,28 +110,6 @@
       currentUser: '',
       singleExpand: true,
       expanded: [],
-      risks: [
-        {
-          text: 'Critical',
-          value: 'critical'
-        },
-        {
-          text: 'High',
-          value: 'high'
-        },
-        {
-          text: 'Medium',
-          value: 'medium'
-        },
-        {
-          text: 'Low',
-          value: 'low'
-        },
-        {
-          text: 'Informational',
-          value: 'informational'
-        },
-      ],
       filteredRisks:['critical'], 
       actions: [
         {
@@ -174,7 +152,7 @@
     },
 
     computed: {
-      ...mapState(['page', 'companyId']),
+      ...mapState(['page', 'companyId', 'riskItems']),
 
       filteredUsers () {
         return this.users.filter(user => {
@@ -240,4 +218,4 @@
 .max-100 {
   max-width: 300px;
 }
-  </style>
+</style>

@@ -224,11 +224,11 @@
 		              		<v-col class="col-auto">
 				          	  <v-select
 				          	  	v-if="mode == 'Edit'"
-				                v-model="editItem.risk"
+				                v-model="editItem.risk_level"
 				                :rules="[rules.required]"
 				                label="Risk" 
 				                chips
-				                :items="risks"
+				                :items="riskItems"
 				                required
 				                >
 				              </v-select>
@@ -349,9 +349,9 @@
 	              		<v-col class="col-auto">
 			          	  <v-select
 			          	  	v-if="mode == 'Edit'"
-			                v-model="editItem.risk"
+			                v-model="editItem.risk_level"
 			                label="Risk" 
-			                :items="risks"
+			                :items="riskItems"
 			                >
 			              </v-select>
 			            </v-col>
@@ -523,45 +523,21 @@
 
 		computed: {
 			...mapState('security', ['questions']),
-			...mapState(['page']),
-	      btnLabel () {
-     		if (this.mode == 'Edit') {
-  				return 'View'
-  			} else {
-  				return 'Edit'
-  			}
-     	  },
-     	  tList() {
-     	  	return ['T1. Software Failures (code, configuration etc.)', 'T2. Cloud Failures (Provider, VHardware, Capacity)', 'T3. Legal Threats (failure to comply, bad contacts)', 'T4. Social Engineering', 'T5. External Unauthorized Access to Information Systems / Data', 'T6. Traffic Monitoring or Interception', 'T7.External Attacker Tampering with Data / Data Destruction', 'T8. Repudiation of transactions and messages', 'T9. Insider Abuse of Privilege', 'T10. Third Party Liability (contractors, third processing)', 'T11. Employee / User Mistakes']
-     	  },
-     	  cias () {
-     	   return ['availability', 'confidentiality', 'integrity']
- 	   	  },
- 	   	  risks () {
- 	   	  	return [
-	 	   	  	{
-		          text: 'Critical',
-		          value: 'critical'
-		        },
-		        {
-		          text: 'High',
-		          value: 'high'
-		        },
-		        {
-		          text: 'Medium',
-		          value: 'medium'
-		        },
-		        {
-		          text: 'Low',
-		          value: 'low'
-		        },
-		        {
-		          text: 'Informational',
-		          value: 'informational'
-		        },
- 	   	  	]
- 	   	  }
-	    },  
+			...mapState(['page', 'riskItems']),
+      btnLabel () {
+   		if (this.mode == 'Edit') {
+				return 'View'
+			} else {
+				return 'Edit'
+			}
+   	  },
+   	  tList() {
+   	  	return ['T1. Software Failures (code, configuration etc.)', 'T2. Cloud Failures (Provider, VHardware, Capacity)', 'T3. Legal Threats (failure to comply, bad contacts)', 'T4. Social Engineering', 'T5. External Unauthorized Access to Information Systems / Data', 'T6. Traffic Monitoring or Interception', 'T7.External Attacker Tampering with Data / Data Destruction', 'T8. Repudiation of transactions and messages', 'T9. Insider Abuse of Privilege', 'T10. Third Party Liability (contractors, third processing)', 'T11. Employee / User Mistakes']
+   	  },
+   	  cias () {
+   	   return ['availability', 'confidentiality', 'integrity']
+	   	  },
+    },  
 
 		mounted () {
 	      this.refreshData()
@@ -613,28 +589,6 @@
 	      		return item
 	      	},
 
-	      	toLisks (item) {
-	      		let risk = ''
-	      		if (item.high) {
-	      			risk = 'High'
-	      		}
-	      		if (item.medium) {
-	      			risk = 'Medium'
-	      		}
-	      		if (item.low) {
-	      			risk = 'Low'
-	      		}
-	      		return risk
-	      	},
-
-	      	fromRisk (item) {
-	      		item.high = Number(item.risk == 'High')
-	      		item.medium = Number(item.risk == 'Medium')
-	      		item.low = Number(item.risk == 'Low')
-
-	      		return item
-	      	},
-
 	      	createModal () {
 	      		this.editItem = Object.assign({}, this.defaultItem)
 	      		this.mode = 'Edit'
@@ -644,13 +598,11 @@
 
 	      	updateModal (item) {
 	      		this.currentQuestion = item
-	      		this.currentQuestion.risk = this.toLisks(item)
 	      		this.mode = 'View'
       			this.defaultIndex = this.items.indexOf(item)
       			this.editItem = Object.assign({}, item)
       			this.editItem.cia = this.toGroups(item, this.cias)
       			this.editItem.Ts = this.toGroups(item, this.tList)
-      			this.editItem.risk = this.toLisks(item)
       			this.updateValid = true
 	      		this.updateDialog = true
 	      	},	
@@ -795,7 +747,6 @@
 		    	try {
 		    		this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
 		    		this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-		    		this.editItem = this.fromRisk(this.editItem)
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/risks/create`,
 		      			data: this.editItem,
@@ -839,7 +790,6 @@
 		    	try {
 		    		this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
 		    		this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-		    		this.editItem = this.fromRisk(this.editItem)
 			    	const data = await axios({
 		      			url: `${BASE_API}/api/admin/risks/update`,
 		      			data: this.editItem,

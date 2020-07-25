@@ -112,8 +112,8 @@
                     </v-col>
                     <v-col cols="12" md="4">
                       <v-select
-                        v-model="editedAppItem.risk"
-                        label="Risk" 
+                        v-model="editedAppItem.risk_level"
+                        label="Risk Level" 
                         :items="riskItems"
                         >
                       </v-select>
@@ -151,7 +151,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="main" text @click="closeAppDialog">Cancel</v-btn>
-              <v-btn :disabled="!appValid" color="main" text @click="createApp">Save</v-btn>
+              <v-btn :disabled="!appValid" color="main" text @click="actionApp">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -168,9 +168,9 @@
         :expanded.sync="expanded"
         @update:items-per-page="getPageNum"
       > 
-        <template v-slot:item.risk="{ item }">
-          <v-chip :color="levelColor(item.risk)" dark>
-            <div class="subtitle-2">{{ item.risk ? item.risk : 'low' }}</div>
+        <template v-slot:item.risk_level="{ item }">
+          <v-chip :color="levelColor(item.risk_level)" dark>
+            <div class="subtitle-2">{{ item.risk_level ? item.risk_level : 'low' }}</div>
           </v-chip>
         </template>
         <template v-slot:item.action="{ item }">
@@ -674,8 +674,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    
   </v-container>
 </template>
 
@@ -683,6 +681,7 @@
   import { fetchApps, fetchAppUsers, BASE_API } from '../../../api'
   import { validEmail, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardApplications',
@@ -721,7 +720,7 @@
       defaultUserIndex: -1,
       defaultDetailIndex: -1,
       defaultAppItem: {
-        risk: 'critical',
+        risk_level: 'critical',
         application_logo: '',
         purpse: '',
         login_url: '',
@@ -751,7 +750,7 @@
         security_setting_1: ''
       },
       editedAppItem: {
-        risk: 'critical'
+        risk_level: 'critical'
       },
       editedUserItem: {
         has_2fa: 'false',
@@ -829,28 +828,6 @@
           return pattern.test(value) || 'Invalid e-mail.'
         },
       },
-      riskItems: [
-        {
-          text: 'Critical',
-          value: 'critical'
-        },
-        {
-          text: 'High',
-          value: 'high'
-        },
-        {
-          text: 'Medium',
-          value: 'medium'
-        },
-        {
-          text: 'Low',
-          value: 'low'
-        },
-        {
-          text: 'Informational',
-          value: 'informational'
-        },
-      ],
       renewalDateMenu: false,
       expirationDateMenu: false,
     }),
@@ -872,6 +849,8 @@
     },
 
     computed: {
+      ...mapState(['page', 'riskItems']),
+      
       usersTitle () {
         if (this.currentApp) {
           return `Users (${this.currentApp.users_table_name})`
@@ -879,9 +858,6 @@
           return 'Users'
         }
       },
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
 
       appFormTitle () {
         return this.defaultAppIndex === -1 ? 'New Application' : 'Edit Application'
@@ -1033,23 +1009,13 @@
         this.snack = true
       },
 
-      async createApp () {
+      async actionApp () {
         const item = Object.assign({}, this.editedAppItem)
-        let res
         if (this.defaultAppIndex > -1) {
-          res = await this._updateApp(item)
-          if (res.data.status == 'Ok') {
-            Object.assign(this.apps[this.defaultAppIndex], item)
-          }
+          await this.updateApp(item)
         } else {
-          res = await this._createApp(item)
-          if (res.data.status == 'Ok') {
-            this.apps.push(item)
-          }
+          await this.createApp(item)
         }
-        this.closeAppDialog()
-
-        this.showSnack(res)
       },
 
       async createDetail() {
@@ -1186,12 +1152,58 @@
         return await this._callAPI(this.delApp, `${BASE_API}/api/applications/delete`)
       },
 
+      async updateApp(data) {
+        const self = this
+        await this.$dialog.confirm({
+          text: 'Do you really want to update this app?',
+          title: 'Warning',
+          actions: {
+            false: 'No',
+            true: {
+              color: 'red',
+              text: 'Yes',
+              handle: () => {
+                self._updateApp(data)
+              }
+            }
+          }
+        })
+      },
+
       async _updateApp (data) {
-        return await this._callAPI(data, `${BASE_API}/api/applications/update`)
+        const res = await this._callAPI(data, `${BASE_API}/api/applications/update`)
+        if (res.data.status == 'Ok') {
+          Object.assign(this.apps[this.defaultAppIndex], item)
+        }
+        this.closeAppDialog()
+        this.showSnack(res)
+      },
+
+      async createApp(data) {
+        const self = this
+        await this.$dialog.confirm({
+          text: 'Do you really want to create an app?',
+          title: 'Warning',
+          actions: {
+            false: 'No',
+            true: {
+              color: 'red',
+              text: 'Yes',
+              handle: () => {
+                self._createApp(data)
+              }
+            }
+          }
+        })
       },
 
       async _createApp (data) {
-        return await this._callAPI(data, `${BASE_API}/api/applications/create`)
+        const res =  await this._callAPI(data, `${BASE_API}/api/applications/create`)
+        if (res.data.status == 'Ok') {
+          this.apps.push(item)
+        }
+        this.closeAppDialog()
+        this.showSnack(res)
       },
 
       async _deleteUser () {
