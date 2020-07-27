@@ -1173,7 +1173,7 @@
       async _updateApp (data) {
         const res = await this._callAPI(data, `${BASE_API}/api/applications/update`)
         if (res.data.status == 'Ok') {
-          Object.assign(this.apps[this.defaultAppIndex], item)
+          Object.assign(this.apps[this.defaultAppIndex], data)
         }
         this.closeAppDialog()
         this.showSnack(res)
@@ -1200,7 +1200,7 @@
       async _createApp (data) {
         const res =  await this._callAPI(data, `${BASE_API}/api/applications/create`)
         if (res.data.status == 'Ok') {
-          this.apps.push(item)
+          this.apps.push(data)
         }
         this.closeAppDialog()
         this.showSnack(res)
