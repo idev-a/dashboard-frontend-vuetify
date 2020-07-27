@@ -903,7 +903,7 @@
         if (this.defaultAppIndex > -1) {
           return true
         }
-        const _apps = this.apps.filter(app => app.application_name.toLowerCase() == value.toLowerCase())
+        const _apps = this.apps.filter(app => app.application_name && app.application_name.toLowerCase() == value.toLowerCase())
         return _apps.length == 0 || 'This app name already exists'
       },
 
