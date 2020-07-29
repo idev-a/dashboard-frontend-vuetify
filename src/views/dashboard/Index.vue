@@ -7,13 +7,13 @@
     <dashboard-core-view />
 
     <!-- <dashboard-core-settings v-model="expandOnHover" /> -->
-
   </v-app>
 </template>
 
 <script>
   import { BASE_API } from '../../api'
   import axios from 'axios'
+  import { mapState } from 'vuex'
   
   export default {
     name: 'DashboardIndex',
@@ -32,14 +32,10 @@
     watch: {
       isIdle (val) {
         if (val) {
-          let user = {}
-          try {
-            user = JSON.parse(localStorage.getItem('user'))
-          } catch(e) {}
           const self = this
           self.loading = true
           const data = {
-            id: user.id,
+            id: this.userId,
           }
           axios({
             url:`${BASE_API}/api/users/login/keep`,
@@ -64,6 +60,8 @@
       }
     },
     computed: {
+      ...mapState(['userId']),
+
       isIdle() {
         return this.$store.state.idleVue.isIdle;
       }

@@ -78,6 +78,8 @@
 </template>
 
 <script>
+  import jwtDecode from 'jwt-decode'
+
   export default {
     name: "UserProfile",
 
@@ -88,8 +90,10 @@
 
     mounted () {
       try {
-        this.user = JSON.parse(localStorage.getItem('user'))
-      } catch(e){}
+        this.user = jwtDecode(localStorage.getItem('jwt'))
+      } catch(e){
+        console.log(e)
+      }
     }
   }
 </script>

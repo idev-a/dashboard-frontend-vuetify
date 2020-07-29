@@ -1,4 +1,5 @@
 import axios from 'axios'
+import jwtDecode from 'jwt-decode'
 require('dotenv').config()
 
 import { DOMAIN_LIST } from './util'
@@ -11,7 +12,7 @@ export const BASE_API = process.env.VUE_APP_BACKEND_URL
 export const getCompanyId = () => {
 	let user = {}
 	try {
-		user = JSON.parse(localStorage.getItem('user'))
+		user = jwtDecode(localStorage.getItem('jwt'))
 	} catch(e) {}
 	return user && user.company_id && user.company_id.trim() || '';
 }
@@ -19,7 +20,7 @@ export const getCompanyId = () => {
 const getUserId = () => {
 	let user = {}
 	try {
-		user = JSON.parse(localStorage.getItem('user'))
+		user = jwtDecode(localStorage.getItem('jwt'))
 	} catch(e) {}
 	return user && user.id || '';
 }
@@ -27,7 +28,7 @@ const getUserId = () => {
 const getAdminRole = () => {
 	let user = {}
 	try {
-		user = JSON.parse(localStorage.getItem('user'))
+		user = jwtDecode(localStorage.getItem('jwt'))
 	} catch(e) {}
 	return user && user.role || 'Customer';
 }

@@ -168,9 +168,8 @@
       gotoSignup () {
         this.$router.push({ name: "Register" });
       },
-      gotoDashboard (user) {
-        localStorage.setItem('jwt', 'success')
-        localStorage.setItem('user', JSON.stringify(user))
+      gotoDashboard (data) {
+        localStorage.setItem('jwt', data.auth_token)
         this.$router.push({ name: "Dashboard" });
       },
       resetForm () {
@@ -233,7 +232,7 @@
                 self.snackbar_color = 'error'
               } else {
                 self.snackbar_color = 'success'
-                self.gotoDashboard(res.data.user)
+                self.gotoDashboard(res.data)
               }
               self.snackbar = true
             })

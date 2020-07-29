@@ -254,10 +254,10 @@
 				emails: '',
 				file: null,
 				company_id: 'grove.co',
-				snackbar: false,
-		      	message: '',
 		      	search: '',
 		      	searchCron: '',
+				snackbar: false,
+		      	message: '',
 		      	color: 'success',
 		      	importUrl: `${BASE_API}/api/admin/gsuite/drive/run`,
 		      	gsuites: [

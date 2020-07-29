@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import jwtDecode from 'jwt-decode'
 
 Vue.use(Router)
 
@@ -437,8 +438,10 @@ router.beforeEach((to, from, next) => {
         } else {
             let user = {}
             try {
-              user = JSON.parse(localStorage.getItem('user'))
-            } catch (e) {}
+              user = jwtDecode(localStorage.getItem('jwt'))
+            } catch (e) {
+              console.log(e)
+            }
             if(to.matched.some(record => record.meta.is_admin)) {
                 if(user.role == 'Admin'){
                     next()
@@ -446,7 +449,7 @@ router.beforeEach((to, from, next) => {
                 else{
                     next({ name: 'Dashboard'})
                 }
-            }else {
+            } else {
                 next()
             }
         }

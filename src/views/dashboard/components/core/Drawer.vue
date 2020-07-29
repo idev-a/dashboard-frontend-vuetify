@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import jwtDecode from 'jwt-decode'
   // Utilities
   import {
     mapState,
@@ -87,6 +88,7 @@
     },
 
     data: () => ({
+      user: {},
       items: [
         {
           icon: 'mdi-view-dashboard',
@@ -320,12 +322,14 @@
 
     methods: {
       mapItem (item) {
-        let user = {}
         try {
-          user = JSON.parse(localStorage.getItem('user'))
-        } catch (e) {}
+          this.user = jwtDecode(localStorage.getItem('jwt'))
+          console.log(this.user)
+        } catch (e) {
+          console.log(e)
+        }
         if (item.is_admin) {
-          if (user.role === 'Admin') {
+          if (this.user.role === 'Admin') {
             return {
               ...item,
               children: item.children ? item.children.map(this.mapItem) : undefined,
