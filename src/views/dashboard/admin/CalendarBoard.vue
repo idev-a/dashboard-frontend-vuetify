@@ -187,9 +187,7 @@
 		},
 
 		computed: {
-      		page () {
-		        return Number(localStorage.getItem('page')) || 5
-	     	}, 
+      		...mapState(['page', 'userId']),
 
 			importable () {
 				return !this.loading && this.file && this.emails && this.user_email && this.company_id
@@ -275,7 +273,7 @@
                 const data = {
                 	user_email: this.user_email,
                 	emails: this.emails,
-                	user_id: JSON.parse(localStorage.getItem('user')).id,
+                	user_id: this.userId,
                 	company_id: this.company_id.trim()
                 }
 

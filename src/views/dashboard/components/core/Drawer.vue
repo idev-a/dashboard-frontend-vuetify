@@ -324,7 +324,6 @@ import jwtDecode from 'jwt-decode'
       mapItem (item) {
         try {
           this.user = jwtDecode(localStorage.getItem('jwt'))
-          console.log(this.user)
         } catch (e) {
           console.log(e)
         }

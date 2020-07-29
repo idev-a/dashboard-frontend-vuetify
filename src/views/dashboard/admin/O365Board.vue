@@ -8,7 +8,7 @@
         class="pa-5"
       >
         <v-card-title>
-            Office365 Board (office_365_users)
+            Office365 Board (office_365_users, office_365_groups)
             <v-spacer></v-spacer>
             <v-btn class="main" :loading="loading" @click="redirectO365" :disabled="!importable">
             Authenticate

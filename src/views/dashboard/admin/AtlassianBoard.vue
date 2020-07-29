@@ -165,7 +165,7 @@
 	    },
 
 	    computed: {
-	    	...mapState(['page']),
+	    	...mapState(['page', 'userId']),
 
 			importable () {
 				return !this.loading && this.apiKey.trim() && this.orgId.trim() && this.company_id.trim()
@@ -220,7 +220,7 @@
 		      			data: { 
 		      				api_key: this.apiKey.trim(),
 		      				org_id: this.orgId.trim(),
-		      				user_id: JSON.parse(localStorage.getItem('user')).id,
+		      				user_id: this.userId,
 		      				company_id: this.company_id.trim()
 		      			},
 		      			method: 'POST'
