@@ -152,7 +152,7 @@
                   label="Owner Email"
                   hint="Ctrl + Enter to run the gsuite script"
                   rows="3"
-                  @change="changeAccountEmail"
+                  @input="changeAccountEmail"
                   @keyup.ctrl.13="keyDownOnImport"
               />
               </v-col>
@@ -255,7 +255,7 @@
         loading: false,
         emails: '',
         file: null,
-        company_id: 'grove.co',
+        company_id: '',
         search: '',
         searchCron: '',
         snackbar: false,

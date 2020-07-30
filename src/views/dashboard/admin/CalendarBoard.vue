@@ -34,7 +34,7 @@
               v-model="user_email"
               :rules="[rules.required, rules.email]"
               :loading="loading"
-              @change="changeAccountEmail"
+              @input="changeAccountEmail"
               label="Service Email"
               outlined
           />
