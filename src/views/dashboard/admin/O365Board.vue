@@ -135,7 +135,7 @@
         color: 'success',
         o365ClientId: '892cebc7-08ed-4cff-bf80-a6b79ea2f2c3',
         o365ClientSecret: '.pjM5.F5F247l4MctVao5GF~b_869jO9Q.',
-        scope: ["User.Read.All", "Contacts.Read", "email", "Group.Read.All", "Directory.Read.All", "Group.ReadWrite.All", "Directory.ReadWrite.All", "Directory.AccessAsUser.All"],
+        scope: ["User.Read.All", "Contacts.Read", "email", "Group.Read.All", "Directory.Read.All", "Group.ReadWrite.All", "Directory.ReadWrite.All", "Directory.AccessAsUser.All", "Application.Read.All"],
         scopes: ["User.Read", "User.ReadBasic.All", "Directory.Read.All", "Directory.AccessAsUser.All", "User.Read.All", "Contacts.Read", "Contacts.Read.Shared", "User.ManageIdentities.All", "email", "Policy.ReadWrite.AuthenticationMethod"],
         company_id: '',
         search: '',
@@ -262,7 +262,7 @@
               O365_CLIENT_ID: this.o365ClientId.trim(),
               O365_CLIENT_SECRET: this.o365ClientSecret.trim(),
               scope: this.scope.join(','),
-              company_id: this.companyId,
+              company_id: this.company_id,
               user_id: this.userId
             },
             method: 'POST'
