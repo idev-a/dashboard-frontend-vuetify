@@ -137,7 +137,7 @@
 				email: '',
 				slackClientId: ' ',
 				slackClientSecret: ' ',
-				company_id: 'grove.co',
+				company_id: '',
 				snackbar: false,
 				search: '',
 		      	message: '',
@@ -201,7 +201,7 @@
 		        return Number(localStorage.getItem('page')) || 5
 	     	}, 
 			importable () {
-				return !this.loading && this.slackClientId.trim() && this.slackClientSecret.trim() && this.scope.length
+				return !this.loading && this.slackClientId.trim() && this.slackClientSecret.trim() && this.scope.length && this.company_id.trim()
 			},
 			slackAuthorizeUrl () {
 				return `https://slack.com/oauth/authorize?scope=${this.scope.join(',')}&client_id=${this.slackClientId.trim()}&redirect_uri=${BASE_API}/api/callback`

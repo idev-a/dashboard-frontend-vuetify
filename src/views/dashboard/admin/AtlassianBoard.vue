@@ -123,7 +123,7 @@
 				loading: false,
 				apiKey: '5ud2KvbbqP5KohPIGSGb',
 				orgId: 'c6da411c-59d4-431e-a49a-f624edd2c345',
-				company_id: 'grove.co',
+				company_id: '',
 				snackbar: false,
 		      	message: '',
 		      	color: 'success',

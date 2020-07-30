@@ -46,17 +46,18 @@
               </v-card-title>
               <v-row>
                 <v-col cols='12' md="4">
-                        <v-textarea
-                          v-model="emails"
-                          :rules="[rules.required]"
-                          :loading="loading"
-                          label="Owner Emails"
-                          hint="Ctrl + Enter to run the google drive script"
-                          outlined
-                          rows="2"
-                          auto-grow
-                          @keyup.ctrl.13="keyDownOnImport"
-                      />
+                  <v-textarea
+                    v-model="emails"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-email"
+                    :loading="loading"
+                    label="Owner Emails"
+                    hint="Ctrl + Enter to run the google drive script"
+                    outlined
+                    rows="2"
+                    auto-grow
+                    @keyup.ctrl.13="keyDownOnImport"
+                />
                 </v-col>
                 <v-col cols='12' md="4">
                     <v-file-input
@@ -71,15 +72,15 @@
                 </v-col>
                 <v-col cols='12' md="4">
                   <v-textarea
-                          v-model="company_id"
-                          :rules="[rules.required]"
-                          prepend-icon="mdi-email"
-                          :loading="loading"
-                          label="Company Name"
-                          auto-grow
-                            rows="1"
-                          hide-details="auto"
-                        ></v-textarea>
+                    v-model="company_id"
+                    :rules="[rules.required]"
+                    prepend-icon="mdi-application"
+                    :loading="loading"
+                    label="Company Name"
+                    auto-grow
+                      rows="1"
+                    hide-details="auto"
+                  ></v-textarea>
                 </v-col>
               </v-row>
               <v-card-title>
@@ -115,10 +116,10 @@
             <v-tab-item
               value="gsuite_users"
             >
-          <v-card-title>
+             <v-card-title>
               <div>
-                  <div>gsuite_users, google_groups, gsuite_devices</div>
-                  <v-subheader>Find gsuite users, groups and devices</v-subheader>
+                <div>gsuite_users, google_groups, gsuite_devices</div>
+                <v-subheader>Find gsuite users, groups and devices</v-subheader>
               </div>
                 <v-spacer></v-spacer>
                 <v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
@@ -143,16 +144,17 @@
             </v-card-title>
             <v-row>
               <v-col cols='12' md="4">
-                      <v-text-field
-                        v-model="emails"
-                        :rules="[rules.required]"
-                        :loading="loading"
-                        label="Owner Email"
-                        hint="Ctrl + Enter to run the gsuite_users script"
-                        rows="3"
-                        outlined
-                        @keyup.ctrl.13="keyDownOnImport"
-                    />
+                <v-text-field
+                  v-model="emails"
+                  :rules="[rules.required]"
+                  prepend-icon="mdi-email"
+                  :loading="loading"
+                  label="Owner Email"
+                  hint="Ctrl + Enter to run the gsuite script"
+                  rows="3"
+                  @change="changeAccountEmail"
+                  @keyup.ctrl.13="keyDownOnImport"
+              />
               </v-col>
               <v-col cols='12' md="4">
                   <v-file-input
@@ -168,15 +170,15 @@
               </v-col>
               <v-col cols='12' md="4">
                 <v-textarea
-                        v-model="company_id"
-                        :rules="[rules.required]"
-                        prepend-icon="mdi-email"
-                        :loading="loading"
-                        label="Company Name"
-                        auto-grow
-                          rows="1"
-                        hide-details="auto"
-                      ></v-textarea>
+                  v-model="company_id"
+                  :rules="[rules.required]"
+                  prepend-icon="mdi-application"
+                  :loading="loading"
+                  label="Company Name"
+                  auto-grow
+                  rows="1"
+                  hide-details="auto"
+                ></v-textarea>
               </v-col>
             </v-row>
             <v-card-title>
@@ -254,13 +256,13 @@
         emails: '',
         file: null,
         company_id: 'grove.co',
-            search: '',
-            searchCron: '',
+        search: '',
+        searchCron: '',
         snackbar: false,
-            message: '',
-            color: 'success',
-            importUrl: `${BASE_API}/api/admin/gsuite/drive/run`,
-            gsuites: [
+        message: '',
+        color: 'success',
+        importUrl: `${BASE_API}/api/admin/gsuite/drive/run`,
+        gsuites: [
           {
             key: 'google_drive_shared',
             bgColor: 'success',
@@ -271,12 +273,12 @@
             bgColor: 'orange accent-3',
             title: 'GSuite'
           },
-            ],
+        ],
         errorMessages: {
           emails: {
-                  required: false,
-                  invalid: false,
-              },
+            required: false,
+            invalid: false,
+          },
         },
         driveHeaders: [ 
           {
@@ -315,9 +317,9 @@
             text: 'Run At',
             value: 'run_at'
           },
-            ],
-            usersHeaders: [
-              {
+        ],
+        usersHeaders: [
+          {
             text: 'Email',
             value: 'email'
           },
@@ -345,17 +347,17 @@
             text: 'Run At',
             value: 'run_at'
           },
-            ],
-            groupHeaders: [
-              {
-                text: 'Name',
-                value: 'name',
-              },
-              {
-                text: 'Email',
-                value: 'email',
-              },
-              {
+        ],
+        groupHeaders: [
+          {
+            text: 'Name',
+            value: 'name',
+          },
+          {
+            text: 'Email',
+            value: 'email',
+          },
+          {
             text: 'Company',
             value: 'company_id'
           },
@@ -363,29 +365,29 @@
             text: 'Run At',
             value: 'run_at'
           },
-            ],
-            deviceHeaders: [
-              {
-                text: 'Name',
-                value: 'name',
-              },
-              {
-                text: 'Email',
-                value: 'email',
-              },
-              {
-                text: 'Model',
-                value: 'model',
-              },
-              {
-                text: 'OS',
-                value: 'os',
-              },
-              {
-                text: 'Type',
-                value: 'type',
-              },
-              {
+        ],
+        deviceHeaders: [
+          {
+            text: 'Name',
+            value: 'name',
+          },
+          {
+            text: 'Email',
+            value: 'email',
+          },
+          {
+            text: 'Model',
+            value: 'model',
+          },
+          {
+            text: 'OS',
+            value: 'os',
+          },
+          {
+            text: 'Type',
+            value: 'type',
+          },
+          {
             text: 'Company',
             value: 'company_id'
           },
@@ -393,23 +395,23 @@
             text: 'Run At',
             value: 'run_at'
           },
-            ],
-            gsuiteHeaders: [],
-            selectedItems: [],
-            items: [],
-            cronType: 'GSuite Drive',
-            cronInterval: 'Weekly',
+        ],
+        gsuiteHeaders: [],
+        selectedItems: [],
+        items: [],
+        cronType: 'GSuite Drive',
+        cronInterval: 'Weekly',
         rules: {
-              required: value => {
-                this.errorMessages.emails.required = !!value
-                return this.errorMessages.emails.required || 'This field is required.'
-              },
-              email: value => {
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                this.errorMessages.emails.invalid = pattern.test(value)
-                return this.errorMessages.emails.invalid || 'Invalid e-mail.'
-              },
-            }
+          required: value => {
+            this.errorMessages.emails.required = !!value
+            return this.errorMessages.emails.required || 'This field is required.'
+          },
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            this.errorMessages.emails.invalid = pattern.test(value)
+            return this.errorMessages.emails.invalid || 'Invalid e-mail.'
+          },
+        }
       }
     },
 
@@ -427,20 +429,26 @@
       beautifyEmail,
       beautifyEmails,
 
-      getPageNum (_page) {
-            localStorage.setItem('page', _page)
-        },
+      changeAccountEmail() {
+        if (this.emails.includes('@')) {
+          this.company_id = this.emails.split('@')[1]
+        }
+      },
 
-        changeTab (href) {
-          // initialize the vars
-          this.emails = ''
-          if (href == 'gsuite_users') {
-            this.importUrl = `${BASE_API}/api/admin/gsuite/users/run`
-            this.gsuiteHeaders = this.usersHeaders
-          } else {
-            this.importUrl = `${BASE_API}/api/admin/gsuite/drive/run`
-          }
-        },
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
+
+      changeTab (href) {
+        // initialize the vars
+        this.emails = ''
+        if (href == 'gsuite_users') {
+          this.importUrl = `${BASE_API}/api/admin/gsuite/users/run`
+          this.gsuiteHeaders = this.usersHeaders
+        } else {
+          this.importUrl = `${BASE_API}/api/admin/gsuite/drive/run`
+        }
+      },
 
       keyDownOnImport () {
             if (this.query) {
@@ -519,42 +527,41 @@
         }
 
         let formData = new FormData()
-            for (let file of this.file) {
-                  formData.append("file", file, file.name);
-                }
+        for (let file of this.file) {
+          formData.append("file", file, file.name);
+        }
 
-                const data = {
-                  emails: this.emails,
-                  user_id: this.userId,
-                  company_id: this.company_id.trim()
-                }
+        const data = {
+          emails: this.emails,
+          user_id: this.userId,
+          company_id: this.company_id.trim()
+        }
 
-                const json = JSON.stringify(data);
+        const json = JSON.stringify(data);
         const blob = new Blob([json], {
           type: 'application/json'
         });
 
         formData.append("document", blob);
-
-                this.loading = true
-                this.file = null
-          try {
-            const res = await axios.post(this.importUrl, formData)
-              this.csvData = res.data.csv_data
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
+        this.loading = true
+        this.file = null
+        try {
+          const res = await axios.post(this.importUrl, formData)
+            this.csvData = res.data.csv_data
+            this.message = res.data.message
+            this.color = res.data.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
       },
 
       // Cron jobs
       showCron (type, interval) {
-            this.showCronDialog({dialog: true, type, interval })
-          },
+        this.showCronDialog({dialog: true, type, interval })
+      },
     }
   }
 </script>

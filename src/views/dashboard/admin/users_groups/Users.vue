@@ -59,6 +59,12 @@
               </template>
               <span>Download</span>
             </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-on="on" v-bind="attrs" :loading="loading" :disabled="loading"  class="" @click="showCron('run_migrate_users', 'Daily')" color="main"><v-icon  size="16" dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+              </template>
+              <span>Cron</span>
+            </v-tooltip>
           </div>
         </v-card-title>
         <v-data-table
@@ -437,6 +443,8 @@
     },
 
     methods: {
+      ...mapActions(['showConfirm', 'showCronDialog']),
+
       beautifyEmails,
 
       getPageNum (_page) {
@@ -592,6 +600,11 @@
         } else {
           downloadCSV(this.items)
         }
+      },
+
+      // Cron jobs
+      showCron (type, interval) {
+        this.showCronDialog({dialog: true, type, interval })
       },
     }
   }

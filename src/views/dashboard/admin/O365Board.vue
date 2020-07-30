@@ -137,7 +137,7 @@
         o365ClientSecret: '.pjM5.F5F247l4MctVao5GF~b_869jO9Q.',
         scope: ["User.Read.All", "Contacts.Read", "email", "Group.Read.All", "Directory.Read.All", "Group.ReadWrite.All", "Directory.ReadWrite.All", "Directory.AccessAsUser.All"],
         scopes: ["User.Read", "User.ReadBasic.All", "Directory.Read.All", "Directory.AccessAsUser.All", "User.Read.All", "Contacts.Read", "Contacts.Read.Shared", "User.ManageIdentities.All", "email", "Policy.ReadWrite.AuthenticationMethod"],
-        company_id: 'grove.co',
+        company_id: '',
         search: '',
         selectedItems: [],
         items: [],
@@ -202,7 +202,7 @@
       ...mapState(['page', 'userId', 'companyId']),
 
       importable () {
-        return !this.loading && this.o365ClientId.trim() && this.o365ClientSecret.trim() && this.scope.length
+        return !this.loading && this.o365ClientId.trim() && this.o365ClientSecret.trim() && this.scope.length && this.company_id.trim()
       }
     },
 
