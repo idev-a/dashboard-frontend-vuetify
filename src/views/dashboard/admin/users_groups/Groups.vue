@@ -594,7 +594,9 @@
       },
       async migrate () {
         let formData = new FormData()
-        formData.append("file", this.file, this.file.name);
+        if (this.file) {
+          formData.append("file", this.file, this.file.name);
+        }
 
         const data = {
           emails: this.serviceEmail,
