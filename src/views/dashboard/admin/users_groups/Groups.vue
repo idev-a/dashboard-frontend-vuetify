@@ -387,8 +387,8 @@
     },
 
     components: {
-        GroupDetail: () => import('../../component/GroupDetail')
-      },
+      GroupDetail: () => import('../../component/GroupDetail')
+    },
 
     computed: {
       ...mapState(['page', 'userId']),
@@ -416,7 +416,11 @@
         }
       },
       migratable () {
-        return this.loading || this.companyId == 'All' || this.directory == '' || this.serviceEmail == '' || this.companyId != this.serviceEmail.split('@')[1] || this.file == null
+        if (this.directory == 'google_groups') {
+          return this.loading || this.companyId == 'All' || this.serviceEmail == '' || this.companyId != this.serviceEmail.split('@')[1] || this.file == null
+        } else {
+          return this.loading || this.companyId == 'All' || this.directory == ''
+        }
       }
     },
 
