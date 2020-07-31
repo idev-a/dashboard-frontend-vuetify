@@ -10,7 +10,7 @@
 	    	<v-card-title>
 		        Slack Board (slack_users)
 		        <v-spacer></v-spacer>
-		        <v-btn text :href="slackAuthorizeUrl" @click="redirectSlack" :disabled="!importable" target="_blank">
+		        <v-btn text @click="redirectSlack" :disabled="!importable" target="_blank">
 		    		<v-img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" ></v-img>
 		    	</v-btn>
 	        	<v-btn v-if="false" :loading="loading" :disabled="!importable" @click="runScript" color="success">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
@@ -259,6 +259,8 @@
       			} catch (e) {
       				console.log(e.response)
       			}
+
+      			window.open(this.slackAuthorizeUrl, '_blank', "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=600")
       		},
 
       		downloadCSV () {

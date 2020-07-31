@@ -429,33 +429,33 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    if(to.matched.some(record => record.meta.requiresAuth)) {
-        if (localStorage.getItem('jwt') == null || localStorage.getItem('jwt') == 'null') {
-            next({
-                path: '/pages/login',
-                params: { nextUrl: to.fullPath }
-            })
-        } else {
-            let user = {}
-            try {
-              user = jwtDecode(localStorage.getItem('jwt'))
-            } catch (e) {
-              console.log(e)
-            }
-            if(to.matched.some(record => record.meta.is_admin)) {
-                if(user.role == 'Admin'){
-                    next()
-                }
-                else{
-                    next({ name: 'Dashboard'})
-                }
-            } else {
-                next()
-            }
-        }
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('jwt') == null || localStorage.getItem('jwt') == 'null') {
+      next({
+        path: '/pages/login',
+        params: { nextUrl: to.fullPath }
+      })
     } else {
+      let user = {}
+      try {
+        user = jwtDecode(localStorage.getItem('jwt'))
+      } catch (e) {
+        console.log(e)
+      }
+      if(to.matched.some(record => record.meta.is_admin)) {
+        if(user.role == 'Admin'){
+          next()
+        }
+        else{
+          next({ name: 'Dashboard'})
+        }
+      } else {
         next()
+      }
     }
+  } else {
+    next()
+  }
 })
 
 

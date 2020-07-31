@@ -558,6 +558,7 @@
     },
 
     async mounted () {
+      console.log('dashboard mounted')
       this.fetchChartsData()
       
       this.fetchAllCardData()

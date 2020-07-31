@@ -1,6 +1,5 @@
 <template>
   <v-main
-    v-if="$store.state.companyId"
   >
     <router-view />
 
