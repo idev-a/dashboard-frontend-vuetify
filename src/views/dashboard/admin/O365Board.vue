@@ -268,7 +268,7 @@
             method: 'POST'
           })
           if (res.status == 200) {
-            window.open(res.data.auth_url, '_blank', "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=600")
+            window.open(res.data.auth_url, '_blank', "toolbar=yes,replace=false,clearcache=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=600,noreferrer")
           }
         } catch (e) {
           console.log(e.response)
