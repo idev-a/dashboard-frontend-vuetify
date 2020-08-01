@@ -13,7 +13,8 @@ export const getCompanyId = () => {
 	let user = {}
 	try {
 		user = jwtDecode(localStorage.getItem('jwt'))
-	} catch(e) {}
+	} catch(e) {console.log(e, localStorage.getItem('jwt'))}
+	console.log(user)
 	return user && user.company_id && user.company_id.trim() || '';
 }
 

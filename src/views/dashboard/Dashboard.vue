@@ -523,7 +523,7 @@
 
     computed: {
       ...mapState(['companyId']),
-      
+
       riskLevelCharts () {
         return riskLevelChart(this.charts.critical_risk, this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk, this.charts.informational_risk)
       },

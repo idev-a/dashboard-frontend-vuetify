@@ -268,8 +268,7 @@
             method: 'POST'
           })
           if (res.status == 200) {
-            chrome.windows.create({"url": res.data.auth_url, "incognito": true});
-            // window.open(res.data.auth_url, '_blank', "toolbar=yes,replace=false,clearcache=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=600,noreferrer")
+            window.open(res.data.auth_url, '_blank', "toolbar=yes, resizable=yes, top=100, left=100, width=400, height=300, noreferrer")
           }
         } catch (e) {
           console.log(e.response)
