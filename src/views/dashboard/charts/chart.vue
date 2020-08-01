@@ -220,7 +220,7 @@
   } from '../../../util'
   import axios from 'axios'
   import Highcharts from 'highcharts'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'DashboardChart',
@@ -278,15 +278,15 @@
       ...mapState(['companyId']),
 
       riskLevelCharts () {
-        return riskLevelChart(this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk)
+        return riskLevelChart(this.charts.critical_risk, this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk, this.charts.informational_risk)
       },
 
       highRiskUsers () {
-        return userRiskChart(this.charts.user_high, this.charts.user_medium, this.charts.user_low)
+        return userRiskChart(this.charts.user_critical, this.charts.user_high, this.charts.user_medium, this.charts.user_low, this.charts.user_informational)
       },
 
       highRiskApps () {
-        return appRiskChart(this.charts.app_high, this.charts.app_medium, this.charts.app_low)
+        return appRiskChart(this.charts.app_critical, this.charts.app_high, this.charts.app_medium, this.charts.app_low, this.charts.app_informational)
       },
 
       CIACharts () {
@@ -319,6 +319,8 @@
     },
 
     methods: {
+      ...mapActions(['SET_TEMP_RISK']),
+
       async fetchCharts () {
         this.loadingCard  = true
         try {
@@ -390,7 +392,6 @@
       },
 
       gotoRiskPage () {
-        console.log(this.org_score)
         if (this.charts.org_score < 3) {
           this.$router.push({ name: 'Low Risks'})
         } else if (this.charts.org_score == 3) {
@@ -401,14 +402,20 @@
       },
 
       gotoRiskUsersPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Users' })
       },
 
       gotoRiskAppsPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Application Risk' })
       },
 
       gotoAnswersPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Category' })
       }
     }

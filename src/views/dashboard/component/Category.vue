@@ -127,7 +127,7 @@
 <script>
   import { BASE_API } from '../../../api'
   import axios from 'axios'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'CategoryRisk',
@@ -144,12 +144,12 @@
       ],
       risks: [
       ],
-      filteredRisks:['critical'], 
+      filteredRisks:[], 
       risksOrigin: []
     }),
 
     computed: {
-      ...mapState(['page', 'companyId', 'riskItems']),
+      ...mapState(['page', 'companyId', 'riskItems', 'tempRisk']),
       
       headers () {
         let headers = [
@@ -179,6 +179,10 @@
     },
 
     mounted () {
+      if (this.tempRisk) {
+        this.filteredRisks = [...this.tempRisk]
+        this.SET_TEMP_RISK([])
+      }
       this.fetchRisks()
     },
 
@@ -187,6 +191,8 @@
     },
 
     methods: {
+      ...mapActions(['SET_TEMP_RISK']),
+
       updateData () {
         if (this.select.length) {
           this.risks = this.risksOrigin.filter(risk => this.select.includes(risk.category))
@@ -208,8 +214,8 @@
             } else if (pattern == 'informational') {
               pattern = /informational/i
             } 
-            const risks = this.filteredRisks.join('')
-            if (risks.match(pattern)) {
+            const risks = this.filteredRisks.map(risk => risk.value)
+            if (risks.join('').match(pattern)) {
               return risk
             }
           } else {

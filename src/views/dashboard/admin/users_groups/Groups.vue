@@ -4,7 +4,7 @@
   >
     
     <v-card-title>
-        <div class="font-weight-light body">Manage <b>groups</b> table</div>
+      <div class="font-weight-light body">Manage <b>groups</b> table</div>
       <v-spacer></v-spacer>
     </v-card-title>
     <v-card-title>
@@ -22,7 +22,7 @@
       <div class="d-flex flex-wrap align-center">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" class="mr-2" @click="readGroups" color="main">
+            <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || !companyId" class="mr-2" @click="readGroups" color="main">
               <v-icon  size="16" dark>mdi-database-search</v-icon>
             </v-btn>
           </template>
@@ -51,17 +51,18 @@
       </div>
     </v-card-title>
     <div class="d-flex flex-wrap align-center">
-      <v-select
+      <v-autocomplete
         v-model="companyId"
         :rules="[rules.required]"
         chips
+        deletable-chips
         small
         :items="companiesAndAll"
         @input="readGroups"
         class="mr-3"
         label="Select a company"
         hint="Select a company you want to manage"
-      ></v-select>
+      />
       <v-select
         v-model="directory"
         chips
@@ -200,15 +201,16 @@
                       </v-textarea>
                   </v-col>
                   <v-col cols="12" md="4">
-                      <v-select
+                    <v-autocomplete
                       v-model="editItem.company_id"
                       :rules="[rules.required]"
-                    chips
-                    small
+                      chips
+                      deletable-chips
+                      small
                       :items="companies"
                       class="mb-3"
                       label="Company"
-                    ></v-select>
+                    />
                 </v-col>
               </v-row>
           </v-form>

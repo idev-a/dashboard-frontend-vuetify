@@ -460,7 +460,7 @@
   import { riskLevelChart, userRiskChart, appRiskChart, CIAChart, scoreDonutChart, appUsersChart, highriskCategoryChart, ciaCategoryChart } from '../../util'
   import axios from 'axios'
   import Highcharts from 'highcharts'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'DashboardDashboard',
@@ -558,13 +558,14 @@
     },
 
     async mounted () {
-      console.log('dashboard mounted')
       this.fetchChartsData()
       
       this.fetchAllCardData()
     },
 
     methods: {
+      ...mapActions(['SET_TEMP_RISK']),
+
       async fetchChartsData() {
         const res = await axios.get(`${BASE_API}/api/charts/${this.companyId}/all`)
         this.charts = res.data.charts
@@ -579,7 +580,6 @@
       },
 
       gotoRiskPage () {
-        console.log(this.org_score)
         if (this.charts.org_score < 3) {
           this.$router.push({ name: 'Low Risks'})
         } else if (this.charts.org_score == 3) {
@@ -590,14 +590,20 @@
       },
 
       gotoRiskUsersPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Users' })
       },
 
       gotoRiskAppsPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Application Risk' })
       },
 
       gotoAnswersPage () {
+        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
+          { text: 'High', value: 'high'}])
         this.$router.push({ name: 'Category' })
       }
     },

@@ -132,13 +132,14 @@
 		                class="mb-3"
 	                >
 	              	</v-textarea>
-	              	<v-combobox
+	              	<v-autocomplete
 			          v-model="editedItem.Category"
 			          :items="categories"
 			          :rules="[rules.required]"
 			          label="Category"
 			          chips
-			        ></v-combobox>
+			          deletable-chips
+			        />
 	         	</v-form>
 	      	</v-card-text>
 	      	<v-card-actions>

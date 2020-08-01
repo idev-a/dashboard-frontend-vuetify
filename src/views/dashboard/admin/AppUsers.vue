@@ -343,7 +343,7 @@
                   </v-tooltip>
                 </template>
                 <template v-slot:item.email="{ item }">
-                  <span v-html="beautifyEmail(item.email)"></span>
+                  <span v-html="beautifyEmails(item.email)"></span>
                 </template>
                 <template v-slot:item.has_2fa="{ item }">
                   <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
@@ -408,19 +408,20 @@
                     >
                       <v-row>
                         <v-col cols="12" md="4">
-                          <v-select
+                          <v-autocomplete
                             :loading="loadingCompany"
                             v-model="editedDetailItem.company_id"
                             :items="companies"
                             :rules="[rules.required]"
                             chips
+                            deletable-chips
                             dense
                             label="Select a Company"
                             required
-                          ></v-select>
+                          />
                         </v-col>
                         <v-col cols="12" md="4">
-                          <v-select
+                          <v-autocomplete
                             v-model="editedDetailItem.application_id"
                             :items="apps"
                             label="Select a Application"
@@ -428,10 +429,10 @@
                             item-value="id"
                             item-text="application_name"
                             chips
+                            deletable-chips
                             dense
                             required
-                          >
-                          </v-select>
+                          />
                         </v-col>
                         <v-col cols="12" md="4">
                           <v-textarea
@@ -634,7 +635,7 @@
                   sm="3"
                 >
                     <b class="display-1">Admin User</b>
-                    <div v-html="beautifyEmail(currentDetail.admin_user)" class="text--secondary"></div>
+                    <div v-html="beautifyEmails(currentDetail.admin_user)" class="text--secondary"></div>
                 </v-col>
                 <v-col
                   cols="6"
@@ -679,7 +680,7 @@
 
 <script>
   import { fetchApps, fetchAppUsers, BASE_API } from '../../../api'
-  import { validEmail, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
+  import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
   import axios from 'axios'
   import { mapState } from 'vuex'
 
@@ -899,6 +900,9 @@
     },
 
     methods: {
+      levelColor,
+      beautifyEmails,
+
       uniqueApp (value) {
         if (this.defaultAppIndex > -1) {
           return true
@@ -907,24 +911,8 @@
         return _apps.length == 0 || 'This app name already exists'
       },
 
-      levelColor (level) {
-        return levelColor(level)
-      },
       getPageNum (_page) {
         localStorage.setItem('page', _page)
-      },
-      beautifyEmail (emails) {
-        let res = ''
-        const list = emails.split(' ')
-        list.map(email => {
-          if (validEmail(email)) {
-            res += `<a href="mailto:${email}">${email}</a><br />`
-          } else {
-            res += `${email} <br />`
-          }
-        })
-
-        return res
       },
       showDetails (item) {
         this.expandedDetail = []
@@ -950,11 +938,11 @@
       async fetchDashboardUsers () {
         let res = await axios.get(`${BASE_API}/api/users/all`)
         res = res.data.users
-        const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.email.split('@')[1]))
+        const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.company_id))
         const self = this;
         companyUsers.map(user => {
-          if (!self.companies.includes(user.email.split('@')[1])) {
-            self.companies.push(user.email.split('@')[1]) 
+          if (!self.companies.includes(user.company_id)) {
+            self.companies.push(user.company_id) 
           }
         })
 

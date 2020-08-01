@@ -96,7 +96,7 @@
   import { BASE_API } from '../../../api'
   import { validEmail, levelColor, beautifyEmail } from '../../../util'
   import axios from 'axios'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'DashboardCompanyUsers',
@@ -110,7 +110,7 @@
       currentUser: '',
       singleExpand: true,
       expanded: [],
-      filteredRisks:['critical'], 
+      filteredRisks:[], 
       actions: [
         {
           color: 'info',
@@ -144,6 +144,10 @@
     }),
 
     mounted () {
+      if (this.tempRisk) {
+        this.filteredRisks = [...this.tempRisk]
+        this.SET_TEMP_RISK([])
+      }
       this.fetchUsers()
     },
 
@@ -152,7 +156,7 @@
     },
 
     computed: {
-      ...mapState(['page', 'companyId', 'riskItems']),
+      ...mapState(['page', 'companyId', 'riskItems', 'tempRisk']),
 
       filteredUsers () {
         return this.users.filter(user => {
@@ -172,8 +176,8 @@
             } else if (pattern == 'informational') {
               pattern = /informational/i
             } 
-            const risks = this.filteredRisks.join('')
-            if (risks.match(pattern)) {
+            const risks = this.filteredRisks.map(risk => risk.value)
+            if (risks.join('').match(pattern)) {
               return user
             }
           }
@@ -182,6 +186,8 @@
     },
 
     methods: {
+      ...mapActions(['SET_TEMP_RISK']),
+
       levelColor,
       beautifyEmail,
 

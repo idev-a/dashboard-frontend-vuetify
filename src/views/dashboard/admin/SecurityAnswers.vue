@@ -60,6 +60,7 @@
 	              :items="categories"
 	              hide-selected
 	              chips
+	              deletable-chips
 	              attach
 	              label="Select a category"
 	              multiple
@@ -158,6 +159,7 @@
 			                item-text="Question"
 			                :rules="[rules.required]"
 			                :items="questions"
+			                clearable
 			                required
 			                >
 			              </v-autocomplete>
@@ -219,6 +221,7 @@
 				          label="tag"
 				          multiple
 				          chips
+				          deletable-chips
 				        ></v-combobox>
 		              	<v-row>
 		              		<v-col class="col-auto">
@@ -234,16 +237,18 @@
 				              </v-select>
 				            </v-col>
 				            <v-col class="col-auto">
-				            	<v-select
+				            	<v-autocomplete
 				            		v-if="mode == 'Edit'"
 							  	  	v-model="editItem.company_id"
 							  	  	:loading="loading"
 							  	  	chips
+							  	  	deletable-chips
+							  	  	deletable-chips
 						          	:items="companies"
 						          	:rules="[rules.required]"
 						          	label="Select a company"
 						          	required
-						        ></v-select>
+						        />
 				            </v-col>
 			            </v-row>
 		              	<div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>

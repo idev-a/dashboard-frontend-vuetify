@@ -49,7 +49,8 @@ export default new Vuex.Store({
     page: Number(localStorage.getItem('page')) || 5,
     companyId,
     userId,
-    isAdmin
+    isAdmin,
+    tempRisk: []
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -95,6 +96,9 @@ export default new Vuex.Store({
     },
     SHOW_CRON_DIALOG (state, payload) {
       state.cron = payload
+    },
+    SET_TEMP_RISK (state, payload) {
+      state.tempRisk = payload
     }
   },
   actions: {
@@ -111,8 +115,10 @@ export default new Vuex.Store({
       commit('SHOW_CRON_DIALOG', payload)
     },
     SOCKET_notification({ commit }, payload) {
-      console.log('notifications', payload)
       commit('SOCKET_NOTIFICATION', payload)
+    },
+    SET_TEMP_RISK({ commit }, payload) {
+      commit('SET_TEMP_RISK', payload)
     }
   },
   modules: { 

@@ -17,17 +17,18 @@
         </div>
         <v-spacer></v-spacer>
         <div class="d-flex flex-wrap align-center">
-          <v-select
+          <v-autocomplete
             v-model="companyId"
             :rules="[rules.required]"
             chips
+            deletable-chips
             small
             :items="companiesAndAll"
             @input="readUsers"
             class="mr-3"
             label="Select a company"
             hint="Select a company you want to manage"
-          ></v-select>
+          />
           <v-select
             v-model="directory"
             chips
@@ -39,7 +40,7 @@
           ></v-select>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-                <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" class="mr-2" @click="readUsers" color="main">
+                <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || !companyId" class="mr-2" @click="readUsers" color="main">
                   <v-icon  size="16" dark>mdi-database-search</v-icon>
                 </v-btn>
               </template>
@@ -228,15 +229,16 @@
                 </v-textarea>
               </v-col>
               <v-col cols="12" md="4">
-                <v-select
+                <v-autocomplete
                   v-model="editItem.company_id"
                   :rules="[rules.required]"
                   chips
+                  deletable-chips
                   small
                   :items="companies"
                   class="mb-3"
                   label="Company"
-                ></v-select>
+                />
             </v-col>
           </v-row>
           </v-form>

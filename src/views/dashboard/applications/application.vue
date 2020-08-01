@@ -273,10 +273,15 @@
       this.loading = true
       this.apps = await fetchApps()
       this.loading = false
+
+      if (this.tempRisk) {
+        this.filteredRisks = [...this.tempRisk]
+        this.SET_TEMP_RISK([])
+      }
     },
 
     computed: {
-      ...mapState(['companyId', 'page', 'riskItems']),
+      ...mapState(['companyId', 'page', 'riskItems', 'tempRisk']),
 
       usersTitle () {
         return 'Users'
@@ -304,8 +309,8 @@
             } else if (pattern == 'informational') {
               pattern = /informational/i
             } 
-            const risks = this.filteredRisks.join('')
-            if (risks.match(pattern)) {
+            const risks = this.filteredRisks.map(risk => risk.value)
+            if (risks.join('').match(pattern)) {
               return app
             }
           }
@@ -314,6 +319,8 @@
     },
 
     methods: {
+      ...mapActions(['SET_TEMP_RISK']),
+
       levelColor,
       
       getPageNum (_page) {
