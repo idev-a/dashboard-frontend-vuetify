@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Information Risk?',
-        body: 'Information risk is a calculation based on the likelihood that an unauthorized user will negatively impact the confidentiality, integrity, and availability of data that you collect, transmit, or store.'
+        body: 'Informational No immediate threat. May provide suggestions for improvement.'
       }
     }),
 

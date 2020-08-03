@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Medium Risk?',
-        body: 'Medium risk findings mean the impact and likelihood of a security event is probable. Reputation and financial  damage is moderate. These findings should have a resolution or control.'
+        body: 'Medium Medium risk findings mean the impact and likelihood of a security event is probable. Moderate damage. Reputation and financial damage is moderate.'
       }
     }),
 

@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Critical Risk?',
-        body: 'Critical risks are defined as events that can cause grave damage to the mine operation or result in worker fatality. These are the “show stoppers” essential for control.'
+        body: 'Critical Risk Implies an immediate, easily accessible threat The impact and likelihood of this risk is imminent. Risks should be addressed immediately. These risks cause significant harm to the business.  Risk needs to be downgraded.'
       }
     }),
 

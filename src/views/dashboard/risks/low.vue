@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Low Risk?',
-        body: 'Low risk findings mean the impact and likelihood is a security event is rare. If a security event in this category were to occur there would be little impact financially and reputation on the business.'
+        body: 'Low Implies a relatively minor threat to the risk.'
       }
     }),
 
