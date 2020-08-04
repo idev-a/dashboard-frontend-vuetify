@@ -88,6 +88,17 @@
                         required
                       ></v-text-field>
                     </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field 
+                        :rules="[rules.required]"
+                        v-model.trim="editedItem.code"
+                        :append-icon="'mdi-refresh'"
+                        @click:append="generateCode"
+                        label="Login Code"
+                        readonly
+                        required
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                 </v-form>
               </v-container>
@@ -95,8 +106,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="main" text @click="close">Cancel</v-btn>
-              <v-btn color="main" text @click="create">Save</v-btn>
+              <v-btn color="main" :loading="loading" text @click="close">Cancel</v-btn>
+              <v-btn color="main" :loading="loading" text @click="create">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -245,6 +256,7 @@
         ip: '',
         last_login: '',
         member_since: '',
+        code: '',
         daily_tips_opt_out: false
       },
       rules: {
@@ -382,12 +394,7 @@
         self.loading = true
         axios({
             url: `${BASE_API}/api/users/${item.email}`,
-            data: {
-              status: item.status,
-              role: item.role,
-              daily_tips_opt_out: item.daily_tips_opt_out,
-              company_id: item.company_id
-            },
+            data: item,
             method: 'PUT',
           })
             .then(function (res) {
@@ -422,6 +429,18 @@
               self.loading = false
             })
       },
+      async generateCode () {
+        this.loading = true
+        try {
+          const res = await axios.get(`${BASE_API}/api/users/register/generate_code`)
+          this.editedItem.code = res.data.code
+          this.editedItem.code_expiration = this.$moment().add('year', 1).format('YYYY-MM-DD HH:mm:dd')
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.loading = false
+        }
+      }
     }
   }
 </script>
