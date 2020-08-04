@@ -519,6 +519,15 @@
         // this.refs.ciaCategoryChart.chart.setSeries(series)
         this.cia_by_categories = series
       },
+      companyId: {
+        handler(newValue) {
+          if (newValue) {
+            this.fetchChartsData()
+            this.fetchAllCardData()
+          }
+        },
+        immediate: true
+      }
     },
 
     computed: {
@@ -558,9 +567,6 @@
     },
 
     async mounted () {
-      this.fetchChartsData()
-      
-      this.fetchAllCardData()
     },
 
     methods: {

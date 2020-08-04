@@ -13,11 +13,16 @@
       :multi-line="multiLine"
     >
       <span>{{ snackbar_message }}</span>
-      <v-icon
-        dark
-      >
-        mdi-checkbox-marked-circle
-      </v-icon>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
     <v-row justify="center">
       <v-slide-y-transition appear>

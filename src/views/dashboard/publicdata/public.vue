@@ -31,7 +31,7 @@
 			>
 			</vue-friendly-iframe>
 			
-			<div v-if="select['ssllabs']" id="scrapedPage">
+			<div v-if="select['ssllabs'] || false" id="scrapedPage">
 				<v-card-title><img src="https://ssllabs.com/images/qualys-ssl-labs-logo.png" width="341" height="55" alt="SSL Labs logo" title="SSL Labs logo"></v-card-title>
 				<div class="display-2">SSL Report: {{ company }}</div>
 				<div class="title mb-3">Assessed on:  {{beautifyDateTime(data.ssllabs.last_update)}}</div>
@@ -412,7 +412,7 @@
 			    </v-data-table>
 			</div>
 
-			<div v-if="select['wpscan']" class="overflow-y py-4 pa-4">
+			<div v-if="select['wpscan'] || false" class="overflow-y py-4 pa-4">
 				<v-card-title> <span class="mb-2">WPScan:</span><!--  <span>{{this.company}}</span> --></v-card-title>
 				<!-- <template v-if="data.wpscan.scan_aborted">
 					<blockquote class="blockquote">{{data.wpscan.scan_aborted}}</blockquote>

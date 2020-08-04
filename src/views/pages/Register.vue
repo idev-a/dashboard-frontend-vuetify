@@ -14,11 +14,16 @@
       :multi-line="multiLine"
     >
       <span>{{ snackbar_message }}</span>
-      <v-icon
-        dark
-      >
-        mdi-checkbox-marked-circle
-      </v-icon>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
     <v-row justify="center">
       <v-slide-y-transition appear>
@@ -33,12 +38,12 @@
             Register
           </v-card-title>
 
-          <div
+          <v-form
             ref="form"
+            v-model="valid"
             class="text-center"
           >
             <v-text-field
-              ref="email"
               v-model="form.email"
               :rules="[rules.required, rules.email]"
               :loading="loading"
@@ -51,19 +56,30 @@
               required
             />
 
+            <v-text-field
+              v-model="form.company_id"
+              :rules="[rules.required, rules.validCompanyName]"
+              :loading="loading"
+              class="mt-3 mb-7"
+              hide-details="auto"
+              color="secondary"
+              label="Please enter your company name correctly."
+              prepend-icon="mdi-application"
+              @keyup.enter="submit"
+              required
+            />
+
             <v-checkbox
               v-model="form.opt_out"
+              label="Would you like to receive Daily Security Tips?"
             >
-              <template v-slot:label>
-                <div class="black--text">Would you like to receive <b>Daily Security Tips</b>?</div>
-              </template>
             </v-checkbox>
 
             <v-btn
               :loading="loading"
               color="main"
               class="display-1 mt-6"
-              :disabled="formHasErrors || loading"
+              :disabled="!valid || loading"
               @click="submit"
             >
               Submit
@@ -71,7 +87,7 @@
             <div class="text-center grey--text mt-2 body-1 font-weight-light">
               If you already have an account, please <a href="javascript:;" @click="gotoLogin">login</a>
             </div>
-          </div>
+          </v-form>
         </v-card>
       </v-slide-y-transition>
     </v-row>
@@ -94,11 +110,13 @@
       const defaultForm = Object.freeze({
         username: '',
         email: '',
+        company_id: '',
         opt_out: 0,
       })
 
       return {
         loading: false,
+        valid: true,
         socials: [
           {
             href: '#',
@@ -125,28 +143,25 @@
         form: Object.assign({}, defaultForm),
         rules: {
           required: value => {
-            this.errorMessages.email.required = !!value
-            return this.errorMessages.email.required || 'This field is required.'
+            return !!value || 'This field is required.'
           },
           counter: value => value.length >= 6 || 'Min 6 characters',
           email: value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            this.errorMessages.email.invalid = pattern.test(value)
-            return this.errorMessages.email.invalid || 'Invalid e-mail.'
+            return pattern.test(value) || 'Invalid e-mail.'
           },
           validEmail: value => {
             const domain = value.split('@')[1]
-            this.errorMessages.email.business = value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase()) 
-            return this.errorMessages.email.business || 'Please enter a business email'
+            return value.includes('@') && !DOMAIN_LIST.includes(domain.toLowerCase())  || 'Please enter a business email'
+          },
+          validCompanyName: v => {
+            return (v.split(' ').length <= 1) || 'Space is not allowed'
           }
         },
       }
     },
 
     computed: {
-      formHasErrors () {
-        return  !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.form.email
-      }
     },
 
     watch: {
@@ -157,49 +172,39 @@
         this.$router.push({ name: "Login" });
       },
       passwordCheck () {
-        this.errorMessages.password = this.form.password !== this.form.password1
+        let checkPassword = this.form.password !== this.form.password1
           ? 'The password does not match.'
           : ''
-        return !!this.errorMessages.password
-      },
-      resetForm () {
-        this.form = Object.assign({}, this.defaultForm)
-        this.$refs.form.reset()
-        this.formHasErrors = false
+        return !!checkPassword
       },
       async submit () {
-        this.$refs.email.validate(true)
-        
-        if (!this.formHasErrors) {
-          this.loading = true
-          const self = this
-          const data = {
-            username: this.form.username,
-            email: this.form.email,
-            company_id: this.form.email.split('@')[1],
-            daily_tips_opt_out: !this.form.opt_out
-          }
-          axios({
-            url: `${BASE_API}/api/users/register`,
-            method: 'POST',
-            data: data,
-          })
-            .then(function (res) {
-              self.loading = false
-              self.snackbar_message = res.data.message
-              if (res.data.status === 'failure') {
-                self.snackbar_color = 'red darken-3'
-              } else {
-                self.snackbar_color = 'success'
-              }
-              self.snackbar = true
-            })
-            .catch(error => {
-              console.log(error)
-              self.loading = false
-            })
+        this.$refs.form.validate()
+        if (!this.valid) {
+          return
         }
-      },
+        
+        this.loading = true
+        const self = this
+        axios({
+          url: `${BASE_API}/api/users/register`,
+          method: 'POST',
+          data: this.form,
+        })
+          .then(function (res) {
+            self.loading = false
+            self.snackbar_message = res.data.message
+            if (res.data.status === 'failure') {
+              self.snackbar_color = 'red darken-3'
+            } else {
+              self.snackbar_color = 'success'
+            }
+            self.snackbar = true
+          })
+          .catch(error => {
+            console.log(error)
+            self.loading = false
+          })
+      }
     },
   }
 </script>
