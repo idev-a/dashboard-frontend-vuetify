@@ -15,6 +15,7 @@
     "deploy": "sudo rm -rf /var/www/html/ && sudo mv dist/ /var/www/html/"
   },
   "dependencies": {
+    "anchorme": "^2.1.2",
     "axios": "^0.19.2",
     "axios-retry": "^3.1.8",
     "core-js": "^3.6.5",

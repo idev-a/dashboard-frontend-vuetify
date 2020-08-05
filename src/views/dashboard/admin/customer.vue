@@ -434,7 +434,7 @@
         try {
           const res = await axios.get(`${BASE_API}/api/users/register/generate_code`)
           this.editedItem.code = res.data.code
-          this.editedItem.code_expiration = this.$moment().add('year', 1).format('YYYY-MM-DD HH:mm:dd')
+          this.editedItem.code_expiration = this.$moment().add(1, 'year').format('YYYY-MM-DD HH:mm:dd')
         } catch (e) {
           console.log(e)
         } finally {

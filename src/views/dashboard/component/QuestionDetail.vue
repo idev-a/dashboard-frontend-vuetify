@@ -80,7 +80,7 @@
           cols="auto"
           class="mt-0"
         >
-            <span class="text--secondary">{{currentQuestion.description}}</span>
+          <span class="text--secondary" v-html="highlightText(currentQuestion.description)"></span>
         </v-col>
       </v-row>
       <v-row
@@ -280,7 +280,7 @@
 </template>
 
 <script>
-	import { levelColor } from '../../../util'
+	import { levelColor, highlightText } from '../../../util'
 	export default {
 		name: 'QuestionDetail',
 
@@ -309,7 +309,8 @@
 		},
 
 		methods: {
-			levelColor
+			levelColor,
+      highlightText
 		}
 	}
 </script>

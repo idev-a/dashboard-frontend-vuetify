@@ -1,6 +1,7 @@
 const moment = require('moment');
 const Highcharts = require('highcharts');
 import Papa from "papaparse";
+import anchorme from 'anchorme'
 
 import { companyId } from './api'
 
@@ -60,6 +61,23 @@ export const DOMAIN_LIST = [
   /* Domains used in Brazil */
   "yahoo.com.br", "hotmail.com.br", "outlook.com.br", "uol.com.br", "bol.com.br", "terra.com.br", "ig.com.br", "itelefonica.com.br", "r7.com", "zipmail.com.br", "globo.com", "globomail.com", "oi.com.br"
 ]
+
+// parse and highlight link in the text
+export const highlightText = (text) => {
+  return anchorme({
+    input: text,
+    // use some options
+    options: {
+      attributes: {
+        target: "_blank",
+        class: "detected"
+      }
+    },
+    // and extensions
+    extensions: [
+    ]
+  });
+}
 
 // mark colors based upon level
 

@@ -47,7 +47,7 @@
         @update:items-per-page="getPageNum"
       >
         <template v-slot:item.email="{ item }">
-          <span v-html="beautifyEmail(item.email)"></span>
+          <span v-html="highlightText(item.email)"></span>
         </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -94,7 +94,7 @@
 
 <script>
   import { BASE_API } from '../../../api'
-  import { validEmail, levelColor, beautifyEmail } from '../../../util'
+  import { validEmail, levelColor, highlightText } from '../../../util'
   import axios from 'axios'
   import { mapState, mapActions } from 'vuex'
 
@@ -189,7 +189,7 @@
       ...mapActions(['SET_TEMP_RISK']),
 
       levelColor,
-      beautifyEmail,
+      highlightText,
 
       getPageNum (_page) {
         localStorage.setItem('page', _page)

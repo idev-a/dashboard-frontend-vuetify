@@ -37,7 +37,7 @@
         @update:items-per-page="getPageNum"
       >
         <template v-slot:item.email="{ item }">
-          <span v-html="beautifyEmail(item.email)"></span>
+          <span v-html="highlightText(item.email)"></span>
         </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
@@ -148,7 +148,7 @@
         localStorage.setItem('page', _page)
       },
 
-      beautifyEmail (emails) {
+      highlightText (emails) {
         if (!emails) {
           return
         }
