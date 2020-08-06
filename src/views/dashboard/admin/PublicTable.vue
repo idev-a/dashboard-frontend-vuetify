@@ -34,22 +34,22 @@
               v-model="company"
               :loading="loadingUsers"
               chips
-                :items="companies"
-                :label="companyLabel"
-                hint="Display the table data for this company"
-                @input="changeCompany"
+              :items="companies"
+              :label="companyLabel"
+              hint="Display the table data for this company"
+              @input="changeCompany"
               ></v-select>
           </v-col>
         </v-row>
         <public-data
           v-if="company"
-        :title='title'
-        :category='category.toLowerCase()'
-        :banner="banner"
-        :company="company"
-        :key="componentkey"
-        :mode="mode"
-      >
+          :title='title'
+          :category='category.toLowerCase()'
+          :banner="banner"
+          :company="company"
+          :key="componentkey"
+          :mode="mode"
+        >
         </public-data>
     </v-card>
   </v-container>
@@ -62,49 +62,47 @@
   import { mapState, mapActions } from 'vuex';
 
   export default {
-      name: 'PublicDataTable',
+    name: 'PublicDataTable',
 
-      data: () => ({
-        mode: true,
-        loading: true,
-        loadingUsers: true,
-        search: '',
-        company: '',
-        banner: false,
-        category: 'business',
-        title: 'Business Data',
-        data: {},
-        companyLabel: 'Select a Company',
-        companies: [
-        ],
-        defaultCompanies: [
-          '627846.com',
-          'grove.co',
-          'revampcybersecurity.com'
-        ],
-        defaultPersonalEmails: [
-          'ideveloper003@gmail.com'
-        ],
-        categories: [
-          'Business',
-          'Personal'
-        ],
+    data: () => ({
+      mode: true,
+      loading: true,
+      loadingUsers: true,
+      search: '',
+      company: '',
+      banner: false,
+      category: 'business',
+      title: 'Business Data',
+      data: {},
+      companyLabel: 'Select a Company',
+      companies: [
+      ],
+      defaultCompanies: [
+        '627846.com',
+        'grove.co',
+        'revampcybersecurity.com'
+      ],
+      defaultPersonalEmails: [
+        'ideveloper003@gmail.com'
+      ],
+      categories: [
+        'Business',
+        'Personal'
+      ],
 
-        headers: [
-          {
-            value: 'company_id',
-            text: 'Company',
-          },
-        ],
-        }),
+      headers: [
+        {
+          value: 'company_id',
+          text: 'Company',
+        },
+      ],
+    }),
 
-        computed: {
-          ...mapState('publicdata', {
-          componentkey: state => state.componentkey
-        }),
-      page () {
-            return Number(localStorage.getItem('page')) || 5
-          }, 
+    computed: {
+      ...mapState(['page']),
+      ...mapState('publicdata', {
+        componentkey: state => state.componentkey
+      }),
     },
 
     components: {

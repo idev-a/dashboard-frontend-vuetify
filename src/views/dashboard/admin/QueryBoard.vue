@@ -171,17 +171,18 @@
         </v-card>
         <v-card-title>
           <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  class="mb-5"
-                  single-line
-                  hide-details
-                ></v-text-field>
-                <v-spacer></v-spacer>
-                
-                <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
-            </v-card-title>
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            clearable
+            class="mb-5"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          
+          <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+        </v-card-title>
 
             <v-card-title>
                 <v-autocomplete

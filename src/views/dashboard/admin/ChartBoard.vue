@@ -37,6 +37,7 @@
                     hint="Select a company you want to get the chart data"
                     :error="error"
                     :error-messages="errorMessages"
+                    @change="changeCompany"
                   />
                 </v-col>
                 <v-col
@@ -56,8 +57,9 @@
                   />
                 </v-col>
                 <v-col
-                cols='12'
-                md='4'
+                  v-if="false"
+                  cols='12'
+                  md='4'
                 >
                   <v-autocomplete
                     v-model="chartGroup"
@@ -118,8 +120,9 @@
                   />
                 </v-col>
                 <v-col
-                cols='12'
-                md='3'
+                  v-if="false"
+                  cols='12'
+                  md='3'
                 >
                   <v-text-field
                     v-model="company_id_field"
@@ -141,7 +144,7 @@
                     <v-text-field
                       v-model="item.dataLabel"
                       :rules="[rules.required]"
-                      prepend-icon="mdi-magnify"
+                      prepend-icon="mdi-format-text"
                       label="What kind of data do you want to display (Data Label)"
                       hint="Data label appeared on the charts"
                       ></v-text-field>
@@ -152,7 +155,7 @@
                     <v-textarea
                       v-model="item.condition"
                       :rules="[rules.required]"
-                      prepend-icon="mdi-magnify"
+                      prepend-icon="mdi-filter"
                       label="What kind of data do you want to display (Query Where Condition)"
                       hint="Input the query conditions as you want (Ctrl + Enter to run the test)"
                       rows="1"
@@ -180,22 +183,22 @@
             <v-card-title>
           Charts <small class="ml-2">(Results)</small>
         </v-card-title>
-            <v-card-text>
-              <v-row>
-                <v-col
-              cols='12'
-              md="6"
-              v-if="!loading && done" 
+          <v-card-text>
+            <v-row>
+              <v-col
+                cols='12'
+                md="6"
+                v-if="!loading && done" 
               >
                 <v-sheet class="min-50">
-                    <highcharts :options="barChart"></highcharts>
-                  </v-sheet>
-                </v-col>
-                <v-col
-              cols='12'
-              md="5"
-              v-if="!loading && done && data['Pie Chart'] && data['Pie Chart'].length" 
-              >
+                  <highcharts :options="barChart"></highcharts>
+                </v-sheet>
+              </v-col>
+              <v-col
+                cols='12'
+                md="5"
+                v-if="!loading && done && data['Pie Chart'] && data['Pie Chart'].length" 
+                >
                   <v-sheet class="min-50">
                     <highcharts :options="pieChart"></highcharts>
                   </v-sheet>
@@ -263,6 +266,7 @@
   import { BASE_API, fetchCompanies } from '../../../api'
   import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '../../../util'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
     export default {
       name: 'ChartBoard',
@@ -348,10 +352,7 @@
       },
 
       computed: {
-        page () {
-            return Number(localStorage.getItem('page')) || 5
-        }, 
-
+        ...mapState(['page']),
         pieChart () {
           return pieChart(this.title, this.data['Pie Chart'], this.total)
         },
@@ -383,6 +384,24 @@
         },
 
         async deleteChartTableData () {
+          const self = this
+          await this.$dialog.confirm({
+            text: 'Do you really want to delete data?',
+            title: 'Warning',
+            actions: {
+              false: 'No',
+              true: {
+                color: 'red',
+                text: 'Yes',
+                handle: () => {
+                  self._deleteChartTableData()
+                }
+              }
+            }
+          })
+        },
+
+        async _deleteChartTableData () {
           this.loading = true
           const ids = this.selectedChartTableData.map(item => item.id)
             try {
@@ -409,32 +428,30 @@
           this.label = item.label
           this.conditions = item.conditions
           this.targetTable = item.target_table
+          this.company = item.company
           this.company_id_field = item.company_id_field
 
           this.done = false
         },
-
-        
-
-          async getTables () {
-            const query = 'Show Tables'
-            try {
-              const res = await axios({
-                url: `${BASE_API}/api/admin/query`,
-                data: { query },
-                method: 'POST'
-              })
-              this.tableNames = res.data.items.map(item => { return item.Tables_in_revamp })
-            } catch(e) {
+        async getTables () {
+          const query = 'Show Tables'
+          try {
+            const res = await axios({
+              url: `${BASE_API}/api/admin/query`,
+              data: { query },
+              method: 'POST'
+            })
+            this.tableNames = res.data.items.map(item => { return item.Tables_in_revamp })
+          } catch(e) {
             console.log(e)
           } finally {
               this.loading = false
           }
-          },
+        },
 
-          async readAll () {
-            this.loading = true
-            try {
+        async readAll () {
+          this.loading = true
+          try {
             const res = await axios({
                 url: `${BASE_API}/api/admin/chart/readall`,
                 method: 'GET'
@@ -448,35 +465,33 @@
               this.loading = false
               this.snackbar = true
           }
-          },
+        },
 
-          keyDownOnTest () {
-            if (this.condition && this.targetTable) {
-              this.testChart()
-            }
-          },
+        keyDownOnTest () {
+          this.testChart()
+        },
 
-          async saveChart () {
-            this.$refs.form.validate()
+        async saveChart () {
+          this.$refs.form.validate()
 
-            if (!this.valid) { 
-              return
-            }
+          if (!this.valid) { 
+            return
+          }
 
           this.loading = true
-          this.headers = []
+          // this.headers = []
           const data =  { 
-              company_id_field: this.company_id_field,
-              targetTable: this.targetTable,
-              conditions: this.conditions,
-              chartType: this.chartType,
-              dataLabel: this.dataLabel,
-              company: this.company,
-              label: this.label,
-              title: this.title
-            }
+            company_id_field: this.company_id_field,
+            targetTable: this.targetTable,
+            conditions: this.conditions,
+            chartType: this.chartType,
+            dataLabel: this.dataLabel,
+            company: this.company,
+            label: this.label,
+            title: this.title
+          }
 
-            try {
+          try {
             const res = await axios({
                 url: `${BASE_API}/api/admin/chart/save`,
                 data,
@@ -487,29 +502,27 @@
           } catch(e) {
             this.message = e.response.data.message
           } finally {
-              this.loading = false
-              this.snackbar = true
-              this.done = true
+            this.loading = false
+            this.snackbar = true
+            this.done = true
           }
-          },
+        },
 
-          async testChart () {
+        async testChart () {
           this.$refs.form.validate()
 
-            if (!this.valid) { 
-              return
-            }
+          if (!this.valid) { 
+            return
+          }
 
           this.loading = true
-          this.headers = []
           const data =  { 
-              company_id_field: this.company_id_field,
-              targetTable: this.targetTable,
-              conditions: this.conditions,
-              chartType: this.chartType,
-              dataLabel: this.dataLabel,
-              company: this.company,
-            }
+            company_id_field: this.company_id_field,
+            targetTable: this.targetTable,
+            conditions: this.conditions,
+            chartType: this.chartType,
+            company: this.company,
+          }
           try {
             const res = await axios({
                 url: `${BASE_API}/api/admin/chart/test`,
@@ -528,7 +541,12 @@
               this.snackbar = true
               this.done = true
           }
+        },
+        changeCompany () {
+          this.conditions = []
+          this.targetTable = ''
+          this.chartType = 'Pie Chart'
         }
-      }
+    }
   }
 </script>

@@ -713,19 +713,19 @@
             }
             const self = this
             await this.$dialog.confirm({
-            text: 'Do you really want to update this answer?',
-            title: 'Warning',
-            actions: {
-              false: 'No',
-              true: {
-                color: 'red',
-                text: 'Yes',
-                handle: () => {
-                  self._updateAnswer()
+              text: 'Do you really want to update this answer?',
+              title: 'Warning',
+              actions: {
+                false: 'No',
+                true: {
+                  color: 'red',
+                  text: 'Yes',
+                  handle: () => {
+                    self._updateAnswer()
+                  }
                 }
               }
-            }
-          })
+            })
           },
 
           async deleteAnswer () {
