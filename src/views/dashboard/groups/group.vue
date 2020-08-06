@@ -4,6 +4,7 @@
     fluid
     tag="section"
   >
+    <blockquote class="blockquote">These are the groups that are in your directory</blockquote>
     <v-card
       class="px-5 py-3"
       icon="mdi-account-group-outline"

@@ -4,6 +4,7 @@
     fluid
     tag="section"
   >
+    <blockquote class="blockquote">Applications that your organization uses.  The people that use them and its current risk based on security settings.</blockquote>
     <!-- Applications to each company -->
     <v-card
       inline

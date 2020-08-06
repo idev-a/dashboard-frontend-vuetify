@@ -4,19 +4,44 @@
     fluid
     tag="section"
   >
+    
     <v-row>
       <v-col
         cols="12"
         sm="6"
         lg="3"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-          @click="gotoRiskPage"
-        >
-          <highcharts  v-if="!loadingCard" :options="scoreChart"></highcharts>
-        </v-card>
+          <v-menu  
+            top 
+            origin="center center"
+            transition="scale-transition"
+            close-on-content-click
+            :nudge-width="100"
+            offset-y 
+            offset-x>
+            <template v-slot:activator="{ on, attrs }">
+              <v-card
+                class="pt-3 min-50"
+                :loading="loadingCard"
+              >
+                <v-icon    
+                  v-bind="attrs"
+                  v-on="on"
+                  class="float-right mr-3"
+                >mdi-information</v-icon>
+                <div
+                  @click="gotoRiskPage"
+                >
+                  <highcharts  v-if="!loadingCard" :options="scoreChart"></highcharts>
+                </div>
+              </v-card>
+            </template>
+            <v-sheet
+              class="pa-4"
+            >
+              {{tooltip.orgChart}}
+            </v-sheet>
+          </v-menu>
       </v-col>
 
       <v-col
@@ -24,13 +49,36 @@
         sm="6"
         lg="3"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-          @click="gotoAnswersPage"
-        >
-          <highcharts v-if="!loadingCard" :options="riskLevelCharts"></highcharts>
-        </v-card>
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            >
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-right mr-3"
+              >mdi-information</v-icon>
+              <div
+                @click="gotoAnswersPage"
+              >
+                <highcharts v-if="!loadingCard" :options="riskLevelCharts"></highcharts>
+              </div>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.riskLevels"></span>
+          </v-sheet>
+        </v-menu>
       </v-col>
 
       <v-col
@@ -38,13 +86,36 @@
         sm="6"
         lg="3"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-          @click="gotoRiskUsersPage"
-        >
-          <highcharts v-if="!loadingCard" :options="highRiskUsers"></highcharts>
-        </v-card>
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            >
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-right mr-3"
+              >mdi-information</v-icon>
+              <div
+                @click="gotoRiskUsersPage"
+              >
+                <highcharts v-if="!loadingCard" :options="highRiskUsers"></highcharts>
+              </div>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.highRiskUsers"></span>
+          </v-sheet>
+        </v-menu>
       </v-col>
 
       <v-col
@@ -52,13 +123,36 @@
         sm="6"
         lg="3"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-          @click="gotoRiskAppsPage"
-        >
-          <highcharts v-if="!loadingCard" :options="highRiskApps"></highcharts>
-        </v-card>
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            >
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-right mr-3"
+              >mdi-information</v-icon>
+              <div
+                @click="gotoRiskAppsPage"
+              >
+                <highcharts v-if="!loadingCard" :options="highRiskApps"></highcharts>
+              </div>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.highriskApps"></span>
+          </v-sheet>
+        </v-menu>
       </v-col>
 
       <v-col
@@ -66,12 +160,32 @@
         sm="6"
         lg="3"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-        >
-          <highcharts v-if="!loadingCard" :options="CIACharts"></highcharts>
-        </v-card>
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            >
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-right mr-3"
+              >mdi-information</v-icon>
+              <highcharts v-if="!loadingCard" :options="CIACharts"></highcharts>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.ciaChart"></span>
+          </v-sheet>
+        </v-menu>
       </v-col>
 
       <v-col
@@ -79,75 +193,136 @@
         md="12"
         lg="9"
       >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-        >
-          <highcharts v-if="!loadingCard" :options="appUsersChart"></highcharts>
-        </v-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-        >
-          <highcharts v-if="!loadingCard" :options="highriskCategoryChart"></highcharts>
-        </v-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card
-          class="pt-3 min-50"
-          :loading="loadingCard"
-        > 
-          <v-menu
-            v-if="!loadingCard"
-            bottom
-            right
-            offset-x
-            v-model="categoryMenu"
-            :nudge-width="600"
-            :close-on-content-click="false"
-          >
-            <template v-slot:activator="{ on: menu }">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on: tooltip }">
-                  <v-btn
-                    class="ml-2 mb-2"
-                    color="main"
-                    dark
-                    v-on="{ ...tooltip, ...menu }"
-                  ><v-icon size="16" left dark>mdi-filter-menu-outline</v-icon>Filter by Categories</v-btn>
-                </template>
-                <span>Select multiple categories to display chart</span>
-              </v-tooltip>
-            </template>
+         <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
             <v-card
-              class="pa-2 pl-4 max-200"
-            >
-              <v-row v-if="!loadingCard">
-                <v-col
-                  class="pa-1 mr-0"
-                  cols="6"
-                  md="2"
-                  v-for="item in charts.cia_by_categories.categories"
-                  :key="item"
-                  @click=""
-                >
-                  <v-checkbox color="red" class="category-checkbox dark pa-0 ma-0" v-model="selectedCategories" dense :label="item" :value="item"></v-checkbox>
-                </v-col>
-              </v-row>
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            > 
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-left ml-3"
+              >mdi-information</v-icon>
+              <highcharts v-if="!loadingCard" :options="appUsersChart"></highcharts>
             </v-card>
-          </v-menu>
-          <highcharts v-if="!loadingCard" :updateArgs="[true, false]" :options="ciaCategoryChart" :highcharts="ciaCategoryChartIns"></highcharts>
-        </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.usersForApps"></span>
+          </v-sheet>
+        </v-menu>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="12"
+      >
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            > 
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-left ml-3"
+              >mdi-information</v-icon>
+              <highcharts v-if="!loadingCard" :options="highriskCategoryChart"></highcharts>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+            max-width="210"
+          >
+            <span v-html="tooltip.highriskByCategory"></span>
+          </v-sheet>
+        </v-menu>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="12"
+      >
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
+            > 
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="float-right mr-3"
+              >mdi-information</v-icon>
+              <v-menu
+                v-if="!loadingCard"
+                bottom
+                right
+                offset-x
+                v-model="categoryMenu"
+                :nudge-width="200"
+                :close-on-content-click="false"
+              >
+                <template v-slot:activator="{ on: menu }">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on: tooltip }">
+                      <v-btn
+                        class="ml-2 mb-2"
+                        color="main"
+                        dark
+                        v-on="{ ...tooltip, ...menu }"
+                      ><v-icon size="16" left dark>mdi-filter-menu-outline</v-icon>Filter by Categories</v-btn>
+                    </template>
+                    <span>Select multiple categories to display chart</span>
+                  </v-tooltip>
+                </template>
+                <v-card
+                  class="pa-2 pl-4 max-200"
+                >
+                  <v-row v-if="!loadingCard">
+                    <v-col
+                      class="pa-1 mr-0"
+                      cols="6"
+                      md="2"
+                      v-for="item in charts.cia_by_categories.categories"
+                      :key="item"
+                      @click=""
+                    >
+                      <v-checkbox color="red" class="category-checkbox dark pa-0 ma-0" v-model="selectedCategories" dense :label="item" :value="item"></v-checkbox>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-menu>
+              <highcharts v-if="!loadingCard" :updateArgs="[true, false]" :options="ciaCategoryChart" :highcharts="ciaCategoryChartIns"></highcharts>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            <span v-html="tooltip.allQuestions"></span>
+          </v-sheet>
+        </v-menu>
       </v-col>
     </v-row>
     <v-row>
@@ -469,6 +644,7 @@
       return {
         loading: true,
         loadingCard: true,
+        tooltipMenu: false,
         smallCards: {
           critical_risk: '0',
           high_risk: '0',
@@ -493,7 +669,18 @@
         selectedCategories: [],
         cia_by_categories: [],
         ciaCategoryChartIns: Highcharts,
-        categoryMenu: false
+        categoryMenu: false,
+        tooltip: {
+          orgChart: 'This is a cumulative risk score based off the information we currently have.',
+          riskLevels: '',
+          highriskUsers: '',
+          highriskApps: '',
+          ciaChart: 'These are the items that negatively impact Confidentiality, Integrity, & Availability. <a href="">Learn more</a>',
+          ciaByCategory: '',
+          highriskByCategory: '',
+          usersForApps: '',
+          allQuestions: 'List of all questions in your organization.  Choose Risk filter to see category type.'
+        }
       }
     },
 

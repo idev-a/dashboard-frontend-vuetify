@@ -4,6 +4,7 @@
     fluid
     tag="section"
   >
+    <blockquote class="blockquote">These are the users that are in your directory</blockquote>
     <v-card
       icon="mdi-account-multiple"
       title="Users"
@@ -140,7 +141,7 @@
         },
         { text: 'Actions', value: 'action', sortable: false },
       ],
-      users: [],
+      users: []
     }),
 
     mounted () {

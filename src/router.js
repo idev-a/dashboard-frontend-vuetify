@@ -401,14 +401,14 @@ let router = new Router({
             requiresAuth: true
           }
         },
-        {
-          name: 'Personal',
-          path: 'publicdata/personal',
-          component: () => import('@/views/dashboard/publicdata/personal'),
-          meta: {
-            requiresAuth: true
-          }
-        },
+        // {
+        //   name: 'Personal',
+        //   path: 'publicdata/personal',
+        //   component: () => import('@/views/dashboard/publicdata/personal'),
+        //   meta: {
+        //     requiresAuth: true
+        //   }
+        // },
       ],
     },
     {

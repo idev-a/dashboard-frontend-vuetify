@@ -4,11 +4,12 @@
     fluid
     tag="section"
   >
+    <blockquote v-if="category == 'all'" class="blockquote">These are all the security questions in your organization.</blockquote>
+
     <v-card
       v-if="banner"
-      raised
-      shaped
-      class="p-3"
+      outlined 
+      class="banner-bg"
     >
       <v-card-title class="mb-2" >
         {{banner.title}}
@@ -85,6 +86,7 @@
         :items-per-page="page"
         :search="search"
         single-expand
+        calculate-widths
         show-expand
         :expanded.sync="expanded"
         @click:row="showDetails"
@@ -156,7 +158,7 @@
           {
             text: 'Question',
             value: 'question',
-            width: 350
+            width: 450
           },
           {
             text: 'Answer',

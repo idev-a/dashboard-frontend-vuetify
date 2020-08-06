@@ -266,11 +266,10 @@ import jwtDecode from 'jwt-decode'
               title: 'Business',
               to: 'business',
             },
-            {
-              title: 'Personal',
-              to: 'personal',
-            },
-
+            // {
+            //   title: 'Personal',
+            //   to: 'personal',
+            // },
           ]
         },
         {
