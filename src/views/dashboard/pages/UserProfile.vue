@@ -21,7 +21,7 @@
               <v-text-field
                 label="Company Name"
                 v-model="user.company_id"
-                disabled
+                readonly
               />
             </v-col>
 
@@ -33,7 +33,7 @@
                 label="Email Address"
                 class="purple-input"
                 v-model="user.email"
-                disabled
+                readonly
               />
             </v-col>
 
@@ -55,7 +55,19 @@
                 class="purple-input"
                 label="Role"
                 :value="user.role"
+                readonly
               />
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-checkbox
+                :value="!user.daily_tips_opt_out"
+                label="Receive Daily Security Tips"
+                disabled
+              >
+              </v-checkbox>
             </v-col>
 
             <v-col

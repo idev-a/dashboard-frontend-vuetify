@@ -333,6 +333,10 @@
             value: 'type'
           },
           {
+            text: 'Company',
+            value: 'company'
+          },
+          {
             text: 'Title',
             value: 'title'
           },
@@ -352,7 +356,7 @@
       },
 
       computed: {
-        ...mapState(['page']),
+        ...mapState(['page', 'companyId']),
         pieChart () {
           return pieChart(this.title, this.data['Pie Chart'], this.total)
         },
@@ -453,7 +457,7 @@
           this.loading = true
           try {
             const res = await axios({
-                url: `${BASE_API}/api/admin/chart/readall`,
+                url: `${BASE_API}/api/admin/chart/${this.companyId}/readall`,
                 method: 'GET'
               })
               this.chartTableData = res.data.data
@@ -552,6 +556,8 @@
           ]
           this.targetTable = ''
           this.chartType = 'Pie Chart'
+          this.title = ''
+          this.label = ''
         }
     }
   }

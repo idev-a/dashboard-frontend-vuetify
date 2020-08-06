@@ -340,7 +340,7 @@
         this.loadingCard  = true
         try {
           const res = await axios({
-            url: `${BASE_API}/api/admin/chart/readall`,
+            url: `${BASE_API}/api/admin/chart/${this.companyId}/readall`,
             method: 'GET'
           })
           this.customCharts = res.data.data
