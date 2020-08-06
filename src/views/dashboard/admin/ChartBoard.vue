@@ -543,7 +543,13 @@
           }
         },
         changeCompany () {
-          this.conditions = []
+          this.conditions = [
+            {
+              id: 1,
+              dataLabel: '',
+              condition: ''
+            },
+          ]
           this.targetTable = ''
           this.chartType = 'Pie Chart'
         }
