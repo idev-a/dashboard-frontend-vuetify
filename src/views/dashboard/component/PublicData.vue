@@ -191,61 +191,78 @@
             >
               <!-- Business Information -->
               <!-- Manual information -->
-                        <public-data-panel-item-pre
-                :data="result.business_observations"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.business_observations"
+                  :mode="mode"
+                />
 
-                        <public-data-panel-item-pre
-                :data="result.email_provider"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.email_provider"
+                  :mode="mode"
+                />
 
-                        <public-data-panel-item-pre
-                :data="result.name_associated"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.name_associated"
+                  :mode="mode"
+                />
 
-                        <public-data-panel-item-pre
-                :data="result.website_type"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.website_type"
+                  :mode="mode"
+                />
 
-                        <public-data-panel-item-pre
-                :data="result.business_geo"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.business_geo"
+                  :mode="mode"
+                />
   
-              <public-data-panel-item-pre
-                :data="result.business_google_search_results"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.business_google_search_results"
+                  :mode="mode"
+                />
 
-                        <public-data-panel-item-pre
-                :data="result.business_other"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.business_other"
+                  :mode="mode"
+                />
 
-              <public-data-panel-item-pre
-                :data="result.linkedin_data"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  :data="result.linkedin_data"
+                  :mode="mode"
+                />
+
+                <public-data-panel-item-pre
+                  :data="result.business_email"
+                  :mode="mode"
+                />
+
+                <public-data-panel-item-pre
+                  :data="result.business_hosting"
+                  :mode="mode"
+                />
+
+                <public-data-panel-item-pre
+                  :data="result.names_associated"
+                  :mode="mode"
+                />
 
               <!-- Automation result from public_data.py -->
-                        <public-data-panel-item-pre
-                :data="result.spf_record"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  v-if="false"
+                  :data="result.spf_record"
+                  :mode="mode"
+                />
 
                     <public-data-panel-item-pre
                 :data="result.spf_dmarc"
                 :mode="mode"
                         />
 
-                        <public-data-panel-item-pre
-                :data="result.spf_record_more"
-                :mode="mode"
-                        />
+                <public-data-panel-item-pre
+                  v-if="false"
+                  :data="result.spf_record_more"
+                  :mode="mode"
+                />
 
                     <public-data-panel-item-pre
                 :data="result.spf_spoofing_possible"
@@ -315,7 +332,7 @@
                         </v-expansion-panel>
 
               <v-expansion-panel
-                v-if="result.dnstwist"
+                v-if="result.dnstwist && false"
               >
                 <v-expansion-panel-header>
                   <v-row  align="center">
