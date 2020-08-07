@@ -380,7 +380,7 @@
               />
 
               <v-expansion-panel
-                v-if="result.ssllabs && false"
+                v-if="result.ssllabs"
               >
                 <v-expansion-panel-header>
                   <v-row  align="center">
@@ -420,7 +420,7 @@
               </v-expansion-panel>
 
               <public-data-panel-item
-                :data="result.wpscan && false"
+                :data="result.wpscan"
                 :mode="mode"
                         />
                       
