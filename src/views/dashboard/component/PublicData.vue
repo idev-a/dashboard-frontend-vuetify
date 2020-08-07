@@ -40,7 +40,7 @@
                       </div>
                       <div>
                         <b class="mr-2">Domain:</b>
-                        <span class="display-1">{{removeQuotes(publicData.high.domain.answer)}}</span>
+                        <span class="display-1" v-html="removeQuotes(publicData.high.domain.answer)"></span>
                     </div>
                 </v-row>
                 </v-col>
@@ -66,7 +66,7 @@
                       </div>
                       <div>
                         <b class="mr-2">IP:</b>
-                        <span class="display-1">{{removeQuotes(publicData.high.website_ip.answer)}}</span>
+                        <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.answer)"></span>
                     </div>
                 </v-row>
                 </v-col>
