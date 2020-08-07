@@ -587,7 +587,7 @@ export const beautifyDateZ = (date) => {
 }
 
 export const removeQuotes = (val) => {
-  return val.replace(/\"/g, "")
+  return highlightText(val.replace(/\"/g, ""))
 }
 
 export const readNewLine = (val) => {

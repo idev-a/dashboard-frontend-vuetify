@@ -82,9 +82,7 @@
       	},
 
       	computed: {
-			page () {
-		        return Number(localStorage.getItem('page')) || 5
-	      	}, 
+			...mapState(['page']) 
 	    },
 
       	methods: {

@@ -299,7 +299,7 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
               <v-expansion-panel
-                v-if="result.builtwith"
+                v-if="result.builtwith && false"
               >
                 <v-expansion-panel-header>
                   <v-row align="center">
@@ -365,7 +365,7 @@
               </v-expansion-panel>
 
               <public-data-shodan
-                :data="result.shodan"
+                :data="result.shodan && false"
                 :mode="mode"
               />
 
@@ -424,10 +424,10 @@
                 :mode="mode"
                         />
                       
-                      <public-item-urlscan
+              <public-item-urlscan
                 :data="result.urlscan"
                 :mode="mode"
-                      />
+              />
 
                       <!-- Personal data -->
                       <!-- Manual data -->
