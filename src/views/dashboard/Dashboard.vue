@@ -4,6 +4,27 @@
     fluid
     tag="section"
   >
+    <v-banner
+      v-model="banner"
+      single-line
+    >
+      <v-card
+        class="ma-1"
+        flat
+        :elevation="1"
+      >
+        <v-card-text>
+          <div class="d-flex align-center justify-space-between" >
+            <div>
+              Welcome <b>{{upperFirst(companyId)}}</b> to the Secure dashboard.  Click <a href="#">here</a> to learn more about the dashboard. 
+            </div>
+            <v-btn text icon @click="banner = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-banner>
     
     <v-row>
       <v-col
@@ -27,7 +48,7 @@
                 <v-icon    
                   v-bind="attrs"
                   v-on="on"
-                  class="float-right mr-3"
+                  class="info-btn"
                 >mdi-information</v-icon>
                 <div
                   @click="gotoRiskPage"
@@ -64,7 +85,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-right mr-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <div
                 @click="gotoAnswersPage"
@@ -101,7 +122,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-right mr-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <div
                 @click="gotoRiskUsersPage"
@@ -138,7 +159,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-right mr-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <div
                 @click="gotoRiskAppsPage"
@@ -175,7 +196,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-right mr-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <highcharts v-if="!loadingCard" :options="CIACharts"></highcharts>
             </v-card>
@@ -208,7 +229,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-left ml-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <highcharts v-if="!loadingCard" :options="appUsersChart"></highcharts>
             </v-card>
@@ -240,7 +261,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-left ml-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <highcharts v-if="!loadingCard" :options="highriskCategoryChart"></highcharts>
             </v-card>
@@ -273,7 +294,7 @@
               <v-icon    
                 v-bind="attrs"
                 v-on="on"
-                class="float-right mr-3"
+                class="info-btn"
               >mdi-information</v-icon>
               <v-menu
                 v-if="!loadingCard"
@@ -320,7 +341,7 @@
           <v-sheet
             class="pa-4"
           >
-            <span v-html="tooltip.allQuestions"></span>
+            <span v-html="tooltip.ciaByCategory"></span>
           </v-sheet>
         </v-menu>
       </v-col>
@@ -636,6 +657,7 @@
   import axios from 'axios'
   import Highcharts from 'highcharts'
   import { mapState, mapActions } from 'vuex'
+  import upperFirst from 'lodash/upperFirst'
 
   export default {
     name: 'DashboardDashboard',
@@ -645,6 +667,7 @@
         loading: true,
         loadingCard: true,
         tooltipMenu: false,
+        banner: true,
         smallCards: {
           critical_risk: '0',
           high_risk: '0',
@@ -677,7 +700,7 @@
           highriskApps: '',
           ciaChart: 'These are the items that negatively impact Confidentiality, Integrity, & Availability. <a href="">Learn more</a>',
           ciaByCategory: '',
-          highriskByCategory: '',
+          highriskByCategory: 'List of all questions in your organization.  Choose Risk filter to see category type.',
           usersForApps: '',
           allQuestions: 'List of all questions in your organization.  Choose Risk filter to see category type.'
         }
@@ -758,6 +781,7 @@
 
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
+      upperFirst,
 
       async fetchChartsData() {
         const res = await axios.get(`${BASE_API}/api/charts/${this.companyId}/all`)
@@ -803,7 +827,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .category-checkbox .theme--light.v-messages {
     display: none;
   }
@@ -812,5 +836,12 @@
     max-height: 200px;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .info-btn {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 10;
   }
 </style>
