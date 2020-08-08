@@ -189,7 +189,7 @@
           {text: 'devices', value: 'devices'},
           {text: 'clients', value: 'clients'},
           {text: 'sm devices', value: 'sm/devices'},
-          {text: 'sm devices software', value: 'sm/devices/software'},
+          {text: 'sm device softwares', value: 'sm/device/softwares'},
         ],
         snackbar: false,
         message: '',
@@ -280,7 +280,7 @@
           if ( ['clients', 'sm/devices'].includes(this.endpoint)) {
             this.buildNetworkIds()
           } 
-          if (this.endpoint == 'sm/devices/software') {
+          if (this.endpoint == 'sm/device/softwares') {
             this.buildDeviceIds()
           }
           if (!this.loading && this.apiKey && this.orgId && this.endpoint) {
@@ -293,118 +293,118 @@
         },
 
         parseHeader (items) {
-        if (items.length) {
-          let _headers = []
-              Object.keys(items[0]).map((val,i) => {
-                _headers.push({
-                  text: val[0].toUpperCase() + val.slice(1),
-                  value: val
-                })
+          if (items.length) {
+            let _headers = []
+            Object.keys(items[0]).map((val,i) => {
+              _headers.push({
+                text: val[0].toUpperCase() + val.slice(1),
+                value: val
               })
-              this.headers = _headers
-            }
+            })
+            this.headers = _headers
+          }
         },
 
-          async runAPI () {
-            this.loading = true
-            this.selectedItems = []
-            this.items = []
+      async runAPI () {
+        this.loading = true
+        this.selectedItems = []
+        this.items = []
 
-            const data = { 
-              apiKey: this.apiKey, 
-              orgId: this.orgId, 
-              networkIds: this.networkIds,
-              deviceIds: this.deviceIds
-            }
-          try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
-                data,
-                method: 'POST'
-              })
-              this.items = res.data.data.map((item, index) => {
-                if (Object.keys(item).includes('org_id')) { 
-                  return {
-                    ...item,
-                    run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
-                  }
-                } else {
-                  return {
-                    ...item,
-                    org_id: this.orgId,
-                    run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
-                  }
-                }
-              })
-              this.parseHeader(this.items)
-              this.message = res.data.message
-              this.color = res.data.status
-              this.modal = true
-          } catch(e) {
-            if (e.response && e.response.data) {
-              this.message = e.response.data.message  
-            } else {
-              this.message = 'Something wrong happened on the server.'
-            }
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
-
-          downloadCSV () {
-            if (this.selectedItems.length) {
-              downloadCSV(this.selectedItems)
-            } else {
-              downloadCSV(this.items)
-            }
-          },
-
-          async populateData () {
-            this.loading = true
-            let data = this.indexedItems
-            if (this.selectedItems.length) {
-              data = this.selectedItems
-            }
-          try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/meraki/${this.endpoint}/populate`,
-                data: { data },
-                method: 'POST'
-              })
-              this.message = res.data.message
-              this.color = res.data.status
-              this.modal = true
-          } catch(e) {
-            this.message = e.response.data.message || 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
-
-          async readAll () {
-            this.loading = true
-            this.items = []
-            this.selectedItems = []
-            
-          try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/meraki/${this.endpoint}/read`,
-                data: { org_id: this.orgId },
-                method: 'POST'
-              })
-              this.items = res.data.data
-              this.parseHeader(this.items)
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          }
+        const data = { 
+          apiKey: this.apiKey, 
+          orgId: this.orgId, 
+          networkIds: this.networkIds,
+          deviceIds: this.deviceIds
         }
+        try {
+          const res = await axios({
+            url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
+            data,
+            method: 'POST'
+          })
+          this.items = res.data.data.map((item, index) => {
+            if (Object.keys(item).includes('org_id')) { 
+              return {
+                ...item,
+                run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+              }
+            } else {
+              return {
+                ...item,
+                org_id: this.orgId,
+                run_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
+              }
+            }
+          })
+          this.parseHeader(this.items)
+          this.message = res.data.message
+          this.color = res.data.status
+          this.modal = true
+        } catch(e) {
+          if (e.response && e.response.data) {
+            this.message = e.response.data.message  
+          } else {
+            this.message = 'Something wrong happened on the server.'
+          }
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
+
+      downloadCSV () {
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
+      },
+
+      async populateData () {
+        this.loading = true
+        let data = this.indexedItems
+        if (this.selectedItems.length) {
+          data = this.selectedItems
+        }
+        try {
+          const res = await axios({
+              url: `${BASE_API}/api/admin/meraki/${this.endpoint}/populate`,
+              data: { data },
+              method: 'POST'
+            })
+            this.message = res.data.message
+            this.color = res.data.status
+            this.modal = true
+        } catch(e) {
+          this.message = e.response.data.message || 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
+
+      async readAll () {
+        this.loading = true
+        this.items = []
+        this.selectedItems = []
+        
+        try {
+          const res = await axios({
+            url: `${BASE_API}/api/admin/meraki/${this.endpoint}/read`,
+            data: { org_id: this.orgId },
+            method: 'POST'
+          })
+          this.items = res.data.data
+          this.parseHeader(this.items)
+          this.message = res.data.message
+          this.color = res.data.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      }
+    }
   }
 </script>
