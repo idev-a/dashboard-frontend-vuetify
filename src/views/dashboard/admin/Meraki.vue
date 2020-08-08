@@ -32,28 +32,28 @@
             md="5"
             >
             <v-text-field
-                    v-model="apiKey"
-                    :loading="loading"
-                    hide-details="auto"
-                    class="mb-2"
-                    label="Please enter api key"
-                    prepend-icon="mdi-key"
-                    @input="changeInput"
-                  />
+              v-model="apiKey"
+              :loading="loading"
+              hide-details="auto"
+              class="mb-2"
+              label="Please enter api key"
+              prepend-icon="mdi-key"
+              @input="changeInput"
+            />
             </v-col>
             <v-col
             cols='12'
             md="5"
             >
             <v-text-field
-                    v-model="orgId"
-                    :loading="loading"
-                    hide-details="auto"
-                    class="mb-2"
-                    label="please enter Org Id"
-                    prepend-icon="mdi-identifier"
-                    @input="changeInput"
-                  />
+              v-model="orgId"
+              :loading="loading"
+              hide-details="auto"
+              class="mb-2"
+              label="please enter Org Id"
+              prepend-icon="mdi-identifier"
+              @input="changeInput"
+            />
             </v-col>
           </v-row>
           <v-row>
@@ -80,7 +80,7 @@
                 v-model="deviceId"
                 :loading="loading"
                 class="max-height-300"
-                label="Please enter devuce Id(s)"
+                label="Please enter device Id(s)"
                 hint="A list of device ids seperated by new line"
                 rows="3"
                 outlined
@@ -188,8 +188,8 @@
         endpoints: [
           {text: 'devices', value: 'devices'},
           {text: 'clients', value: 'clients'},
-          {text: 'sm devices', value: 'sm devices'},
-          {text: 'sm devices software', value: 'sm devices software'},
+          {text: 'sm devices', value: 'sm/devices'},
+          {text: 'sm devices software', value: 'sm/devices/software'},
         ],
         snackbar: false,
         message: '',
@@ -233,25 +233,40 @@
 
         buildNetworkIds () {
           let networkIds = []
-            if (this.selectedItems.length > 0 && this.selectedItems[0].networkId) {
-              this.selectedItems.map(item => {
-                if (item.networkId) {
-                  networkIds.push(item.networkId.trim())
-                }
-              })
-            }
-            if (this.networkId) {
-              this.networkId.split('\n').map(_networkId => {
-                if (!networkIds.includes(_networkId.trim())) {
-                  networkIds.push(_networkId.trim())
-                }
-              })
-            }
-            this.networkIds = networkIds
+          if (this.selectedItems.length > 0 && this.selectedItems[0].networkId) {
+            this.selectedItems.map(item => {
+              if (item.networkId) {
+                networkIds.push(item.networkId.trim())
+              }
+            })
+          }
+          if (this.networkId) {
+            this.networkId.split('\n').map(_networkId => {
+              if (!networkIds.includes(_networkId.trim())) {
+                networkIds.push(_networkId.trim())
+              }
+            })
+          }
+          this.networkIds = networkIds
         },
 
         buildDeviceIds() {
-
+          let deviceIds = []
+          if (this.selectedItems.length > 0 && this.selectedItems[0].deviceId) {
+            this.selectedItems.map(item => {
+              if (item.deviceId) {
+                deviceIds.push(item.deviceId.trim())
+              }
+            })
+          }
+          if (this.deviceId) {
+            this.deviceId.split('\n').map(_deviceId => {
+              if (!deviceIds.includes(_deviceId.trim())) {
+                deviceIds.push(_deviceId.trim())
+              }
+            })
+          }
+          this.deviceIds = deviceIds
         },
 
         changeEndpoint (val) {
@@ -295,7 +310,12 @@
             this.selectedItems = []
             this.items = []
 
-            const data = { apiKey: this.apiKey, orgId: this.orgId, networkIds: this.networkIds }
+            const data = { 
+              apiKey: this.apiKey, 
+              orgId: this.orgId, 
+              networkIds: this.networkIds,
+              deviceIds: this.deviceIds
+            }
           try {
             const res = await axios({
                 url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
