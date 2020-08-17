@@ -245,6 +245,7 @@
     methods: {
       beautifyEmail,
       levelColor,
+      highlightText,
 
       getPageNum (_page) {
           localStorage.setItem('page', _page)

@@ -70,7 +70,8 @@
 		},
 
 		methods: {
-			beautifyEmails
+			beautifyEmails,
+      highlightText
 		}
 	}
 </script>

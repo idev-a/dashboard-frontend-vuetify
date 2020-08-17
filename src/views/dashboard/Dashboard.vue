@@ -32,37 +32,37 @@
         sm="6"
         lg="3"
       >
-          <v-menu  
-            top 
-            origin="center center"
-            transition="scale-transition"
-            close-on-content-click
-            :nudge-width="100"
-            offset-y 
-            offset-x>
-            <template v-slot:activator="{ on, attrs }">
-              <v-card
-                class="pt-3 min-50"
-                :loading="loadingCard"
-              >
-                <v-icon    
-                  v-bind="attrs"
-                  v-on="on"
-                  class="info-btn"
-                >mdi-information</v-icon>
-                <div
-                  @click="gotoRiskPage"
-                >
-                  <highcharts  v-if="!loadingCard" :options="scoreChart"></highcharts>
-                </div>
-              </v-card>
-            </template>
-            <v-sheet
-              class="pa-4"
+        <v-menu  
+          top 
+          origin="center center"
+          transition="scale-transition"
+          close-on-content-click
+          :nudge-width="100"
+          offset-y 
+          offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-card
+              class="pt-3 min-50"
+              :loading="loadingCard"
             >
-              {{tooltip.orgChart}}
-            </v-sheet>
-          </v-menu>
+              <v-icon    
+                v-bind="attrs"
+                v-on="on"
+                class="info-btn"
+              >mdi-information</v-icon>
+              <div
+                @click="gotoRiskPage"
+              >
+                <highcharts  v-if="!loadingCard" :options="scoreChart"></highcharts>
+              </div>
+            </v-card>
+          </template>
+          <v-sheet
+            class="pa-4"
+          >
+            {{tooltip.orgChart}}
+          </v-sheet>
+        </v-menu>
       </v-col>
 
       <v-col
@@ -214,13 +214,14 @@
         md="12"
         lg="9"
       >
-         <v-menu  
+        <v-menu  
           top 
           origin="center center"
           transition="scale-transition"
           close-on-content-click
           offset-y 
-          offset-x>
+          offset-x
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-card
               class="pt-3 min-50"
@@ -268,7 +269,6 @@
           </template>
           <v-sheet
             class="pa-4"
-            max-width="210"
           >
             <span v-html="tooltip.highriskByCategory"></span>
           </v-sheet>
@@ -285,7 +285,8 @@
           transition="scale-transition"
           close-on-content-click
           offset-y 
-          offset-x>
+          offset-x
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-card
               class="pt-3 min-50"
@@ -593,7 +594,6 @@
         />
       </v-col>
 
- 
       <v-col
         cols="12"
         sm="6"
@@ -726,7 +726,6 @@
           series.push(temp)
         })
 
-        // this.refs.ciaCategoryChart.chart.setSeries(series)
         this.cia_by_categories = series
       },
       companyId: {
@@ -806,21 +805,23 @@
         }
       },
 
-      gotoRiskUsersPage () {
+      _setTempRisk() {
         this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
           { text: 'High', value: 'high'}])
+      },
+
+      gotoRiskUsersPage () {
+        this._setTempRisk()
         this.$router.push({ name: 'Users' })
       },
 
       gotoRiskAppsPage () {
-        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
-          { text: 'High', value: 'high'}])
+        this._setTempRisk()
         this.$router.push({ name: 'Application Risk' })
       },
 
       gotoAnswersPage () {
-        this.SET_TEMP_RISK([{ text: 'Critical', value: 'critical'},
-          { text: 'High', value: 'high'}])
+        this._setTempRisk()
         this.$router.push({ name: 'Category' })
       }
     },
