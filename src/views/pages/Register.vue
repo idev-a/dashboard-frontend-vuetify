@@ -60,10 +60,22 @@
               v-model="form.company_id"
               :rules="[rules.required, rules.validCompanyName]"
               :loading="loading"
+              class="mt-3"
+              hide-details="auto"
+              color="secondary"
+              label="Please enter your company domain correctly."
+              prepend-icon="mdi-application"
+              @keyup.enter="submit"
+              required
+            />
+
+            <v-text-field
+              v-model="form.company_name"
+              :loading="loading"
               class="mt-3 mb-7"
               hide-details="auto"
               color="secondary"
-              label="Please enter your company name correctly."
+              label="Company Name."
               prepend-icon="mdi-application"
               @keyup.enter="submit"
               required

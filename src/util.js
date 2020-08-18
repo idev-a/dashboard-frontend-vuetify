@@ -367,15 +367,15 @@ export const riskLevelChart = (critical, high, medium, low, informational) => {
 }
 
 export const userRiskChart = (critical, high, medium, low, informational) => {
-  return riskPieChart({critical, high, medium, low, informational, title:'High Risk Users'})
+  return riskPieChart({critical, high, medium, low, informational, title:'Risk level by user'})
 }
 
 export const appRiskChart = (critical, high, medium, low, informational) => {
-  return riskPieChart({critical, high, medium, low, informational, title:'High Risk Apps'})
+  return riskPieChart({critical, high, medium, low, informational, title:'Risk level by application'})
 }
 
 export const CIAChart = (high, medium, low) => {
-  return riskPieChart({high, medium, low, title:'CIA', high_label:'Confidetiality', medium_label:'Availability', low_label:'Integrity'})
+  return riskPieChart({high, medium, low, title:'CIA', high_label:'Confidentiality', low_label:'Integrity', medium_label:'Availability'})
 }
 
 // donut chart template

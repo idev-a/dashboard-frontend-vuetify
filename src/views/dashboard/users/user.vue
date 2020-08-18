@@ -39,7 +39,7 @@
         :loading="loading"
         :headers="headers"
         :items="filteredUsers"
-        item-key="email"
+        item-key="_id"
         :items-per-page="page"
         :search="search"
         single-expand

@@ -102,6 +102,7 @@
       <v-col
         cols="12"
         md="12"
+        v-if="false"
       >
         <v-card
           class="pt-3 min-50"
@@ -290,7 +291,7 @@
       },
 
       CIACharts () {
-        return CIAChart(this.charts.confidentiality, this.charts.availability, this.charts.integrity)
+        return CIAChart(this.charts.confidentiality, this.charts.integrity, this.charts.availability)
       },
 
       scoreChart () {

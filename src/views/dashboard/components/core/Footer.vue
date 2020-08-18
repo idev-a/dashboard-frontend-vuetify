@@ -40,7 +40,7 @@
       <v-row class="mt-7" align="center" justify="center">
         <div class="body-1 font-weight-light pt-6 pt-md-0 text-center">
           &copy; 2020, copyright
-          by <a color="main" href="https://revampcybersecurity.com/">RevampCyberSecurity</a>
+          by <a color="main" href="https://revampcybersecurity.com/">Revampcybersecurity.com</a>
         </div>
       </v-row>
     </v-container>

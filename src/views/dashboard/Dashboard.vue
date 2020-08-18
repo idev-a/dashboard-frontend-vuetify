@@ -278,6 +278,7 @@
       <v-col
         cols="12"
         md="12"
+        v-if="false"
       >
         <v-menu  
           top 
@@ -530,7 +531,7 @@
           title="Email Security"
           :value="smallCards.email_security"
           sub-icon="mdi-chevron-triple-right"
-          sub-text="Email Settings, Pushing Attempts"
+          sub-text="Phishing, Spam"
           to="Email Security"
           hover
           ripple
@@ -694,7 +695,7 @@
         ciaCategoryChartIns: Highcharts,
         categoryMenu: false,
         tooltip: {
-          orgChart: 'This is a cumulative risk score based off the information we currently have.',
+          orgChart: 'This is a comprehensive Org Risk Score based off the current info/Data.',
           riskLevels: '',
           highriskUsers: '',
           highriskApps: '',
@@ -755,7 +756,7 @@
       },
 
       CIACharts () {
-        return CIAChart(this.charts.confidentiality, this.charts.availability, this.charts.integrity)
+        return CIAChart(this.charts.confidentiality, this.charts.integrity, this.charts.availability)
       },
 
       scoreChart () {
@@ -796,12 +797,16 @@
       },
 
       gotoRiskPage () {
-        if (this.charts.org_score < 3) {
+        if (this.charts.org_score == 1) {
+          this.$router.push({ name: 'Information Risks'})
+        } else if (this.charts.org_score == 2) {
           this.$router.push({ name: 'Low Risks'})
         } else if (this.charts.org_score == 3) {
           this.$router.push({ name: 'Medium Risks'})
-        } else {
+        } else if (this.charts.org_score == 4) {
           this.$router.push({ name: 'High Risks'})
+        } else {
+          this.$router.push({ name: 'Critical Risks'})
         }
       },
 
@@ -844,5 +849,6 @@
     top: 10px !important;
     right: 10px !important;
     z-index: 10;
+    color: #2a9be7 !important;
   }
 </style>
