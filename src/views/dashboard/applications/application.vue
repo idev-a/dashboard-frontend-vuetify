@@ -44,7 +44,6 @@
         item-key="id"
         :search="search"
         single-expand
-        show-expand
         :expanded.sync="expanded"
         @update:items-per-page="getPageNum"
       >
@@ -58,11 +57,13 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
-                icon 
                 v-on="on"
+                small
+                dense
                 @click.stop="showUsers(item)"
               >
-                <v-icon>mdi-account-search</v-icon>
+                <!-- <v-icon>mdi-account-search</v-icon> -->
+                Show Users
               </v-btn>
             </template>
             <span>Show Users</span>
@@ -71,19 +72,17 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
-                icon 
+                small
+                dense
                 v-on="on"
                 @click="showDetails(item)"
               >
-                <v-icon>mdi-application</v-icon>
+                <!-- <v-icon>mdi-application</v-icon> -->
+                Show Details
               </v-btn>
             </template>
             <span>Show Details</span>
           </v-tooltip>
-        </template>
-        <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
-          <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
-          <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
         </template>
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
@@ -245,7 +244,7 @@
           text: 'Risk',
           value: 'risk',
         },
-        { text: 'Actions', value: 'action', sortable: false },
+        { text: 'Actions', value: 'action', sortable: false, align: 'center' },
       ],
       apps: [],
       userHeaders: [
@@ -341,21 +340,29 @@
         return res
       },
       showDetails (item) {
-        this.expanded = []
-        this.currentApp = item
-        this.details = true
-        this.user = false
-        this.expanded.push(item)
+        if (this.expanded.includes(item)) {
+          const index = this.expanded.indexOf(item);
+          this.expanded.splice(index, 1);
+        } else {
+          this.expanded.push(item)
+          this.currentApp = item
+          this.details = true
+          this.user = false
+        }
       },
       async showUsers (item) {
         this.currentApp = item
         this.user  = true
         this.details = false
-        this.expanded = []
-        this.expanded.push(item)
-        this.loading = true
-        this.users = await fetchAppUsers(item.users_table_name)
-        this.loading = false
+        if (this.expanded.includes(item)) {
+          const index = this.expanded.indexOf(item);
+          this.expanded.splice(index, 1);
+        } else {
+          this.expanded.push(item)
+          this.loading = true
+          this.users = await fetchAppUsers(item.users_table_name)
+          this.loading = false
+        }
       },
     }
   }

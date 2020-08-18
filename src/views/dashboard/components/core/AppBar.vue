@@ -220,6 +220,8 @@
   // Utilities
   import { mapState, mapMutations, mapActions } from 'vuex'
 
+  import { enableDailyTips } from '../../../../api'
+
   export default {
     name: 'DashboardCoreAppBar',
 
@@ -301,6 +303,10 @@
 
     computed: {
       ...mapState(['drawer', 'connected', 'message', 'notifications', 'isAdmin']),
+    },
+
+    async mounted () {
+      await enableDailyTips()
     },
 
     methods: {

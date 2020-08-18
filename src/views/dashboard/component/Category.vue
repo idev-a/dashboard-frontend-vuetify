@@ -159,18 +159,19 @@
           {
             text: 'Question',
             value: 'question',
-            width: 450
+            width: 350
           },
           {
             text: 'Answer',
             value: 'answer',
-            width: 400
+            width: 300
           },
         ]
         if (this.category == 'all') {
           headers.push({
             text: 'Category',
             value: 'category',
+            width: 200
           })
         }
         headers.push({ text: 'Actions', value: 'action', sortable: false })
@@ -254,15 +255,15 @@
       getPageNum (_page) {
         localStorage.setItem('page', _page)
       },
-      expand (can) {
-        if (can) {
-        }
-      },
       showDetails (item) {
-        this.expanded = []
-        this.currentQuestion = item
-        this.details = true
-        this.expanded.push(item)
+        if (this.expanded.includes(item)) {
+          const index = this.expanded.indexOf(item);
+          this.expanded.splice(index, 1);
+        } else {
+          this.expanded.push(item)
+          this.currentQuestion = item
+          this.details = true
+        }
       },
       fetchRisks () {
         if (!this.isLevelVisible) {

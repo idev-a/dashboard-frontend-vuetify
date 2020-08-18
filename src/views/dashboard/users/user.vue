@@ -12,7 +12,6 @@
     >
       <v-card-title>
         Users
-        
       </v-card-title>
       <v-card-title>
         <v-text-field
@@ -66,10 +65,10 @@
             <span>Show Details</span>
           </v-tooltip>
         </template>
-        <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
-          <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
-          <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
-        </template>
+<!--         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+          <v-btn @click="expand(true)">Expand</v-btn>
+          <v-btn @click="expand(false)" >close</v-btn>
+        </template> -->
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length" >
             <user-detail :currentUser="currentUser" />
@@ -199,9 +198,12 @@
 
       showDetails (item) {
         this.currentUser = item
-        // this.user = true
-        this.expanded = []
-        this.expanded.push(item)
+        if (this.expanded.includes(item)) {
+          const index = this.expanded.indexOf(item);
+          this.expanded.splice(index, 1);
+        } else {
+          this.expanded.push(item)
+        }
       },
       fetchUsers () {
         const self = this

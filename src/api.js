@@ -8,6 +8,45 @@ export const BASE_API = process.env.VUE_APP_BACKEND_URL
 // export const BASE_API = 'http://localhost:5000'
 // export const BASE_API = 'https://urinotsecure.revampcybersecurity.com'
 
+const getAuthToken = () => {
+	return localStorage.getItem('jwt')
+}
+
+export const Call = async (url, method, data={}) => {
+	let res = {}
+	try {
+		res = await axios({
+			url: `${BASE_API}/api/${url}`,
+			headers: {
+				'Content-Type': 'application/json; charset=utf-8',
+				'Authorization': getAuthToken()
+			},
+			method,
+			data
+		})
+	} catch(e) {
+		res = e.response
+		if (e.response.status == 401) {
+			// authentication token is expired.
+			localStorage.removeItem('jwt')
+			location.href = '/auth/login'
+		}
+	}
+	return res.data
+}
+
+export const Post = async (url, data) => {
+	return await Call(url, 'POST', data)
+}
+
+export const Get = async (url) => {
+	return await Call(url, 'GET')
+}
+
+export const Put = async (url, data) => {
+	return await Call(url, 'PUT', data)
+}
+
 // rea
 export const getCompanyId = () => {
 	let user = {}
@@ -174,4 +213,8 @@ export const deleteAnswer = async (data) => {
 
 export const createAnswer = async (data) => {
 	return await updateAnswer(data)
+}
+
+export const enableDailyTips = async () => {
+	await Get('tips/daily/run')
 }

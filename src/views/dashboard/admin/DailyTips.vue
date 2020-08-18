@@ -6,6 +6,7 @@
   >
     <v-card
       class="pa-5"
+      :loading="loading"
     >
       <div class="d-flex align-center justify-space-between mb-5" >
         <div class="display-2">DAILY TIPS</div> 

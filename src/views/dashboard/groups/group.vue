@@ -183,9 +183,12 @@
       },
       showDetails (item) {
         this.currentGroup = item
-        this.user = true
-        this.expanded = []
-        this.expanded.push(item)
+        if (this.expanded.includes(item)) {
+          const index = this.expanded.indexOf(item);
+          this.expanded.splice(index, 1);
+        } else {
+          this.expanded.push(item)
+        }
       },
       fetchGroups () {
         const self = this
