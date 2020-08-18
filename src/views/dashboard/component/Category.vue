@@ -10,8 +10,9 @@
       v-if="banner"
       outlined 
       class="banner-bg"
+      :style="bannerClass"
     >
-      <v-card-title class="mb-2" >
+      <v-card-title class="mb-2">
         {{banner.title}}
       </v-card-title>
       <v-card-text>
@@ -177,6 +178,31 @@
       },
       isLevelVisible () {
         return !['critical', 'high', 'medium', 'low', 'informational'].includes(this.category)
+      },
+      bannerClass () {
+        let color = ''
+        let border = ''
+        switch(this.category) {
+          case 'critical':
+            color = 'black'
+            break
+          case 'high':
+            color = 'red'
+            break
+          case 'medium':
+            color = 'orange'
+            break
+          case 'low':
+            color = 'green'
+            break
+          case 'informational':
+            color = 'gray'
+            break
+        }
+        return {
+          color,
+          border: '1px dashed'
+        }
       }
     },
 

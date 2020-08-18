@@ -114,11 +114,11 @@ tr.v-data-table__mobile-table-row:nth-of-type(odd) td.v-data-table__mobile-row{
   margin: auto;
   --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
   border: 1px solid var(--saf-0);
-  padding: 1rem 1rem 1rem 5.5rem !important;
-  background-color: rgba(var(--sk_primary_background,255,255,255),1);
+  padding: 1rem 1rem 1rem 1rem !important;
+/*  background-color: rgba(var(--sk_primary_background,255,255,255),1);
   background-image: url(../../assets/banner-bg.png);
   background-size: 60px 60px;
   background-repeat: no-repeat;
-  background-position: 1.25rem;
+  background-position: 1.25rem;*/
 }
 </style>
