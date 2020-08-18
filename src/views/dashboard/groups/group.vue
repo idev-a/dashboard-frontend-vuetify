@@ -49,7 +49,7 @@
                 v-on="on"
                 @click.stop="showDetails(item)"
               >
-                <v-icon>mdi-account-search</v-icon>
+                <v-icon color="primary">mdi-information-outline</v-icon>
               </v-btn>
             </template>
             <span>Show Details</span>

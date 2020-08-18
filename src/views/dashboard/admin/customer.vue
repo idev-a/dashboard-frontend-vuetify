@@ -84,8 +84,14 @@
                       <v-text-field 
                         :rules="[rules.required]"
                         v-model.trim="editedItem.company_id"
-                        label="Company"
+                        label="Company Domain"
                         required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field 
+                        v-model.trim="editedItem.company_name"
+                        label="Company Name"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
@@ -212,8 +218,12 @@
           value: 'status',
         },
         {
-          text: 'Company',
+          text: 'Company Domain',
           value: 'company_id',
+        },
+        {
+          text: 'Company Name',
+          value: 'company_name',
         },
         {
           text: 'Last Login',

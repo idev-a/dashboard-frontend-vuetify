@@ -55,11 +55,12 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
-                icon 
+                color="primary"
                 v-on="on"
                 @click.stop="showDetails(item)"
               >
-                <v-icon>mdi-account-search</v-icon>
+                <!-- <v-icon>mdi-account-search</v-icon> -->
+                Details
               </v-btn>
             </template>
             <span>Show Details</span>
@@ -139,7 +140,7 @@
           text: 'Job Title',
           value: 'job_title',
         },
-        { text: 'Actions', value: 'action', sortable: false },
+        { text: 'Actions', value: 'action', sortable: false, align: 'center' },
       ],
       users: []
     }),
