@@ -56,6 +56,26 @@ export const getCompanyId = () => {
 	return user && user.company_id && user.company_id.trim() || '';
 }
 
+export const getCompanyName = () => {
+	let user = {}
+	try {
+		user = jwtDecode(localStorage.getItem('jwt'))
+	} catch(e) {console.log(e)}
+
+	console.log(user)
+
+	let companyName = ''
+	if (user) {
+		if (user.company_name && user.company_name.trim()) {
+			companyName = user.company_name
+		} else if (user.company_id && user.company_id.trim()) {
+			companyName = user.company_id
+		}
+	}
+
+	return companyName
+}
+
 const getUserId = () => {
 	let user = {}
 	try {

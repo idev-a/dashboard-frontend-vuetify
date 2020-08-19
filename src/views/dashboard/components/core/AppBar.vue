@@ -319,9 +319,11 @@
       goTo (name) {
         if (name === 'Login') {
           localStorage.setItem('jwt', null)
-        } 
+          window.location.href = '/pages/login'
+        } else {
+          this.$router.push({ name })
+        }
         
-        this.$router.push({ name })
       }
     },
   }

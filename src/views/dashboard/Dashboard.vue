@@ -16,7 +16,7 @@
         <v-card-text>
           <div class="d-flex align-center justify-space-between" >
             <div>
-              Welcome <b>{{upperFirst(companyId)}}</b> to the Secure dashboard.  Click <a href="#">here</a> to learn more about the dashboard. 
+              Welcome <b>{{upperFirst(companyName)}}</b> to the Secure dashboard.  Click <a href="#">here</a> to learn more about the dashboard. 
             </div>
             <v-btn text icon @click="banner = false">
               <v-icon>mdi-close</v-icon>
@@ -659,6 +659,7 @@
   import Highcharts from 'highcharts'
   import { mapState, mapActions } from 'vuex'
   import upperFirst from 'lodash/upperFirst'
+  import camelCase from 'lodash/camelCase'
 
   export default {
     name: 'DashboardDashboard',
@@ -729,7 +730,7 @@
 
         this.cia_by_categories = series
       },
-      companyId: {
+      companyName: {
         handler(newValue) {
           if (newValue) {
             this.fetchChartsData()
@@ -741,7 +742,7 @@
     },
 
     computed: {
-      ...mapState(['companyId']),
+      ...mapState(['companyId', 'companyName']),
 
       riskLevelCharts () {
         return riskLevelChart(this.charts.critical_risk, this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk, this.charts.informational_risk)
@@ -782,6 +783,7 @@
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
       upperFirst,
+      camelCase,
 
       async fetchChartsData() {
         const res = await axios.get(`${BASE_API}/api/charts/${this.companyId}/all`)
