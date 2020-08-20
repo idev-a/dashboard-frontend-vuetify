@@ -12,8 +12,8 @@
       >
         <v-card-title>
             Security Questions ({{ questions.length }})
-            <v-spacer></v-spacer>
-            <v-tooltip bottom>
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="showCreate" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-plus</v-icon></v-btn>
             </template>
@@ -27,27 +27,58 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!questions.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
+              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!questions.length && !selectedItems.length)" @click="downloadCSV" class="mr-2" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
             </template>
-            <span>Download Data</span>
+            <span>Download Questions</span>
           </v-tooltip>
-            </v-card-title>
-            <v-card-title>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                class="mb-5"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-card-title>
-            <v-card-text>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="uploadDialog=true" color="main"><v-icon  size="16" dark>mdi-upload</v-icon></v-btn>
+            </template>
+            <span>Upload Answers Sheet</span>
+          </v-tooltip>
+        </v-card-title>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            class="mb-5"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-spacer />
+          <v-select
+            v-model="category"
+            :items="categories"
+            label="Category"
+            multiple
+            chips
+            dense
+            deletable-chips
+          >
+            <template v-slot:prepend-item>
+              <v-list-item
+                ripple
+                @click="toggleSelect"
+              >
+                <v-list-item-action>
+                  <v-icon :color="category.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Select All</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mt-2"></v-divider>
+            </template>
+          </v-select>
+        </v-card-title>
+        <v-card-text>
           <v-data-table
             v-model="selectedItems"
               :loading="loading"
               :headers="headers"
-              :items="questions"
+              :items="filteredQuestions"
               :items-per-page="page"
               item-key="id"
               :search="search"
@@ -89,50 +120,50 @@
   
     <!-- Crud dialog -->
     <v-dialog
-        v-model="dialog"
-        @click:outside="showDialog(false)"
-        max-width="1024"
-      >
-        <v-card>
-          <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
-          </v-card-title>
-          <v-card-text>
-            <v-form
-              ref="form"
-                class="mt-4"
-                v-model="valid"
+      v-model="dialog"
+      @click:outside="showDialog(false)"
+      max-width="1024"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form
+            ref="form"
+            class="mt-4"
+            v-model="valid"
+          >
+            <v-combobox
+              v-model="editedItem.Question"
+              label="Question" 
+              item-value="id"
+              item-text="Question"
+              :rules="[rules.required]"
+              :items="questions"
+              clear-icon
+              required
+              >
+            </v-combobox>
+            <v-textarea
+              v-model="editedItem.Description"
+              label="Description" 
+              auto-grow
+              rows="2"
+              :rules="[rules.required]"
+              hide-details="auto"
+              class="mb-3"
             >
-                <v-combobox
-                  v-model="editedItem.Question"
-                  label="Question" 
-                  item-value="id"
-                  item-text="Question"
-                  :rules="[rules.required]"
-                  :items="questions"
-                  clear-icon
-                  required
-                  >
-                </v-combobox>
-                <v-textarea
-                  v-model="editedItem.Description"
-                  label="Description" 
-                  auto-grow
-                  rows="2"
-                  :rules="[rules.required]"
-                  hide-details="auto"
-                  class="mb-3"
-                >
-                </v-textarea>
-                <v-textarea
-                  v-model="editedItem.mapping"
-                  label="Mapping (Public Data only)" 
-                  auto-grow
-                  rows="1"
-                  hide-details="auto"
-                  class="mb-3"
-                >
-                </v-textarea>
+            </v-textarea>
+            <v-textarea
+              v-model="editedItem.mapping"
+              label="Mapping (Public Data only)" 
+              auto-grow
+              rows="1"
+              hide-details="auto"
+              class="mb-3"
+            >
+            </v-textarea>
             <v-combobox
               v-model="editedItem.Category"
               :items="categories"
@@ -183,27 +214,87 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- Upload Answers Dialog -->
+    <v-dialog
+      v-model="uploadDialog"
+      width=600
+    >
+      <v-card>
+        <v-card-title>
+          Upload the answers sheet
+        </v-card-title>
+        <v-card-text>
+          <v-form
+            ref="uploadForm"
+            v-model="uploadValid"
+          >
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                  v-model="company_id"
+                  :items="companies"
+                  label="Select company" 
+                  auto-grow
+                  chips
+                  rows="2"
+                  :rules="[rules.required]"
+                  hide-details="auto"
+                  class="mb-3"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-file-input
+                  ref="myfile" 
+                  v-model="file"
+                  accept=".csv"
+                  placeholder="Import answers sheet"
+                  prepend-icon="mdi-database-import"
+                  label="Answer sheet"
+                  :rules="[rules.required]"
+                  :loading="loading"
+                ></v-file-input>
+              </v-col>
+            </v-row>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn text @click="uploadDialog = false" :loading="loading" :disabled="loading">Close</v-btn>
+              <v-btn color="success" text @click="uploadAnswerSheet" :loading="loading" :disabled="loading || !uploadValid">Upload</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
+import { getCompaniesUsers, BASE_API } from '../../../api'
 import { mapState, mapActions } from 'vuex';
+import axios from 'axios'
 
 export default {
   name: 'SecurityQuestions',
 
   data () {
     return {
+      loading: false,
       done: false,
       search: '',
       valid: true,
+      uploadDialog: false,
+      uploadValid: true,
+      file: null,
+      category: [],
       defaultIndex: -1,
       editedIndex: -1,
       editedItem: {},
       defaultItem: {},
       selectedItems: [],
       expanded: [],
+      company_id: '',
+      companies: [],
       headers: [
         {
           text: 'Question',
@@ -220,7 +311,7 @@ export default {
           value: 'Category',
           width: 180
         },
-        { text: 'Actions', value: 'action', sortable: false }
+        { text: 'Actions', value: 'action', sortable: false, width: 120, align: 'center' }
       ],
       rules: {
         required: value => {
@@ -238,134 +329,186 @@ export default {
   },
 
   computed: {
-    ...mapState('security', ['questions', 'loading', 'dialog']),
-      ...mapState(['page']),
+    ...mapState('security', ['questions', 'dialog']),
+    ...mapState(['page']),
 
     formTitle () {
       return this.editedIndex === -1 ? 'New Question' : 'Edit Question'
     },
 
-      btnLabel () {
-    if (this.mode == 'Edit') {
+    btnLabel () {
+      if (this.mode == 'Edit') {
         return 'View'
       } else {
         return 'Edit'
+      }
+    },
+    filteredQuestions () {
+      if (this.category.length) {
+        return this.questions.filter(que => this.category.includes(que.Category))
+      } else {
+        return this.questions
       }
     },
     categories () {
       const cats = []
       if (this.questions.length) {
         this.questions.map(item => {
-          if (!cats.includes(item)) {
+          if (!cats.includes(item.Category)) {
             cats.push(item.Category)
           }
         })
       } 
       return cats
-    }
+    },
+    selectedAllCategories () {
+      return this.category.length == this.categories.length
+    },
+    selectedSomeCategories () {
+      return this.category.length > 0 && !this.selectedAllCategories
+    },
+    icon () {
+      if (this.selectedAllCategories) return 'mdi-close-box'
+      if (this.selectedSomeCategories) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    },
   },
 
-  mounted () {
+  async mounted () {
     this.fetchQuestions()
+    this.companies = await getCompaniesUsers()
   },
 
   methods: {
     ...mapActions(['showConfirm', 'showCronDialog']),
 
-    ...mapActions('security', ['fetchQuestions', 'createQuestion', 'updateQuestion', 'deleteQuestion', 'setLoading', 'showDialog']),
+    ...mapActions('security', ['fetchQuestions', 'createQuestion', 'updateQuestion', 'deleteQuestion', 'setLoading', 'showDialog', 'showSnackbar']),
 
     getPageNum (_page) {
-          localStorage.setItem('page', _page)
-        },
+      localStorage.setItem('page', _page)
+    },
 
-        showEdit(item) {
-          this.editedIndex = this.questions.indexOf(item)
-          this.editedItem = Object.assign({}, item)
-          this.showDialog()
-        },
-
-        showCreate() {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-          this.showDialog()
-        },
-
-        async _createQuestion () {
-          this.$refs.form.validate()
-          if (!this.valid) {
-            return
-          }
-          const self = this
-          await this.$dialog.confirm({
-          text: 'Do you really want to create a new question?',
-          title: 'Warning',
-          actions: {
-            false: 'No',
-            true: {
-              color: 'red',
-              text: 'Yes',
-              handle: () => {
-                self.createQuestion({
-                  editedItem: self.editedItem,
-                })
-              }
-            }
-          }
-        })
-        },
-
-        async _updateQuestion () {
-          this.$refs.form.validate()
-          if (!this.valid) {
-            return
-          }
-          const self = this
-          await this.$dialog.confirm({
-          text: 'Do you really want to delete this question?',
-          title: 'Warning',
-          actions: {
-            false: 'No',
-            true: {
-              color: 'red',
-              text: 'Yes',
-              handle: () => {
-                self.updateQuestion({
-                  editedItem: this.editedItem,
-                  editedIndex: self.editedIndex
-                })
-              }
-            }
-          }
-        })
-        },
-
-        async _deleteQuestion (item) {
-          const self = this
-          await this.$dialog.confirm({
-          text: 'Do you really want to delete this question?',
-          title: 'Warning',
-          actions: {
-            false: 'No',
-            true: {
-              color: 'red',
-              text: 'Yes',
-              handle: () => {
-                self.deleteQuestion({
-                  editedItem: item,
-                })
-              }
-            }
-          }
-        })
-        },
-
-      downloadCSV () {
-        if (this.selectedItems.length) {
-          downloadCSV(this.selectedItems)
+    toggleSelect () {
+      this.$nextTick(() => {
+        if (this.selectedAllCategories) {
+          this.category = []
         } else {
-          downloadCSV(this.questions)
+          this.category = this.categories.slice()
         }
-      },
+      })
+    },
+
+    showEdit(item) {
+      this.editedIndex = this.questions.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.showDialog()
+    },
+
+    showCreate() {
+      this.editedItem = Object.assign({}, this.defaultItem)
+      this.editedIndex = -1
+      this.showDialog()
+    },
+
+    async _createQuestion () {
+      this.$refs.form.validate()
+      if (!this.valid) {
+        return
+      }
+      const self = this
+      await this.$dialog.confirm({
+      text: 'Do you really want to create a new question?',
+      title: 'Warning',
+      actions: {
+        false: 'No',
+        true: {
+          color: 'red',
+          text: 'Yes',
+          handle: () => {
+            self.createQuestion({
+              editedItem: self.editedItem,
+            })
+          }
+        }
+      }
+    })
+    },
+
+    async _updateQuestion () {
+      this.$refs.form.validate()
+      if (!this.valid) {
+        return
+      }
+      const self = this
+      await this.$dialog.confirm({
+        text: 'Do you really want to delete this question?',
+        title: 'Warning',
+        actions: {
+          false: 'No',
+          true: {
+            color: 'red',
+            text: 'Yes',
+            handle: () => {
+              self.updateQuestion({
+                editedItem: this.editedItem,
+                editedIndex: self.editedIndex
+              })
+            }
+          }
+        }
+      })
+    },
+
+    async _deleteQuestion (item) {
+      const self = this
+      await this.$dialog.confirm({
+        text: 'Do you really want to delete this question?',
+        title: 'Warning',
+        actions: {
+          false: 'No',
+          true: {
+            color: 'red',
+            text: 'Yes',
+            handle: () => {
+              self.deleteQuestion({
+                editedItem: item,
+              })
+            }
+          }
+        }
+      })
+    },
+
+    downloadCSV () {
+      if (this.selectedItems.length) {
+        downloadCSV(this.selectedItems)
+      } else {
+        const modifiedQues = this.filteredQuestions.map(ques => {
+          ques.Answer = ''
+          return ques
+        })
+        downloadCSV(modifiedQues)
+      }
+    },
+
+    async uploadAnswerSheet () {
+      let formData = new FormData()
+
+      formData.append("file", this.file, this.file.name);
+
+      this.loading = true
+      const payload = {}
+      try {
+        const res = await axios.post(`${BASE_API}/api/risks/answers/upload/${this.company_id}`, formData)
+        payload.message = res.data.message
+        payload.color = res.data.status
+      } catch(e) {
+        this.message = 'Something wrong happened on the server.'
+      } finally {
+        this.loading = false
+        this.showSnackbar(payload)  
+      }
     }
+  }
 }
 </script>

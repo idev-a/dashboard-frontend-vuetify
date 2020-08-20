@@ -62,8 +62,6 @@ export const getCompanyName = () => {
 		user = jwtDecode(localStorage.getItem('jwt'))
 	} catch(e) {console.log(e)}
 
-	console.log(user)
-
 	let companyName = ''
 	if (user) {
 		if (user.company_name && user.company_name.trim()) {
@@ -237,4 +235,9 @@ export const createAnswer = async (data) => {
 
 export const enableDailyTips = async () => {
 	await Get('tips/daily/run')
+}
+
+export const getCompaniesUsers = async () => {
+	let res = await Get('users/all')
+    return res.users.map(user => user.company_id)
 }

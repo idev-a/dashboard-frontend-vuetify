@@ -33,51 +33,52 @@
           </v-tooltip>
         </v-card-title>
         <v-card-title>
-                <v-select
+            <v-select
               v-model="company"
               :loading="loadingUsers"
               chips
-                :items="companies"
-                label="Select a company"
-                hint="Display the table data for this company"
-                @input="fetchRisks"
+              :items="companies"
+              label="Select a company"
+              hint="Display the table data for this company"
+              @input="fetchRisks"
             ></v-select>
-                <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
             <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  class="mb-5"
-                  single-line
-                  hide-details
-                ></v-text-field>
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              class="mb-5"
+              single-line
+              hide-details
+            ></v-text-field>
             </v-card-title>
             <v-card-title>
-          <v-autocomplete
-            :loading="loading"
-                v-model="selectedCategories"
-                :disabled="loading"
-                :items="categories"
-                hide-selected
-                chips
-                deletable-chips
-                attach
-                label="Select a category"
-                multiple
-                @input="changeCategory"
-              >
-                <template v-slot:selection="data">
-                  <v-chip
-                    v-bind="data.attrs"
-                    :input-value="data.selected"
-                    close
-                    @click="data.select"
-                    @click:close="remove(data.item)"
-                  >
-                    {{ data.item }}
-                  </v-chip>
-                </template>
-              </v-autocomplete>
+            <v-select
+              :loading="loading"
+              v-model="selectedCategories"
+              :items="categories"
+              label="Select a Category"
+              multiple
+              chips
+              dense
+              deletable-chips
+              @change="changeCategory"
+            >
+              <template v-slot:prepend-item>
+                <v-list-item
+                  ripple
+                  @click="toggleSelect"
+                >
+                  <v-list-item-action>
+                    <v-icon :color="selectedCategories.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>Select All</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider>
+              </template>
+            </v-select>
         </v-card-title> 
         <v-card-text>
           <v-data-table
@@ -239,11 +240,11 @@
                     <v-col class="col-auto">
                       <v-autocomplete
                         v-if="mode == 'Edit'"
-                      v-model="editItem.company_id"
-                      :loading="loading"
-                      chips
-                      deletable-chips
-                      deletable-chips
+                        v-model="editItem.company_id"
+                        :loading="loading"
+                        chips
+                        deletable-chips
+                        deletable-chips
                         :items="companies"
                         :rules="[rules.required]"
                         label="Select a company"
@@ -445,7 +446,7 @@
 
 <script>
   import axios from 'axios'
-  import { BASE_API } from '../../../api'
+  import { BASE_API, getCompaniesUsers } from '../../../api'
   import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
   import { mapState, mapActions } from 'vuex';
 
@@ -500,14 +501,14 @@
                 {
                   text: 'Answer',
                   value: 'answer',
-                  width: 400
+                  width: 350
                 },
                 {
                   text: 'Category',
                   value: 'category',
                   width: 180
                 },
-                { text: 'Actions', value: 'action', sortable: false }
+                { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 120 }
             ],
             rules: {
               required: value => {
@@ -529,290 +530,301 @@
     computed: {
       ...mapState('security', ['questions']),
       ...mapState(['page', 'riskItems']),
+
       btnLabel () {
-      if (this.mode == 'Edit') {
-        return 'View'
-      } else {
-        return 'Edit'
-      }
+        if (this.mode == 'Edit') {
+          return 'View'
+        } else {
+          return 'Edit'
+        }
       },
-      tList() {
+      tList () {
         return ['T1. Software Failures (code, configuration etc.)', 'T2. Cloud Failures (Provider, VHardware, Capacity)', 'T3. Legal Threats (failure to comply, bad contacts)', 'T4. Social Engineering', 'T5. External Unauthorized Access to Information Systems / Data', 'T6. Traffic Monitoring or Interception', 'T7.External Attacker Tampering with Data / Data Destruction', 'T8. Repudiation of transactions and messages', 'T9. Insider Abuse of Privilege', 'T10. Third Party Liability (contractors, third processing)', 'T11. Employee / User Mistakes']
       },
       cias () {
-       return ['availability', 'confidentiality', 'integrity']
-        },
+        return ['availability', 'confidentiality', 'integrity']
+      },
+      filteredQuestions () {
+        if (this.selectedCategories.length) {
+          return this.risksOrigin.filter(que => this.selectedCategories.includes(que.Category))
+        } else {
+          return this.risksOrigin
+        }
+      },
+      selectedAllCategories () {
+        return this.selectedCategories.length == this.categories.length
+      },
+      selectedSomeCategories () {
+        return this.selectedCategories.length > 0 && !this.selectedAllCategories
+      },
+      icon () {
+        if (this.selectedAllCategories) return 'mdi-close-box'
+        if (this.selectedSomeCategories) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
     },  
 
     mounted () {
-        this.refreshData()
-      },
+      this.refreshData()
+    },
 
     methods: {
       ...mapActions(['showConfirm', 'showCronDialog']),
-
       ...mapActions('security', ['fetchQuestions']),
 
       getPageNum (_page) {
-            localStorage.setItem('page', _page)
-          },
+        localStorage.setItem('page', _page)
+      },
 
-          remove (item) {
-            this.selectedCategories.map((cat, i) => {
-              if (cat == item) {
-                this.selectedCategories.splice(i, 1)
-              }
-            })
+      toggleSelect () {
+        this.$nextTick(() => {
+          if (this.selectedAllCategories) {
+            this.selectedCategories = []
+          } else {
+            this.selectedCategories = this.categories.slice()
+          }
+        })
+      },
 
-            this.changeCategory(this.selectedCategories)
-          },
+      showDetails(item) {
+        this.expanded = []
+        this.currentQuestion = item
+        this.details = true
+        this.expanded.push(item)
+      },
 
-          showDetails(item) {
-            this.expanded = []
-            this.currentQuestion = item
-            this.details = true
-            this.expanded.push(item)
-          },
-
-          toGroups (item, idxs) {
+      toGroups (item, idxs) {
         let group = []
-        
-            idxs.map( (idx, i) => {
-              if (item[idx]) {
-                group.push(i)
-              }
-            })
+    
+        idxs.map( (idx, i) => {
+          if (item[idx]) {
+            group.push(i)
+          }
+        })
 
-            return group
-          },
+        return group
+      },
 
-          fromGroups (group, item, idxs) {
-            group.map(idx => {
-              const listIdx = idxs[idx]
-              item[listIdx] = 1
-            })
-            return item
-          },
+      fromGroups (group, item, idxs) {
+        group.map(idx => {
+          const listIdx = idxs[idx]
+          item[listIdx] = 1
+        })
+        return item
+      },
 
-          createModal () {
-            this.editItem = Object.assign({}, this.defaultItem)
-            this.mode = 'Edit'
-            this.valid = true
-            this.createDialog = true
-          },
+      createModal () {
+        this.editItem = Object.assign({}, this.defaultItem)
+        this.mode = 'Edit'
+        this.valid = true
+        this.createDialog = true
+      },
 
-          updateModal (item) {
-            this.currentQuestion = item
-            this.mode = 'View'
-            this.defaultIndex = this.items.indexOf(item)
-            this.editItem = Object.assign({}, item)
-            this.editItem.cia = this.toGroups(item, this.cias)
-            this.editItem.Ts = this.toGroups(item, this.tList)
-            this.updateValid = true
-            this.updateDialog = true
-          },  
+      updateModal (item) {
+        this.currentQuestion = item
+        this.mode = 'View'
+        this.defaultIndex = this.items.indexOf(item)
+        this.editItem = Object.assign({}, item)
+        this.editItem.cia = this.toGroups(item, this.cias)
+        this.editItem.Ts = this.toGroups(item, this.tList)
+        this.updateValid = true
+        this.updateDialog = true
+      },  
 
-          toggleMode () {
-            if (this.mode == 'Edit') {
-              this.mode = 'View'
-            } else {
-              this.mode = 'Edit'
-            }
-        },
+      toggleMode () {
+        if (this.mode == 'Edit') {
+          this.mode = 'View'
+        } else {
+          this.mode = 'Edit'
+        }
+      },
           
-          changeCategory (data) {
-            this.selectedItems = []
-            if (data.length) {
-              this.items = this.risksOrigin.filter(risk => data.includes(risk.category))
-            } else {
-              this.items = this.risksOrigin
-            }
-          },
+      changeCategory (data) {
+        this.selectedItems = []
+        if (data.length) {
+          this.items = this.risksOrigin.filter(risk => data.includes(risk.category))
+        } else {
+          this.items = this.risksOrigin
+        }
+      },
 
-          refreshData () {
-            this.fetchQuestions()
-            this.fetchUsers()
-          },
+      refreshData () {
+        this.fetchQuestions()
+        this.fetchUsers()
+      },
 
-          downloadCSV () {
-            if (this.selectedItems.length) {
-              downloadCSV(this.selectedItems)
-            } else {
-              downloadCSV(this.items)
-            }
-          },
+      downloadCSV () {
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
+      },
 
-          fetchRisks () {
-            const self = this
-            self.loading = true
-            self.selectedItems = []
-            self.selectedCategories = []
-            axios(`${BASE_API}/api/risks/all/${this.company}`, {
-                method: 'GET',
-              })
-              .then(function (res) {
-                self.items = addKey(res.data.risks)
-                self.categories = res.data.categories
-                self.risksOrigin = res.data.risks
-              })
-              .catch(error => {
-                console.log(error)
-              })
-              .finally(() => {
-                self.loading = false
-              })
-          },
-
-          async fetchUsers () {
-            this.loadingUsers = true
-            let res = await axios.get(`${BASE_API}/api/users/all`)
-            res = res.data.users
-            const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.email.split('@')[1]))
-            this.companies = []
-            const self = this;
-            companyUsers.map(user => {
-              if (!self.companies.includes(user.email.split('@')[1])) {
-                self.companies.push(user.email.split('@')[1]) 
-              }
-            })
-            this.loadingUsers = false
-          },
-
-          runCallback () {
-            if (this.callback) {
-              this.callback()
-            }
-          },
-
-          async createAnswer () {
-            this.$refs.form.validate()
-            if (!this.valid) {
-              return
-            }
-            const self = this
-            await this.$dialog.confirm({
-            text: 'Do you really want to create a new answer?',
-            title: 'Warning',
-            actions: {
-              false: 'No',
-              true: {
-                color: 'red',
-                text: 'Yes',
-                handle: () => {
-                  self._createAnswer()
-                }
-              }
-            }
+      fetchRisks () {
+        const self = this
+        self.loading = true
+        self.selectedItems = []
+        self.selectedCategories = []
+        axios(`${BASE_API}/api/risks/all/${this.company}`, {
+            method: 'GET',
           })
-          },
-
-          async updateAnswer () {
-            this.$refs.updateForm.validate()
-            if (!this.updateValid) {
-              return
-            }
-            const self = this
-            await this.$dialog.confirm({
-              text: 'Do you really want to update this answer?',
-              title: 'Warning',
-              actions: {
-                false: 'No',
-                true: {
-                  color: 'red',
-                  text: 'Yes',
-                  handle: () => {
-                    self._updateAnswer()
-                  }
-                }
-              }
-            })
-          },
-
-          async deleteAnswer () {
-            const self = this
-            await this.$dialog.confirm({
-            text: 'Do you really want to update this answer?',
-            title: 'Warning',
-            actions: {
-              false: 'No',
-              true: {
-                color: 'red',
-                text: 'Yes',
-                handle: () => {
-                  self._deleteAnswer()
-                }
-              }
-            }
+          .then(function (res) {
+            self.items = addKey(res.data.risks)
+            self.categories = res.data.categories
+            self.risksOrigin = res.data.risks
           })
-          },
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => {
+            self.loading = false
+          })
+      },
 
-          async _createAnswer () {
-            this.showConfirm(false)
-            this.loading = true
-          try {
-            this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-            this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-            const data = await axios({
-                url: `${BASE_API}/api/admin/risks/create`,
-                data: this.editItem,
-                method: 'POST'
-              })
-              this.message = data.data.message
-              this.color = data.data.status
-          } catch(e) {
-            console.log(e)
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
+      async fetchUsers () {
+        this.loadingUsers = true
 
-          async _deleteAnswer () {
-            this.loading = true
-          try {
-            const data = await axios({
-                url: `${BASE_API}/api/admin/risks/delete`,
-                data: this.editItem,
-                method: 'POST'
-              })
-              this.message = data.data.message
-              this.color = data.data.status
-              if (data.data.status == 'success') {
-                this.items.splice(this.defaultIndex, 1)
-                this.updateDialog = false
+        this.companies = await getCompaniesUsers()
+        
+        this.loadingUsers = false
+      },
+
+      runCallback () {
+        if (this.callback) {
+          this.callback()
+        }
+      },
+
+      async createAnswer () {
+        this.$refs.form.validate()
+        if (!this.valid) {
+          return
+        }
+        const self = this
+        await this.$dialog.confirm({
+          text: 'Do you really want to create a new answer?',
+          title: 'Warning',
+          actions: {
+            false: 'No',
+            true: {
+              color: 'red',
+              text: 'Yes',
+              handle: () => {
+                self._createAnswer()
               }
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
+            }
           }
-          },
+        })
+      },
 
-          async _updateAnswer () {
-            this.loading = true
-          try {
-            this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-            this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-            const data = await axios({
-                url: `${BASE_API}/api/admin/risks/update`,
-                data: this.editItem,
-                method: 'POST'
-              })
-              this.message = data.data.message
-              this.color = data.data.status
-              if (data.data.status == 'success') {
-                Object.assign(this.items[this.defaultIndex], this.editItem)
-                this.currentQuestion = this.editItem
+      async updateAnswer () {
+        this.$refs.updateForm.validate()
+        if (!this.updateValid) {
+          return
+        }
+        const self = this
+        await this.$dialog.confirm({
+          text: 'Do you really want to update this answer?',
+          title: 'Warning',
+          actions: {
+            false: 'No',
+            true: {
+              color: 'red',
+              text: 'Yes',
+              handle: () => {
+                self._updateAnswer()
               }
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
+            }
           }
-          },
+        })
+      },
+
+      async deleteAnswer () {
+        const self = this
+        await this.$dialog.confirm({
+          text: 'Do you really want to update this answer?',
+          title: 'Warning',
+          actions: {
+            false: 'No',
+            true: {
+              color: 'red',
+              text: 'Yes',
+              handle: () => {
+                self._deleteAnswer()
+              }
+            }
+          }
+        })
+      },
+
+      async _createAnswer () {
+        this.showConfirm(false)
+        this.loading = true
+        try {
+          this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
+          this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
+          const data = await axios({
+              url: `${BASE_API}/api/admin/risks/create`,
+              data: this.editItem,
+              method: 'POST'
+            })
+            this.message = data.data.message
+            this.color = data.data.status
+        } catch(e) {
+          console.log(e)
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
+
+      async _deleteAnswer () {
+        this.loading = true
+        try {
+          const data = await axios({
+              url: `${BASE_API}/api/admin/risks/delete`,
+              data: this.editItem,
+              method: 'POST'
+            })
+            this.message = data.data.message
+            this.color = data.data.status
+            if (data.data.status == 'success') {
+              this.items.splice(this.defaultIndex, 1)
+              this.updateDialog = false
+            }
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
+
+      async _updateAnswer () {
+        this.loading = true
+        try {
+          this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
+          this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
+          const data = await axios({
+              url: `${BASE_API}/api/admin/risks/update`,
+              data: this.editItem,
+              method: 'POST'
+            })
+            this.message = data.data.message
+            this.color = data.data.status
+            if (data.data.status == 'success') {
+              Object.assign(this.items[this.defaultIndex], this.editItem)
+              this.currentQuestion = this.editItem
+            }
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
     }
   }
 </script>

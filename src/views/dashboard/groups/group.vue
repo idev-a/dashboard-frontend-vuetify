@@ -45,11 +45,12 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
-                icon 
+                color="primary"
                 v-on="on"
                 @click.stop="showDetails(item)"
               >
-                <v-icon color="primary">mdi-information-outline</v-icon>
+                <!-- <v-icon color="primary">mdi-information-outline</v-icon> -->
+                Details
               </v-btn>
             </template>
             <span>Show Details</span>

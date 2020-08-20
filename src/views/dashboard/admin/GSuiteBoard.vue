@@ -60,7 +60,7 @@
                 />
                 </v-col>
                 <v-col cols='12' md="4">
-                    <v-file-input
+                  <v-file-input
                     accept=".json"
                     placeholder="Import GSuite private key file (.json file)"
                     prepend-icon="mdi-database-import"

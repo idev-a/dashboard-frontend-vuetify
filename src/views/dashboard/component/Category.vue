@@ -54,30 +54,31 @@
         </v-select>
       </v-card-title>
       <v-card-title>
-        <v-autocomplete
+        <v-select
           :loading="loading"
           v-if="category == 'all'"
           v-model="select"
           :items="categories"
-          chips
           dense
-          deletable-chips
           label="Select a category"
           multiple
           @input="updateData"
         >
-          <template v-slot:selection="data">
-            <v-chip
-              v-bind="data.attrs"
-              :input-value="data.selected"
-              close
-              @click="data.select"
-              @click:close="remove(data.item)"
+          <template v-slot:prepend-item>
+            <v-list-item
+              ripple
+              @click="toggleSelect"
             >
-              {{ data.item }}
-            </v-chip>
+              <v-list-item-action>
+                <v-icon :color="select.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Select All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
           </template>
-        </v-autocomplete>
+        </v-select>
       </v-card-title> 
       <v-data-table
         :loading="loading"
@@ -98,11 +99,12 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
-                icon 
+                color="primary"
                 v-on="on"
                 @click.stop="showDetails(item)"
               >
-                <v-icon>mdi-application</v-icon>
+                <!-- <v-icon>mdi-application</v-icon> -->
+                Details
               </v-btn>
             </template>
             <span>Show Details</span>
@@ -174,7 +176,7 @@
             width: 200
           })
         }
-        headers.push({ text: 'Actions', value: 'action', sortable: false })
+        headers.push({ text: 'Actions', value: 'action', sortable: false, align: 'center' })
         return headers
       },
       isLevelVisible () {
@@ -204,7 +206,18 @@
           color,
           border: '1px dashed'
         }
-      }
+      },
+      selectedAllCategories () {
+        return this.select.length == this.categories.length
+      },
+      selectedSomeCategories () {
+        return this.select.length > 0 && !this.selectedAllCategories
+      },
+      icon () {
+        if (this.selectedAllCategories) return 'mdi-close-box'
+        if (this.selectedSomeCategories) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
     },
 
     mounted () {
@@ -221,6 +234,16 @@
 
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
+
+      toggleSelect () {
+        this.$nextTick(() => {
+          if (this.selectedAllCategories) {
+            this.select = []
+          } else {
+            this.select = this.categories.slice()
+          }
+        })
+      },
 
       updateData () {
         if (this.select.length) {

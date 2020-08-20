@@ -679,7 +679,7 @@
 </template>
 
 <script>
-  import { fetchApps, fetchAppUsers, BASE_API } from '../../../api'
+  import { fetchApps, fetchAppUsers, BASE_API, getCompaniesUsers } from '../../../api'
   import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
   import axios from 'axios'
   import { mapState } from 'vuex'
@@ -936,16 +936,8 @@
       },
 
       async fetchDashboardUsers () {
-        let res = await axios.get(`${BASE_API}/api/users/all`)
-        res = res.data.users
-        const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.company_id))
-        const self = this;
-        companyUsers.map(user => {
-          if (!self.companies.includes(user.company_id)) {
-            self.companies.push(user.company_id) 
-          }
-        })
-
+        this.loadingCompany = true
+        this.companies = await getCompaniesUsers()
         this.loadingCompany = false
       },
 

@@ -49,7 +49,7 @@
 
 <script>
 	import axios from 'axios'
-	import { BASE_API } from '../../../../api'
+	import { BASE_API, getCompaniesUsers } from '../../../../api'
 	import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '../../../../util'
 	import { mapState, mapActions } from 'vuex';
 
@@ -59,7 +59,6 @@
 		data () {
 			return {
 				companies: [],
-				loading: [],
 				tabs: [
 					{
 						key: 'users',
@@ -81,16 +80,7 @@
 	    },
 
 		async mounted() {
-			await this.fetchCompanyData()
+			this.companies = await getCompaniesUsers()
 		},
-
-		methods: {
-			async fetchCompanyData () {
-	      		let res = await axios.get(`${BASE_API}/api/users/all`)
-	      		const companyUsers = res.data.users.filter(user => user.company_id && !DOMAIN_LIST.includes(user.company_id))
-	      		this.companies = companyUsers.map(user => user.company_id )
-	      		
-	      	},
-		}
 	}
 </script>

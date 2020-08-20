@@ -58,12 +58,13 @@
               <v-btn 
                 text 
                 v-on="on"
+                color="primary"
                 small
                 dense
                 @click.stop="showUsers(item)"
               >
                 <!-- <v-icon>mdi-account-search</v-icon> -->
-                Show Users
+                Users
               </v-btn>
             </template>
             <span>Show Users</span>
@@ -73,12 +74,13 @@
               <v-btn 
                 text 
                 small
+                color="primary"
                 dense
                 v-on="on"
                 @click="showDetails(item)"
               >
                 <!-- <v-icon>mdi-application</v-icon> -->
-                Show Details
+                Details
               </v-btn>
             </template>
             <span>Show Details</span>
