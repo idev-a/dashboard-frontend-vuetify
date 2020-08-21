@@ -349,7 +349,7 @@
                   <v-chip :color="item.has_2fa == 1 ? 'success' : 'default'" dark>{{ item.has_2fa == 1 ? 'Yes' : 'No' }}</v-chip>
                 </template>
                 <template v-slot:item.status="{ item }">
-                  <v-chip :color="item.status == 'Active' ? 'success' : 'default'" dark>{{ item.status == 'Active' ? 'Active' : 'Disabled' }}</v-chip>
+                  <v-chip :color="item.status == 'Active' ? 'success' : 'default'" dark>{{ lowerCase(item.status) == 'active' ? 'Active' : 'disabled' }}</v-chip>
                 </template>
               </v-data-table>
             </div>
@@ -683,6 +683,7 @@
   import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
   import axios from 'axios'
   import { mapState } from 'vuex'
+  import { lowerCase } from 'lodash'
 
   export default {
     name: 'DashboardApplications',
@@ -695,8 +696,8 @@
       company: '',
       companies: [],
       statusItems: [
-        'Active',
-        'Disabled'
+        {text: 'Active', value: 'active'},
+        {text: 'Disabled', value: 'disabled'}
       ],
       search: '',
       searchDetail: '',
@@ -902,6 +903,7 @@
     methods: {
       levelColor,
       beautifyEmails,
+      lowerCase,
 
       uniqueApp (value) {
         if (this.defaultAppIndex > -1) {

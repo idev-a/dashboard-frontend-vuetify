@@ -140,231 +140,121 @@
     </v-card>
 
     <v-dialog
-        v-model="createDialog"
-        max-width="1024"
-      >
-        <v-card>
-          <v-card-title class="display-2">
-            Answer a question
-          </v-card-title>
-            <v-card-text>
-              <v-form
-                  ref="form"
-                  v-model="valid"
-                >
-                <v-autocomplete
-                      v-if="mode == 'Edit'"
-                      v-model="editItem.question_id"
-                      label="Question" 
-                      item-value="id"
-                      item-text="Question"
-                      :rules="[rules.required]"
-                      :items="questions"
-                      clearable
-                      required
-                      >
-                    </v-autocomplete>
-                <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.answer"
-                      label="Answer" 
-                      auto-grow
-                      rows="1"
-                      :rules="[rules.required]"
-                      hide-details="auto"
-                      class="mb-3"
-                      required
-                    >
-                  </v-textarea>
-                <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.notes"
-                      label="Notes" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                    <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.link"
-                      label="Link" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                    <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.recommendation"
-                      label="Recommendation" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                    <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.impact"
-                      label="Impact" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                    <v-combobox
-                      v-if="mode == 'Edit'"
-                  v-model="editItem.tag"
-                  label="tag"
-                  multiple
-                  chips
-                  deletable-chips
-                ></v-combobox>
-                    <v-row>
-                      <v-col class="col-auto">
-                      <v-select
-                        v-if="mode == 'Edit'"
-                        v-model="editItem.risk_level"
-                        :rules="[rules.required]"
-                        label="Risk" 
-                        chips
-                        :items="riskItems"
-                        required
-                        >
-                      </v-select>
-                    </v-col>
-                    <v-col class="col-auto">
-                      <v-autocomplete
-                        v-if="mode == 'Edit'"
-                        v-model="editItem.company_id"
-                        :loading="loading"
-                        chips
-                        deletable-chips
-                        deletable-chips
-                        :items="companies"
-                        :rules="[rules.required]"
-                        label="Select a company"
-                        required
-                    />
-                    </v-col>
-                  </v-row>
-                    <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>
-                    <v-chip-group
-                      v-if="mode == 'Edit'"
-                  v-model="editItem.cia"
-                  column
-                  multiple
-                >
-                  <v-chip filter outlined v-for="cia in cias" class="text-capitalize">{{cia}}</v-chip>
-                </v-chip-group>
-                <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">T1 ~ T11</div>
-                <v-chip-group
-                      v-if="mode == 'Edit'"
-                  v-model="editItem.Ts"
-                  column
-                  multiple
-                >
-                  <v-chip filter outlined v-for="t in tList">{{t}}</v-chip>
-                </v-chip-group>
-            </v-form>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                v-if="mode == 'Edit'"
-                color="primary"
-                text
-                :loading="loading"
-                @click="createAnswer"
-              >
-                Create
-              </v-btn>
-              <v-btn
-                color="success"
-                text
-                :loading="loading"
-                @click="createDialog = false"
-              >
-                Close
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-    </v-dialog>
-
-    <v-dialog
-        v-model="updateDialog"
-        max-width="1024"
-      >
-        <v-card>
+      v-model="createDialog"
+      max-width="1024"
+    >
+      <v-card>
+        <v-card-title class="display-2">
+          Answer a question
+        </v-card-title>
           <v-card-text>
-            <question-detail v-if="mode == 'View'" :currentQuestion="currentQuestion"></question-detail>
             <v-form
-                ref="updateForm"
-                class="mt-4"
-                v-model="updateValid"
+              ref="form"
+              v-model="valid"
+            >
+              <v-autocomplete
+                v-if="mode == 'Edit'"
+                v-model="editItem.question_id"
+                label="Question" 
+                item-value="id"
+                item-text="Question"
+                :rules="[rules.required]"
+                :items="questions"
+                clearable
+                required
+                >
+              </v-autocomplete>
+              <v-textarea
+                v-if="mode == 'Edit'"
+                v-model="editItem.answer"
+                label="Answer" 
+                auto-grow
+                rows="1"
+                :rules="[rules.required]"
+                hide-details="auto"
+                class="mb-3"
+                required
               >
-              <div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
+              </v-textarea>
               <v-textarea
-                  v-if="mode == 'Edit'"
-                    v-model="editItem.answer"
-                    label="Answer" 
-                    auto-grow
-                    rows="1"
+                v-if="mode == 'Edit'"
+                v-model="editItem.notes"
+                label="Notes" 
+                auto-grow
+                rows="1"
+                hide-details="auto"
+                class="mb-3"
+              >
+              </v-textarea>
+              <v-textarea
+                v-if="mode == 'Edit'"
+                v-model="editItem.link"
+                label="Link" 
+                auto-grow
+                rows="1"
+                hide-details="auto"
+                class="mb-3"
+              >
+              </v-textarea>
+              <v-textarea
+                v-if="mode == 'Edit'"
+                v-model="editItem.recommendation"
+                label="Recommendation" 
+                auto-grow
+                rows="1"
+                hide-details="auto"
+                class="mb-3"
+              >
+              </v-textarea>
+              <v-textarea
+                v-if="mode == 'Edit'"
+                v-model="editItem.impact"
+                label="Impact" 
+                auto-grow
+                rows="1"
+                hide-details="auto"
+                class="mb-3"
+                >
+              </v-textarea>
+              <v-combobox
+                v-if="mode == 'Edit'"
+                v-model="editItem.tag"
+                label="tag"
+                multiple
+                chips
+                deletable-chips
+              ></v-combobox>
+              <v-row>
+                <v-col class="col-auto">
+                  <v-select
+                    v-if="mode == 'Edit'"
+                    v-model="editItem.risk_level"
                     :rules="[rules.required]"
-                    hide-details="auto"
-                    class="mb-3"
+                    label="Risk" 
+                    chips
+                    :items="riskItems"
                     required
-                  >
-                </v-textarea>
-              <v-textarea
-                  v-if="mode == 'Edit'"
-                    v-model="editItem.notes"
-                    label="Notes" 
-                    auto-grow
-                    rows="1"
+                    >
+                  </v-select>
+                </v-col>
+                <v-col class="col-auto">
+                  <v-autocomplete
+                    v-if="mode == 'Edit'"
+                    v-model="editItem.company_id"
+                    :loading="loading"
+                    chips
+                    deletable-chips
+                    deletable-chips
+                    :items="companies"
                     :rules="[rules.required]"
-                    hide-details="auto"
-                    class="mb-3"
-                  >
-                  </v-textarea>
-                  <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.recommendation"
-                      label="Recommendation" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                    <v-textarea
-                    v-if="mode == 'Edit'"
-                      v-model="editItem.impact"
-                      label="Impact" 
-                      auto-grow
-                      rows="1"
-                      hide-details="auto"
-                      class="mb-3"
-                    >
-                    </v-textarea>
-                  <v-row>
-                    <v-col class="col-auto">
-                    <v-select
-                      v-if="mode == 'Edit'"
-                      v-model="editItem.risk_level"
-                      label="Risk" 
-                      :items="riskItems"
-                      >
-                    </v-select>
-                  </v-col>
-                </v-row>
-                  <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>
-                  <v-chip-group
-                    v-if="mode == 'Edit'"
+                    label="Select a company"
+                    required
+                />
+                </v-col>
+              </v-row>
+              <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>
+              <v-chip-group
+                v-if="mode == 'Edit'"
                 v-model="editItem.cia"
                 column
                 multiple
@@ -373,7 +263,7 @@
               </v-chip-group>
               <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">T1 ~ T11</div>
               <v-chip-group
-                    v-if="mode == 'Edit'"
+                v-if="mode == 'Edit'"
                 v-model="editItem.Ts"
                 column
                 multiple
@@ -381,64 +271,171 @@
                 <v-chip filter outlined v-for="t in tList">{{t}}</v-chip>
               </v-chip-group>
           </v-form>
-            </v-card-text>
-            <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="mode == 'Edit'"
+            color="primary"
+            text
+            :loading="loading"
+            @click="createAnswer"
+          >
+            Create
+          </v-btn>
+          <v-btn
+            color="success"
+            text
+            :loading="loading"
+            @click="createDialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="updateDialog"
+      max-width="1024"
+    >
+      <v-card>
+        <v-card-text>
+          <question-detail v-if="mode == 'View'" :currentQuestion="currentQuestion"></question-detail>
+          <v-form
+            ref="updateForm"
+            class="mt-4"
+            v-model="updateValid"
+          >
+            <div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
+            <v-textarea
               v-if="mode == 'Edit'"
-              color="primary"
-              text
-              :loading="loading"
-              @click="updateAnswer"
-            >
-              Update
-            </v-btn>
-            <v-btn
+              v-model="editItem.answer"
+              label="Answer" 
+              auto-grow
+              rows="1"
+              :rules="[rules.required]"
+              hide-details="auto"
+              class="mb-3"
+              required
+            />
+            <v-textarea
               v-if="mode == 'Edit'"
-              color="primary"
-              text
-              :loading="loading"
-              @click="deleteAnswer"
+              v-model="editItem.notes"
+              label="Notes" 
+              auto-grow
+              rows="1"
+              hide-details="auto"
+              class="mb-3"
+            />
+            <v-textarea
+              v-if="mode == 'Edit'"
+              v-model="editItem.recommendation"
+              label="Recommendation" 
+              auto-grow
+              rows="1"
+              hide-details="auto"
+              class="mb-3"
             >
-              Delete
-            </v-btn>
-            <v-btn
-              color="primary"
-              text
-              :loading="loading"
-              @click="toggleMode"
+            </v-textarea>
+            <v-textarea
+              v-if="mode == 'Edit'"
+              v-model="editItem.impact"
+              label="Impact" 
+              auto-grow
+              rows="1"
+              hide-details="auto"
+              class="mb-3"
             >
-              {{ btnLabel }}
-            </v-btn>
-            <v-btn
-              color="success"
-              text
-              :loading="loading"
-              @click="updateDialog = false"
+            </v-textarea>
+            <v-row>
+              <v-col class="col-auto">
+                <v-select
+                  v-if="mode == 'Edit'"
+                  v-model="editItem.risk_level"
+                  label="Risk" 
+                  :items="riskItems"
+                  >
+                </v-select>
+              </v-col>
+            </v-row>
+            <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>
+            <v-chip-group
+              v-if="mode == 'Edit'"
+              v-model="editItem.cia"
+              column
+              multiple
             >
-              Close
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+              <v-chip filter outlined v-for="cia in cias" class="text-capitalize">{{cia}}</v-chip>
+            </v-chip-group>
+            <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">T1 ~ T11</div>
+            <v-chip-group
+              v-if="mode == 'Edit'"
+              v-model="editItem.Ts"
+              column
+              multiple
+            >
+              <v-chip filter outlined v-for="t in tList">{{t}}</v-chip>
+            </v-chip-group>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="mode == 'Edit'"
+            color="primary"
+            text
+            :loading="loading"
+            @click="updateAnswer"
+          >
+            Update
+          </v-btn>
+          <v-btn
+            v-if="mode == 'Edit'"
+            color="primary"
+            text
+            :loading="loading"
+            @click="deleteAnswer"
+          >
+            Delete
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            :loading="loading"
+            @click="toggleMode"
+          >
+            {{ btnLabel }}
+          </v-btn>
+          <v-btn
+            color="success"
+            text
+            :loading="loading"
+            @click="updateDialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
 
     <v-snackbar
-          v-model="snackbar"
-          bottom
-          :color="color"
-          >
-          {{ message }}
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              @click="snackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+      v-model="snackbar"
+      bottom
+      :color="color"
+      >
+      {{ message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
     <confirm-dialog @callback="runCallback"></confirm-dialog>
   </v-container>
@@ -462,11 +459,11 @@
         slackClientId: ' ',
         slackClientSecret: ' ',
         snackbar: false,
-            message: '',
-            color: 'success',
-            items: [],
-            selectedItems: [],
-            currentQuestion: '',
+        message: '',
+        color: 'success',
+        items: [],
+        selectedItems: [],
+        currentQuestion: '',
         details: false,
         expanded: [],
         selectedCategories:[],
@@ -492,34 +489,34 @@
         updateValid: true,
         editItem: {},
         callback: null,
-            headers: [
-              {
-                  text: 'Question',
-                  value: 'question',
-                  width: 350
-                },
-                {
-                  text: 'Answer',
-                  value: 'answer',
-                  width: 350
-                },
-                {
-                  text: 'Category',
-                  value: 'category',
-                  width: 180
-                },
-                { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 120 }
-            ],
-            rules: {
-              required: value => {
-                return !!value || 'This field is required.'
-              },
-              email: value => {
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                return pattern.test(value) || 'Invalid e-mail.'
-              },
-            }
+        headers: [
+          {
+            text: 'Question',
+            value: 'question',
+            width: 350
+          },
+          {
+            text: 'Answer',
+            value: 'answer',
+            width: 350
+          },
+          {
+            text: 'Category',
+            value: 'category',
+            width: 180
+          },
+          { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 120 }
+        ],
+        rules: {
+          required: value => {
+            return !!value || 'This field is required.'
+          },
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
         }
+      }
     },
 
     components: {
@@ -765,18 +762,18 @@
           this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
           this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
           const data = await axios({
-              url: `${BASE_API}/api/admin/risks/create`,
-              data: this.editItem,
-              method: 'POST'
-            })
-            this.message = data.data.message
-            this.color = data.data.status
+            url: `${BASE_API}/api/admin/risks/create`,
+            data: this.editItem,
+            method: 'POST'
+          })
+          this.message = data.data.message
+          this.color = data.data.status
         } catch(e) {
           console.log(e)
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 
@@ -784,21 +781,21 @@
         this.loading = true
         try {
           const data = await axios({
-              url: `${BASE_API}/api/admin/risks/delete`,
-              data: this.editItem,
-              method: 'POST'
-            })
-            this.message = data.data.message
-            this.color = data.data.status
-            if (data.data.status == 'success') {
-              this.items.splice(this.defaultIndex, 1)
-              this.updateDialog = false
-            }
+            url: `${BASE_API}/api/admin/risks/delete`,
+            data: this.editItem,
+            method: 'POST'
+          })
+          this.message = data.data.message
+          this.color = data.data.status
+          if (data.data.status == 'success') {
+            this.items.splice(this.defaultIndex, 1)
+            this.updateDialog = false
+          }
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 
@@ -808,21 +805,21 @@
           this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
           this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
           const data = await axios({
-              url: `${BASE_API}/api/admin/risks/update`,
-              data: this.editItem,
-              method: 'POST'
-            })
-            this.message = data.data.message
-            this.color = data.data.status
-            if (data.data.status == 'success') {
-              Object.assign(this.items[this.defaultIndex], this.editItem)
-              this.currentQuestion = this.editItem
-            }
+            url: `${BASE_API}/api/admin/risks/update`,
+            data: this.editItem,
+            method: 'POST'
+          })
+          this.message = data.data.message
+          this.color = data.data.status
+          if (data.data.status == 'success') {
+            Object.assign(this.items[this.defaultIndex], this.editItem)
+            this.currentQuestion = this.editItem
+          }
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
     }
