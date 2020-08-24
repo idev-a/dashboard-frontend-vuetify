@@ -771,7 +771,7 @@
         },
         {
           text: 'Risk',
-          value: 'risk',
+          value: 'risk_level',
         },
         { text: 'Actions', value: 'action', sortable: false },
       ],
