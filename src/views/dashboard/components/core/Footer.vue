@@ -55,18 +55,19 @@
       links: [
         {
           href: 'https://revampcybersecurity.com',
-          icon: 'mdi-home',
           text: 'Home',
         },
         {
           href: 'https://revampcybersecurity.com/privacy-policy/',
-          icon: 'mdi-twitter',
           text: 'Privacy Policy',
         },
         {
           href: 'https://revampcybersecurity.com/security/',
-          icon: 'mdi-twitter',
           text: 'Security',
+        },
+        {
+          href: '/help/get-started',
+          text: 'Help',
         },
       ],
       socials: [
