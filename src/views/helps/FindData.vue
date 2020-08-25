@@ -1,16 +1,21 @@
 <template>
-	
+  
 </template>
 <script>
-	import { HelpMixin } from './HelpMixin'
+  import { HelpMixin } from './HelpMixin'
 
-	export default {
-		name: 'FindData',
-		mixins: [HelpMixin],
+  export default {
+    name: 'FindData',
+    mixins: [HelpMixin],
 
-		data: () => {
-			return {
-				  items: [
+    data: () => {
+      return {
+        items: [
+          {
+            text: 'Dashboard',
+            disabled: false,
+            to: 'Dashboard',
+          },
           {
             text: 'Getting Started',
             disabled: false,
@@ -22,7 +27,7 @@
             to: 'Find Data',
           },
         ],
-			}
-		},
-	}
+      }
+    },
+  }
 </script>

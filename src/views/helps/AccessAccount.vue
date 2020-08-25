@@ -12,6 +12,11 @@
       return {
         items: [
           {
+            text: 'Dashboard',
+            disabled: false,
+            to: 'Dashboard',
+          },
+          {
             text: 'Getting Started',
             disabled: false,
             to: 'Get Started',

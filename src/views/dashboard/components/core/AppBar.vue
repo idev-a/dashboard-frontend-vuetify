@@ -109,7 +109,7 @@
           v-bind="attrs"
           v-on="on"
           text
-          to="/pages/help"
+          to="/help/get-started"
         >
           <v-icon>mdi-help-circle-outline</v-icon>
         </v-btn>

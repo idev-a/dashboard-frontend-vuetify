@@ -91,9 +91,7 @@ import { mapState } from 'vuex'
           return;
         }
         if (name === 'Dashboard') {
-          if (token === 'success') {
-            this.$router.push({ name });
-          }
+          this.$router.push({ name });
         } else {
           this.$router.push({ name });
         }

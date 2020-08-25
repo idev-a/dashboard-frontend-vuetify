@@ -5,11 +5,16 @@ export const HelpMixin = {
   data ()  {
     return {
       items: [
-        // {
-        //   text: 'Getting Started',
-        //   disabled: true,
-        //   to: 'Get Started',
-        // },
+        {
+          text: 'Dashboard',
+          disabled: false,
+          to: 'Dashboard',
+        },
+        {
+          text: 'Getting Started',
+          disabled: true,
+          to: 'Get Started',
+        },
       ],
     }
   },
