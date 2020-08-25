@@ -376,7 +376,7 @@
         },
 
     computed: {
-      ...mapState(['page', 'companyId']),
+      ...mapState(['page', 'companyId', 'userId']),
 
       indexedItems () {
         return this.items.map((item, index) => ({
@@ -587,7 +587,7 @@
       query: this.query,
       emails,
       company_id: this.companyId,
-      user_id: JSON.parse(localStorage.getItem('user')).id
+      user_id: this.userId
     }
 
     const json = JSON.stringify(data);
