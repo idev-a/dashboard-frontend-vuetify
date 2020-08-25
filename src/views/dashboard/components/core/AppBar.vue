@@ -101,7 +101,24 @@
       <span>Lock Screen</span>
     </v-tooltip>
 
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="ml-2"
+          min-width="0"
+          v-bind="attrs"
+          v-on="on"
+          text
+          to="/pages/help"
+        >
+          <v-icon>mdi-help-circle-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Help</span>
+    </v-tooltip>
+
     <v-menu
+      v-if="false"
       bottom
       left
       offset-y

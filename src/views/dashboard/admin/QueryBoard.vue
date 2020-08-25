@@ -28,29 +28,29 @@
           cols='12'
           md="3"
           >
-                <v-autocomplete
-            v-model="table"
-            :items="tables"
-            label="Tables"
-            outlined
-            @input="selectTable"
-                >
-                </v-autocomplete>
+            <v-autocomplete
+              v-model="table"
+              :items="tables"
+              label="Tables"
+              outlined
+              @input="selectTable"
+            >
+            </v-autocomplete>
             </v-col>
           <v-col
           cols='12'
           md="9"
           >
             <v-textarea
-                    v-model="query"
-                    label="Raw SQL Query" 
-                    hint="Ctrl + Enter to run the query"
-                    rows="2"
-                    auto_grow
-                    clearable
-                    outlined
-                    @keyup.ctrl.13="keyDownOnQuery"
-                />
+              v-model="query"
+              label="Raw SQL Query" 
+              hint="Ctrl + Enter to run the query"
+              rows="2"
+              auto_grow
+              clearable
+              outlined
+              @keyup.ctrl.13="keyDownOnQuery"
+          />
           </v-col>
         </v-row>
       <!-- hunter.io & findemails.com -->
@@ -66,16 +66,16 @@
           </v-card-title>
         <v-card-text>
           <v-textarea
-                    v-model="website"
-                    label="Multiple websites for hunter.io & findemails.com" 
-                    hint="Shift + Enter to run api"
-                    placeholder="grove.co"
-                    rows="2"
-                    auto-grow
-                    clearable
-                    outlined
-                    @keyup.shift.13="keyDownOnAPI"
-                />
+            v-model="website"
+            label="Multiple websites for hunter.io & findemails.com" 
+            hint="Shift + Enter to run api"
+            placeholder="grove.co"
+            rows="2"
+            auto-grow
+            clearable
+            outlined
+            @keyup.shift.13="keyDownOnAPI"
+          />
         </v-card-text>
       </v-card>
         
@@ -83,17 +83,17 @@
         <v-card 
           tile
           outlined
-        v-if="toggleEmailNotification"
+          v-if="toggleEmailNotification"
         >
         <v-card-title
-            class="my-3"
+          class="my-3"
         >
           Email Notification 
           <v-spacer></v-spacer>
           <v-btn class="main" @click="sendEmailNotification" :loading="loading" :disabled="!notifyPossible">
             Send
-              <v-icon right>mdi-send</v-icon>
-            </v-btn>
+            <v-icon right>mdi-send</v-icon>
+          </v-btn>
           <v-btn :loading="loading" :disabled="loading" @click="showCronDialog({dialog: true, type: 'run_email_notification', interval: 'Daily'})" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
         </v-card-title>
         <v-card-text>
@@ -101,71 +101,71 @@
             ref="form"
             v-model="noti.valid"
           > 
-                  <v-textarea
-                      v-model="noti.title"
-                      prepend-icon="mdi-message"
-                      label="Title" 
-                      hint="Title of the message"
-                      rows="1"
-                      auto-grow
-                      clearable
-                      :rules="[rules.required]"
-                  />
-                  <v-textarea
-                      v-model="noti.message"
-                      prepend-icon="mdi-message"
-                      label="Message" 
-                      hint="Content of the message"
-                      :rules="[rules.required]"
-                      auto-grow
-                      clearable
-                      rows="1"
-                  />
-                  <v-row>
-                    <v-col cols="12" md="5">
-                      <v-file-input
-                    prepend-icon="mdi-attachment"
-                    label="Attachments"
-                    ref="notiAttach"
-                    v-model="noti.attach"
-                    :loading="loading"
-                    multiple 
-                  ></v-file-input>
+            <v-textarea
+              v-model="noti.title"
+              prepend-icon="mdi-message"
+              label="Title" 
+              hint="Title of the message"
+              rows="1"
+              auto-grow
+              clearable
+              :rules="[rules.required]"
+            />
+            <v-textarea
+              v-model="noti.message"
+              prepend-icon="mdi-message"
+              label="Message" 
+              hint="Content of the message"
+              :rules="[rules.required]"
+              auto-grow
+              clearable
+              rows="1"
+            />
+            <v-row>
+              <v-col cols="12" md="5">
+                <v-file-input
+                  prepend-icon="mdi-attachment"
+                  label="Attachments"
+                  ref="notiAttach"
+                  v-model="noti.attach"
+                  :loading="loading"
+                  multiple 
+                ></v-file-input>
               </v-col>
-                <v-col cols="12" md="4">
-                  <v-text-field
-                          v-model="noti.templateId"
-                          prepend-icon="mdi-book-information-variant"
-                          label="Template ID" 
-                          hint="Sendgrid Template Id"
-                          :rules="[rules.required]"
-                      />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                      <v-text-field
-                          v-model="noti.interval"
-                          prepend-icon="mdi-clock-outline"
-                          label="Interval" 
-                          hint="Interval of the crontab"
-                          :rules="[rules.required]"
-                      />
-                  </v-col>
-              </v-row>
-              <v-row>
-                  <v-col cols="12">
-                      <v-textarea
-                          v-model.trim="noti.recipients"
-                          prepend-icon="mdi-email-outline"
-                          label="Recipients" 
-                          rows="1"
-                          auto-grow
-                          clearable
-                          placeholder="hello@example.com"
-                          hint="Please use comma(,) as a separator"
-                          :rules="[rules.required]"
-                      />
-                  </v-col>
-              </v-row>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  v-model="noti.templateId"
+                  prepend-icon="mdi-book-information-variant"
+                  label="Template ID" 
+                  hint="Sendgrid Template Id"
+                  :rules="[rules.required]"
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                  v-model="noti.interval"
+                  prepend-icon="mdi-clock-outline"
+                  label="Interval" 
+                  hint="Interval of the crontab"
+                  :rules="[rules.required]"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  v-model.trim="noti.recipients"
+                  prepend-icon="mdi-email-outline"
+                  label="Recipients" 
+                  rows="1"
+                  auto-grow
+                  clearable
+                  placeholder="hello@example.com"
+                  hint="Please use comma(,) as a separator"
+                  :rules="[rules.required]"
+                />  
+              </v-col>
+            </v-row>
           </form>
         </v-card-text>
         </v-card>
@@ -183,10 +183,9 @@
           
           <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
         </v-card-title>
-
             <v-card-title>
-                <v-autocomplete
-            :loading="loading"
+              <v-autocomplete
+                :loading="loading"
                 v-model="selectedHeaders"
                 :disabled="loading"
                 :items="headers"
@@ -196,7 +195,7 @@
                 item-value="value"
                 item-text="text"
                 hide-selected
-              @input="updateHeaders"
+                @input="updateHeaders"
               >
                 <template v-slot:selection="data">
                   <v-chip
@@ -242,44 +241,44 @@
         </v-data-table>
     </v-card>
     <v-snackbar
-          v-model="snackbar"
-          bottom
-          :color="color"
-          >
-          {{ message }}
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              @click="snackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+      v-model="snackbar"
+      bottom
+      :color="color"
+      >
+      {{ message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
         <v-dialog v-model="modal" max-width="1024">
           <v-card>
             <v-card-title>Propspects</v-card-title>
             <v-row class="px-3 pl-8">
               <v-col cols="12" md="8">
-              <v-text-field
-                      v-model="prospectSearch"
-                      append-icon="mdi-magnify"
-                      label="Search"
-                      class="mb-5"
-                      single-line
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="auto">
-                    <v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="main">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-                  </v-col> 
-              </v-row>
-              <v-card-text>
+                <v-text-field
+                  v-model="prospectSearch"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  class="mb-5"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="auto">
+                <v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="main">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              </v-col> 
+            </v-row>
+            <v-card-text>
               <v-data-table
-              v-model="selectedProspects"
+                v-model="selectedProspects"
                 :loading="loading"
                 :headers="prospectsHeaders"
                 :items="indexedProspects"
@@ -289,8 +288,8 @@
                 show-select
                 @update:items-per-page="getPageNum"
               > 
-          </v-data-table>
-        </v-card-text>
+            </v-data-table>
+          </v-card-text>
         </v-card>
     </v-dialog>
   </v-container>
