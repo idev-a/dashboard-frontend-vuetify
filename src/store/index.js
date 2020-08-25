@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 import publicdata from './public'
 import security from './security'
+import help from './help'
 import { getCompanyId, getCompanyName, userId, isAdmin } from '../api'
 
 export default new Vuex.Store({
@@ -124,6 +125,7 @@ export default new Vuex.Store({
   },
   modules: { 
     publicdata,
-    security
+    security,
+    help
   },
 })

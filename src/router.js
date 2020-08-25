@@ -55,6 +55,42 @@ let router = new Router({
       ],
     },
     {
+      path: '/help',
+      component: () => import('@/views/helps/Index'),
+      children: [
+        {
+          name: 'Get Started',
+          path: 'get-started',
+          component: () => import('@/views/helps/GetStarted'),
+        },
+        {
+          name: 'Register Account',
+          path: 'register-account',
+          component: () => import('@/views/helps/RegisterAccount'),
+        },
+        {
+          name: 'Why Register',
+          path: 'why-register',
+          component: () => import('@/views/helps/WhyRegister'),
+        },
+        {
+          name: 'Access Account',
+          path: 'access-account',
+          component: () => import('@/views/helps/AccessAccount'),
+        },
+        {
+          name: 'Find Data',
+          path: 'find-data',
+          component: () => import('@/views/helps/FindData'),
+        },
+        {
+          name: 'Purchase Product',
+          path: 'purchase-product',
+          component: () => import('@/views/helps/PurchaseProduct'),
+        }
+      ]
+    },
+    {
       path: '/',
       component: () => import('@/views/dashboard/Index'),
       children: [
