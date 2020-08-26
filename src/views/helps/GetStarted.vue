@@ -1,29 +1,26 @@
 <template>
-  <div>
-    
-    <v-container
-      id="login"
-      class="justify-center p-relative"
-      tag="section"
-    >
-      <v-row justify="center">
-        <v-col cols=12 lg=10>
-          <v-card tile flat class="mt-15">
-            <v-card-title class="help-title">
-              Getting Started
-            </v-card-title>
-            <v-card-text>
-              <ul class="help-list">
-                <li  v-for="(item, i) in menuItems" :key="i">
-                  <a @click="goto(item.name)" >{{ item.text}}</a>
-                </li>
-              </ul>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-container
+    id="GetStarted"
+    class="justify-center p-relative"
+    tag="section"
+  >
+    <v-row justify="center">
+      <v-col cols=12 lg=10>
+        <v-card tile flat class="mt-15">
+          <v-card-title class="help-title">
+            Getting Started
+          </v-card-title>
+          <v-card-text>
+            <ul class="help-list">
+              <li  v-for="(item, i) in menuItems" :key="i">
+                <a @click="goto(item.name)" >{{ item.text}}</a>
+              </li>
+            </ul>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -48,11 +45,6 @@
 </script>
 
 <style lang="scss">
-.help-title {
-  font-size: 30px;
-  margin-bottom: 1.875rem;
-}
-
 ul.help-list {
   li {
     margin: 1.5rem 0px;

@@ -4,7 +4,8 @@
     
     <pages-core-view />
 
-    <!-- <pages-core-footer /> -->
+    <help-core-footer />
+    
     <dashboard-core-footer />
   </v-app>
 </template>
@@ -16,7 +17,7 @@
     components: {
       PagesCoreAppBar: () => import('./components/core/AppBar'),
       DashboardCoreFooter: () => import('../dashboard/components/core/Footer'),
-      // PagesCoreFooter: () => import('./components/core/Footer'),
+      HelpCoreFooter: () => import('./components/core/PageFooter'),
       PagesCoreView: () => import('./components/core/View'),
     },
 
@@ -31,7 +32,11 @@
 </script>
 
 <style>
-  footer {
-    background: #f5f5f5 !important;
-  }
+footer {
+  background: #f5f5f5 !important;
+}
+.help-title {
+  font-size: 30px;
+  margin-bottom: 1.875rem;
+}
 </style>

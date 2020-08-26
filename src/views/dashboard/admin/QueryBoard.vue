@@ -258,39 +258,39 @@
       </template>
     </v-snackbar>
 
-        <v-dialog v-model="modal" max-width="1024">
-          <v-card>
-            <v-card-title>Propspects</v-card-title>
-            <v-row class="px-3 pl-8">
-              <v-col cols="12" md="8">
-                <v-text-field
-                  v-model="prospectSearch"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  class="mb-5"
-                  single-line
-                  hide-details
-                ></v-text-field>
-              </v-col>
-              <v-col cols="auto">
-                <v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="main">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-              </v-col> 
-            </v-row>
-            <v-card-text>
-              <v-data-table
-                v-model="selectedProspects"
-                :loading="loading"
-                :headers="prospectsHeaders"
-                :items="indexedProspects"
-                :items-per-page="page"
-                item-key="_id"
-                :search="prospectSearch"
-                show-select
-                @update:items-per-page="getPageNum"
-              > 
-            </v-data-table>
-          </v-card-text>
-        </v-card>
+    <v-dialog v-model="modal" max-width="1024">
+      <v-card>
+        <v-card-title>Propspects</v-card-title>
+          <v-row class="px-3 pl-8">
+            <v-col cols="12" md="8">
+              <v-text-field
+                v-model="prospectSearch"
+                append-icon="mdi-magnify"
+                label="Search"
+                class="mb-5"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn :loading="loading" :disabled="loading || (!prospects.length && !selectedProspects.length)" @click="downloadProspectCSV" color="main">Download CSV <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+            </v-col> 
+          </v-row>
+          <v-card-text>
+            <v-data-table
+              v-model="selectedProspects"
+              :loading="loading"
+              :headers="prospectsHeaders"
+              :items="indexedProspects"
+              :items-per-page="page"
+              item-key="_id"
+              :search="prospectSearch"
+              show-select
+              @update:items-per-page="getPageNum"
+            > 
+          </v-data-table>
+        </v-card-text>
+      </v-card>
     </v-dialog>
   </v-container>
 </template>

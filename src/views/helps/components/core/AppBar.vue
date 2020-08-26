@@ -15,49 +15,49 @@
     </v-container>
   </v-app-bar> -->
   <header class="gradient-light-blue">
-      <div class="container pt-8">
-        <v-img
-          class="hidden-xs-only"
-          width="200"
-            :src="require(`@/assets/rc-logo.png`)"
-          >
-        </v-img>
-      </div>
-      <div
-        class="section section-contact-page section-header"
-      >
-        <v-container
-          id="login"
-          class="justify-center"
-          tag="section"
+    <div class="container pt-8">
+      <v-img
+        class="hidden-xs-only"
+        width="200"
+          :src="require(`@/assets/rc-logo.png`)"
         >
-          <div class="text-center display-2 white--text">
-            <h1 class="font-weight-regular">How can we help?</h1>
-            <v-breadcrumbs class="justify-center" :items="items">
-              <template v-slot:divider>
-                <v-icon color="white">mdi-arrow-right-bold-outline</v-icon>
-              </template>
-              <template v-slot:item="d">
-                <a @click="goTo(d.item.to)" class="white--text display-1 font-weight-medium">{{d.item.text}}</a>
-              </template>
-            </v-breadcrumbs>
-          </div>
-        </v-container>
-      </div>
-      <v-row justify="center">
-        <v-col cols="12" md="9" style="position: relative;">
-          <v-card
-            class="help-search"
-            width="100%"
-          >
-            <v-text-field
-              placeholder="Search"
-              append-icon="mdi-magnify"
-            />
-          </v-card>
-        </v-col>
-      </v-row>
-    </header>
+      </v-img>
+    </div>
+    <div
+      class="section section-contact-page section-header"
+    >
+      <v-container
+        id="login"
+        class="justify-center"
+        tag="section"
+      >
+        <div class="text-center display-2 white--text">
+          <h1 class="font-weight-regular">{{title}}</h1>
+          <v-breadcrumbs class="justify-center" :items="items">
+            <template v-slot:divider>
+              <v-icon color="white">mdi-arrow-right-bold-outline</v-icon>
+            </template>
+            <template v-slot:item="d">
+              <a @click="goTo(d.item.to)" class="white--text display-1 font-weight-medium">{{d.item.text}}</a>
+            </template>
+          </v-breadcrumbs>
+        </div>
+      </v-container>
+    </div>
+    <v-row justify="center" v-if="showSearch">
+      <v-col cols="12" md="9" style="position: relative;">
+        <v-card
+          class="help-search"
+          width="100%"
+        >
+          <v-text-field
+            placeholder="Search"
+            append-icon="mdi-magnify"
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+  </header>
 </template>
 
 <script>
@@ -67,21 +67,14 @@ import { mapState } from 'vuex'
     name: 'PagesCoreAppBar',
 
     data: () => ({
-      titles: {
-        '/pages/lock': 'Lock Page',
-        '/pages/login': 'Login Page',
-        '/pages/register': 'Register Page',
-      },
-      searchItems: [
-        {text: 'test', value: 'test'}
-      ]
     }),
 
     computed: {
-      ...mapState('help', ['items']),
-      title () {
-        return this.titles[this.$route.path]
-      },
+      ...mapState('help', ['items', 'title']),
+
+      showSearch () {
+        return this.title != 'Contact Us'
+      }
     },
 
     methods: {

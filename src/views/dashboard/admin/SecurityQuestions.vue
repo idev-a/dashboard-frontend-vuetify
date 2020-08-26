@@ -521,7 +521,7 @@ export default {
       try {
         const res = await axios.post(`${BASE_API}/api/risks/answers/upload/${this.company_id}`, formData)
         payload.message = res.data.message
-        payload.color = res.data.status
+        payload.status = res.data.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {

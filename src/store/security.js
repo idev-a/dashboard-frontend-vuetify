@@ -41,7 +41,7 @@ export default {
 			state.loading = payload
 		},
 		showSnackbar(state, payload) {
-			state.color = payload.color
+			state.color = payload.status
 			state.message = payload.message
 			state.snackbar = true
 		},

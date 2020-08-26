@@ -87,6 +87,11 @@ let router = new Router({
           name: 'Purchase Product',
           path: 'purchase-product',
           component: () => import('@/views/helps/PurchaseProduct'),
+        },
+        {
+          name: 'Contact Us',
+          path: 'contact-us',
+          component: () => import('@/views/helps/ContactUs'),
         }
       ]
     },

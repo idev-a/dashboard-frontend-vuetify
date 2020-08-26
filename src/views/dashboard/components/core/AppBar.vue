@@ -291,8 +291,7 @@
       notification(data) {
         console.log('message', data)
         try {
-          const user_id = JSON.parse(localStorage.getItem('user')).id
-          if (data.user_id == user_id) {
+          if (data.user_id == this.userId) {
             this.notification = data.msg
             this.snackbar = true
             this.addNotification({
@@ -319,7 +318,7 @@
     }),
 
     computed: {
-      ...mapState(['drawer', 'connected', 'message', 'notifications', 'isAdmin']),
+      ...mapState(['drawer', 'connected', 'message', 'notifications', 'isAdmin', 'userId']),
     },
 
     async mounted () {
