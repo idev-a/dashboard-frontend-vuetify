@@ -43,16 +43,3 @@
     },
   }
 </script>
-
-<style lang="scss">
-ul.help-list {
-  li {
-    margin: 1.5rem 0px;
-    a {
-      font-size: 1.3125rem;
-      color: #333;
-      font-weight: 400;
-    }
-  }
-}
-</style>

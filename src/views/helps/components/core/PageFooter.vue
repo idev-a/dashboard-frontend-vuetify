@@ -6,9 +6,9 @@
   >
     <v-divider v-if="showDivider" class="mb-13 mt-10"/>
 
-    <v-row v-if="showDivider" justify="center" class="ma-0 pa-0">
-      <v-col cols=12 lg=10>
-        <v-row class="ma-0 pa-0">
+    <v-row v-if="showDivider" justify="center" no-gutters>
+      <v-col cols=12 lg=9>
+        <v-row>
           <v-col>
             <div class="help-title mb-2">
               Love what you see?

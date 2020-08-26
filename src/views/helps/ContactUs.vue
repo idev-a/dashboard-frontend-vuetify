@@ -126,6 +126,7 @@
           this.color = res.status
           this.snackbar = true
           this.loading = false
+          this.form = {}
         }
       }
     },

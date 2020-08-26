@@ -31,12 +31,22 @@
   }
 </script>
 
-<style>
+<style lang="scss">
 footer {
   background: #f5f5f5 !important;
 }
 .help-title {
   font-size: 30px;
   margin-bottom: 1.875rem;
+}
+ul.help-list {
+  li {
+    margin: 1.5rem 0px;
+    a {
+      font-size: 1.3125rem;
+      color: #333;
+      font-weight: 400;
+    }
+  }
 }
 </style>

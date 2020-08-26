@@ -27,7 +27,7 @@ import VueSocketIO from 'vue-socket.io'
 import VuetifyDialog from 'vuetify-dialog'
 import 'vuetify-dialog/dist/vuetify-dialog.css'
 import VueTheMask from 'vue-the-mask'
-import { VueReCaptcha } from 'vue-recaptcha-v3'
+// import { VueReCaptcha } from 'vue-recaptcha-v3'
 
 import { BASE_API } from './api.js'
 

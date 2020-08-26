@@ -44,8 +44,8 @@
         </div>
       </v-container>
     </div>
-    <v-row justify="center" v-if="showSearch">
-      <v-col cols="12" md="9" style="position: relative;">
+    <v-row justify="center" v-if="showSearch" no-gutters>
+      <v-col cols="12" md="8" style="position: relative;">
         <v-card
           class="help-search"
           width="100%"
