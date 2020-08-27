@@ -13,7 +13,7 @@
           <v-card-text>
             <ul class="help-list">
               <li  v-for="(item, i) in menuItems" :key="i">
-                <a @click="goto(item.name)" >{{ item.text}}</a>
+                <a @click="goto(item.id)" >{{ item.title}}</a>
               </li>
             </ul>
           </v-card-text>
@@ -29,17 +29,5 @@
   export default {
     name: 'Help',
     mixins: [HelpMixin],
-
-    data () {
-      return {
-        menuItems:[
-          {text: 'How to register an account?', name: 'Register Account'},
-          {text: 'Why do I have to register?', name: 'Why Register'},
-          {text: 'Cannot Log In / How to access my account', name: 'Access Account'},
-          {text: 'How to find data in my account?', name: 'Find Data'},
-          {text: 'What to do after you purchase a product from Revamp Cyber?', name: 'Purchase Product'}
-        ]
-      }
-    },
   }
 </script>

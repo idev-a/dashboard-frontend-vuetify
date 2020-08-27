@@ -83,19 +83,19 @@
         <v-card-text>
           <v-data-table
             v-model="selectedItems"
-              :loading="loading"
-              :headers="headers"
-              :items="items"
-              :items-per-page="page"
-              item-key="_id"
-              :search="search"
-              show-select
-              single-expand
-              show-expand
-              :expanded.sync="expanded"
-              @click:row="showDetails"
-              @update:items-per-page="getPageNum"
-            >
+            :loading="loading"
+            :headers="headers"
+            :items="items"
+            :items-per-page="page"
+            item-key="_id"
+            :search="search"
+            show-select
+            single-expand
+            show-expand
+            :expanded.sync="expanded"
+            @click:row="showDetails"
+            @update:items-per-page="getPageNum"
+          >
               <template v-slot:item.action="{ item }">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">

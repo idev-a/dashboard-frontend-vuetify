@@ -1,33 +1,33 @@
-
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import { Get } from '../../api'
 
 export const HelpMixin = {
   data ()  {
     return {
-      items: [
-        {
-          text: 'Dashboard',
-          disabled: false,
-          to: 'Dashboard',
-        },
-        {
-          text: 'Getting Started',
-          disabled: true,
-          to: 'Get Started',
-        },
-      ],
+      loading: false,
     }
   },
 
   mounted () {
-    this.setItems(this.items)
+    this.getHelps()
+  },
+
+  computed: {
+    ...mapState('help', ['menuItems', 'items'])
   },
   
   methods: {
-    ...mapActions('help', ['setItems']),
+    ...mapActions('help', ['setItems', 'setMenuItems']),
 
     goto (name) {
-      this.$router.push({ name })
+      this.$router.push({ path: `/help/get-started/${name}` })
+    },
+
+    async getHelps () {
+      this.loading = true
+      const res = await Get('admin/help/read_all')
+      this.setMenuItems(res.items)
+      this.loading = false
     }
   }
 }

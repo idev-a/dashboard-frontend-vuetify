@@ -185,6 +185,10 @@ import jwtDecode from 'jwt-decode'
               title: 'Bamboo Board',
               to: 'bamboo',
             },
+            {
+              title: 'Help Board',
+              to: 'help',
+            },
           ]
         },
         {

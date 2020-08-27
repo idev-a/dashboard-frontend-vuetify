@@ -64,29 +64,9 @@ let router = new Router({
           component: () => import('@/views/helps/GetStarted'),
         },
         {
-          name: 'Register Account',
-          path: 'register-account',
-          component: () => import('@/views/helps/RegisterAccount'),
-        },
-        {
-          name: 'Why Register',
-          path: 'why-register',
-          component: () => import('@/views/helps/WhyRegister'),
-        },
-        {
-          name: 'Access Account',
-          path: 'access-account',
-          component: () => import('@/views/helps/AccessAccount'),
-        },
-        {
-          name: 'Find Data',
-          path: 'find-data',
-          component: () => import('@/views/helps/FindData'),
-        },
-        {
-          name: 'Purchase Product',
-          path: 'purchase-product',
-          component: () => import('@/views/helps/PurchaseProduct'),
+          name: 'Help Details',
+          path: 'get-started/:menuId',
+          component: () => import('@/views/helps/HelpDetail'),
         },
         {
           name: 'Contact Us',
@@ -309,6 +289,15 @@ let router = new Router({
           name: 'Bamboo Board',
           path: 'admin/bamboo',
           component: () => import('@/views/dashboard/admin/BambooBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'Help Board',
+          path: 'admin/help',
+          component: () => import('@/views/dashboard/admin/Help/Help'),
           meta: {
             is_admin: true,
             requiresAuth: true

@@ -8,7 +8,7 @@
         class="pa-5"
       >
         <v-card-title>
-            GSuite Board
+          GSuite Board
         </v-card-title>
         <v-card-text>
           <v-tabs

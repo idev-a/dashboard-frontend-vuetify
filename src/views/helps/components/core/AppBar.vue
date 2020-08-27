@@ -19,7 +19,7 @@
       <v-img
         class="hidden-xs-only"
         width="200"
-          :src="require(`@/assets/rc-logo.png`)"
+        :src="require(`@/assets/rc-logo.png`)"
         >
       </v-img>
     </div>
@@ -73,7 +73,7 @@ import { mapState } from 'vuex'
       ...mapState('help', ['items', 'title']),
 
       showSearch () {
-        return this.title != 'Contact Us'
+        return false
       }
     },
 
@@ -100,7 +100,7 @@ import { mapState } from 'vuex'
   left: calc(50% - 175px);  
 }
 .section-header {
-  height: 12.625rem;
+  height: 10.625rem;
 }
 
 .gradient-light-blue {

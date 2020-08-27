@@ -49,4 +49,21 @@ ul.help-list {
     }
   }
 }
+
+ul.related-articles {
+  li {
+    margin: 1rem 0px;
+    a {
+      font-size: 1.0125rem;
+      color: #333;
+      font-weight: 300;
+    }
+  }
+}
+
+div.help-content {
+  img {
+    border-radius: 5px;
+  }
+}
 </style>
