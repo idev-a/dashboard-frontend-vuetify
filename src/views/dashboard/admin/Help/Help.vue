@@ -128,7 +128,7 @@
                   v-model="editItem.content"
                   id="editor" 
                   useCustomImageHandler 
-                  :customModules="customModulesForEditor"
+                  :editorOptions="editorSettings"
                   @image-added="handleImageAdded" 
                 > </vue-editor>
               </v-col>
