@@ -84,7 +84,7 @@
         :loading="loading"
         :headers="headers"
         :items="risks"
-        item-key="answer_id"
+        item-key="id"
         :items-per-page="page"
         :search="search"
         single-expand
@@ -94,6 +94,9 @@
         @click:row="showDetails"
         @update:items-per-page="getPageNum"
       >
+        <template v-slot:item.run_at="{ item }">
+          <span>{{ formatDate(item.run_at) }}</span>
+        </template>
         <template v-slot:item.action="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -130,7 +133,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../../api'
+  import { BASE_API, Get, Post } from '../../../api'
+  import { formatDate } from '../../../util'
   import axios from 'axios'
   import { mapState, mapActions } from 'vuex'
 
@@ -145,10 +149,8 @@
       details: false,
       expanded: [],
       select:[],
-      categories: [
-      ],
-      risks: [
-      ],
+      categories: [],
+      risks: [],
       filteredRisks:[], 
       risksOrigin: []
     }),
@@ -160,22 +162,26 @@
         let headers = [
           {
             text: 'Question',
-            value: 'question',
+            value: 'Question',
             width: 350
           },
           {
             text: 'Answer',
-            value: 'answer',
+            value: 'Answer',
             width: 300
           },
         ]
         if (this.category == 'all') {
           headers.push({
             text: 'Category',
-            value: 'category',
+            value: 'Category',
             width: 200
           })
         }
+        headers.push({
+          text: 'Date',
+          value: 'run_at',
+        })
         headers.push({ text: 'Actions', value: 'action', sortable: false, align: 'center' })
         return headers
       },
@@ -234,6 +240,7 @@
 
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
+      formatDate,
 
       toggleSelect () {
         this.$nextTick(() => {
@@ -288,29 +295,19 @@
           this.details = true
         }
       },
-      fetchRisks () {
+      async fetchRisks () {
         if (!this.isLevelVisible) {
           this.filteredRisks = []
         }
 
-        const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/risks/${this.category}/${this.companyId}`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.risks = res.data.risks
-              self.categories = res.data.categories
-              self.risksOrigin = res.data.risks
+        this.loading = true
+        const res = await Get(`risks/${this.category}/${this.companyId}`)
+        this.risks = res.risks
+        this.categories = res.categories
+        this.risksOrigin = res.risks
 
-              self.updateData()
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+        this.updateData()
+        this.loading = false
       },
       remove (item) {
         this.select.map((cat, i) => {

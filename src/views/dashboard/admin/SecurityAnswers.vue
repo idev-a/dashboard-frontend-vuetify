@@ -278,6 +278,7 @@
             v-if="mode == 'Edit'"
             color="primary"
             text
+            :disabled="loading || !valid"
             :loading="loading"
             @click="createAnswer"
           >
@@ -443,7 +444,7 @@
 
 <script>
   import axios from 'axios'
-  import { BASE_API, getCompaniesUsers } from '../../../api'
+  import { BASE_API, getCompaniesUsers, Get, Post } from '../../../api'
   import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
   import { mapState, mapActions } from 'vuex';
 
@@ -480,7 +481,7 @@
         defaultItem: {
           link: '',
           tag: '',
-          risk: 'High',
+          risk_level: 'high',
           cia: [],
           Ts: []
         },
@@ -492,17 +493,17 @@
         headers: [
           {
             text: 'Question',
-            value: 'question',
+            value: 'Question',
             width: 350
           },
           {
             text: 'Answer',
-            value: 'answer',
+            value: 'Answer',
             width: 350
           },
           {
             text: 'Category',
-            value: 'category',
+            value: 'Category',
             width: 180
           },
           { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 120 }
@@ -658,32 +659,20 @@
         }
       },
 
-      fetchRisks () {
-        const self = this
-        self.loading = true
-        self.selectedItems = []
-        self.selectedCategories = []
-        axios(`${BASE_API}/api/risks/all/${this.company}`, {
-            method: 'GET',
-          })
-          .then(function (res) {
-            self.items = addKey(res.data.risks)
-            self.categories = res.data.categories
-            self.risksOrigin = res.data.risks
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          .finally(() => {
-            self.loading = false
-          })
+      async fetchRisks () {
+        this.loading = true
+        this.selectedItems = []
+        this.selectedCategories = []
+        const res = await Get(`risks/all/${this.company}`)
+        this.items = addKey(res.risks)
+        this.categories = res.categories
+        this.risksOrigin = res.risks
+        this.loading = false
       },
 
       async fetchUsers () {
         this.loadingUsers = true
-
         this.companies = await getCompaniesUsers()
-        
         this.loadingUsers = false
       },
 
@@ -693,14 +682,9 @@
         }
       },
 
-      async createAnswer () {
-        this.$refs.form.validate()
-        if (!this.valid) {
-          return
-        }
-        const self = this
+      async confirm(msg, callback) {
         await this.$dialog.confirm({
-          text: 'Do you really want to create a new answer?',
+          text: msg,
           title: 'Warning',
           actions: {
             false: 'No',
@@ -708,11 +692,20 @@
               color: 'red',
               text: 'Yes',
               handle: () => {
-                self._createAnswer()
+                callback()
               }
             }
           }
         })
+      },
+
+      async createAnswer () {
+        this.$refs.form.validate()
+        if (!this.valid) {
+          return
+        }
+
+        await this.confirm('Do you really want to create a new answer?', this._createAnswer)
       },
 
       async updateAnswer () {
@@ -720,107 +713,51 @@
         if (!this.updateValid) {
           return
         }
-        const self = this
-        await this.$dialog.confirm({
-          text: 'Do you really want to update this answer?',
-          title: 'Warning',
-          actions: {
-            false: 'No',
-            true: {
-              color: 'red',
-              text: 'Yes',
-              handle: () => {
-                self._updateAnswer()
-              }
-            }
-          }
-        })
+        await this.confirm('Do you really want to update this answer?', this._updateAnswer)
       },
 
       async deleteAnswer () {
-        const self = this
-        await this.$dialog.confirm({
-          text: 'Do you really want to update this answer?',
-          title: 'Warning',
-          actions: {
-            false: 'No',
-            true: {
-              color: 'red',
-              text: 'Yes',
-              handle: () => {
-                self._deleteAnswer()
-              }
-            }
-          }
-        })
+        await this.confirm('Do you really want to update this answer?', this._deleteAnswer)
       },
 
       async _createAnswer () {
         this.showConfirm(false)
         this.loading = true
-        try {
-          this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-          this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-          const data = await axios({
-            url: `${BASE_API}/api/admin/risks/create`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-        } catch(e) {
-          console.log(e)
-          this.message = 'Something wrong happened on the server.'
-        } finally {
-          this.loading = false
-          this.snackbar = true
-        }
+        this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
+        this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
+        const res = await Post('admin/risks/create', this.editItem)
+        this.message = res.message
+        this.color = res.status
+        this.loading = false
+        this.snackbar = true
       },
 
       async _deleteAnswer () {
         this.loading = true
-        try {
-          const data = await axios({
-            url: `${BASE_API}/api/admin/risks/delete`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-          if (data.data.status == 'success') {
-            this.items.splice(this.defaultIndex, 1)
-            this.updateDialog = false
-          }
-        } catch(e) {
-          this.message = 'Something wrong happened on the server.'
-        } finally {
-          this.loading = false
-          this.snackbar = true
+        const res = await Post('admin/risks/delete', this.editItem)
+        this.message = res.message
+        this.color = res.status
+        if (res.status == 'success') {
+          this.items.splice(this.defaultIndex, 1)
+          this.updateDialog = false
         }
+        this.loading = false
+        this.snackbar = true
       },
 
       async _updateAnswer () {
         this.loading = true
-        try {
-          this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-          this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
-          const data = await axios({
-            url: `${BASE_API}/api/admin/risks/update`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-          if (data.data.status == 'success') {
-            Object.assign(this.items[this.defaultIndex], this.editItem)
-            this.currentQuestion = this.editItem
-          }
-        } catch(e) {
-          this.message = 'Something wrong happened on the server.'
-        } finally {
-          this.loading = false
-          this.snackbar = true
+        this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
+        this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
+        const res = await Post('admin/risks/update', this.editItem,)
+        this.message = res.message
+        this.color = res.status
+        if (res.status == 'success') {
+          Object.assign(this.items[this.defaultIndex], this.editItem)
+          this.currentQuestion = this.editItem
         }
+        this.loading = false
+        this.snackbar = true
       },
     }
   }

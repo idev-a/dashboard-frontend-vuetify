@@ -1,6 +1,6 @@
 <template>
 	<div
-      class="px-4"
+    class="px-4 py-2"
     >
       <v-row
         align="center"
@@ -19,7 +19,7 @@
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
             <span class="text--secondary">
-            	{{currentQuestion.question}} 
+            	{{currentQuestion.Question}} 
             	<v-chip :color="levelColor(currentQuestion.risk_level)" dark>
 		            <div class="subtitle-2 text-capitalize">{{ currentQuestion.risk_level }}</div>
           	  	</v-chip>
@@ -42,7 +42,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{currentQuestion.answer}}</span>
+            <span class="text--secondary">{{currentQuestion.Answer}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>
@@ -61,7 +61,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{currentQuestion.category}}</span>
+            <span class="text--secondary">{{currentQuestion.Category}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>
@@ -134,7 +134,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{currentQuestion.notes}}</span>
+            <span class="text--secondary">{{currentQuestion.Notes}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>
@@ -159,9 +159,9 @@
           <v-chip
             outlined
             class="ma-2"
-            :color="currentQuestion.confidentiality == 1 ? 'red accent-2' : 'grey accent-4'"
+            :color="currentQuestion.Confidentiality == 1 ? 'red accent-2' : 'grey accent-4'"
           >
-            <v-avatar v-if="currentQuestion.confidentiality == 1" left>
+            <v-avatar v-if="currentQuestion.Confidentiality == 1" left>
               <v-icon>mdi-checkbox-marked-circle</v-icon>
             </v-avatar>
             Confidentiality
@@ -170,9 +170,9 @@
           <v-chip
             outlined
             class="ma-2"
-            :color="currentQuestion.integrity == 1 ? 'red accent-2' : 'grey accent-4'"
+            :color="currentQuestion.Integrity == 1 ? 'red accent-2' : 'grey accent-4'"
           >
-            <v-avatar v-if="currentQuestion.integrity == 1" left>
+            <v-avatar v-if="currentQuestion.Integrity == 1" left>
               <v-icon>mdi-checkbox-marked-circle</v-icon>
             </v-avatar>
             Integrity

@@ -181,6 +181,7 @@
             color="primary"
             text
             :loading="loading"
+            :disabled="loading || !valid"
             @click="_createQuestion"
           >
             Create
@@ -189,6 +190,7 @@
             v-if="editedIndex !== -1"
             color="primary"
             text
+            :disabled="loading || !valid"
             :loading="loading"
             @click="_updateQuestion"
           >

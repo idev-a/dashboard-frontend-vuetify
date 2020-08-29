@@ -579,6 +579,9 @@ export const beautifyDate = (date) => {
 }
 
 export const formatDate = (date) => {
+  if (!date) {
+    return '02/03/2020'
+  }
   return moment(date).format('MM/DD/YYYY')
 }
 

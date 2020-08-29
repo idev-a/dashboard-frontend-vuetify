@@ -1,9 +1,9 @@
 <template>
   <div>
     <div
-        color="success"
-        class="px-3 py-1"
-      >
+      color="success"
+      class="px-3 py-1"
+    >
         <!-- <v-card-title>
           {{ currentUser.firstname_lastname }}
         </v-card-title> -->
@@ -129,8 +129,8 @@
           <v-col
             cols="9"
           >
-              <b class="display-1">Applications</b>
-              <div class="d-flex flex-wrap text--secondary"><v-chip v-for="app in currentUser.apps" class="ma-2"><span class="subtitle-1">{{app.name}}</span></v-chip></div>
+            <b class="display-1">Applications</b>
+            <div class="d-flex flex-wrap text--secondary"><v-chip v-for="app in currentUser.apps" class="ma-2"><span class="subtitle-1">{{app.name}}</span></v-chip></div>
           </v-col>
         </v-row>
       </div>
@@ -139,7 +139,7 @@
         v-model="deviceDialog"
       >
         <v-card
-          >
+        >
           <div class="d-flex py-3 px-5 align-center">
             <div class="display-1 ml-4">Mobile Devices ({{ currentUser.email }})</div>
             <v-spacer></v-spacer>
@@ -199,46 +199,46 @@
         selectedDevices: [],
         deviceDialog: false,
         deviceHeaders: [
-            {
-              text: 'Device Id',
-              value: 'deviceId'
-            },
-            {
-              text: 'Model',
-              value: 'model'
-            },
-            {
-              text: 'OS',
-              value: 'os'
-            },
-            {
-              text: 'Type',
-              value: 'type'
-            },
-            {
-              text: 'Status',
-              value: 'status'
-            },
-            // {
-            //   text: 'Hardware Id',
-            //   value: 'hardwareId'
-            // },
-            {
-              text: 'First Sync',
-              value: 'firstsync'
-            },
-            {
-              text: 'Last Sync',
-              value: 'lastsync'
-            },
-            // {
-            //   text: 'User Agent',
-            //   value: 'useragent'
-            // },
-          ],
-          snackbar: false,
-          color: '',
-          message: '',
+          {
+            text: 'Device Id',
+            value: 'deviceId'
+          },
+          {
+            text: 'Model',
+            value: 'model'
+          },
+          {
+            text: 'OS',
+            value: 'os'
+          },
+          {
+            text: 'Type',
+            value: 'type'
+          },
+          {
+            text: 'Status',
+            value: 'status'
+          },
+          // {
+          //   text: 'Hardware Id',
+          //   value: 'hardwareId'
+          // },
+          {
+            text: 'First Sync',
+            value: 'firstsync'
+          },
+          {
+            text: 'Last Sync',
+            value: 'lastsync'
+          },
+          // {
+          //   text: 'User Agent',
+          //   value: 'useragent'
+          // },
+        ],
+        snackbar: false,
+        color: '',
+        message: '',
       }
     },
 
@@ -248,27 +248,26 @@
       highlightText,
 
       getPageNum (_page) {
-          localStorage.setItem('page', _page)
+        localStorage.setItem('page', _page)
       },
 
       async showMobileDevices () {
-          this.loading = true
-          this.devices = []
-          this.deviceDialog = true
-          this.selectdDevices = []
-          try {
-            const res = await axios.get(`${BASE_API}/api/admin/gsuite/mobile/${this.currentUser.email}`)
-            this.devices = res.data.items
-            this.message = res.data.message
-            this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
+        this.loading = true
+        this.devices = []
+        this.deviceDialog = true
+        this.selectdDevices = []
+        try {
+          const res = await axios.get(`${BASE_API}/api/admin/gsuite/mobile/${this.currentUser.email}`)
+          this.devices = res.data.items
+          this.message = res.data.message
+          this.color = res.data.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
         }
+      }
     }
   }
-
 </script>

@@ -146,6 +146,7 @@
     <!-- manage order of helps using DnD -->
     <v-dialog
       v-model="manageDlg"
+      max-width="600"
     >
       <v-card
         class=""
@@ -264,7 +265,8 @@
         editItem: {},
         defaultItem: {
           title: '',
-          content: ''
+          content: '',
+          status: 1
         },
         defaultIndex: -1,
         customToolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["image", "code-block"]],
