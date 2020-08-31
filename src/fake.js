@@ -18,6 +18,11 @@ const RISK_LEVELS = [
   'informational'
 ]
 
+const random_risk_level = () => {
+  const risk_idx = random.int(0, 4)
+  return RISK_LEVELS[risk_idx]
+}
+
 const ramdomOrg = (limit) => {
   const orgs = ['/']
   Array.apply(null, Array(limit)).map(() => {
@@ -32,6 +37,17 @@ const isUniqueEmail = (email, items) => {
 
   return filtered && filtered.length == 0
 }
+
+const getDateArray = (start, end) => {
+    var arr = new Array();
+    var dt = new Date(start);
+    while (dt <= end) {
+        arr.push(moment(dt).format('YYYY-MM-DD'));
+        dt.setDate(dt.getDate() + 1);
+    }
+    return arr;
+}
+
 
 export const generateGeneralUsers = ({userCnt, company_id}) => {
   // org_unit_path
@@ -94,7 +110,7 @@ export const generateGeneralUsers = ({userCnt, company_id}) => {
 
 export const generateUsers = ({general_bamboo}) => {
   return general_bamboo.map(user => {
-    const risk_idx = random.int(0, 2)
+    
     return {
       id: user.id,
       firstname_lastname: user.fullName,
@@ -107,7 +123,7 @@ export const generateUsers = ({general_bamboo}) => {
       department: user.department,
       job_title: user.job_title,
       user_type: '',
-      risk_level: RISK_LEVELS[risk_idx],
+      risk_level: random_risk_level(),
       observations: '',
       privileged_account: Number(faker.random.boolean()),
       jamf_installed: Number(faker.random.boolean()),
@@ -273,75 +289,81 @@ export const generateCompanyApps = ({company_id, apps}) => {
   return company_applications
 }
 
-export const generateSecurityAnswers = ({company_id, questions}) => {
+export const generateSecurityAnswers = ({company_id, questions, startDate, endDate}) => {
   const answers = []
 
   const totalQuestionsCnt = random.uniformInt(10, parseInt(questions.length/3))()
-  questions.map((question, id) => {
-    const risk_idx = random.int(0, 2)
-    
-    // limit the # randomly
-    if (answers.length > totalQuestionsCnt) {
-      return
-    }
+  const run_atArray = getDateArray(new Date(startDate), new Date(endDate))
+  let id = 0
+  run_atArray.map( (run_at) => {
+    if (faker.random.boolean()) {
+      questions.map((question) => {    
+        id++
 
-    // skip the public data
-    if (question.mapping) {
-      return
+        // limit the # randomly
+        // if (answers.length > totalQuestionsCnt) {
+        //   return
+        // }
+
+        // skip the public data
+        if (question.mapping) {
+          return
+        }
+        if (!faker.random.boolean()) {
+          return
+        }
+        const idx = random.int(0, ANSWER_TEMPLATES.length-1)
+        const Answer = ANSWER_TEMPLATES[idx]
+        const link = ''
+        const tag = ''
+        const risk_level = random_risk_level()
+        const informational_risk = Number(faker.random.boolean())
+        const Confidentiality = Number(faker.random.boolean())
+        const Integrity = Number(faker.random.boolean())
+        const availability = Number(faker.random.boolean())
+        const T1 = Number(faker.random.boolean())
+        const T2 = Number(faker.random.boolean())
+        const T3 = Number(faker.random.boolean())
+        const T4 = Number(faker.random.boolean())
+        const T5 = Number(faker.random.boolean())
+        const T6 = Number(faker.random.boolean())
+        const T7 = Number(faker.random.boolean())
+        const T8 = Number(faker.random.boolean())
+        const T9 = Number(faker.random.boolean())
+        const T10 = Number(faker.random.boolean())
+        const T11 = Number(faker.random.boolean())
+        const Notes = ''
+        answers.push({
+          id,
+          question_id: question.id,
+          question: question.Question,
+          Answer,
+          Category: question.Category,
+          description: question.Description,
+          link,
+          tag,
+          risk_level,
+          Confidentiality,
+          Integrity,
+          availability,
+          T1,
+          T2,
+          T3,
+          T4,
+          T5,
+          T6,
+          T7,
+          T8,
+          T9,
+          T10,
+          T11,
+          Notes,
+          company_id,
+          run_at
+        })
+      })
     }
-    if (!random.uniformBoolean()) {
-      return
-    }
-    const idx = random.int(0, ANSWER_TEMPLATES.length-1)
-    const Answer = ANSWER_TEMPLATES[idx]
-    const link = ''
-    const tag = ''
-    const risk_level = RISK_LEVELS[risk_idx]
-    const informational_risk = Number(faker.random.boolean())
-    const Confidentiality = Number(faker.random.boolean())
-    const Integrity = Number(faker.random.boolean())
-    const availability = Number(faker.random.boolean())
-    const T1 = Number(faker.random.boolean())
-    const T2 = Number(faker.random.boolean())
-    const T3 = Number(faker.random.boolean())
-    const T4 = Number(faker.random.boolean())
-    const T5 = Number(faker.random.boolean())
-    const T6 = Number(faker.random.boolean())
-    const T7 = Number(faker.random.boolean())
-    const T8 = Number(faker.random.boolean())
-    const T9 = Number(faker.random.boolean())
-    const T10 = Number(faker.random.boolean())
-    const T11 = Number(faker.random.boolean())
-    const Notes = ''
-    answers.push({
-      id,
-      question_id: question.id,
-      question: question.Question,
-      Answer,
-      Category: question.Category,
-      description: question.Description,
-      link,
-      tag,
-      risk_level,
-      Confidentiality,
-      Integrity,
-      availability,
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      Notes,
-      company_id
-    })
   })
-
   return answers
 }
 
@@ -386,7 +408,9 @@ export const generateData = ({
     company_id,
     apps,
     questions,
-    devices
+    devices,
+    startDate,
+    endDate
   }) => {
   userCnt = Number(userCnt)
   groupCnt = Number(groupCnt)
@@ -396,7 +420,7 @@ export const generateData = ({
   const google_groups = generateGoogleGroups({groupCnt, company_id, general_bamboo})
   const groups = generateGroups({google_groups})
   const company_applications = generateCompanyApps({company_id, apps})
-  const security_answers = generateSecurityAnswers({company_id, questions})
+  const security_answers = generateSecurityAnswers({company_id, questions, startDate, endDate})
   const gsuite_devices = generateDevices({company_id, users, devices})
 
   return {
