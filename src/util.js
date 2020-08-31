@@ -383,8 +383,8 @@ const lineChart = (title, subtitle, yLabel, categories, series) => {
     },
     legend: {
       layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
+      align: 'center',
+      verticalAlign: 'top'
     },
 
     plotOptions: {
@@ -560,13 +560,15 @@ export const ciaCategoryChart = (data, categories) => {
   return columnChart(title, subtitle, yLabel, data, categories)
 }
 
-export const highRiskByCatLineChart = (series, categories) => {
+export const highRiskByCatLineChart = (data) => {
   const title = 'High Risk by Category over Time'
   let subtitle = ''
   let yLabel = '# of risks'
 
-  series = JSON.parse(JSON.stringify(series))
-  categories = JSON.parse(JSON.stringify(categories))
+  console.log(data)
+
+  const series = JSON.parse(JSON.stringify(data.series))
+  const categories = JSON.parse(JSON.stringify(data.categories))
   return lineChart(title, subtitle, yLabel, categories, series)
 }
 

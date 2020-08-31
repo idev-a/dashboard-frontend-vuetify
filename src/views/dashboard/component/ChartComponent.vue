@@ -479,7 +479,7 @@ import { mapState, mapActions } from 'vuex'
       },
 
       highRiskByCatLineChart () {
-        return highRiskByCatLineChart(this.catLineChart.series, this.catLineChart.categories)
+        return highRiskByCatLineChart(this.catLineChart)
       }
     },
 
