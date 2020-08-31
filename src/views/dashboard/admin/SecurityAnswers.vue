@@ -124,6 +124,9 @@
                   <span>Update Answer</span>
                 </v-tooltip>
               </template>
+              <template v-slot:item.Answer="{ item }">
+                <span>{{removeQuotes(item.Answer)}}</span>
+              </template>
               <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
                 <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
                 <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
@@ -445,7 +448,7 @@
 <script>
   import axios from 'axios'
   import { BASE_API, getCompaniesUsers, Get, Post } from '../../../api'
-  import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
+  import { downloadCSV, addKey, DOMAIN_LIST, removeQuotes } from '../../../util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -569,6 +572,7 @@
     methods: {
       ...mapActions(['showConfirm', 'showCronDialog']),
       ...mapActions('security', ['fetchQuestions']),
+      removeQuotes,
 
       getPageNum (_page) {
         localStorage.setItem('page', _page)

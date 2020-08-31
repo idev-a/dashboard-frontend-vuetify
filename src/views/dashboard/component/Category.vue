@@ -102,16 +102,33 @@
             <template v-slot:activator="{ on }">
               <v-btn 
                 text 
+                small
                 color="primary"
                 v-on="on"
                 @click.stop="showDetails(item)"
               >
-                <!-- <v-icon>mdi-application</v-icon> -->
                 Details
               </v-btn>
             </template>
             <span>Show Details</span>
           </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn 
+                text 
+                small
+                color="primary"
+                v-on="on"
+                @click.stop="showHistory(item)"
+              >
+                History
+              </v-btn>
+            </template>
+            <span>Show History</span>
+          </v-tooltip>
+        </template>
+        <template v-slot:item.Answer="{ item }">
+          <span>{{removeQuotes(item.Answer)}}</span>
         </template>
         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
           <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
@@ -129,12 +146,85 @@
         </template>
       </v-data-table>
     </v-card>
+
+    <!-- history -->
+    <v-dialog
+      v-model="dialog"
+    >
+      <v-card>
+        <div class="d-flex py-3 px-5 align-center">
+          <div class="display-1 ml-4">History ({{ history.length }})</div>
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="searchHistory"
+            append-icon="mdi-magnify"
+            label="Search"
+            class="mb-3"
+            single-line
+            hide-details
+          />
+        </div>
+        <v-card-text>
+          <v-data-table
+            :loading="loading"
+            :headers="headers"
+            :items="history"
+            item-key="id"
+            single-expand
+            calculate-widths
+            show-expand
+            :expanded.sync="expandedHistory"
+            @click:row="showDetailsInHistory"
+            :items-per-page="page"
+            :search="searchHistory"
+            @update:items-per-page="getPageNum"
+          >
+            <template v-slot:item.run_at="{ item }">
+              <span>{{ formatDate(item.run_at) }}</span>
+            </template>
+            <template v-slot:item.Answer="{ item }">
+              <span>{{removeQuotes(item.Answer)}}</span>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn 
+                    text 
+                    small
+                    color="primary"
+                    v-on="on"
+                    @click.stop="showDetailsInHistory(item)"
+                  >
+                    Details
+                  </v-btn>
+                </template>
+                <span>Show Details</span>
+              </v-tooltip>
+            </template>
+            <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+              <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
+              <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
+            </template>
+            <template v-slot:expanded-item="{ headers }">
+              <td :colspan="headers.length">
+                <div
+                  v-if="detailsHistory"
+                  class="px-4"
+                >
+                  <question-detail :currentQuestion="currentQuestion"></question-detail>
+                </div>
+              </td>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
   import { BASE_API, Get, Post } from '../../../api'
-  import { formatDate } from '../../../util'
+  import { formatDate, removeQuotes } from '../../../util'
   import axios from 'axios'
   import { mapState, mapActions } from 'vuex'
 
@@ -143,14 +233,19 @@
 
     data: () => ({
       loading: false,
+      dialog: false,
       search: '',
+      searchHistory: '',
       ripple: false,
       currentQuestion: '',
       details: false,
+      detailsHistory: false,
       expanded: [],
+      expandedHistory: [],
       select:[],
       categories: [],
       risks: [],
+      history: [],
       filteredRisks:[], 
       risksOrigin: []
     }),
@@ -182,7 +277,7 @@
           text: 'Date',
           value: 'run_at',
         })
-        headers.push({ text: 'Actions', value: 'action', sortable: false, align: 'center' })
+        headers.push({ text: 'Actions', value: 'action', sortable: false, align: 'center', width: 180 })
         return headers
       },
       isLevelVisible () {
@@ -241,6 +336,7 @@
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
       formatDate,
+      removeQuotes,
 
       toggleSelect () {
         this.$nextTick(() => {
@@ -294,6 +390,24 @@
           this.currentQuestion = item
           this.details = true
         }
+      },
+      showDetailsInHistory (item) {
+        if (this.expandedHistory.includes(item)) {
+          const index = this.expandedHistory.indexOf(item);
+          this.expandedHistory.splice(index, 1);
+        } else {
+          this.expandedHistory.push(item)
+          this.currentQuestion = item
+          this.detailsHistory = true
+        }
+      },
+      async showHistory (item) {
+        this.dialog = true
+        this.loading = true
+        this.history = []
+        const res = await Get(`risks/history/${item.question_id}/${this.companyId}`)
+        this.history = res.risks
+        this.loading = false
       },
       async fetchRisks () {
         if (!this.isLevelVisible) {

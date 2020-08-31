@@ -83,7 +83,7 @@ let router = new Router({
         {
           name: 'Dashboard',
           path: '',
-          component: () => import('@/views/dashboard/Dashboard'),
+          component: () => import('@/views/dashboard/home/Dashboard'),
           meta: {
             requiresAuth: true
           }
