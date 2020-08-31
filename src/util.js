@@ -362,6 +362,56 @@ export const columnChart = (title, subtitle, yLabel, series, categories, interva
   }
 }
 
+const lineChart = (title, subtitle, yLabel, categories, series) => {
+  return {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: title
+    },
+    subtitle: {
+        text: subtitle
+    },
+    xAxis: {
+        categories,
+    },
+    yAxis: {
+      title: {
+          text: yLabel
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+      series: {
+        label: {
+          connectorAllowed: false
+        },
+      }
+    },
+    series,
+    responsive: {
+      rules: [{
+        condition: {
+          maxWidth: 500
+        },
+        chartOptions: {
+          legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
+          }
+        }
+      }]
+    }
+  }
+}
+
 export const riskLevelChart = (critical, high, medium, low, informational) => {
   return riskPieChart({critical, high, medium, low, informational, title:'Risk Levels'})
 }
@@ -506,7 +556,18 @@ export const ciaCategoryChart = (data, categories) => {
   let subtitle = `${categories.length} Categories`
   let yLabel = '#'
 
+
   return columnChart(title, subtitle, yLabel, data, categories)
+}
+
+export const highRiskByCatLineChart = (series, categories) => {
+  const title = 'High Risk by Category over Time'
+  let subtitle = ''
+  let yLabel = '# of risks'
+
+  series = JSON.parse(JSON.stringify(series))
+  categories = JSON.parse(JSON.stringify(categories))
+  return lineChart(title, subtitle, yLabel, categories, series)
 }
 
 export const get_json = (val) => {

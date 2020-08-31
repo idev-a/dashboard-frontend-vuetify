@@ -251,6 +251,49 @@
     <v-col
       cols="12"
       md="12"
+    >
+      <v-menu  
+        top 
+        origin="center center"
+        transition="scale-transition"
+        close-on-content-click
+        offset-y 
+        offset-x>
+        <template v-slot:activator="{ on, attrs }">
+          <v-card
+            class="pt-3 min-50"
+            :loading="loadingCatLine"
+          > 
+            <v-icon    
+              v-bind="attrs"
+              v-on="on"
+              class="info-btn"
+            >mdi-information</v-icon>
+            <v-row>
+              <v-col cols="auto">
+                <v-select
+                  v-model="days"
+                  label="Date Range Filter"
+                  class="ml-5"
+                  :items="daysItems"
+                  @change="changeDateRange"
+                />
+              </v-col>
+            </v-row>
+            <highcharts v-if="!loadingCatLine" :options="highRiskByCatLineChart"></highcharts>
+          </v-card>
+        </template>
+        <v-sheet
+          class="pa-4"
+        >
+          <span v-html="tooltip.highriskByCategory"></span>
+        </v-sheet>
+      </v-menu>
+    </v-col>
+
+    <v-col
+      cols="12"
+      md="12"
       v-if="false"
     >
       <v-menu  
@@ -310,7 +353,7 @@
                 </v-row>
               </v-card>
             </v-menu>
-            <highcharts v-if="!loadingCard" :updateArgs="[true, false]" :options="ciaCategoryChart" :highcharts="ciaCategoryChartIns"></highcharts>
+            <highcharts v-if="!loadingCard" :updateArgs="[true, false]" :options="ciaCategoryChart" ></highcharts>
           </v-card>
         </template>
         <v-sheet
@@ -333,7 +376,8 @@ import {
   scoreDonutChart, 
   appUsersChart, 
   highriskCategoryChart, 
-  ciaCategoryChart 
+  ciaCategoryChart,
+  highRiskByCatLineChart
 } from '../../../util'
 import Highcharts from 'highcharts'
 import { mapState, mapActions } from 'vuex'
@@ -344,8 +388,12 @@ import { mapState, mapActions } from 'vuex'
     data () {
       return {
         loadingCard: false,
+        loadingCatLine: false,
         tooltipMenu: false,
         charts: {},
+        catLineChart: {},
+        days: 30,
+        daysItems: [1, 10, 20, 30],
         selectedCategories: [],
         cia_by_categories: [],
         categoryMenu: false,
@@ -387,7 +435,8 @@ import { mapState, mapActions } from 'vuex'
       companyId: {
         handler(newValue) {
           if (newValue) {
-            this.fetchChartsData()
+            this.fetchChartsData(),
+            this.fetchCatLineChart()
           }
         },
         immediate: true
@@ -422,11 +471,15 @@ import { mapState, mapActions } from 'vuex'
       },
 
       highriskCategoryChart () {
-        return highriskCategoryChart(this.charts.hishrisk_by_categories)
+        return highriskCategoryChart(this.charts.high_risk_by_categories)
       },
 
       ciaCategoryChart () {
         return ciaCategoryChart(this.cia_by_categories, this.selectedCategories)
+      },
+
+      highRiskByCatLineChart () {
+        return highRiskByCatLineChart(this.catLineChart.series, this.catLineChart.categories)
       }
     },
 
@@ -439,6 +492,17 @@ import { mapState, mapActions } from 'vuex'
         this.charts = res.charts
         this.selectedCategories = this.charts.cia_by_categories.categories
         this.loadingCard = false
+      },
+
+      async fetchCatLineChart(days=30) {
+        this.loadingCatLine = true
+        const res = await Get(`charts/${this.companyId}/category_line/${days}`)
+        this.catLineChart = res
+        this.loadingCatLine = false
+      },
+
+      changeDateRange (val) {
+        this.fetchCatLineChart(val)
       },
 
       gotoRiskPage () {
