@@ -165,8 +165,6 @@
   import { downloadCSV, beautifyEmails } from '../../../util'
   import { generateData } from '../../../fake'
   import { mapState, mapActions } from 'vuex';
-  import DateRangePicker from 'vue2-daterange-picker'
-  import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
   export default {
     name: 'RandomBoard',
