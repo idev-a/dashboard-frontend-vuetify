@@ -292,7 +292,7 @@ export const generateCompanyApps = ({company_id, apps}) => {
 export const generateSecurityAnswers = ({company_id, questions, startDate, endDate}) => {
   const answers = []
 
-  const totalQuestionsCnt = random.uniformInt(10, parseInt(questions.length/3))()
+  const totalQuestionsCnt = random.uniformInt(100, parseInt(questions.length/3))()
   const run_atArray = getDateArray(new Date(startDate), new Date(endDate))
   let id = 0
   run_atArray.map( (run_at) => {

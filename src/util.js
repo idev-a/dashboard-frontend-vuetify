@@ -385,8 +385,8 @@ const lineChart = (title, subtitle, yLabel, categories, series) => {
     },
     legend: {
       layout: 'vertical',
-      align: 'center',
-      verticalAlign: 'right'
+      align: 'right',
+      verticalAlign: 'middle'
     },
 
     plotOptions: {

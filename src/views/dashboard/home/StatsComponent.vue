@@ -355,6 +355,7 @@ export default {
 
     methods: {
       async fetchAllCardData () {
+        this.loading = true
         const res = await Get(`dashboard/${this.companyId}/all`)
         this.smallCards = res
         this.loading = false
