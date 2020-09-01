@@ -482,35 +482,37 @@ export default {
     },
 
     downloadCSV () {
+      let modifiedQues = []
       if (this.selectedItems.length) {
-        downloadCSV(this.selectedItems)
+        modifiedQues = this.selectedItems
       } else {
-        const modifiedQues = this.filteredQuestions.map(ques => {
-          ques.Answer = ''
-          ques.link = ''
-          ques.tag = ''
-          ques.impact = ''
-          ques.recommendation = ''
-          ques.risk_level = ''
-          ques.Confidentiality = ''
-          ques.Integrity = ''
-          ques.availability = ''
-          ques['T1. Software Failures (code, configuration etc.)'] = ''
-          ques['T2. Cloud Failures (Provider, VHardware, Capacity)'] = ''
-          ques['T3. Legal Threats (failure to comply, bad contacts)'] = ''
-          ques['T4. Social Engineering'] = ''
-          ques['T5. External Unauthorized Access to Information Systems / Data'] = ''
-          ques['T6. Traffic Monitoring or Interception'] = ''
-          ques['T7.External Attacker Tampering with Data / Data Destruction'] = ''
-          ques['T8. Repudiation of transactions and messages'] = ''
-          ques['T9. Insider Abuse of Privilege'] = ''
-          ques['T10. Third Party Liability (contractors, third processing)'] = ''
-          ques['T11. Employee / User Mistakes'] = ''
-          ques['Notes'] = ''
-          return ques
-        })
-        downloadCSV(modifiedQues)
+        modifiedQues = this.filteredQuestions
       }
+      const _items = modifiedQues.map(ques => {
+        ques.Answer = ''
+        ques.link = ''
+        ques.tag = ''
+        ques.impact = ''
+        ques.recommendation = ''
+        ques.risk_level = 'high'
+        ques.Confidentiality = ''
+        ques.Integrity = ''
+        ques.availability = ''
+        ques['T1. Software Failures (code, configuration etc.)'] = ''
+        ques['T2. Cloud Failures (Provider, VHardware, Capacity)'] = ''
+        ques['T3. Legal Threats (failure to comply, bad contacts)'] = ''
+        ques['T4. Social Engineering'] = ''
+        ques['T5. External Unauthorized Access to Information Systems / Data'] = ''
+        ques['T6. Traffic Monitoring or Interception'] = ''
+        ques['T7.External Attacker Tampering with Data / Data Destruction'] = ''
+        ques['T8. Repudiation of transactions and messages'] = ''
+        ques['T9. Insider Abuse of Privilege'] = ''
+        ques['T10. Third Party Liability (contractors, third processing)'] = ''
+        ques['T11. Employee / User Mistakes'] = ''
+        ques['Notes'] = ''
+        return ques
+      })
+      downloadCSV(_items)
     },
 
     async uploadAnswerSheet () {
