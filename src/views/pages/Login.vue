@@ -108,6 +108,7 @@
   import { BASE_API } from '../../api'
   import { DOMAIN_LIST } from '../../util'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'PagesLogin',
@@ -161,12 +162,11 @@
     },
 
     computed: {
+      ...mapState(['companyId']),
+
       formHasErrors () {
         return !this.errorMessages.email.required || !this.errorMessages.email.invalid || !this.form.email
       }
-    },
-
-    watch: {
     },
 
     methods: {
@@ -175,7 +175,7 @@
       },
       gotoDashboard (data) {
         localStorage.setItem('jwt', data.auth_token)
-        this.$router.push({ name: "Dashboard" });
+        window.location.href = '/'
       },
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)

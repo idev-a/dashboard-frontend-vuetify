@@ -74,7 +74,7 @@ export const getCompanyName = () => {
 	return companyName
 }
 
-const getUserId = () => {
+export const getUserId = () => {
 	let user = {}
 	try {
 		user = jwtDecode(localStorage.getItem('jwt'))
@@ -82,17 +82,13 @@ const getUserId = () => {
 	return user && user.id || '';
 }
 
-const getAdminRole = () => {
+export const getAdminRole = () => {
 	let user = {}
 	try {
 		user = jwtDecode(localStorage.getItem('jwt'))
 	} catch(e) {}
 	return user && user.role || 'Customer';
 }
-
-export const companyId = getCompanyId();
-export const userId = getUserId()
-export const isAdmin = getAdminRole() == 'Admin'
 
 /* 
   API methods

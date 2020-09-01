@@ -6,7 +6,7 @@ Vue.use(Vuex)
 import publicdata from './public'
 import security from './security'
 import help from './help'
-import { getCompanyId, getCompanyName, userId, isAdmin } from '../api'
+import { getCompanyId, getCompanyName, getUserId, getAdminRole } from '../api'
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -50,8 +50,8 @@ export default new Vuex.Store({
     page: Number(localStorage.getItem('page')) || 5,
     companyId: getCompanyId(),
     companyName: getCompanyName(),
-    userId,
-    isAdmin,
+    userId: getUserId(),
+    isAdmin: getAdminRole() == 'Admin',
     tempRisk: []
   },
   mutations: {

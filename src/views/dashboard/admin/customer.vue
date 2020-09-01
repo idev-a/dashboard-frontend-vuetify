@@ -177,6 +177,7 @@
 <script>
   import { BASE_API } from '../../../api'
   import axios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'DashboardAllUsersTables',
@@ -284,6 +285,8 @@
     },
 
     computed: {
+      ...mapState(['page']),
+
       formTitle () {
         return this.editedIndex === -1 ? 'New User' : 'Edit User'
       },
@@ -291,10 +294,6 @@
       emailReadonly () {
         return this.editedIndex > -1
       },
-
-      page () {
-        return Number(localStorage.getItem('page')) || 5
-      }, 
     },
 
     watch: {
@@ -444,7 +443,7 @@
         try {
           const res = await axios.get(`${BASE_API}/api/users/register/generate_code`)
           this.editedItem.code = res.data.code
-          this.editedItem.code_expiration = this.$moment().add(1, 'year').format('YYYY-MM-DD HH:mm:dd')
+          this.editedItem.code_expiration = this.$moment().add(1, 'year').format('YYYY-MM-DD HH:mm:ss')
         } catch (e) {
           console.log(e)
         } finally {

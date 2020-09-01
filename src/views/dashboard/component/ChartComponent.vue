@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="charts">
     <v-col
       cols="12"
       sm="6"
@@ -269,8 +269,11 @@
               v-on="on"
               class="info-btn"
             >mdi-information</v-icon>
-            <v-row>
-              <v-col cols="auto">
+            <v-row align="center">
+              <v-col cols="auto" class="ml-5">
+                <div class="display-1 font-weight-medium">High Risk by Category over Time</div>
+              </v-col>
+              <v-col cols="auto" class="ml-auto mr-5">
                 <v-select
                   v-model="days"
                   label="Date Range Filter"
@@ -390,7 +393,7 @@ import { mapState, mapActions } from 'vuex'
         loadingCard: false,
         loadingCatLine: false,
         tooltipMenu: false,
-        charts: {},
+        charts: null,
         catLineChart: {},
         days: 30,
         daysItems: [1, 10, 20, 30],
@@ -435,6 +438,7 @@ import { mapState, mapActions } from 'vuex'
       companyId: {
         handler(newValue) {
           if (newValue) {
+            console.log('ChartComponent', newValue)
             this.fetchChartsData(),
             this.fetchCatLineChart()
           }
@@ -444,7 +448,7 @@ import { mapState, mapActions } from 'vuex'
     },
 
     computed: {
-      ...mapState(['companyId', 'companyName']),
+      ...mapState(['companyId']),
 
       riskLevelCharts () {
         return riskLevelChart(this.charts.critical_risk, this.charts.high_risk, this.charts.medium_risk, this.charts.low_risk, this.charts.informational_risk)

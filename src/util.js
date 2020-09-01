@@ -326,17 +326,18 @@ export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
 export const columnChart = (title, subtitle, yLabel, series, categories, interval=1) => {
   return {
     chart: {
-        type: 'column'
+      type: 'column',
+      zoomType: 'x'
     },
     title: {
-        text: title
+      text: title
     },
     subtitle: {
-        text: subtitle
+      text: subtitle
     },
     xAxis: {
-        categories: categories,
-        crosshair: true
+      categories: categories,
+      crosshair: true
     },
     yAxis: {
         min: 0,
@@ -365,7 +366,8 @@ export const columnChart = (title, subtitle, yLabel, series, categories, interva
 const lineChart = (title, subtitle, yLabel, categories, series) => {
   return {
     chart: {
-        type: 'line'
+        type: 'line',
+        zoomType: 'x'
     },
     title: {
         text: title
@@ -384,7 +386,7 @@ const lineChart = (title, subtitle, yLabel, categories, series) => {
     legend: {
       layout: 'vertical',
       align: 'center',
-      verticalAlign: 'top'
+      verticalAlign: 'right'
     },
 
     plotOptions: {
@@ -393,6 +395,9 @@ const lineChart = (title, subtitle, yLabel, categories, series) => {
           connectorAllowed: false
         },
       }
+    },
+    condition: {
+      maxWidth: 500
     },
     series,
     responsive: {
@@ -561,11 +566,9 @@ export const ciaCategoryChart = (data, categories) => {
 }
 
 export const highRiskByCatLineChart = (data) => {
-  const title = 'High Risk by Category over Time'
+  const title = ''
   let subtitle = ''
   let yLabel = '# of risks'
-
-  console.log(data)
 
   const series = JSON.parse(JSON.stringify(data.series))
   const categories = JSON.parse(JSON.stringify(data.categories))

@@ -301,9 +301,9 @@ export const generateSecurityAnswers = ({company_id, questions, startDate, endDa
         id++
 
         // limit the # randomly
-        // if (answers.length > totalQuestionsCnt) {
-        //   return
-        // }
+        if (answers.length > totalQuestionsCnt) {
+          return
+        }
 
         // skip the public data
         if (question.mapping) {

@@ -311,8 +311,7 @@ export default {
 
     data () {
       return {
-        loading: true,
-        loadingCard: true,
+        loading: false,
         banner: true,
         smallCards: {
           critical_risk: '0',
@@ -339,13 +338,14 @@ export default {
     },
 
     computed: {
-      ...mapState(['companyId', 'companyName']),
+      ...mapState(['companyId']),
     },
 
     watch:{
       companyId: {
         handler(newValue) {
           if (newValue) {
+            console.log('StatsComponent', newValue)
             this.fetchAllCardData()
           }
         },

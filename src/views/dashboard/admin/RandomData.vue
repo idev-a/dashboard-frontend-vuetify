@@ -169,8 +169,6 @@
   export default {
     name: 'RandomBoard',
 
-    components: { DateRangePicker },
-
     data () {
       return {
         valid: true,
@@ -309,6 +307,7 @@
         if (!this.valid) {
           return
         }
+        this.loading = true
         const res = generateData({
           ...this.form,
           apps:this.apps,
@@ -321,6 +320,7 @@
         this.data = res
         this.table = 'users'
         this.saved = false
+        this.loading = false
       },
 
       async saveData () {
