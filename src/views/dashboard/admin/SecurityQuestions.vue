@@ -272,9 +272,8 @@
 
 <script>
 import { downloadCSV, addKey, DOMAIN_LIST } from '../../../util'
-import { getCompaniesUsers, BASE_API } from '../../../api'
+import { getCompaniesUsers, BASE_API, Post, Get } from '../../../api'
 import { mapState, mapActions } from 'vuex';
-import axios from 'axios'
 
 export default {
   name: 'SecurityQuestions',
@@ -523,9 +522,9 @@ export default {
       this.loading = true
       const payload = {}
       try {
-        const res = await axios.post(`${BASE_API}/api/risks/answers/upload/${this.company_id}`, formData)
-        payload.message = res.data.message
-        payload.status = res.data.status
+        const res = await Post(`admin/risks/answers/upload/${this.company_id}`, formData)
+        payload.message = res.message
+        payload.status = res.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {

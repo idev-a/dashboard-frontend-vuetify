@@ -314,7 +314,7 @@
             <div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
             <v-textarea
               v-if="mode == 'Edit'"
-              v-model="editItem.answer"
+              v-model="editItem.Answer"
               label="Answer" 
               auto-grow
               rows="1"
@@ -325,7 +325,7 @@
             />
             <v-textarea
               v-if="mode == 'Edit'"
-              v-model="editItem.notes"
+              v-model="editItem.Notes"
               label="Notes" 
               auto-grow
               rows="1"

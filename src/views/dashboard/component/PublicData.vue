@@ -40,7 +40,7 @@
                   </div>
                   <div>
                     <b class="mr-2">Domain:</b>
-                    <span class="display-1" v-html="removeQuotes(publicData.high.domain.answer)"></span>
+                    <span class="display-1" v-html="removeQuotes(publicData.high.domain.Answer)"></span>
                 </div>
               </v-row>
             </v-col>
@@ -66,7 +66,7 @@
                 </div>
                 <div>
                   <b class="mr-2">IP:</b>
-                  <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.answer)"></span>
+                  <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.Answer)"></span>
                 </div>
               </v-row>
             </v-col>
@@ -99,7 +99,7 @@
               </div>
               <div>
                 <b class="mr-2">Name:</b>
-                <span class="display-1">{{publicData.high.name.answer}}</span>
+                <span class="display-1">{{publicData.high.name.Answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -125,7 +125,7 @@
               </div>
               <div>
                 <b class="mr-2">Email:</b>
-                <span class="display-1" v-html="beautifyEmail(publicData.high.email.answer)"></span>
+                <span class="display-1" v-html="beautifyEmail(publicData.high.email.Answer)"></span>
             </div>
           </v-row>
         </v-col>
@@ -151,7 +151,7 @@
               </div>
               <div>
                 <b class="mr-2">Birthday:</b>
-                <span class="display-1">{{publicData.high.dob.answer}}</span>
+                <span class="display-1">{{publicData.high.dob.Answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -287,12 +287,12 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.ctfr_subdomain.question}}</b>
+                      <b class="display-2 d-block">{{result.ctfr_subdomain.Question}}</b>
                       </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                       <div class="d-flex flex-wrap">
-                      <div v-for="domain in split(result.ctfr_subdomain.answer)">
+                      <div v-for="domain in split(result.ctfr_subdomain.Answer)">
                         <v-chip outlined class="secondary ma-2 pa-2 mb-3 text--secondary">{{domain}}</v-chip>
                       </div>
                     </div>
@@ -316,7 +316,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.builtwith.question}}</b>
+                      <b class="display-2 d-block">{{result.builtwith.Question}}</b>
                     </v-row>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -349,7 +349,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.dnstwist.question}}</b>
+                      <b class="display-2 d-block">{{result.dnstwist.Question}}</b>
                     </v-row>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -397,7 +397,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.ssllabs.question}}</b>
+                      <b class="display-2 d-block">{{result.ssllabs.Question}}</b>
                     </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
@@ -580,7 +580,7 @@
 
       builtWithLink () {
         if (this.publicData.high.domain) {
-          return 'https://builtwith.com/' + removeQuotes(this.publicData.high.domain.answer)
+          return 'https://builtwith.com/' + removeQuotes(this.publicData.high.domain.Answer)
         } else {
           return ''
         }

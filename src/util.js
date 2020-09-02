@@ -561,7 +561,6 @@ export const ciaCategoryChart = (data, categories) => {
   let subtitle = `${categories.length} Categories`
   let yLabel = '#'
 
-
   return columnChart(title, subtitle, yLabel, data, categories)
 }
 
@@ -578,7 +577,7 @@ export const highRiskByCatLineChart = (data) => {
 export const get_json = (val) => {
   let res = {}
   try {
-    res = JSON.parse(val.answer)
+    res = JSON.parse(val.Answer)
   } catch(e) {}
   return res
 }
@@ -586,7 +585,7 @@ export const get_json = (val) => {
 export const parse_array = (val) => {
   let res = []
   try {
-    res = JSON.parse(val.answer)
+    res = JSON.parse(val.Answer)
   } catch(e) {}
   return res
 }
@@ -656,7 +655,11 @@ export const beautifyDateZ = (date) => {
 }
 
 export const removeQuotes = (val) => {
-  return highlightText(val.replace(/\"/g, ""))
+  if (val) {
+    return highlightText(val.replace(/\"/g, ""))
+  } else {
+    return ''
+  }
 }
 
 export const readNewLine = (val) => {

@@ -17,13 +17,13 @@
                     </v-icon>
                   </v-btn>
                 </div>
-				<b class="display-2 d-block">{{data.question}}</b>
+				<b class="display-2 d-block">{{data.Question}}</b>
 			</v-row>
 		</v-expansion-panel-header>
 		<v-expansion-panel-content>
 			<!-- <div class="pre-strim">{{removeQuotes(data.answer)}}</div> -->
 			<template>
-				<pre v-html="readNewLine(removeQuotes(data.answer))"></pre>
+				<pre v-html="readNewLine(removeQuotes(data.Answer))"></pre>
 				<update-answer-dialog 
 					v-if="mode"
 					:loading="loading"

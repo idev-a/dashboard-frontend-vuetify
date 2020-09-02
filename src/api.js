@@ -90,6 +90,8 @@ export const getAdminRole = () => {
 	return user && user.role || 'Customer';
 }
 
+const companyId = getCompanyId()
+
 /* 
   API methods
 */

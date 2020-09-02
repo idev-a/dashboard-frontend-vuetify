@@ -401,11 +401,11 @@ import { mapState, mapActions } from 'vuex'
         cia_by_categories: [],
         categoryMenu: false,
         tooltip: {
-          orgChart: 'This is a comprehensive Org Risk Score based off the current info/Data.',
+          orgChart: 'This is a cumulative risk score based off the information we currently have.',
           riskLevels: '',
           highriskUsers: '',
           highriskApps: '',
-          ciaChart: 'These are the items that negatively impact Confidentiality, Integrity, & Availability. <a href="">Learn more</a>',
+          ciaChart: 'These are the items that negatively impact Confidentiality, Integrity, & Availability. <a href="#">Learn more</a>',
           ciaByCategory: '',
           highriskByCategory: 'List of all questions in your organization.  Choose Risk filter to see category type.',
           usersForApps: '',

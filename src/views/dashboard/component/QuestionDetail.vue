@@ -42,7 +42,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{currentQuestion.Answer}}</span>
+            <span class="text--secondary">{{removeQuotes(currentQuestion.Answer)}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>
@@ -280,7 +280,7 @@
 </template>
 
 <script>
-	import { levelColor, highlightText } from '../../../util'
+	import { levelColor, highlightText, removeQuotes } from '../../../util'
 	export default {
 		name: 'QuestionDetail',
 
@@ -292,25 +292,26 @@
 
 		computed: {
 			risk () {
-	      		let risk = 'Low'
-            if (this.currentQuestion.critical) {
-              risk = 'Critical'
-            } else if (this.currentQuestion.high) {
-	      			risk = 'High'
-	      		} else if (this.currentQuestion.medium) {
-	      			risk = 'Medium'
-	      		} else if (this.currentQuestion.low) {
-	      			risk = 'Low'
-	      		} else if (this.currentQuestion.informational) {
-              risk = 'Informational'
-            }
-	      		return risk
+    		let risk = 'Low'
+        if (this.currentQuestion.critical) {
+          risk = 'Critical'
+        } else if (this.currentQuestion.high) {
+    			risk = 'High'
+    		} else if (this.currentQuestion.medium) {
+    			risk = 'Medium'
+    		} else if (this.currentQuestion.low) {
+    			risk = 'Low'
+    		} else if (this.currentQuestion.informational) {
+          risk = 'Informational'
+        }
+    		return risk
 			},
 		},
 
 		methods: {
 			levelColor,
-      highlightText
+      highlightText,
+      removeQuotes
 		}
 	}
 </script>
