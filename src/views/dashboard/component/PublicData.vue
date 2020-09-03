@@ -9,69 +9,69 @@
     >
       <v-card-title>
         {{ title }}
-        </v-card-title>
-          <div
-            v-if="!loading && publicData.high"
+      </v-card-title>
+      <div
+        v-if="!loading && publicData.high"
+      >
+        <!-- General Business data -->
+        <div
+          v-if="category=='business'"
+        >
+          <v-row>
+          <v-col
+            v-if="publicData.high.domain"
+            cols="12"
+            sm="6"
+            md="6"
           >
-            <!-- General Business data -->
-            <div
-              v-if="category=='business'"
-            >
-              <v-row>
-              <v-col
-                v-if="publicData.high.domain"
-                cols="12"
-                sm="6"
-                md="6"
-              >
-                <v-row align="center" class="mx-0">
-                  <div v-if="false" class="align-self-center">
-                    <v-btn
-                      color="main"
-                      icon
-                      @click="showUpdateDialog(publicData.high.domain)"
-                    >
-                      <v-icon
-                        color="success"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                  <div>
-                    <b class="mr-2">Domain:</b>
-                    <span class="display-1" v-html="removeQuotes(publicData.high.domain.Answer)"></span>
-                </div>
-              </v-row>
-            </v-col>
-            <v-col
-              v-if="publicData.high.website_ip"
-              cols="12"
-              sm="6"
-              md="6"
-            >
-              <v-row align="center" class="mx-0">
-                <div v-if="false" class="align-self-center">
-                  <v-btn
-                    color="main"
-                    icon
-                    @click="showUpdateDialog(publicData.high.website_ip)"
+            <v-row align="center" class="mx-0">
+              <div v-if="false" class="align-self-center">
+                <v-btn
+                  color="main"
+                  icon
+                  @click="showUpdateDialog(publicData.high.domain)"
+                >
+                  <v-icon
+                    color="success"
                   >
-                    <v-icon
-                      color="success"
-                    >
-                      mdi-pencil
-                    </v-icon>
-                  </v-btn>
-                </div>
-                <div>
-                  <b class="mr-2">IP:</b>
-                  <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.Answer)"></span>
-                </div>
-              </v-row>
-            </v-col>
+                    mdi-pencil
+                  </v-icon>
+                </v-btn>
+              </div>
+              <div>
+                <b class="mr-2">Domain:</b>
+                <span class="display-1" v-html="removeQuotes(publicData.high.domain.Answer)"></span>
+            </div>
           </v-row>
-      </div>
+        </v-col>
+        <v-col
+          v-if="publicData.high.website_ip"
+          cols="12"
+          sm="6"
+          md="6"
+        >
+          <v-row align="center" class="mx-0">
+            <div v-if="false" class="align-self-center">
+              <v-btn
+                color="main"
+                icon
+                @click="showUpdateDialog(publicData.high.website_ip)"
+              >
+                <v-icon
+                  color="success"
+                >
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
+            </div>
+            <div>
+              <b class="mr-2">IP:</b>
+              <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.Answer)"></span>
+            </div>
+          </v-row>
+        </v-col>
+      </v-row>
+    </div>
 
       <!-- General Personal Data -->
       <v-row

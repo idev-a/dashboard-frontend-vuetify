@@ -128,7 +128,7 @@
           </v-tooltip>
         </template>
         <template v-slot:item.Answer="{ item }">
-          <span>{{removeQuotes(item.Answer)}}</span>
+          <span v-html="highlightText(removeQuotes(item.Answer))"></span>
         </template>
         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
           <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
@@ -148,88 +148,22 @@
     </v-card>
 
     <!-- history -->
-    <v-dialog
-      v-model="dialog"
-    >
-      <v-card>
-        <div class="d-flex py-3 px-5 align-center">
-          <div class="display-1 ml-4">History ({{ history.length }})</div>
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="searchHistory"
-            append-icon="mdi-magnify"
-            label="Search"
-            class="mb-3"
-            single-line
-            hide-details
-          />
-        </div>
-        <v-card-text>
-          <v-data-table
-            :loading="loading"
-            :headers="headers"
-            :items="history"
-            item-key="id"
-            single-expand
-            calculate-widths
-            show-expand
-            :expanded.sync="expandedHistory"
-            @click:row="showDetailsInHistory"
-            :items-per-page="page"
-            :search="searchHistory"
-            @update:items-per-page="getPageNum"
-          >
-            <template v-slot:item.run_at="{ item }">
-              <span>{{ formatDate(item.run_at) }}</span>
-            </template>
-            <template v-slot:item.Answer="{ item }">
-              <span>{{removeQuotes(item.Answer)}}</span>
-            </template>
-            <template v-slot:item.action="{ item }">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn 
-                    text 
-                    small
-                    color="primary"
-                    v-on="on"
-                    @click.stop="showDetailsInHistory(item)"
-                  >
-                    Details
-                  </v-btn>
-                </template>
-                <span>Show Details</span>
-              </v-tooltip>
-            </template>
-            <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
-              <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
-              <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
-            </template>
-            <template v-slot:expanded-item="{ headers }">
-              <td :colspan="headers.length">
-                <div
-                  v-if="detailsHistory"
-                  class="px-4"
-                >
-                  <question-detail :currentQuestion="currentQuestion"></question-detail>
-                </div>
-              </td>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <answer-history :value.sync="dialog" :loading="loading" :history="history" :headers="headers" />
   </v-container>
 </template>
 
 <script>
   import { BASE_API, Get, Post } from '../../../api'
-  import { formatDate, removeQuotes } from '../../../util'
-  import axios from 'axios'
+  import { formatDate, removeQuotes, highlightText } from '../../../util'
   import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'CategoryRisk',
+
+    components: {
+      QuestionDetail: () => import('../component/QuestionDetail'),
+      AnswerHistory: () => import('../component/AnswerHistory'),
+    },
 
     data: () => ({
       loading: false,
@@ -329,14 +263,11 @@
       this.fetchRisks()
     },
 
-    components: {
-      QuestionDetail: () => import('../component/QuestionDetail')
-    },
-
     methods: {
       ...mapActions(['SET_TEMP_RISK']),
       formatDate,
       removeQuotes,
+      highlightText,
 
       toggleSelect () {
         this.$nextTick(() => {
@@ -391,16 +322,7 @@
           this.details = true
         }
       },
-      showDetailsInHistory (item) {
-        if (this.expandedHistory.includes(item)) {
-          const index = this.expandedHistory.indexOf(item);
-          this.expandedHistory.splice(index, 1);
-        } else {
-          this.expandedHistory.push(item)
-          this.currentQuestion = item
-          this.detailsHistory = true
-        }
-      },
+
       async showHistory (item) {
         this.dialog = true
         this.loading = true
@@ -409,6 +331,7 @@
         this.history = res.risks
         this.loading = false
       },
+      
       async fetchRisks () {
         if (!this.isLevelVisible) {
           this.filteredRisks = []

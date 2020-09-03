@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Low Risk?',
-        body: 'Low Implies a relatively minor threat to the risk.'
+        body: 'Low Implies a relatively minor threat. May provide suggestions.'
       }
     }),
 

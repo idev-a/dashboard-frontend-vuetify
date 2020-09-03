@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Information Risk?',
-        body: 'Informational No immediate threat. May provide suggestions for improvement.'
+        body: 'Informational - No immediate threat'
       }
     }),
 

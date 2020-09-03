@@ -246,7 +246,7 @@
           text: 'Risk',
           value: 'risk',
         },
-        { text: 'Actions', value: 'action', sortable: false, align: 'center' },
+        { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 180 },
       ],
       apps: [],
       userHeaders: [

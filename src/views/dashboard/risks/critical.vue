@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Critical Risk?',
-        body: 'Critical Risk Implies an immediate, easily accessible threat The impact and likelihood of this risk is imminent. Risks should be addressed immediately. These risks cause significant harm to the business.  Risk needs to be downgraded.'
+        body: 'Critical Risk is a threat that needs to be addressed immediately. These risks are imminent and can be catastrophic to the business.  Expect reputation and financial damage.'
       }
     }),
 

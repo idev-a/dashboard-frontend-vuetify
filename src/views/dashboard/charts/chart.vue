@@ -132,17 +132,17 @@
             label: item.label,
             title: item.title
           }
-          const res = await Post('api/admin/chart/test', data)
+          const res = await Post('admin/chart/test', data)
           const chartType = item['type']
           if (chartType == 'Pie Chart') {
-            this.custom_pie_data = res.data.data[chartType]
+            this.custom_pie_data = res.data[chartType]
             this.donePie = true
           } else {
             this.doneBar = true
-            this.custom_bar_data = res.data.data[chartType]
+            this.custom_bar_data = res.data[chartType]
           }
           this.title = item.title
-          this.total = res.data.total
+          this.total = res.total
         } catch (e){
           console.log(e)
         }  finally {

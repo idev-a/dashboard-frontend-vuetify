@@ -14,7 +14,7 @@
     data: () => ({
       banner: {
         title: 'What is Medium Risk?',
-        body: 'Medium Medium risk findings mean the impact and likelihood of a security event is probable. Moderate damage. Reputation and financial damage is moderate.'
+        body: 'Medium Risk - These risks may be acceptable  as long as they are monitored to ensure risk does not increase.  These risks are typically necessary to fulfill business functions.'
       }
     }),
 

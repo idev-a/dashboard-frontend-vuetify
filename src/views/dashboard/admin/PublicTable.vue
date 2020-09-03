@@ -10,6 +10,9 @@
         <v-card-title>
           Public Data
         </v-card-title>
+        <v-subheader>
+          Show public data for any registered company.
+        </v-subheader>
         <v-row
         >
           <v-col

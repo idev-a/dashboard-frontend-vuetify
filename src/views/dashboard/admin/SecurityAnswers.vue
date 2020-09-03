@@ -123,9 +123,22 @@
                   </template>
                   <span>Update Answer</span>
                 </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn 
+                      text 
+                      icon
+                      v-on="on"
+                      @click.stop="showHistory(item)"
+                    >
+                      <v-icon>mdi-history</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Show History</span>
+                </v-tooltip>
               </template>
               <template v-slot:item.Answer="{ item }">
-                <span>{{removeQuotes(item.Answer)}}</span>
+                <span v-html="removeQuotes(item.Answer)"></span>
               </template>
               <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
                 <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
@@ -441,7 +454,8 @@
       </template>
     </v-snackbar>
 
-    <confirm-dialog @callback="runCallback"></confirm-dialog>
+    <!-- history -->
+    <answer-history :value.sync="dialog" :loading="loading" :history="history" :headers="headers" />
   </v-container>
 </template>
 
@@ -457,6 +471,7 @@
     data () {
       return {
         done: false,
+        dialog: false,
         loading: false,
         loadingUsers: false,
         search: '',
@@ -492,7 +507,7 @@
         valid: true,
         updateValid: true,
         editItem: {},
-        callback: null,
+        history: [],
         headers: [
           {
             text: 'Question',
@@ -509,7 +524,7 @@
             value: 'Category',
             width: 180
           },
-          { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 120 }
+          { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 180 }
         ],
         rules: {
           required: value => {
@@ -525,7 +540,8 @@
 
     components: {
       ConfirmDialog: () => import('../component/Confirm'),
-      QuestionDetail: () => import('../component/QuestionDetail')
+      QuestionDetail: () => import('../component/QuestionDetail'),
+      AnswerHistory: () => import('../component/AnswerHistory')
     },
 
     computed: {
@@ -593,6 +609,15 @@
         this.currentQuestion = item
         this.details = true
         this.expanded.push(item)
+      },
+
+      async showHistory (item) {
+        this.dialog = true
+        this.loading = true
+        this.history = []
+        const res = await Get(`risks/history/${item.question_id}/${this.company}`)
+        this.history = res.risks
+        this.loading = false
       },
 
       toGroups (item, idxs) {
@@ -678,12 +703,6 @@
         this.loadingUsers = true
         this.companies = await getCompaniesUsers()
         this.loadingUsers = false
-      },
-
-      runCallback () {
-        if (this.callback) {
-          this.callback()
-        }
       },
 
       async confirm(msg, callback) {
