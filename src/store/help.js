@@ -5,7 +5,18 @@ export default {
   state: {
     loading: false,
     menuItems:[],
-    items: [],
+    items: [
+      {
+        text: 'Dashboard',
+        disabled: false,
+        to: 'Dashboard',
+      },
+      {
+        text: 'Getting Started',
+        disabled: true,
+        to: 'Get Started',
+      }
+    ],
     title: 'How can we help?'
   },
   mutations: {

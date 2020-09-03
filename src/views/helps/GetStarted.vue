@@ -25,9 +25,29 @@
 
 <script>
   import { HelpMixin } from './HelpMixin'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'Help',
     mixins: [HelpMixin],
+
+    methods: {
+      ...mapActions('help', ['setItems'])
+    },
+
+    mounted () {
+      this.setItems([
+        {
+          text: 'Dashboard',
+          disabled: false,
+          to: 'Dashboard',
+        },
+        {
+          text: 'Getting Started',
+          disabled: true,
+          to: 'Get Started',
+        }
+      ])
+    }
   }
 </script>

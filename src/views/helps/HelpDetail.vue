@@ -60,35 +60,46 @@ export default {
   },
 
   watch: {
+    '$route.params.menuId' (val) {
+      if (val) {
+        this.buildRelatedArticles()
+      }
+    },
     menuItems: {
       handler (newVal) {
         if (newVal.length) {
-          const id = this.$router.history.current.params.menuId
-          const item = this.menuItems.filter(item => item.id == id)
-          this.current = item[0] 
-          const items = [
-            {
-              text: 'Dashboard',
-              disabled: false,
-              to: 'Dashboard',
-            },
-            {
-              text: 'Getting Started',
-              disabled: true,
-              to: 'Get Started',
-            },
-            {
-              text: this.current.title,
-              disabled: true,
-              to: '',
-            }
-          ]
-          this.setItems(items)
-          this.relatedArticles = this.menuItems.filter(item => item.id != id)
+          this.buildRelatedArticles()
         }
       },
       immediate: true
     }
   },
+
+  methods: {
+    buildRelatedArticles() {
+      const id = this.$route.params.menuId
+      const item = this.menuItems.filter(item => item.id == id)
+      this.current = item[0] 
+      const items = [
+        {
+          text: 'Dashboard',
+          disabled: false,
+          to: 'Dashboard',
+        },
+        {
+          text: 'Getting Started',
+          disabled: true,
+          to: 'Get Started',
+        },
+        {
+          text: this.current.title,
+          disabled: true,
+          to: '',
+        }
+      ]
+      this.setItems(items)
+      this.relatedArticles = this.menuItems.filter(item => item.id != id)
+    }
+  }
 }
 </script>
