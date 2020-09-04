@@ -124,6 +124,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Drawer Board',
+          path: 'admin/drawer-board',
+          component: () => import('@/views/dashboard/admin/SidebarBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Daily Tips',
           path: 'admin/dailytips',
           component: () => import('@/views/dashboard/admin/DailyTips'),

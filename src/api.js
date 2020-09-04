@@ -82,6 +82,14 @@ export const getUserId = () => {
 	return user && user.id || '';
 }
 
+export const getUserEmail = () => {
+	let user = {}
+	try {
+		user = jwtDecode(localStorage.getItem('jwt'))
+	} catch(e) {}
+	return user && user.email || '';
+}
+
 export const getAdminRole = () => {
 	let user = {}
 	try {

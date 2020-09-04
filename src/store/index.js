@@ -6,7 +6,8 @@ Vue.use(Vuex)
 import publicdata from './public'
 import security from './security'
 import help from './help'
-import { getCompanyId, getCompanyName, getUserId, getAdminRole } from '../api'
+import drawer from './drawer'
+import { getCompanyId, getCompanyName, getUserId, getAdminRole, getUserEmail } from '../api'
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -51,6 +52,7 @@ export default new Vuex.Store({
     companyId: getCompanyId(),
     companyName: getCompanyName(),
     userId: getUserId(),
+    email: getUserEmail(),
     isAdmin: getAdminRole() == 'Admin',
     tempRisk: []
   },
@@ -126,6 +128,7 @@ export default new Vuex.Store({
   modules: { 
     publicdata,
     security,
-    help
+    help,
+    drawer
   },
 })

@@ -49,7 +49,7 @@
 
       <template v-for="(item, i) in computedItems">
         <base-item-group
-          v-if="item && item.children"
+          v-if="item && item.children && item.selected"
           :key="`group-${i}`"
           :item="item"
         >
@@ -57,7 +57,7 @@
         </base-item-group>
 
         <base-item
-          v-else
+          v-if="item && !item.children && item.selected"
           :key="`item-${i}`"
           :item="item"
         />
@@ -72,6 +72,7 @@
 
 <script>
 import jwtDecode from 'jwt-decode'
+import { Get, Post } from '@/api'
   // Utilities
   import {
     mapState,
@@ -89,203 +90,12 @@ import jwtDecode from 'jwt-decode'
 
     data: () => ({
       user: {},
-      items: [
-        {
-          icon: 'mdi-view-dashboard',
-          title: 'dashboard',
-          to: '/',
-        },
-        {
-          group: '/admin',
-          icon: 'mdi-account-multiple',
-          title: 'Admin',
-          is_admin: true,
-          children: [
-            {
-              title: 'Customers',
-              to: 'customers',
-            },
-            {
-              title: 'Random Board',
-              to: 'random-board',
-            },
-            {
-              title: 'Daily Tips',
-              to: 'dailytips',
-            },
-            {
-              title: 'Public Data',
-              to: 'publictable',
-            },
-            {
-              title: 'Public Data(Run)',
-              to: 'publicdata/run',
-            },
-            {
-              title: 'Apps & Users',
-              to: 'appusers',
-            },
-            {
-              title: 'Users & Groups',
-              to: 'users-groups',
-            },
-            {
-              title: 'Query Board',
-              to: 'sql',
-            },
-            {
-              title: 'RSS Board',
-              to: 'rss',
-            },
-            {
-              title: 'Meraki Board',
-              to: 'meraki',
-            },
-            {
-              title: 'Chart Board',
-              to: 'chart',
-            },
-            {
-              title: 'GSuite Board',
-              to: 'gsuite',
-            },
-            {
-              title: 'Slack Board',
-              to: 'slack',
-            },
-            {
-              title: 'O365 Board',
-              to: 'o365',
-            },
-            {
-              title: 'Zoom Board',
-              to: 'zoom',
-            },
-            {
-              title: 'Atlassian Board',
-              to: 'atlassian',
-            },
-            {
-              title: 'Extension Board',
-              to: 'chromeext',
-            },
-            {
-              title: 'Security Q&A Board',
-              to: 'securityqa',
-            },
-            {
-              title: 'Calendar Board',
-              to: 'calendar-event',
-            },
-            {
-              title: 'Dropbox Board',
-              to: 'dropbox',
-            },
-            {
-              title: 'Bamboo Board',
-              to: 'bamboo',
-            },
-            {
-              title: 'Help Board',
-              to: 'help',
-            },
-          ]
-        },
-        {
-          group: '/risks',
-          icon: 'mdi-alert',
-          title: 'Risks',
-          children: [
-            {
-              title: 'Critical Risks',
-              to: 'critical',
-            },
-            {
-              title: 'High Risks',
-              to: 'high',
-            },
-            {
-              title: 'Medium Risks',
-              to: 'medium',
-            },
-            {
-              title: 'Low Risks',
-              to: 'low',
-            },
-            {
-              title: 'Information Risks',
-              to: 'information',
-            },
-          ]
-        },
-        {
-          icon: 'mdi-application',
-          title: 'Applications',
-          to: '/applications/index'
-        },
-        {
-          icon: 'mdi-account-multiple',
-          title: 'Users',
-          to: '/users/index',
-        },
-        {
-          icon: 'mdi-account-group-outline',
-          title: 'Groups',
-          to: '/groups/index',
-        },
-        {
-          group: '/security',
-          icon: 'mdi-security',
-          title: 'Security',
-          children: [
-            {
-              title: 'Email Security',
-              to: 'email',
-            },
-            {
-              title: 'Network Security',
-              to: 'network',
-            },
-            {
-              title: 'Physical Security',
-              to: 'physical',
-            },
-            {
-              title: 'Device Security',
-              to: 'device',
-            },
-          ]
-        },
-        {
-          icon: 'mdi-security',
-          title: 'All Questions',
-          to: '/category/all',
-        },
-        {
-          group: '/publicdata',
-          icon: 'mdi-database',
-          title: 'Public Data',
-          children: [
-            {
-              title: 'Business',
-              to: 'business',
-            },
-            // {
-            //   title: 'Personal',
-            //   to: 'personal',
-            // },
-          ]
-        },
-        {
-          icon: 'mdi-poll',
-          title: 'Charts',
-          to: '/charts/index',
-        },
-      ],
+      items: []
     }),
 
     computed: {
-      ...mapState(['barColor', 'barImage']),
+      ...mapState(['barColor', 'barImage', 'email']),
+
       drawer: {
         get () {
           return this.$store.state.drawer
@@ -323,6 +133,10 @@ import jwtDecode from 'jwt-decode'
       },
     },
 
+    mounted () {
+      this.getItems()
+    },
+
     methods: {
       mapItem (item) {
         try {
@@ -346,6 +160,10 @@ import jwtDecode from 'jwt-decode'
           }
         }
       },
+      async getItems () {
+        const res = await Get(`admin/drawer/${this.email}/read`)
+        this.items = res.items.items
+      }
     },
   }
 </script>

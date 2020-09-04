@@ -1,5 +1,6 @@
 <template>
   <v-list-item
+    v-if="item.selected"
     :href="href"
     :rel="href && href !== '#' ? 'noopener' : undefined"
     :target="href && href !== '#' ? '_blank' : undefined"

@@ -82,7 +82,7 @@
             />
 
             <v-checkbox
-              v-model="form.opt_out"
+              v-model="form.daily_tips_opt_out"
               label="Would you like to receive Daily Security Tips?"
             >
             </v-checkbox>
@@ -123,7 +123,7 @@
         username: '',
         email: '',
         company_id: '',
-        opt_out: 0,
+        daily_tips_opt_out: 0,
       })
 
       return {

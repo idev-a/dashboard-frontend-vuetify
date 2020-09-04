@@ -113,7 +113,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="main" :loading="loading" text @click="close">Cancel</v-btn>
-              <v-btn color="main" :loading="loading" text @click="create">Save</v-btn>
+              <v-btn color="main" :loading="loading" :disabled="loading||!valid" text @click="create">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../../api'
+  import { BASE_API, Get, Post, Put } from '@/api'
   import axios from 'axios'
   import { mapState } from 'vuex'
 
@@ -255,10 +255,12 @@
       editedIndex: -1,
       editedItem: {
         email: '',
-        role: '',
-        status: '',
+        role: 'Customer',
+        status: 'Active',
         member_since: '',
-        daily_tips_opt_out: ''
+        company_name: '',
+        daily_tips_opt_out: false,
+        code: '_'
       },
       defaultItem: {
         email: '',
@@ -267,7 +269,7 @@
         ip: '',
         last_login: '',
         member_since: '',
-        code: '',
+        code: '_',
         daily_tips_opt_out: false
       },
       rules: {
@@ -324,17 +326,15 @@
           this.editedIndex = -1
         }, 300)
       },
-      create () {
+      async create () {
         this.$refs.form.validate()
         if (!this.valid) {
           return
         }
         if (this.editedIndex > -1) {
-          this.updateUser(this.editedItem)
-          Object.assign(this.users[this.editedIndex], this.editedItem)
+          await this.updateUser(this.editedItem)
         } else {
-          this.createUser(this.editedItem)
-          this.users.push(this.editedItem)
+          await this.createUser(this.editedItem)
         }
         this.close()
       },
@@ -374,75 +374,43 @@
               self.loading = false
             })
       },
-      createUser (item) {
-        const self = this
-        self.loading = true
-        axios({
-            url: `${BASE_API}/api/users`,
-            data: item,
-            method: 'POST',
-          })
-            .then(function (res) {
-              self.snackText = res.data.message
-              if (res.data.status === 'ok') {
-                self.snackColor = 'success'
-              } else {
-                self.snackColor = 'error'
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.snack = true
-              self.loading = false
-            })
+      showSnack(res) {
+        this.snackText = res.message
+        this.snackColor = res.status
+        this.snack = true
       },
-      updateUser (item) {
-        const self = this
-        self.loading = true
-        axios({
-            url: `${BASE_API}/api/users/${item.email}`,
-            data: item,
-            method: 'PUT',
-          })
-            .then(function (res) {
-              self.snackText = res.data.message
-              if (res.data.status === 'ok') {
-                self.snackColor = 'success'
-              } else {
-                self.snackColor = 'error'
-              }
-              self.snack = true
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+      async createUser (item) {
+        console.log(item)
+        this.loading = true
+        const res = await Post(`users/register`, item)
+        if (res.status == 'success') {
+          this.users.push(item)
+        }
+        this.showSnack(res)
+        this.loading = false
       },
-      fetchUsers () {
+      async updateUser (item) {
         const self = this
         self.loading = true
-        axios(`${BASE_API}/api/users/all`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.users = res.data.users
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+        const res = await Put(`users/${item.email}`, item)
+        this.showSnack(res)
+        if (res.status == 'success') {
+          console.log(this.editedIndex, this.editedItem)
+          Object.assign(this.users[this.editedIndex], this.editedItem)
+        }
+        this.loading = false
+      },
+      async fetchUsers () {
+        this.loading = true
+        const res = await Get(`users/all`)
+        this.users = res.users
+        this.loading = false
       },
       async generateCode () {
         this.loading = true
         try {
-          const res = await axios.get(`${BASE_API}/api/users/register/generate_code`)
-          this.editedItem.code = res.data.code
+          const res = await Get(`users/register/generate_code`)
+          this.editedItem.code = res.code
           this.editedItem.code_expiration = this.$moment().add(1, 'year').format('YYYY-MM-DD HH:mm:ss')
         } catch (e) {
           console.log(e)

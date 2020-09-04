@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="register-account"
+    id="help-board"
     class="justify-center"
     tag="section"
   >
