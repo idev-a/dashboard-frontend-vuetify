@@ -1,117 +1,117 @@
 <template>
   <v-container
-      id="calendar-board"
-      fluid
-      tag="section"
+    id="calendar-board"
+    fluid
+    tag="section"
+  >
+    <v-card
+      class="pa-5"
     >
-      <v-card
-        class="pa-5"
-      >
-        <v-card-title>
-          <div>
-            <div>Calendar Board (calendar_events)</div>
-            <v-subheader>Find Google Calendar Events</v-subheader>
-          </div>
-          <v-spacer></v-spacer>
-          <v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-          <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
-        </v-card-title>
-        <v-row>
-          <v-col cols='12' md="3">
-                  <v-textarea
-                    v-model="emails"
-                    :rules="[rules.required]"
-                    :loading="loading"
-                    label="Event Ids (emails)"
-                    hint="Ctrl + Enter to run the calenar event script"
-                    rows="3"
-                    outlined
-                    @keyup.ctrl.13="keyDownOnImport"
-                />
-          </v-col>
-          <v-col md="3" cols='12'>
-            <v-text-field
-              v-model="user_email"
-              :rules="[rules.required, rules.email]"
-              :loading="loading"
-              @input="changeAccountEmail"
-              label="Service Email"
-              outlined
-          />
-          </v-col>
-          <v-col cols='12' md="3">
-              <v-file-input
-              accept=".json"
-              placeholder="Import GSuite service key file (.json file)"
-              prepend-icon="mdi-database-import"
-              label="Private key"
-              ref="myfile" 
-              v-model="file"
-              :loading="loading"
-              multiple 
-            ></v-file-input>
-          </v-col>
-          <v-col md="3" cols='12'>
-            <v-text-field
-              v-model="company_id"
-              :rules="[rules.required]"
-              :loading="loading"
-              label="Company Name"
-              outlined
-          />
-          </v-col>
-        </v-row>
-        <v-card-title>
-          <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  class="mb-5"
-                  single-line
-                  hide-details
-                ></v-text-field>
-                <v-spacer></v-spacer>
-                <v-btn :loading="loading" :disabled="loading" @click="readAll" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-                <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-              <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-            </v-card-title>
-        <v-data-table
-          v-model="selectedItems"
+      <v-card-title>
+        <div>
+          <div>Calendar Board (calendar_events)</div>
+          <v-subheader>Find Google Calendar Events</v-subheader>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn :loading="loading" :disabled="!importable"  class="" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+        <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+      </v-card-title>
+      <v-row>
+        <v-col cols='12' md="3">
+          <v-textarea
+            v-model="emails"
+            :rules="[rules.required]"
             :loading="loading"
-            :headers="headers"
-            :items="items"
-            :items-per-page="page"
-            item-key="id"
-            :search="search"
-            show-select
-            @update:items-per-page="getPageNum"
-          > 
-            <template v-slot:item.users="{ item }">
-                    <span v-html="beautifyEmails(item.users)"></span>
-                </template>
-                <template v-slot:item.email="{ item }">
-                    <span v-html="beautifyEmail(item.email)"></span>
-                </template>
-        </v-data-table>
+            label="Event Ids (emails)"
+            hint="Ctrl + Enter to run the calenar event script"
+            rows="3"
+            outlined
+            @keyup.ctrl.13="keyDownOnImport"
+          />
+        </v-col>
+        <v-col md="3" cols='12'>
+          <v-text-field
+            v-model="user_email"
+            :rules="[rules.required, rules.email]"
+            :loading="loading"
+            @input="changeAccountEmail"
+            label="Service Email"
+            outlined
+          />
+        </v-col>
+        <v-col cols='12' md="3">
+          <v-file-input
+            accept=".json"
+            placeholder="Import GSuite service key file (.json file)"
+            prepend-icon="mdi-database-import"
+            label="Private key"
+            ref="myfile" 
+            v-model="file"
+            :loading="loading"
+            multiple 
+          ></v-file-input>
+        </v-col>
+        <v-col md="3" cols='12'>
+          <v-text-field
+            v-model="company_id"
+            :rules="[rules.required]"
+            :loading="loading"
+            label="Company Name"
+            outlined
+          />
+        </v-col>
+      </v-row>
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          class="mb-5"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-spacer></v-spacer>
+        <v-btn :loading="loading" :disabled="loading" @click="readAll" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+        <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+        <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+      </v-card-title>
+      <v-data-table
+        v-model="selectedItems"
+        :loading="loading"
+        :headers="headers"
+        :items="items"
+        :items-per-page="page"
+        item-key="id"
+        :search="search"
+        show-select
+        @update:items-per-page="getPageNum"
+      > 
+        <template v-slot:item.users="{ item }">
+          <span v-html="beautifyEmails(item.users)"></span>
+        </template>
+        <template v-slot:item.email="{ item }">
+          <span v-html="beautifyEmail(item.email)"></span>
+        </template>
+      </v-data-table>
     </v-card>
 
     <v-snackbar
-          v-model="snackbar"
-          bottom
-          :color="color"
-          >
-          {{ message }}
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              @click="snackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+      v-model="snackbar"
+      bottom
+      :color="color"
+    >
+      {{ message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -221,20 +221,21 @@
       },
 
       async readAll () {
-      this.loading = true
-      this.selectedItems = []
+        this.loading = true
+        this.selectedItems = []
         this.items = []
-      try {
-        const res = await Get(`admin/calendar/read`)
+        try {
+          const res = await Get(`admin/calendar/read`)
           this.items = res.items
           this.message = res.message
           this.color = res.status
-      } catch(e) {
-        this.message = 'Something wrong happened on the server.'
-      } finally {
+        } catch(e) {
+          this.color = 'error'
+          this.message = 'Something wrong happened on the server.'
+        } finally {
           this.loading = false
           this.snackbar = true
-      }
+        }
       },
 
       downloadCSV () {
@@ -260,13 +261,13 @@
         this.loading = true
         try {
           const res = await Post(`admin/calendar/send`, data)
-            this.message = res.message
-            this.color = res.status
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 
@@ -294,14 +295,15 @@
         this.file = null
         try {
           const res = await Post(`admin/calendar/run`, formData)
-            this.csvData = res.csv_data
-            this.message = res.message
-            this.color = res.status
+          this.csvData = res.csv_data
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
+          this.color = 'error'
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
     }

@@ -37,25 +37,23 @@
             >
               <v-card-title>
                 <div>
-                    <div>gsuite_drive_shared</div>
-                    <v-subheader>Find external shared links</v-subheader>
+                  <div>gsuite_drive_shared</div>
+                  <v-subheader>Find external shared links</v-subheader>
                 </div>
-                  <v-spacer></v-spacer>
-                  <v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-                  <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_g_drive_share', 'Weekly')" color="main">Google Drives<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+                <v-spacer></v-spacer>
+                <v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+                <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron('run_g_drive_share', 'Weekly')" color="main">Google Drives<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
               </v-card-title>
               <v-row>
                 <v-col cols='12' md="4">
-                  <v-textarea
+                  <v-text-field
                     v-model="emails"
                     :rules="[rules.required]"
                     prepend-icon="mdi-email"
                     :loading="loading"
                     label="Owner Emails"
                     hint="Ctrl + Enter to run the google drive script"
-                    outlined
-                    rows="2"
-                    auto-grow
+                    @input="changeAccountEmail"
                     @keyup.ctrl.13="keyDownOnImport"
                 />
                 </v-col>
@@ -78,39 +76,39 @@
                     :loading="loading"
                     label="Company Name"
                     auto-grow
-                      rows="1"
+                    rows="1"
                     hide-details="auto"
                   ></v-textarea>
                 </v-col>
               </v-row>
               <v-card-title>
                 <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        class="mb-5"
-                        single-line
-                        hide-details
-                      ></v-text-field>
-                      <v-spacer></v-spacer>
-                      <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-                      <v-btn :loading="loading" class="mr-2" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-                    <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-                  </v-card-title>
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  class="mb-5"
+                  single-line
+                  hide-details
+                ></v-text-field>
+                <v-spacer></v-spacer>
+                <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllShared" color="main">Read All<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+                <v-btn :loading="loading" class="mr-2" :disabled="loading || (!items.length && !selectedItems.length)" @click="sendAttachment" color="main">Send<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+                <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              </v-card-title>
               <v-data-table
                 v-model="selectedItems"
-                  :loading="loading"
-                  :headers="driveHeaders"
-                  :items="items"
-                  :items-per-page="page"
-                  item-key="id"
-                  :search="search"
-                  show-select
-                  @update:items-per-page="getPageNum"
-                > 
-                      <template v-slot:item.email="{ item }">
-                          <span v-html="beautifyEmails(item.email)"></span>
-                      </template>
+                :loading="loading"
+                :headers="driveHeaders"
+                :items="items"
+                :items-per-page="page"
+                item-key="id"
+                :search="search"
+                show-select
+                @update:items-per-page="getPageNum"
+              > 
+                <template v-slot:item.email="{ item }">
+                    <span v-html="beautifyEmails(item.email)"></span>
+                </template>
               </v-data-table>
             </v-tab-item>
             <v-tab-item
@@ -151,13 +149,12 @@
                   :loading="loading"
                   label="Owner Email"
                   hint="Ctrl + Enter to run the gsuite script"
-                  rows="3"
                   @input="changeAccountEmail"
                   @keyup.ctrl.13="keyDownOnImport"
-              />
+                />
               </v-col>
               <v-col cols='12' md="4">
-                  <v-file-input
+                <v-file-input
                   accept=".json"
                   placeholder="Import GSuite private key file (.json file)"
                   prepend-icon="mdi-database-import"
@@ -165,7 +162,6 @@
                   ref="myfile" 
                   v-model="file"
                   :loading="loading"
-                  multiple 
                 ></v-file-input>
               </v-col>
               <v-col cols='12' md="4">
@@ -183,19 +179,19 @@
             </v-row>
             <v-card-title>
               <v-text-field
-                      v-model="search"
-                      append-icon="mdi-magnify"
-                      label="Search"
-                      class="mb-5"
-                      single-line
-                      hide-details
-                    ></v-text-field>
-                    <v-spacer></v-spacer>
-                    <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_users')" color="main">Users<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-                    <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('google_groups')" color="main">Groups<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-                    <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_devices')" color="main">Devices<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-                  <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
-                </v-card-title>
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                class="mb-5"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_users')" color="main">Users<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+              <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('google_groups')" color="main">Groups<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+              <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGSuite('gsuite_devices')" color="main">Devices<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+              <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+            </v-card-title>
             <v-data-table
               v-model="selectedItems"
                 :loading="loading"
@@ -208,35 +204,34 @@
                 @update:items-per-page="getPageNum"
               > 
                 <template v-slot:item.users="{ item }">
-                        <span v-html="beautifyEmails(item.users)"></span>
-                    </template>
-                    <template v-slot:item.email="{ item }">
-                        <span v-html="beautifyEmails(item.email)"></span>
-                    </template>
+                  <span v-html="beautifyEmails(item.users)"></span>
+                </template>
+                <template v-slot:item.email="{ item }">
+                  <span v-html="beautifyEmails(item.email)"></span>
+                </template>
             </v-data-table>
             </v-tab-item>
           </v-tabs>
         </v-card-text>
     </v-card>
-      
 
     <v-snackbar
-          v-model="snackbar"
-          bottom
-          :color="color"
-          >
-          {{ message }}
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              @click="snackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+      v-model="snackbar"
+      bottom
+      :color="color"
+    >
+      {{ message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -502,22 +497,18 @@
         } else {
           _items = this.items
         }
-
-        const data = {
-          _items
-        }
-
-            this.loading = true
-      try {
-        const res = await Post(`admin/gsuite/send`, data)
+        this.loading = true
+        try {
+          const res = await Post(`admin/gsuite/drive/send`, {_items })
           this.message = res.message
           this.color = res.status
-      } catch(e) {
-        this.message = 'Something wrong happened on the server.'
-      } finally {
+        } catch(e) {
+          this.color = 'error'
+          this.message = 'Something wrong happened on the server.'
+        } finally {
           this.loading = false
           this.snackbar = true
-      }
+        }
       },
 
       async importKey () {
@@ -526,9 +517,7 @@
         }
 
         let formData = new FormData()
-        for (let file of this.file) {
-          formData.append("file", file, file.name);
-        }
+        formData.append("file", this.file, this.file.name);
 
         const data = {
           emails: this.emails,
@@ -550,10 +539,11 @@
             this.message = res.message
             this.color = res.status
         } catch(e) {
+          this.color = 'error'
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 
