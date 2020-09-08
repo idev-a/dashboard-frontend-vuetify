@@ -244,11 +244,11 @@
                     :key="item.id"
                     @cut="remove(srcUsers, item)"
                   >
-                    <v-sheet :key="item.id" class="pa-3" rounded :color="reorder ? 'primary' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
+                    <v-sheet :key="item.id" class="pa-2" rounded :color="reorder ? 'primary' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
                   </drag>
                 </template>
                 <template v-slot:feedback="{data}">
-                  <v-sheet class="pa-3" rounded elevation=1 color="primary" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
+                  <v-sheet class="pa-2" rounded elevation=1 color="primary" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
                 </template>
               </drop-list>
             </v-col>
@@ -268,11 +268,11 @@
                     :data="item" 
                     @cut="remove(whitelistUsers, item)"
                   >
-                    <v-sheet :key="item.id" class="pa-3" rounded :color="reorder ? 'success' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
+                    <v-sheet :key="item.id" class="pa-2" rounded :color="reorder ? 'success' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
                   </drag>
                 </template>
                 <template v-slot:feedback="{data}">
-                  <v-sheet rounded class="pa-3" elevation=1 color="success" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
+                  <v-sheet rounded class="pa-2" elevation=1 color="success" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
                 </template>
               </drop-list>
             </v-col>
@@ -592,15 +592,16 @@
   border: 1px solid black;
   margin: 10px auto;
   width: 100%;
-  min-height: 300px;
+  min-height: 100%;
   border-radius: 4px;
 
   .item {
-    padding: 5px;
+    padding: 0 5px;
     margin: 5px;
     display: flex;
     align-items: center;
     justify-content: start;
+    align-self: baseline;
 
     &.feedback {
       border: 2px dashed black;
