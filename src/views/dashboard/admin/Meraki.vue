@@ -360,15 +360,17 @@
         if (this.selectedItems.length) {
           data = this.selectedItems
         }
-        const res = await Post(`admin/meraki/${this.endpoint}/populate`, { data })
-        console.log(res)
-        this.message = res.message
-        this.color = res.status
-        this.modal = true
-        console.log(e)
-        this.message = 'Something wrong happened on the server.'
-        this.loading = false
-        this.snackbar = true
+        try {
+          const res = await Post(`admin/meraki/${this.endpoint}/populate`, { data })
+          this.message = res.message
+          this.color = res.status
+          this.modal = true
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
       },
 
       async readAll () {
