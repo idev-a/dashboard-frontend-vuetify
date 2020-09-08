@@ -316,7 +316,7 @@
         }
         try {
           const res = await Post(`admin/meraki/${this.endpoint}`, data)
-          this.items = res.map((item, index) => {
+          this.items = res.data.map((item, index) => {
             if (Object.keys(item).includes('org_id')) { 
               return {
                 ...item,
@@ -360,17 +360,15 @@
         if (this.selectedItems.length) {
           data = this.selectedItems
         }
-        try {
-          const res = await Post(`admin/meraki/${this.endpoint}/populate`, { data })
-            this.message = res.message
-            this.color = res.status
-            this.modal = true
-        } catch(e) {
-          this.message = e.response.data.message || 'Something wrong happened on the server.'
-        } finally {
-            this.loading = false
-            this.snackbar = true
-        }
+        const res = await Post(`admin/meraki/${this.endpoint}/populate`, { data })
+        console.log(res)
+        this.message = res.message
+        this.color = res.status
+        this.modal = true
+        console.log(e)
+        this.message = 'Something wrong happened on the server.'
+        this.loading = false
+        this.snackbar = true
       },
 
       async readAll () {
@@ -387,8 +385,8 @@
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       }
     }
