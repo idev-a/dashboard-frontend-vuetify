@@ -131,10 +131,17 @@ import { Get, Post } from '@/api'
       '$vuetify.breakpoint.smAndDown' (val) {
         this.$emit('update:expandOnHover', !val)
       },
+      email: {
+        handler (newVal) {
+          if (newVal) {
+            this.getItems()
+          }
+        },
+        immediate: true
+      }
     },
 
     mounted () {
-      this.getItems()
     },
 
     methods: {
