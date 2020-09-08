@@ -345,7 +345,6 @@ export default {
       companyId: {
         handler(newValue) {
           if (newValue) {
-            console.log('StatsComponent', newValue)
             this.fetchAllCardData()
           }
         },

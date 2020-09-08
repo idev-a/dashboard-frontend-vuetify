@@ -136,6 +136,7 @@
                         :append-icon="'mdi-refresh'"
                         @click:append="generateCode"
                         label="Login Code"
+                        :loading="loading"
                         readonly
                         required
                       ></v-text-field>
