@@ -239,8 +239,8 @@
                   class="mb-3"
                   label="Company"
                 />
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
           </v-form>
           </v-card-text>
           <v-card-actions>
@@ -304,9 +304,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../../api'
-  import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '../../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -441,9 +440,6 @@
       }
     },
 
-    async mounted() {
-    },
-
     methods: {
       ...mapActions(['showConfirm', 'showCronDialog']),
 
@@ -458,35 +454,31 @@
         this.selectedItems = []
         this.items = []
         try {
-          const res = await axios.get(url)
-            this.items = res.data.items
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 
       async readUsers () {
-        this.readAll(`${BASE_API}/api/admin/users/read/${this.companyId}`)
+        this.readAll(`admin/users/read/${this.companyId}`)
       },
 
       async migrate () {
         this.loading = true
         try {
-          const data = await axios({
-            url: `${BASE_API}/api/admin/migrate/users`,
-            data: {
-              directory: this.directory,
-              company_id: this.companyId
-            },
-            method: 'POST'
+          const res = await Post(`admin/migrate/users`, {
+            directory: this.directory,
+            company_id: this.companyId
           })
-          this.message = data.data.message
-          this.color = data.data.status
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
@@ -538,14 +530,10 @@
       async _updateUser () {
         this.loading = true
         try {
-          const data = await axios({
-            url: `${BASE_API}/api/admin/users_groups/users/update`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-          if (data.data.status == 'success') {
+          const res = await Post(`admin/users_groups/users/update`, this.editItem)
+          this.message = res.message
+          this.color = res.status
+          if (res.status == 'success') {
             Object.assign(this.items[this.defaultIndex], this.editItem)
             this.currentUser = this.editItem
           }
@@ -560,14 +548,10 @@
       async _deleteUser () {
         this.loading = true
         try {
-          const data = await axios({
-            url: `${BASE_API}/api/admin/users_groups/users/remove`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-          if (data.data.status == 'success') {
+          const res = await Post(`admin/users_groups/users/remove`, this.editItem)
+          this.message = res.message
+          this.color = res.status
+          if (res.status == 'success') {
             this.items.splice(this.defaultIndex, 1)
             this.updateDialog = false
           }

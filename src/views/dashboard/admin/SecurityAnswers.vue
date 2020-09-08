@@ -460,9 +460,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API, getCompaniesUsers, Get, Post } from '../../../api'
-  import { downloadCSV, addKey, DOMAIN_LIST, removeQuotes } from '../../../util'
+  import { BASE_API, getCompaniesUsers, Get, Post } from '@/api'
+  import { downloadCSV, addKey, DOMAIN_LIST, removeQuotes } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {

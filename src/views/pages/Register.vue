@@ -107,9 +107,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../api'
-  import { DOMAIN_LIST } from '../../util'
-  import axios from 'axios'
+  import { BASE_API, Get, Post } from '@/api'
+  import { DOMAIN_LIST } from '@/util'
 
   export default {
     name: 'PagesRegister',
@@ -173,12 +172,6 @@
       }
     },
 
-    computed: {
-    },
-
-    watch: {
-    },
-
     methods: {
       gotoLogin () {
         this.$router.push({ name: "Login" });
@@ -196,26 +189,15 @@
         }
         
         this.loading = true
-        const self = this
-        axios({
-          url: `${BASE_API}/api/users/register`,
-          method: 'POST',
-          data: this.form,
-        })
-          .then(function (res) {
-            self.loading = false
-            self.snackbar_message = res.data.message
-            if (res.data.status === 'failure') {
-              self.snackbar_color = 'red darken-3'
-            } else {
-              self.snackbar_color = 'success'
-            }
-            self.snackbar = true
-          })
-          .catch(error => {
-            console.log(error)
-            self.loading = false
-          })
+        const res = await Post(`users/register`, this.form)
+        this.loading = false
+        this.snackbar_message = res.message
+        if (res.status === 'failure') {
+          this.snackbar_color = 'red darken-3'
+        } else {
+          this.snackbar_color = 'success'
+        }
+        this.snackbar = true
       }
     },
   }

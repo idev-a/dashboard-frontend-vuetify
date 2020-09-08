@@ -94,9 +94,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../../api'
-  import { validEmail, levelColor, highlightText } from '../../../util'
-  import axios from 'axios'
+  import { BASE_API, Get } from '@/api'
+  import { validEmail, levelColor, highlightText } from '@/util'
   import { mapState, mapActions } from 'vuex'
 
   export default {
@@ -205,21 +204,11 @@
           this.expanded.push(item)
         }
       },
-      fetchUsers () {
-        const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/users/${this.companyId}/all`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.users = res.data.users
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+      async fetchUsers () {
+        this.loading = true
+        const res = await Get(`users/${this.companyId}/all`)
+        this.users = res.users
+        this.loading = false
       },
     }
   }

@@ -119,9 +119,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmail, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -187,16 +186,16 @@
           }
         ],
         rules: {
-            required: value => {
-              return !!value || 'This field is required.'
-            },
-            email: value => {
-              const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-              return pattern.test(value) || 'Invalid e-mail.'
-            },
-          }
+          required: value => {
+            return !!value || 'This field is required.'
+          },
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
         }
-      },
+      }
+    },
 
     computed: {
       ...mapState(['page', 'userId', 'companyId']),
@@ -229,10 +228,10 @@
         this.selectedItems = []
         this.items = []
         try {
-          const res = await axios.get(url)
-          this.items = res.data.items
-          this.message = res.data.message
-          this.color = res.data.status
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
@@ -256,19 +255,15 @@
       async redirectO365 () {
         this.loading = true
         try {
-          const res = await axios({
-            url: `${BASE_API}/api/o365/buildurl`,
-            data: { 
-              O365_CLIENT_ID: this.o365ClientId.trim(),
-              O365_CLIENT_SECRET: this.o365ClientSecret.trim(),
-              scope: this.scope.join(','),
-              company_id: this.company_id,
-              user_id: this.userId
-            },
-            method: 'POST'
+          const res = await Post(`o365/buildurl`, { 
+            O365_CLIENT_ID: this.o365ClientId.trim(),
+            O365_CLIENT_SECRET: this.o365ClientSecret.trim(),
+            scope: this.scope.join(','),
+            company_id: this.company_id,
+            user_id: this.userId
           })
           if (res.status == 200) {
-            window.open(res.data.auth_url, '_blank', "toolbar=yes, resizable=yes, top=100, left=100, width=400, height=300, noreferrer")
+            window.open(res.auth_url, '_blank', "toolbar=yes, resizable=yes, top=100, left=100, width=400, height=300, noreferrer")
           }
         } catch (e) {
           console.log(e.response)

@@ -11,8 +11,7 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../api'
-  import axios from 'axios'
+  import { BASE_API, Post } from '@/api'
   import { mapState } from 'vuex'
   
   export default {
@@ -30,32 +29,19 @@
     }),
 
     watch: {
-      isIdle (val) {
+      async isIdle (val) {
         if (val) {
-          const self = this
-          self.loading = true
+          this.loading = true
           const data = {
             id: this.userId,
           }
-          axios({
-            url:`${BASE_API}/api/users/login/keep`,
-            method: 'POST',
-            data,
-            withCredentials: false,
-            crossdomain: true,
-          })
-            .then(function (res) {
-              self.loading = false
-              if (res.data.status === 'ok') {
-                if (res.data.is_required) {
-                  this.$router.push({ name: 'Lock' })
-                }
-              } 
-            })
-            .catch(error => {
-              console.log(error)
-              self.loading = false
-            })
+          const res = await Post(`users/login/keep`, data)
+          this.loading = false
+          if (res.status === 'ok') {
+            if (res.is_required) {
+              this.$router.push({ name: 'Lock' })
+            }
+          } 
         }
       }
     },
@@ -69,7 +55,7 @@
   }
 </script>
 
-<style type="text/css">
+<style>
 tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, .05);
 }

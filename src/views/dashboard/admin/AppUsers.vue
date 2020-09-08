@@ -679,9 +679,8 @@
 </template>
 
 <script>
-  import { fetchApps, fetchAppUsers, BASE_API, getCompaniesUsers } from '../../../api'
-  import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '../../../util'
-  import axios from 'axios'
+  import { fetchApps, fetchAppUsers, BASE_API, getCompaniesUsers, Get, Post } from '@/api'
+  import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '@/util'
   import { mapState } from 'vuex'
   import { lowerCase } from 'lodash'
 
@@ -838,9 +837,9 @@
       this.loading = true
       await this.fetchDashboardUsers()
       this.appDetails = await fetchApps('all')
-      const res = await axios.get(`${BASE_API}/api/applications/all`)
-      if (res.data) {
-        this.apps = res.data.apps
+      const res = await Get(`applications/all`)
+      if (res) {
+        this.apps = res.apps
       }
       this.loading = false
 
@@ -981,7 +980,7 @@
       },
 
       showSnack (res) {
-        if (res.data.status == 'Ok') {
+        if (res.status == 'Ok') {
           this.snackText = 'Success'
           this.snackColor = 'success'
         } else {
@@ -1009,14 +1008,14 @@
         let res
         if (this.defaultDetailIndex > -1) {
           res = await this._updateDetail(item)
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             const app = this.apps.filter(app => app.id == item.application_id)
             item.application_name = app[0].application_name
             Object.assign(this.appDetails[this.defaultDetailIndex], item)
           } 
         } else {
           res = await this._createDetail(item)
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             const app = this.apps.filter(app => app.id == item.application_id)
             item.application_name = app[0].application_name
             this.appDetails.push(item)
@@ -1035,12 +1034,12 @@
         let res
         if (this.defaultUserIndex > -1) {
           res = await this._updateUser(item)
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             Object.assign(this.users[this.defaultUserIndex], item)
           } 
         } else {
           res = await this._createUser(item)
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             this.users.push(item)
           } 
         }
@@ -1091,19 +1090,19 @@
         let res, index
         if (this.delApp) {
           res = await this._deleteApp()
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             index = this.apps.indexOf(this.delApp)
             this.apps.splice(index, 1)
           } 
         } else if (this.delUser) {
           res = await this._deleteUser()
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             index = this.users.indexOf(this.delUser)
             this.users.splice(index, 1) 
           } 
         } else if (this.delDetail) {
           res = await this._deleteDetail()
-          if (res.data.status == 'Ok') {
+          if (res.status == 'Ok') {
             index = this.appDetails.indexOf(this.delDetail)
             this.appDetails.splice(index, 1) 
           } 
@@ -1121,17 +1120,13 @@
 
       async _callAPI (data, url) {
         this.loading = true
-        const res = await axios({
-          url,
-          data,
-          method: 'POST'
-        })
+        const res = await Post(url, data)
         this.loading = false
         return res
       },
 
       async _deleteApp () {
-        return await this._callAPI(this.delApp, `${BASE_API}/api/applications/delete`)
+        return await this._callAPI(this.delApp, `applications/delete`)
       },
 
       async updateApp(data) {
@@ -1153,8 +1148,8 @@
       },
 
       async _updateApp (data) {
-        const res = await this._callAPI(data, `${BASE_API}/api/applications/update`)
-        if (res.data.status == 'Ok') {
+        const res = await this._callAPI(data, `applications/update`)
+        if (res.status == 'Ok') {
           Object.assign(this.apps[this.defaultAppIndex], data)
         }
         this.closeAppDialog()
@@ -1180,8 +1175,8 @@
       },
 
       async _createApp (data) {
-        const res =  await this._callAPI(data, `${BASE_API}/api/applications/create`)
-        if (res.data.status == 'Ok') {
+        const res =  await this._callAPI(data, `applications/create`)
+        if (res.status == 'Ok') {
           this.apps.push(data)
         }
         this.closeAppDialog()
@@ -1193,29 +1188,29 @@
           id: this.delUser.id,
           users_table_name: this.currentApp.users_table_name
         }
-        return await this._callAPI(data, `${BASE_API}/api/applications/user/delete`)
+        return await this._callAPI(data, `applications/user/delete`)
       },
 
       async _updateUser (data) {
         data.users_table_name = this.currentApp.users_table_name
-        return await this._callAPI(data, `${BASE_API}/api/applications/user/update`)
+        return await this._callAPI(data, `applications/user/update`)
       },
 
       async _createUser (data) {
         data.users_table_name = this.currentApp.users_table_name
-        return await this._callAPI(data, `${BASE_API}/api/applications/user/create`)
+        return await this._callAPI(data, `applications/user/create`)
       },
 
       async _deleteDetail (data) {
-        return await this._callAPI(this.delDetail, `${BASE_API}/api/applications/detail/delete`)
+        return await this._callAPI(this.delDetail, `applications/detail/delete`)
       },
 
       async _updateDetail (data) {
-        return await this._callAPI(data, `${BASE_API}/api/applications/detail/update`)
+        return await this._callAPI(data, `applications/detail/update`)
       },
 
       async _createDetail (data) {
-        return await this._callAPI(data, `${BASE_API}/api/applications/detail/create`)
+        return await this._callAPI(data, `applications/detail/create`)
       }
     }
   }

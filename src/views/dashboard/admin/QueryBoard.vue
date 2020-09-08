@@ -296,211 +296,204 @@
 </template>
 
 <script>
-  import { BASE_API, fetchTables } from '../../../api'
-  import { downloadCSV, highlightText } from '../../../util'
-  import axios from 'axios'
-  import { mapState, mapActions } from 'vuex';
+import { BASE_API, fetchTables, Get, Post } from '../../../api'
+import { downloadCSV, highlightText } from '../../../util'
+import { mapState, mapActions } from 'vuex';
 
-    export default {
-      name: 'QueryBoard',
+export default {
+  name: 'QueryBoard',
 
-      data: () => ({
-        loading: false,
-        modal: false,
-        search: '',
-        prospectSearch: '',
-        query: "",
-        table: '',
-        tables: [],
-        items: [],
-        selectedItems: [],
-        selectedProspects: [],
-        headers: [],
-        selectedHeaders: [],
-        filteredHeaders: [],
-        prospectsHeaders: [
-          {
-            text: 'Domain',
-            value: 'domain'
-          },
-          {
-            text: 'First Name',
-            value: 'first_name'
-          },
-          {
-            text: 'Last Name',
-            value: 'last_name'
-          },
-          {
-            text: 'Email',
-            value: 'email'
-          },
-          {
-            text: 'Title',
-            value: 'title'
-          },
-          {
-            text: 'Source',
-            value: 'source'
-          },
-          {
-            text: 'Run at',
-            value: 'run_at'
-          }
-        ],
-        website: '',
-        prospects: [],
-        snackbar: false,
-        message: '',
-        color: 'success',
-        findHunter: false,
-        toggleEmailNotification: false,
-        noti: {
-          valid: true,
-          templateId: 'd-403a831fec3b4dcd9da4018a3d534a84',
-          recipients: '',
-          title: '',
-          message: '',
-          interval: '0 9 * * *',
-          attach: null,
-        },
-        rules: {
-            required: value => {
-              return !!value || 'This field is required.'
-            },
-        }
-    }),
+  data: () => ({
+    loading: false,
+    modal: false,
+    search: '',
+    prospectSearch: '',
+    query: "",
+    table: '',
+    tables: [],
+    items: [],
+    selectedItems: [],
+    selectedProspects: [],
+    headers: [],
+    selectedHeaders: [],
+    filteredHeaders: [],
+    prospectsHeaders: [
+      {
+        text: 'Domain',
+        value: 'domain'
+      },
+      {
+        text: 'First Name',
+        value: 'first_name'
+      },
+      {
+        text: 'Last Name',
+        value: 'last_name'
+      },
+      {
+        text: 'Email',
+        value: 'email'
+      },
+      {
+        text: 'Title',
+        value: 'title'
+      },
+      {
+        text: 'Source',
+        value: 'source'
+      },
+      {
+        text: 'Run at',
+        value: 'run_at'
+      }
+    ],
+    website: '',
+    prospects: [],
+    snackbar: false,
+    message: '',
+    color: 'success',
+    findHunter: false,
+    toggleEmailNotification: false,
+    noti: {
+      valid: true,
+      templateId: 'd-403a831fec3b4dcd9da4018a3d534a84',
+      recipients: '',
+      title: '',
+      message: '',
+      interval: '0 9 * * *',
+      attach: null,
+    },
+    rules: {
+      required: value => {
+        return !!value || 'This field is required.'
+      },
+    }
+  }),
 
-    mounted () {
-      this.fetchTables()
-        },
+  mounted () {
+    this.fetchTables()
+  },
 
-    computed: {
-      ...mapState(['page', 'companyId', 'userId']),
+  computed: {
+    ...mapState(['page', 'companyId', 'userId']),
 
-      indexedItems () {
-        return this.items.map((item, index) => ({
+    indexedItems () {
+      return this.items.map((item, index) => ({
+        _id: index,
+        ...item
+      }))
+    },
+    indexedProspects () {
+      return this.prospects.map((item, index) => ({
           _id: index,
           ...item
         }))
-      },
-      indexedProspects () {
-        return this.prospects.map((item, index) => ({
-            _id: index,
-            ...item
-          }))
-      },
-      labelEmailNotification () {
-        return this.toggleEmailNotification ? 'Email Notification' : 'Email Notification'
-      },
-      notifyPossible () {
-        return this.noti.title && this.noti.message && !this.loading && this.query &&this.items.length
+    },
+    labelEmailNotification () {
+      return this.toggleEmailNotification ? 'Email Notification' : 'Email Notification'
+    },
+    notifyPossible () {
+      return this.noti.title && this.noti.message && !this.loading && this.query &&this.items.length
+    }
+  },
+
+  methods: {
+    ...mapActions(['showCronDialog']),
+    highlightText,
+
+    cleanWebsite (string) {
+      return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
+    },
+
+    remove (item) {
+      this.selectedHeaders.map((header, i) => {
+        if (header == item.value) {
+          this.selectedHeaders.splice(i, 1)
+        }
+      })
+
+      this.updateHeaders(this.selectedHeaders)
+    },
+
+    async getProspects (websites) {
+      this.loading = true
+      this.selectedProspects = []
+      try {
+        const res = await Post(`admin/getprospects/`, { items: websites })
+        this.prospects = res.prospects
+        this.message = res.message
+        this.color = res.status
+        this.modal = true
+      } catch(e) {
+        this.message = 'Something wrong happened on the server.'
+      } finally {
+        this.loading = false
+        this.snackbar = true
       }
     },
 
-    methods: {
-      ...mapActions(['showCronDialog']),
-
-      highlightText,
-
-      cleanWebsite (string) {
-        return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
-      },
-
-      remove (item) {
-        this.selectedHeaders.map((header, i) => {
-          if (header == item.value) {
-            this.selectedHeaders.splice(i, 1)
+    _getProspectsFromTable () {
+      let websites = []
+      this.selectedItems.map(item => {
+        if (item['website']) {
+          if (this.cleanWebsite(item['website'])) {
+            websites.push(this.cleanWebsite(item['website']))
           }
-        })
-
-        this.updateHeaders(this.selectedHeaders)
-      },
-
-      async getProspects (websites) {
-        this.loading = true
-        this.selectedProspects = []
-        try {
-          const res = await axios({
-            url: `${BASE_API}/api/admin/getprospects/`,
-            data: { items: websites },
-            method: 'POST',
-            timeout: 10000000000
-          })
-          this.prospects = res.data.prospects
-          this.message = res.data.message
-          this.color = res.data.status
-          this.modal = true
-        } catch(e) {
-          this.message = 'Something wrong happened on the server.'
-        } finally {
-          this.loading = false
-          this.snackbar = true
+          
         }
-      },
-
-      _getProspectsFromTable () {
-        let websites = []
-        this.selectedItems.map(item => {
-          if (item['website']) {
-            if (this.cleanWebsite(item['website'])) {
-              websites.push(this.cleanWebsite(item['website']))
-            }
-            
-          }
-        })
-        if (this.website) {
-          this.website.trim().split('\n').map(item => {
-            if (this.cleanWebsite(item)) {
-              websites.push(this.cleanWebsite(item))
-            }
-          })
-        }
-        this.getProspects(websites)
-        // console.log(websites)
-      },
-
-      downloadCSV () {
-        if (this.selectedItems.length) {
-          downloadCSV(this.selectedItems)
-        } else {
-          downloadCSV(this.items)
-        }
-      },
-
-      downloadProspectCSV () {
-        if (this.selectedProspects.length) {
-          downloadCSV(this.selectedProspects)
-        } else {
-          downloadCSV(this.prospects)
-        }
-      },
-
-      keyDownOnAPI () {
-        if (this.website) {
-          let websites = []
-          this.website.trim().split('\n').map(item => {
+      })
+      if (this.website) {
+        this.website.trim().split('\n').map(item => {
+          if (this.cleanWebsite(item)) {
             websites.push(this.cleanWebsite(item))
-          })
-          this.getProspects(websites)
-        }
-      },
+          }
+        })
+      }
+      this.getProspects(websites)
+      // console.log(websites)
+    },
 
-      keyDownOnQuery () {
-        if (this.query) {
-          this.runQuery()
-        }
-      },
+    downloadCSV () {
+      if (this.selectedItems.length) {
+        downloadCSV(this.selectedItems)
+      } else {
+        downloadCSV(this.items)
+      }
+    },
 
-      updateHeaders (data) {
-        if (data.length) {
-          this.filteredHeaders = this.headers.filter(header => data.includes(header.value))
-        } else {
-          this.filteredHeaders = this.headers
-        }
-      },
-      getPageNum (_page) {
-        localStorage.setItem('page', _page)
+    downloadProspectCSV () {
+      if (this.selectedProspects.length) {
+        downloadCSV(this.selectedProspects)
+      } else {
+        downloadCSV(this.prospects)
+      }
+    },
+
+    keyDownOnAPI () {
+      if (this.website) {
+        let websites = []
+        this.website.trim().split('\n').map(item => {
+          websites.push(this.cleanWebsite(item))
+        })
+        this.getProspects(websites)
+      }
+    },
+
+    keyDownOnQuery () {
+      if (this.query) {
+        this.runQuery()
+      }
+    },
+
+    updateHeaders (data) {
+      if (data.length) {
+        this.filteredHeaders = this.headers.filter(header => data.includes(header.value))
+      } else {
+        this.filteredHeaders = this.headers
+      }
+    },
+    getPageNum (_page) {
+      localStorage.setItem('page', _page)
     },
 
     selectTable () {
@@ -519,26 +512,22 @@
       this.filteredHeaders = []
 
       try {
-        const data = await axios({
-            url: `${BASE_API}/api/admin/query`,
-            data: { query: this.query },
-            method: 'POST'
+        const res = await Post(`admin/query`, { query: this.query })
+        res.headers.map(header => {
+          this.headers.push({
+            text: header.toUpperCase(),
+            value: header
           })
-          data.data.headers.map(header => {
-            this.headers.push({
-              text: header.toUpperCase(),
-              value: header
-            })
-          })
-          this.filteredHeaders = this.headers
-          this.items = data.data.items
-          this.message = data.data.message
-          this.color = data.data.status
+        })
+        this.filteredHeaders = this.headers
+        this.items = res.items
+        this.message = res.message
+        this.color = res.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {
-          this.loading = false
-          this.snackbar = true
+        this.loading = false
+        this.snackbar = true
       }
     },
 
@@ -562,17 +551,12 @@
       })
     },
 
-    async _sendEmailNotification () {
-  //    this.$refs.form && this.$refs.form.validate()
-    // if (!this.notiValid) {
-    //  return
-    // }
-
+  async _sendEmailNotification () {
     let formData = new FormData()
     if (this.noti.attach) {
-          for (let file of this.noti.attach) {
-                formData.append("files", file, file.name);
-              }
+      for (let file of this.noti.attach) {
+        formData.append("files", file, file.name);
+      }
     }
 
     const _items = this.selectedItems.length ? this.selectedItems : this.items
@@ -595,14 +579,14 @@
       type: 'application/json'
     });
 
-    formData.append("document", blob);
+      formData.append("document", blob);
 
-            this.loading = true
-            this.file = null
+      this.loading = true
+      this.file = null
       try {
-        const res = await axios.post(`${BASE_API}/api/admin/email_notification/run`, formData)
-          this.message = res.data.message
-          this.color = res.data.status
+        const res = await Post(`admin/email_notification/run`, formData)
+          this.message = res.message
+          this.color = res.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {
@@ -610,6 +594,6 @@
           this.snackbar = true
       }
     },
-    }
   }
+}
 </script>

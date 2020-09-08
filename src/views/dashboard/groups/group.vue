@@ -84,9 +84,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../../api'
-  import { validEmail } from '../../../util'
-  import axios from 'axios'
+  import { BASE_API, Get } from '@/api'
+  import { validEmail } from '@/util'
   import { mapState } from 'vuex'
 
   export default {
@@ -191,21 +190,11 @@
           this.expanded.push(item)
         }
       },
-      fetchGroups () {
-        const self = this
-        self.loading = true
-        axios(`${BASE_API}/api/groups/${this.companyId}/all`, {
-            method: 'GET',
-          })
-            .then(function (res) {
-              self.groups = res.data.groups
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+      async fetchGroups () {
+        this.loading = true
+        const res = await Get(`groups/${this.companyId}/all`)
+        this.groups = res.groups
+        this.loading = false
       },
     }
   }

@@ -116,9 +116,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmail, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -226,10 +225,10 @@
       this.selectedItems = []
         this.items = []
       try {
-        const res = await axios.get(`${BASE_API}/api/admin/calendar/read`)
-          this.items = res.data.items
-          this.message = res.data.message
-          this.color = res.data.status
+        const res = await Get(`admin/calendar/read`)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {
@@ -260,9 +259,9 @@
 
         this.loading = true
         try {
-          const res = await axios.post(`${BASE_API}/api/admin/calendar/send`, data)
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Post(`admin/calendar/send`, data)
+            this.message = res.message
+            this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
@@ -294,10 +293,10 @@
         this.loading = true
         this.file = null
         try {
-          const res = await axios.post(`${BASE_API}/api/admin/calendar/run`, formData)
-            this.csvData = res.data.csv_data
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Post(`admin/calendar/run`, formData)
+            this.csvData = res.csv_data
+            this.message = res.message
+            this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {

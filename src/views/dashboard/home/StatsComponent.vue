@@ -303,7 +303,7 @@
 </template>
 
 <script>
-import { Get } from '../../../api'
+import { Get } from '@/api'
 import { mapState, mapActions } from 'vuex'
 
 export default {

@@ -158,152 +158,150 @@
     </v-container>
 </template>
 <script>
-  import { BASE_API } from '../../../api'
-  import { downloadCSV } from '../../../util'
-  import axios from 'axios'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV } from '@/util'
+  import { mapState } from 'vuex'
 
-    export default {
-      name: 'MerakiBoard',
+  export default {
+    name: 'MerakiBoard',
 
-      data: () => ({
-        loading: false,
-        modal: false,
-        tooltip: true,
-        search: '',
-        error: false,
-        errorMessages: '', 
-        orgId: '980328',
-        networkId: '',
-        networkIds: [],
-        deviceId: '',
-        deviceIds: [],
-        apiKey: 'd5e95468c483102bec4de6cb9afed4b79b5e0568',
-        headers: [
-        ],
-        selectedItems: [
-        ],
-        items: [
-        ],
-        endpoint: '',
-        endpoints: [
-          {text: 'devices', value: 'devices'},
-          {text: 'clients', value: 'clients'},
-          {text: 'sm devices', value: 'sm/devices'},
-          {text: 'sm device softwares', value: 'sm/device/softwares'},
-        ],
-        snackbar: false,
-        message: '',
-        color: 'failure',
-        runnable: false,
-        }),
+    data: () => ({
+      loading: false,
+      modal: false,
+      tooltip: true,
+      search: '',
+      error: false,
+      errorMessages: '', 
+      orgId: '980328',
+      networkId: '',
+      networkIds: [],
+      deviceId: '',
+      deviceIds: [],
+      apiKey: 'd5e95468c483102bec4de6cb9afed4b79b5e0568',
+      headers: [
+      ],
+      selectedItems: [
+      ],
+      items: [
+      ],
+      endpoint: '',
+      endpoints: [
+        {text: 'devices', value: 'devices'},
+        {text: 'clients', value: 'clients'},
+        {text: 'sm devices', value: 'sm/devices'},
+        {text: 'sm device softwares', value: 'sm/device/softwares'},
+      ],
+      snackbar: false,
+      message: '',
+      color: 'failure',
+      runnable: false,
+      }),
 
-        watch: {
-          selectedItems () {
-            if (this.selectedItems.length > 0) {
-              const _endpoint = this.endpoint
-              this.selectedItems.map(item => {
-                if (item.networkId) {
-                  this.endpoint = 'clients'
-                } else {
-                  this.endpoint = _endpoint
-                }
-              })
-              this.changeInput('')
-            } 
-          }
-        },
-
-        computed: {
-          page () {
-            return Number(localStorage.getItem('page')) || 5
-          }, 
-
-          indexedItems () {
-            return this.items.map((item, index) => ({
-              _id: index,
-              ...item
-            }))
-          },
-        },
-
-        methods: {
-          getPageNum (_page) {
-            localStorage.setItem('page', _page)
-        },
-
-        buildNetworkIds () {
-          let networkIds = []
-          if (this.selectedItems.length > 0 && this.selectedItems[0].networkId) {
+      watch: {
+        selectedItems () {
+          if (this.selectedItems.length > 0) {
+            const _endpoint = this.endpoint
             this.selectedItems.map(item => {
               if (item.networkId) {
-                networkIds.push(item.networkId.trim())
+                this.endpoint = 'clients'
+              } else {
+                this.endpoint = _endpoint
               }
             })
-          }
-          if (this.networkId) {
-            this.networkId.split('\n').map(_networkId => {
-              if (!networkIds.includes(_networkId.trim())) {
-                networkIds.push(_networkId.trim())
-              }
-            })
-          }
-          this.networkIds = networkIds
-        },
-
-        buildDeviceIds() {
-          let deviceIds = []
-          if (this.selectedItems.length > 0 && this.selectedItems[0].deviceId) {
-            this.selectedItems.map(item => {
-              if (item.deviceId) {
-                deviceIds.push(item.deviceId.trim())
-              }
-            })
-          }
-          if (this.deviceId) {
-            this.deviceId.split('\n').map(_deviceId => {
-              if (!deviceIds.includes(_deviceId.trim())) {
-                deviceIds.push(_deviceId.trim())
-              }
-            })
-          }
-          this.deviceIds = deviceIds
-        },
-
-        changeEndpoint (val) {
-          this.endpoint = val
-          this.changeInput()
-        },
-
-        changeInput (val) {
-          this.error = false
-          this.errorMessages = ''
-          if ( ['clients', 'sm/devices'].includes(this.endpoint)) {
-            this.buildNetworkIds()
+            this.changeInput('')
           } 
-          if (this.endpoint == 'sm/device/softwares') {
-            this.buildDeviceIds()
-          }
-          if (!this.loading && this.apiKey && this.orgId && this.endpoint) {
-            this.runnable = true
-          } else {
-            this.runnable = false
-            this.error = true
-            this.errorMessages = 'Please input an api key and org id'
-          }
-        },
+        }
+      },
 
-        parseHeader (items) {
-          if (items.length) {
-            let _headers = []
-            Object.keys(items[0]).map((val,i) => {
-              _headers.push({
-                text: val[0].toUpperCase() + val.slice(1),
-                value: val
-              })
-            })
-            this.headers = _headers
-          }
+      computed: {
+        ...mapState(['page']),
+
+        indexedItems () {
+          return this.items.map((item, index) => ({
+            _id: index,
+            ...item
+          }))
         },
+      },
+
+      methods: {
+        getPageNum (_page) {
+          localStorage.setItem('page', _page)
+      },
+
+      buildNetworkIds () {
+        let networkIds = []
+        if (this.selectedItems.length > 0 && this.selectedItems[0].networkId) {
+          this.selectedItems.map(item => {
+            if (item.networkId) {
+              networkIds.push(item.networkId.trim())
+            }
+          })
+        }
+        if (this.networkId) {
+          this.networkId.split('\n').map(_networkId => {
+            if (!networkIds.includes(_networkId.trim())) {
+              networkIds.push(_networkId.trim())
+            }
+          })
+        }
+        this.networkIds = networkIds
+      },
+
+      buildDeviceIds() {
+        let deviceIds = []
+        if (this.selectedItems.length > 0 && this.selectedItems[0].deviceId) {
+          this.selectedItems.map(item => {
+            if (item.deviceId) {
+              deviceIds.push(item.deviceId.trim())
+            }
+          })
+        }
+        if (this.deviceId) {
+          this.deviceId.split('\n').map(_deviceId => {
+            if (!deviceIds.includes(_deviceId.trim())) {
+              deviceIds.push(_deviceId.trim())
+            }
+          })
+        }
+        this.deviceIds = deviceIds
+      },
+
+      changeEndpoint (val) {
+        this.endpoint = val
+        this.changeInput()
+      },
+
+      changeInput (val) {
+        this.error = false
+        this.errorMessages = ''
+        if ( ['clients', 'sm/devices'].includes(this.endpoint)) {
+          this.buildNetworkIds()
+        } 
+        if (this.endpoint == 'sm/device/softwares') {
+          this.buildDeviceIds()
+        }
+        if (!this.loading && this.apiKey && this.orgId && this.endpoint) {
+          this.runnable = true
+        } else {
+          this.runnable = false
+          this.error = true
+          this.errorMessages = 'Please input an api key and org id'
+        }
+      },
+
+      parseHeader (items) {
+        if (items.length) {
+          let _headers = []
+          Object.keys(items[0]).map((val,i) => {
+            _headers.push({
+              text: val[0].toUpperCase() + val.slice(1),
+              value: val
+            })
+          })
+          this.headers = _headers
+        }
+      },
 
       async runAPI () {
         this.loading = true
@@ -317,12 +315,8 @@
           deviceIds: this.deviceIds
         }
         try {
-          const res = await axios({
-            url: `${BASE_API}/api/admin/meraki/${this.endpoint}`,
-            data,
-            method: 'POST'
-          })
-          this.items = res.data.data.map((item, index) => {
+          const res = await Post(`admin/meraki/${this.endpoint}`, data)
+          this.items = res.map((item, index) => {
             if (Object.keys(item).includes('org_id')) { 
               return {
                 ...item,
@@ -337,8 +331,8 @@
             }
           })
           this.parseHeader(this.items)
-          this.message = res.data.message
-          this.color = res.data.status
+          this.message = res.message
+          this.color = res.status
           this.modal = true
         } catch(e) {
           if (e.response && e.response.data) {
@@ -367,13 +361,9 @@
           data = this.selectedItems
         }
         try {
-          const res = await axios({
-              url: `${BASE_API}/api/admin/meraki/${this.endpoint}/populate`,
-              data: { data },
-              method: 'POST'
-            })
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Post(`admin/meraki/${this.endpoint}/populate`, { data })
+            this.message = res.message
+            this.color = res.status
             this.modal = true
         } catch(e) {
           this.message = e.response.data.message || 'Something wrong happened on the server.'
@@ -389,15 +379,11 @@
         this.selectedItems = []
         
         try {
-          const res = await axios({
-            url: `${BASE_API}/api/admin/meraki/${this.endpoint}/read`,
-            data: { org_id: this.orgId },
-            method: 'POST'
-          })
-          this.items = res.data.data
+          const res = await Post(`admin/meraki/${this.endpoint}/read`, { org_id: this.orgId })
+          this.items = res
           this.parseHeader(this.items)
-          this.message = res.data.message
-          this.color = res.data.status
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {

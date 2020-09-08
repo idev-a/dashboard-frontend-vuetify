@@ -173,9 +173,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { levelColor, beautifyEmail, highlightText } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { levelColor, beautifyEmail, highlightText } from '@/util'
   import { mapState } from 'vuex'
 
   export default {
@@ -257,15 +256,15 @@
         this.deviceDialog = true
         this.selectdDevices = []
         try {
-          const res = await axios.get(`${BASE_API}/api/admin/gsuite/mobile/${this.currentUser.email}`)
-          this.devices = res.data.items
-          this.message = res.data.message
-          this.color = res.data.status
+          const res = await Get(`admin/gsuite/mobile/${this.currentUser.email}`)
+          this.devices = res.items
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       }
     }

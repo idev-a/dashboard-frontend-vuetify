@@ -105,9 +105,8 @@
 </template>
 
 <script>
-  import { BASE_API } from '../../api'
-  import { DOMAIN_LIST } from '../../util'
-  import axios from 'axios'
+  import { BASE_API, Post } from '@/api'
+  import { DOMAIN_LIST } from '@/util'
   import { mapState } from 'vuex'
 
   export default {
@@ -169,6 +168,17 @@
       }
     },
 
+    mounted () {
+      const message = localStorage.getItem('message')
+      console.log(message)
+      if (message != undefined && message) {
+        localStorage.removeItem('message')
+        this.snackbar_message = message
+        this.snackbar_color = 'failure'
+        this.snackbar = true
+      }
+    },
+
     methods: {
       gotoSignup () {
         this.$router.push({ name: "Register" });
@@ -181,70 +191,37 @@
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
       },
-      request () {
-
+      async request () {
         if (!this.formHasErrors) {
           this.loading = true
-          const self = this
           const data = {
             email: this.form.email,
           }
-          axios({
-            url: `${BASE_API}/api/users/login/code`,
-            method: 'POST',
-            data,
-            withCredentials: false,
-            crossdomain: true,
-          })
-            .then(function (res) {
-              self.loading = false
-              self.snackbar_message = res.data.message
-              if (res.data.status === 'failure') {
-                self.snackbar_color = 'error'
-              } else {
-                self.snackbar_color = 'success'
-              }
-              self.snackbar = true
-            })
-            .catch(error => {
-              console.log(error)
-              self.loading = false
-            })
+          const res = await Post(`users/login/code`, data)
+          this.loading = false
+          this.snackbar_message = res.message
+          this.snackbar_color = res.status
+          this.snackbar = true
         }
       },
 
-      submit () {
-        this.$refs['code'].validate(true)
+      async submit () {
+        this.$refs.code.validate(true)
 
         if (this.code) {
           this.loading = true
-          const self = this
           const data = {
             code: this.code,
             keep: this.keepMeLogin,
           }
-          axios({
-            url:`${BASE_API}/api/users/login/verify`,
-            method: 'POST',
-            data,
-            withCredentials: false,
-            crossdomain: true,
-          })
-            .then(function (res) {
-              self.loading = false
-              self.snackbar_message = res.data.message
-              if (res.data.status === 'failure') {
-                self.snackbar_color = 'error'
-              } else {
-                self.snackbar_color = 'success'
-                self.gotoDashboard(res.data)
-              }
-              self.snackbar = true
-            })
-            .catch(error => {
-              console.log(error)
-              self.loading = false
-            })
+          const res = await Post(`users/login/verify`, data)
+          this.snackbar_message = res.message
+          this.snackbar_color = res.status
+          this.snackbar = true
+          if (res.status === 'success') {
+            this.gotoDashboard(res)
+          }
+          this.loading = false
         }
       },
     },

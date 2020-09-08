@@ -98,9 +98,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -181,15 +180,15 @@
       },
 
       async readAll () {
-        var url = `${BASE_API}/api/admin/general_bamboo/read`
+        var url = `admin/general_bamboo/read`
           this.loading = true
         this.selectedItems = []
           this.items = []
         try {
-          const res = await axios.get(url)
-            this.items = res.data.items
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Get(url)
+            this.items = res.items
+            this.message = res.message
+            this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
@@ -201,17 +200,13 @@
       async authBamboo () {
         this.loading = true
         try {
-          const res = await axios({
-            url: `${BASE_API}/api/admin/bamboo/run`,
-            data: { 
-              access_token: this.access_token.trim(),
-              user_id: this.userId,
-              company_id: this.company_id.trim()
-            },
-            method: 'POST'
+          const res = await Post(`admin/bamboo/run`, { 
+            access_token: this.access_token.trim(),
+            user_id: this.userId,
+            company_id: this.company_id.trim()
           })
-          this.message = res.data.message
-          this.color = res.data.status
+          this.message = res.message
+          this.color = res.status
         } catch (e) {
           console.log(e.response)
         } finally {

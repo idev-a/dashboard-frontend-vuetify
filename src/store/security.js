@@ -1,5 +1,4 @@
 import  { BASE_API, Get, Post, updateAnswer } from '../api'
-import axios from 'axios'
 
 export const strict = false
 

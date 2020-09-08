@@ -84,22 +84,22 @@
           md="4"
         >
           <v-row align="center">
-              <div v-if="mode" class="align-self-center">
-                <v-btn
-                  color="main"
-                  icon
-                  @click="showUpdateDialog(publicData.high.name)"
+            <div v-if="mode" class="align-self-center">
+              <v-btn
+                color="main"
+                icon
+                @click="showUpdateDialog(publicData.high.name)"
+              >
+                <v-icon
+                  color="success"
                 >
-                  <v-icon
-                    color="success"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-              </div>
-              <div>
-                <b class="mr-2">Name:</b>
-                <span class="display-1">{{publicData.high.name.Answer}}</span>
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
+            </div>
+            <div>
+              <b class="mr-2">Name:</b>
+              <span class="display-1">{{publicData.high.name.Answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -110,22 +110,22 @@
           md="4"
         >
           <v-row align="center">
-              <div v-if="mode" class="align-self-center">
-                <v-btn
-                  color="main"
-                  icon
-                  @click="showUpdateDialog(publicData.high.email)"
+            <div v-if="mode" class="align-self-center">
+              <v-btn
+                color="main"
+                icon
+                @click="showUpdateDialog(publicData.high.email)"
+              >
+                <v-icon
+                  color="success"
                 >
-                  <v-icon
-                    color="success"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-              </div>
-              <div>
-                <b class="mr-2">Email:</b>
-                <span class="display-1" v-html="beautifyEmail(publicData.high.email.Answer)"></span>
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
+            </div>
+            <div>
+              <b class="mr-2">Email:</b>
+              <span class="display-1" v-html="beautifyEmail(publicData.high.email.Answer)"></span>
             </div>
           </v-row>
         </v-col>
@@ -136,22 +136,22 @@
           md="4"
         >
           <v-row align="center">
-              <div v-if="mode" class="align-self-center">
-                <v-btn
-                  color="main"
-                  icon
-                  @click="showUpdateDialog(publicData.high.dob)"
+            <div v-if="mode" class="align-self-center">
+              <v-btn
+                color="main"
+                icon
+                @click="showUpdateDialog(publicData.high.dob)"
+              >
+                <v-icon
+                  color="success"
                 >
-                  <v-icon
-                    color="success"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
-              </div>
-              <div>
-                <b class="mr-2">Birthday:</b>
-                <span class="display-1">{{publicData.high.dob.Answer}}</span>
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
+            </div>
+            <div>
+              <b class="mr-2">Birthday:</b>
+              <span class="display-1">{{publicData.high.dob.Answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -180,94 +180,94 @@
           :key="key"
           :value="key"
         >
-            <v-card
-              flat
-              tile
-              class="px-3"
-            >
-              <v-row>
-                <v-expansion-panels
-                  flat
-                >
-              <!-- Business Information -->
-              <!-- Manual information -->
-                  <public-data-panel-item-pre
-                    :data="result.business_observations"
-                    :mode="mode"
-                  />
+          <v-card
+            flat
+            tile
+            class="px-3"
+          >
+            <v-row>
+              <v-expansion-panels
+                flat
+              >
+            <!-- Business Information -->
+            <!-- Manual information -->
+                <public-data-panel-item-pre
+                  :data="result.business_observations"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.email_provider"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.email_provider"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.name_associated"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.name_associated"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.website_type"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.website_type"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.business_geo"
-                    :mode="mode"
-                  />
-    
-                  <public-data-panel-item-pre
-                    :data="result.business_google_search_results"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.business_geo"
+                  :mode="mode"
+                />
+  
+                <public-data-panel-item-pre
+                  :data="result.business_google_search_results"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.business_other"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.business_other"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.linkedin_data"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.linkedin_data"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.business_email"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.business_email"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.business_hosting"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.business_hosting"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.names_associated"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.names_associated"
+                  :mode="mode"
+                />
 
-                <!-- Automation result from public_data.py -->
-                  <public-data-panel-item-pre
-                    v-if="false"
-                    :data="result.spf_record"
-                    :mode="mode"
-                  />
+              <!-- Automation result from public_data.py -->
+                <public-data-panel-item-pre
+                  v-if="false"
+                  :data="result.spf_record"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.spf_dmarc"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.spf_dmarc"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    v-if="false"
-                    :data="result.spf_record_more"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  v-if="false"
+                  :data="result.spf_record_more"
+                  :mode="mode"
+                />
 
-                  <public-data-panel-item-pre
-                    :data="result.spf_spoofing_possible"
-                    :mode="mode"
-                  />
+                <public-data-panel-item-pre
+                  :data="result.spf_spoofing_possible"
+                  :mode="mode"
+                />
 
                 <v-expansion-panel
                   v-if="result.ctfr_subdomain"
@@ -483,7 +483,7 @@
 </template>
 
 <script>
-  import { BASE_API, fetchPublicData, getCompanyId } from '../../../api'
+  import { BASE_API, fetchPublicData, getCompanyId } from '@/api'
   import { 
     validEmail,
     get_json,
@@ -494,8 +494,7 @@
     beautifyDateTimeFromUnix,
     beautifyDateTime,
     removeQuotes
-  } from '../../../util'
-  import axios from 'axios'
+  } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {

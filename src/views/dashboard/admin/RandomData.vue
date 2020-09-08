@@ -153,17 +153,18 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { 
     BASE_API,
     fetchCompanies,
     fetchTables,
     fetchAllApps,
     fetchAllQuestions,
-    fetchDevices
-  } from '../../../api'
-  import { downloadCSV, beautifyEmails } from '../../../util'
-  import { generateData } from '../../../fake'
+    fetchDevices,
+    Get,
+    Post
+  } from '@/api'
+  import { downloadCSV, beautifyEmails } from '@/util'
+  import { generateData } from '@/fake'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -326,18 +327,14 @@
       async saveData () {
         this.loading = true
         try {
-          const res = await axios({
-              url: `${BASE_API}/api/admin/random/save`,
-              data: this.data,
-              method: 'POST',
-            })
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Post(`admin/random/save`, this.data)
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
       },
 

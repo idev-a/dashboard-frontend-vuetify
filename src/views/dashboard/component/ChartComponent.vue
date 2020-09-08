@@ -370,7 +370,7 @@
 </template>
 
 <script>
-import { BASE_API, Get } from '../../../api'
+import { BASE_API, Get } from '@/api'
 import { 
   riskLevelChart, 
   userRiskChart, 
@@ -438,7 +438,6 @@ import { mapState, mapActions } from 'vuex'
       companyId: {
         handler(newValue) {
           if (newValue) {
-            console.log('ChartComponent', newValue)
             this.fetchChartsData(),
             this.fetchCatLineChart()
           }

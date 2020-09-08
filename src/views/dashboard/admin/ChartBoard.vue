@@ -263,9 +263,8 @@
   </v-container>
 </template>
 <script>
-  import { BASE_API, fetchCompanies } from '../../../api'
-  import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '../../../util'
-  import axios from 'axios'
+  import { BASE_API, fetchCompanies, Get, Post } from '@/api'
+  import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '@/util'
   import { mapState } from 'vuex'
 
     export default {
@@ -409,14 +408,10 @@
           this.loading = true
           const ids = this.selectedChartTableData.map(item => item.id)
             try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/chart/delete`,
-                method: 'POST',
-                data: { ids }
-              })
+            const res = await Post(`admin/chart/delete`, { ids })
               this.chartTableData = this.chartTableData.filter(item => !ids.includes(item.id))
-              this.message = res.data.message
-              this.color = res.data.status
+              this.message = res.message
+              this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
@@ -440,12 +435,8 @@
         async getTables () {
           const query = 'Show Tables'
           try {
-            const res = await axios({
-              url: `${BASE_API}/api/admin/query`,
-              data: { query },
-              method: 'POST'
-            })
-            this.tableNames = res.data.items.map(item => { return item.Tables_in_revamp })
+            const res = await Post(`admin/query`, { query })
+            this.tableNames = res.items.map(item => { return item.Tables_in_revamp })
           } catch(e) {
             console.log(e)
           } finally {
@@ -456,13 +447,10 @@
         async readAll () {
           this.loading = true
           try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/chart/${this.companyId}/readall`,
-                method: 'GET'
-              })
-              this.chartTableData = res.data.data
-              this.message = res.data.message
-              this.color = res.data.status
+            const res = await Get(`admin/chart/${this.companyId}/readall`)
+              this.chartTableData = res
+              this.message = res.message
+              this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
@@ -496,13 +484,9 @@
           }
 
           try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/chart/save`,
-                data,
-                method: 'POST'
-              })
-              this.message = res.data.message
-              this.color = res.data.status
+            const res = await Post(`admin/chart/save`, data)
+              this.message = res.message
+              this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
@@ -528,16 +512,12 @@
             company: this.company,
           }
           try {
-            const res = await axios({
-                url: `${BASE_API}/api/admin/chart/test`,
-                data,
-                method: 'POST'
-              })
-              this.data = res.data.data
-              this.total = res.data.total
-              this.message = res.data.message
-              this.tested = res.data.status
-              this.color = res.data.status
+            const res = await Post(`admin/chart/test`, data)
+              this.data = res
+              this.total = res.total
+              this.message = res.message
+              this.tested = res.status
+              this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {

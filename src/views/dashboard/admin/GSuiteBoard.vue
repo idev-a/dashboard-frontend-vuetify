@@ -124,17 +124,17 @@
                 <v-spacer></v-spacer>
                 <v-btn :loading="loading" :disabled="!importable"  class="mr-2" @click="importKey" color="main">Import & Run<v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
                 <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_users', 'Daily')" color="main">Users<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
-                </template>
-                <span>Crons for Gsuite Users</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_google_groups', 'Daily')" color="main">Groups<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
-                </template>
-                <span>Crons for Google Groups</span>
-              </v-tooltip>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_gsuite_users', 'Daily')" color="main">Users<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+                  </template>
+                  <span>Crons for Gsuite Users</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCron('run_google_groups', 'Daily')" color="main">Groups<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+                  </template>
+                  <span>Crons for Google Groups</span>
+                </v-tooltip>
                 <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="" @click="showCron('run_gsuite_devices', 'Daily')" color="main">Devices<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
@@ -241,9 +241,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmail, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -261,7 +260,7 @@
         snackbar: false,
         message: '',
         color: 'success',
-        importUrl: `${BASE_API}/api/admin/gsuite/drive/run`,
+        importUrl: `admin/gsuite/drive/run`,
         gsuites: [
           {
             key: 'google_drive_shared',
@@ -443,83 +442,83 @@
         // initialize the vars
         this.emails = ''
         if (href == 'gsuite_users') {
-          this.importUrl = `${BASE_API}/api/admin/gsuite/users/run`
+          this.importUrl = `admin/gsuite/users/run`
           this.gsuiteHeaders = this.usersHeaders
         } else {
-          this.importUrl = `${BASE_API}/api/admin/gsuite/drive/run`
+          this.importUrl = `admin/gsuite/drive/run`
         }
       },
 
       keyDownOnImport () {
-            if (this.query) {
-              this.importKey()
-            }
-          },
+        if (this.query) {
+          this.importKey()
+        }
+      },
 
-          async readAll (url) {
+      async readAll (url) {
+        this.loading = true
+        this.selectedItems = []
+        this.items = []
+        try {
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
+      },
+
+      async readAllShared () {
+        this.readAll(`admin/google_drive/read`)
+      },
+
+      async readAllGSuite (type="gsuite_users") {
+        this.readAll(`admin/${type}/read`)
+        if (type == "gsuite_users") {
+          this.gsuiteHeaders = this.usersHeaders
+        } else if (type == 'google_groups') {
+          this.gsuiteHeaders = this.groupHeaders
+        } else if (type == 'gsuite_devices') {
+          this.gsuiteHeaders = this.deviceHeaders
+        }
+      },
+
+      downloadCSV () {
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
+      },
+
+      async sendAttachment () {
+        let _items;
+        if (this.selectedItems.length) {
+          _items = this.selectedItems
+        } else {
+          _items = this.items
+        }
+
+        const data = {
+          _items
+        }
+
             this.loading = true
-          this.selectedItems = []
-            this.items = []
-          try {
-            const res = await axios.get(url)
-              this.items = res.data.items
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
-
-          async readAllShared () {
-          this.readAll(`${BASE_API}/api/admin/google_drive/read`)
-          },
-
-          async readAllGSuite (type="gsuite_users") {
-          this.readAll(`${BASE_API}/api/admin/${type}/read`)
-          if (type == "gsuite_users") {
-            this.gsuiteHeaders = this.usersHeaders
-          } else if (type == 'google_groups') {
-            this.gsuiteHeaders = this.groupHeaders
-          } else if (type == 'gsuite_devices') {
-            this.gsuiteHeaders = this.deviceHeaders
-          }
-          },
-
-          downloadCSV () {
-            if (this.selectedItems.length) {
-              downloadCSV(this.selectedItems)
-            } else {
-              downloadCSV(this.items)
-            }
-          },
-
-          async sendAttachment () {
-            let _items;
-            if (this.selectedItems.length) {
-              _items = this.selectedItems
-            } else {
-              _items = this.items
-            }
-
-            const data = {
-              _items
-            }
-
-                this.loading = true
-          try {
-            const res = await axios.post(`${BASE_API}/api/admin/gsuite/send`, data)
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
+      try {
+        const res = await Post(`admin/gsuite/send`, data)
+          this.message = res.message
+          this.color = res.status
+      } catch(e) {
+        this.message = 'Something wrong happened on the server.'
+      } finally {
+          this.loading = false
+          this.snackbar = true
+      }
+      },
 
       async importKey () {
         if (!this.emails || !this.file) {
@@ -546,10 +545,10 @@
         this.loading = true
         this.file = null
         try {
-          const res = await axios.post(this.importUrl, formData)
-            this.csvData = res.data.csv_data
-            this.message = res.data.message
-            this.color = res.data.status
+          const res = await Post(this.importUrl, formData)
+            this.csvData = res.csv_data
+            this.message = res.message
+            this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {

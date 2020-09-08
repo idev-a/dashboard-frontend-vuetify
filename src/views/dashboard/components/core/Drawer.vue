@@ -162,7 +162,7 @@ import { Get, Post } from '@/api'
       },
       async getItems () {
         const res = await Get(`admin/drawer/${this.email}/read`)
-        this.items = res.items.items
+        this.items = res.items
       }
     },
   }

@@ -98,9 +98,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -112,47 +111,47 @@
         access_token: 'ZcleRNk2k4AAAAAAAArSgBy0XndfW9vszf0WGF9RaifVAeOgNE77P3fZjkFyA94Y',
         company_id: '',
         snackbar: false,
-            message: '',
-            color: 'success',
-            search: '',
-            selectedItems: [],
-            items: [],
-            headers: [
-              {
-                text: 'Email',
-                value: 'email'
-              },
-              {
-                text: 'Display Name',
-                value: 'display_name'
-              },
-              {
-                text: 'Status',
-                value: 'status'
-              },
-              {
-                text: 'Group Name',
-                value: 'group_name'
-              },
-              {
-                text: 'Membership Type',
-                value: 'membership_type'
-              },
-              {
-                text: 'Company',
-                value: 'company_id'
-              },
-              {
-                text: 'Run',
-                value: 'run_at'
-              }
-            ],
-        rules: {
-              required: value => {
-                return !!value || 'This field is required.'
-              },
-            }
+        message: '',
+        color: 'success',
+        search: '',
+        selectedItems: [],
+        items: [],
+        headers: [
+          {
+            text: 'Email',
+            value: 'email'
+          },
+          {
+            text: 'Display Name',
+            value: 'display_name'
+          },
+          {
+            text: 'Status',
+            value: 'status'
+          },
+          {
+            text: 'Group Name',
+            value: 'group_name'
+          },
+          {
+            text: 'Membership Type',
+            value: 'membership_type'
+          },
+          {
+            text: 'Company',
+            value: 'company_id'
+          },
+          {
+            text: 'Run',
+            value: 'run_at'
           }
+        ],
+        rules: {
+            required: value => {
+              return !!value || 'This field is required.'
+            },
+          }
+        }
       },
 
       computed: {
@@ -169,56 +168,52 @@
       beautifyEmails,
 
       downloadCSV () {
-            if (this.selectedItems.length) {
-              downloadCSV(this.selectedItems)
-            } else {
-              downloadCSV(this.items)
-            }
-          },
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
+      },
           
-          getPageNum (_page) {
-            localStorage.setItem('page', _page)
-        },
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
 
-        async readAll () {
-          var url = `${BASE_API}/api/admin/dropbox_users/read`
-            this.loading = true
-          this.selectedItems = []
-            this.items = []
-          try {
-            const res = await axios.get(url)
-              this.items = res.data.items
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
+      async readAll () {
+        var url = `admin/dropbox_users/read`
+        this.loading = true
+        this.selectedItems = []
+        this.items = []
+        try {
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
+      },
 
-          async authDropbox () {
-            this.loading = true
-            try {
-              const res = await axios({
-                url: `${BASE_API}/api/admin/dropbox/run`,
-                data: { 
-                  access_token: this.access_token.trim(),
-                  user_id: this.userId,
-                  company_id: this.company_id.trim()
-                },
-                method: 'POST'
-              })
-              this.message = res.data.message
-              this.color = res.data.status
-            } catch (e) {
-              console.log(e.response)
-            } finally {
-              this.loading = false
-              this.snackbar = true
-            }
-          }
+      async authDropbox () {
+        this.loading = true
+        try {
+          const res = await Post(`admin/dropbox/run`, { 
+            access_token: this.access_token.trim(),
+            user_id: this.userId,
+            company_id: this.company_id.trim()
+          })
+          this.message = res.message
+          this.color = res.status
+        } catch (e) {
+          console.log(e.response)
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
+      }
     }
   }
 </script>

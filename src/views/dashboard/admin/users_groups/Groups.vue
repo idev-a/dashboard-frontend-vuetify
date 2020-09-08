@@ -2,7 +2,6 @@
   <div
     id="admin-groups"
   >
-    
     <v-card-title>
       <div class="font-weight-light body">Manage <b>groups</b> table</div>
       <v-spacer></v-spacer>
@@ -89,196 +88,195 @@
         :loading="loading"
       ></v-file-input>
     </div>
-      <v-data-table
-        v-model="selectedItems"
-        :loading="loading"
-        :headers="headers"
-        :items="items"
-        :items-per-page="page"
-        item-key="id"
-        :search="search"
-        show-select
-        @update:items-per-page="getPageNum"
-      > 
-        <template v-slot:item.action="{ item }">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn 
-                text 
-                icon 
-                v-on="on"
-                @click.stop="updateModal(item)"
-              >
-                <v-icon>mdi-pen</v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </template>
-        <template v-slot:item.email="{ item }">
-            <span v-html="beautifyEmails(item.email)"></span>
-        </template>
-      </v-data-table>
+    <v-data-table
+      v-model="selectedItems"
+      :loading="loading"
+      :headers="headers"
+      :items="items"
+      :items-per-page="page"
+      item-key="id"
+      :search="search"
+      show-select
+      @update:items-per-page="getPageNum"
+    > 
+      <template v-slot:item.action="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              text 
+              icon 
+              v-on="on"
+              @click.stop="updateModal(item)"
+            >
+              <v-icon>mdi-pen</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
+      </template>
+      <template v-slot:item.email="{ item }">
+        <span v-html="beautifyEmails(item.email)"></span>
+      </template>
+    </v-data-table>
 
-      <v-dialog
-        v-model="updateDialog"
-        max-width="1024"
-      >
-        <v-card>
-            <v-card-title>{{ updateTitle }}</v-card-title>
-            <v-card-text>
-              <group-detail v-if="mode == 'View'" :currentGroup="currentGroup" />
-              <v-form
-                v-if="mode == 'Edit'"
-                  ref="updateForm"
-                  class="mt-4"
-                  v-model="updateValid"
-                >
-                <div class="text--secondary text-center display-2">{{ currentGroup.question }}</div>
-                <v-row >
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                          v-model="editItem.email"
-                          label="Email" 
-                          :rules="[rules.required, rules.email]"
-                          hide-details="auto"
-                          class="mb-3"
-                        >
-                      </v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                          v-model="editItem.name"
-                          label="Full Name" 
-                          :rules="[rules.required]"
-                          hide-details="auto"
-                          class="mb-3"
-                        >
-                        </v-text-field>
-                      </v-col>
-              </v-row>
+    <v-dialog
+      v-model="updateDialog"
+      max-width="1024"
+    >
+      <v-card>
+          <v-card-title>{{ updateTitle }}</v-card-title>
+          <v-card-text>
+            <group-detail v-if="mode == 'View'" :currentGroup="currentGroup" />
+            <v-form
+              v-if="mode == 'Edit'"
+              ref="updateForm"
+              class="mt-4"
+              v-model="updateValid"
+            >
+              <div class="text--secondary text-center display-2">{{ currentGroup.question }}</div>
               <v-row >
-                  <v-col cols="12" md="6">
-                  <v-combobox multiple
-                            v-model="editItem._members" 
-                            label="Members" 
-                            append-icon
-                            hide-selected
-                            chips
-                            :items="parseItems(editItem.members)"
-                            deletable-chips
-                            :search-input.sync="tagSearch" 
-                            :rules="[rules.emails]"
-                            >
-                      </v-combobox>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-combobox multiple
-                            v-model="editItem._aliases" 
-                            label="Aliases" 
-                            append-icon
-                            hide-selected
-                            chips
-                            :items="parseItems(editItem.aliases)"
-                            deletable-chips
-                            :search-input.sync="tagSearch" 
-                            :rules="[rules.emails]"
-                            >
-                    </v-combobox>
-                  </v-col>
-              </v-row>
-                  <v-row >
-                  <v-col cols="12" md="6">
-                    <v-textarea
-                          v-model="editItem.description"
-                          label="Description" 
-                          auto-grow
-                          rows="1"
-                          hide-details="auto"
-                          class="mb-3"
-                          required
-                        >
-                      </v-textarea>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-autocomplete
-                      v-model="editItem.company_id"
-                      :rules="[rules.required]"
-                      chips
-                      deletable-chips
-                      small
-                      :items="companies"
-                      class="mb-3"
-                      label="Company"
-                    />
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="editItem.email"
+                    label="Email" 
+                    :rules="[rules.required, rules.email]"
+                    hide-details="auto"
+                    class="mb-3"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="editItem.name"
+                    label="Full Name" 
+                    :rules="[rules.required]"
+                    hide-details="auto"
+                    class="mb-3"
+                  >
+                  </v-text-field>
                 </v-col>
               </v-row>
+              <v-row >
+                <v-col cols="12" md="6">
+                  <v-combobox multiple
+                    v-model="editItem._members" 
+                    label="Members" 
+                    append-icon
+                    hide-selected
+                    chips
+                    :items="parseItems(editItem.members)"
+                    deletable-chips
+                    :search-input.sync="tagSearch" 
+                    :rules="[rules.emails]"
+                    >
+                  </v-combobox>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-combobox multiple
+                    v-model="editItem._aliases" 
+                    label="Aliases" 
+                    append-icon
+                    hide-selected
+                    chips
+                    :items="parseItems(editItem.aliases)"
+                    deletable-chips
+                    :search-input.sync="tagSearch" 
+                    :rules="[rules.emails]"
+                    >
+                  </v-combobox>
+                </v-col>
+              </v-row>
+              <v-row >
+                <v-col cols="12" md="6">
+                  <v-textarea
+                    v-model="editItem.description"
+                    label="Description" 
+                    auto-grow
+                    rows="1"
+                    hide-details="auto"
+                    class="mb-3"
+                    required
+                  >
+                  </v-textarea>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                    v-model="editItem.company_id"
+                    :rules="[rules.required]"
+                    chips
+                    deletable-chips
+                    small
+                    :items="companies"
+                    class="mb-3"
+                    label="Company"
+                  />
+              </v-col>
+            </v-row>
           </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              v-if="mode == 'Edit'"
-              color="primary"
-              text
-              :loading="loading"
-              @click="updateGroup"
-            >
-              Update
-            </v-btn>
-            <v-btn
-              v-if="mode == 'Edit'"
-              color="primary"
-              text
-              :loading="loading"
-              @click="deleteGroup"
-            >
-              Delete
-            </v-btn>
-            <v-btn
-              color="primary"
-              text
-              :loading="loading"
-              @click="toggleMode"
-            >
-              {{ btnLabel }}
-            </v-btn>
-            <v-btn
-              color="success"
-              text
-              :loading="loading"
-              @click="updateDialog = false"
-            >
-              Close
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-snackbar
-        v-model="snackbar"
-        bottom
-        :color="color"
-        >
-        {{ message }}
-        <template v-slot:action="{ attrs }">
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
-            dark
+            v-if="mode == 'Edit'"
+            color="primary"
             text
-            v-bind="attrs"
-            @click="snackbar = false"
+            :loading="loading"
+            @click="updateGroup"
+          >
+            Update
+          </v-btn>
+          <v-btn
+            v-if="mode == 'Edit'"
+            color="primary"
+            text
+            :loading="loading"
+            @click="deleteGroup"
+          >
+            Delete
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            :loading="loading"
+            @click="toggleMode"
+          >
+            {{ btnLabel }}
+          </v-btn>
+          <v-btn
+            color="success"
+            text
+            :loading="loading"
+            @click="updateDialog = false"
           >
             Close
           </v-btn>
-        </template>
-      </v-snackbar>
-    </div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      bottom
+      :color="color"
+      >
+      {{ message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../../api'
-  import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '../../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, DOMAIN_LIST, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -315,8 +313,7 @@
         currentGroup: {},
         editItem: {},
         defaultIndex: -1,
-        defaultItem: {
-        },
+        defaultItem: {},
         mode: 'View',
         YES_NO: [
           {
@@ -365,26 +362,26 @@
         ],
         x: 0,
         y: 0,
-            rules: {
-              required: value => {
-                return !!value || 'This field is required.'
-              },
-              email: value => {
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                return pattern.test(value) || 'Invalid e-mail.'
-              },
-              emails: vals => {
-                if (vals == '') {
-                  return true
-                }
-                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                let emailValid = ''
-                vals.map(value => {
-                  emailValid = pattern.test(value) || 'Invalid e-mail.'
-                })
-                return emailValid
-              }
+        rules: {
+          required: value => {
+            return !!value || 'This field is required.'
+          },
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
+          emails: vals => {
+            if (vals == '') {
+              return true
             }
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            let emailValid = ''
+            vals.map(value => {
+              emailValid = pattern.test(value) || 'Invalid e-mail.'
+            })
+            return emailValid
+          }
+        }
       }
     },
 
@@ -426,9 +423,6 @@
       }
     },
 
-    async mounted() {
-    },
-
     methods: {
       ...mapActions(['showConfirm', 'showCronDialog']),
 
@@ -456,25 +450,25 @@
         });
       },
 
-    async readAll (url) {
+      async readAll (url) {
         this.loading = true
-      this.selectedItems = []
+        this.selectedItems = []
         this.items = []
-      try {
-        const res = await axios.get(url)
-          this.items = res.data.items
-          this.message = res.data.message
-          this.color = res.data.status
-      } catch(e) {
-        this.message = 'Something wrong happened on the server.'
-      } finally {
+        try {
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
           this.loading = false
           this.snackbar = true
-      }
+        }
       },
 
       async readGroups () {
-        this.readAll(`${BASE_API}/api/admin/groups/read/${this.companyId}`)
+        this.readAll(`admin/groups/read/${this.companyId}`)
       },
 
       createModal () {
@@ -535,64 +529,55 @@
       async _updateGroup () {
         this.editItem.members = this.editItem._members.join(';')
         this.editItem.aliases = this.editItem._aliases.join(';')
-        console.log(this.editItem)
         this.loading = true
-      try {
-        const data = await axios({
-            url: `${BASE_API}/api/admin/users_groups/groups/update`,
-            data: this.editItem,
-            method: 'POST'
-          })
-          this.message = data.data.message
-          this.color = data.data.status
-          if (data.data.status == 'success') {
+        try {
+          const res = await Post(`admin/users_groups/groups/update`, this.editItem)
+          this.message = res.message
+          this.color = res.status
+          if (res.status == 'success') {
             Object.assign(this.items[this.defaultIndex], this.editItem)
             this.currentUser = this.editItem
           }
-      } catch(e) {
-        this.message = 'Something wrong happened on the server.'
-      } finally {
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
           this.loading = false
           this.snackbar = true
-      }
+        }
       },
 
       async _deleteGroup () {
         this.loading = true
         try {
-          const data = await axios({
-              url: `${BASE_API}/api/admin/users_groups/groups/remove`,
-              data: this.editItem,
-              method: 'POST'
-            })
-            this.message = data.data.message
-            this.color = data.data.status
-            if (data.data.status == 'success') {
-              this.items.splice(this.defaultIndex, 1)
-              this.updateDialog = false
-            }
+          const res = await Post(`admin/users_groups/groups/remove`, this.editItem)
+          this.message = res.message
+          this.color = res.status
+          if (res.status == 'success') {
+            this.items.splice(this.defaultIndex, 1)
+            this.updateDialog = false
+          }
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {
-            this.loading = false
-            this.snackbar = true
+          this.loading = false
+          this.snackbar = true
         }
-        },
+      },
 
-        toggleMode () {
-          if (this.mode == 'Edit') {
-            this.mode = 'View'
-          } else {
-            this.mode = 'Edit'
-          }
+      toggleMode () {
+        if (this.mode == 'Edit') {
+          this.mode = 'View'
+        } else {
+          this.mode = 'Edit'
+        }
       },
 
       downloadCSV () {
-          if (this.selectedItems.length) {
-            downloadCSV(this.selectedItems)
-          } else {
-            downloadCSV(this.items)
-          }
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
       },
       async migrate () {
         let formData = new FormData()
@@ -616,9 +601,9 @@
         this.file = null
         this.loading = true
         try {
-          const data = await axios.post(`${BASE_API}/api/admin/migrate/groups`, formData)
-          this.message = data.data.message
-          this.color = data.data.status
+          const res = await Post(`admin/migrate/groups`, formData)
+          this.message = res.message
+          this.color = res.status
         } catch(e) {
           this.message = 'Something wrong happened on the server.'
         } finally {

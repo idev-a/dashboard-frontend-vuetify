@@ -11,7 +11,8 @@
         Sidebar Board
         <v-spacer></v-spacer>
         <v-select
-          v-model="form.email"
+          v-model="form"
+          return-object
           label="Users"
           :items="users"
           item-text="email"
@@ -41,7 +42,7 @@
       </v-card-title>
       <v-card-text>
         <v-jstree 
-          :data="items" 
+          :data="customMenus" 
           show-checkbox 
           multiple 
           no-dots
@@ -72,8 +73,27 @@ export default {
       users: [],
       items: [],
       form: {
-        email: ''
       }
+    }
+  },
+
+  computed: {
+    customMenus () {
+      return this.items.map(item => {
+        if (item.is_admin) {
+          if (this.form.role != 'Admin') {
+            item.selected = false
+            item.disabled = true
+            item.opened = false
+            item.children = item.children.map(child => {
+              child.selected = false
+              child.disabled = true
+              return child
+            })
+          }
+        }
+        return item
+      })
     }
   },
 
@@ -89,7 +109,7 @@ export default {
     async readAll () {
       this.loading = true
       const res = await Get(`admin/drawer/${this.form.email}/read`)
-      this.items = res.items.items
+      this.items = res.items
       this.loading = false
     },
     async showCreateDialog () {

@@ -19,11 +19,46 @@
           class="mt-5"
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn color="main" @click="fetchUsers" dark class="mb-2 mr-2"><v-icon size="16" left dark>mdi-refresh</v-icon>Refresh</v-btn>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn color="main" dark class="mb-2" v-on="on"><v-icon size="16" left dark>mdi-plus</v-icon>Add New User</v-btn>
+            <v-btn 
+              color="primary"
+              v-on="on"
+              @click="manageACL"
+              :loading="loading"
+            >
+            <v-icon size="16" left>mdi-web</v-icon>ACL
+            </v-btn>
           </template>
+          <span>Manage ACL</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              color="primary"
+              v-on="on"
+              :loading="loading"
+              @click="refreshPage"
+            >
+            <v-icon size="16" left>mdi-refresh</v-icon>Refresh
+            </v-btn>
+          </template>
+          <span>Refresh Users</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              color="primary"
+              v-on="on"
+              :loading="loading"
+              @click="showCreateDlg"
+            >
+            <v-icon size="16" left>mdi-plus</v-icon>Add
+            </v-btn>
+          </template>
+          <span>Add New User</span>
+        </v-tooltip>
+        <v-dialog v-model="dialog" max-width="500px">
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -158,29 +193,127 @@
         </template>
       </v-data-table>
     </v-card>
+
+    <!-- ACL -->
+    <v-dialog
+      v-model="aclDialog"
+      width="800"
+    >
+      <v-card>
+        <v-card-title>
+          Access Control List(ACL)
+        </v-card-title>
+        <v-card-text class="pb-0">
+          <div class="mt-5">Manage Whitelist IPs</div>
+        </v-card-text>
+        <v-card-text>
+          <v-form
+            ref="form"
+            v-model="valid"
+          >
+            <v-combobox
+              v-model="whitelistIPs"
+              :rules="[rules.ip]"
+              label="Source IPs"
+              :loading="loading"
+              placeholder="for example, 0.0.0.0, 192.168.2.0"
+              hint="Define IP whitelist"
+              persistent-hint
+              outlined
+              chips
+              deletable-chips
+              multiple
+            />
+          </v-form>
+          <div class="mt-5">Manage Whitelist Users</div>
+          <v-row>
+            <v-col>
+              <div class="d-flex justify-center font-weight-medium primary--text">Users</div>
+              <drop-list 
+                :items="srcUsers" 
+                class="list"
+                @reorder="$event.apply(srcUsers)" 
+                @insert="onInsert1" 
+                mode="cut"
+              >
+                <template v-slot:item="{item, reorder}">
+                  <drag 
+                    :data="item" 
+                    class="item" 
+                    :key="item.id"
+                    @cut="remove(srcUsers, item)"
+                  >
+                    <v-sheet :key="item.id" class="pa-3" rounded :color="reorder ? 'primary' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
+                  </drag>
+                </template>
+                <template v-slot:feedback="{data}">
+                  <v-sheet class="pa-3" rounded elevation=1 color="primary" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
+                </template>
+              </drop-list>
+            </v-col>
+            <v-col>
+              <div class="d-flex justify-center font-weight-medium success--text">Whitelist Users</div>
+              <drop-list
+                :items="whitelistUsers"
+                class="list"
+                @insert="onInsert2"
+                @reorder="$event.apply(whitelistUsers)"
+                mode="cut"
+              >
+                <template v-slot:item="{item, reorder}">
+                  <drag 
+                    class="item" 
+                    :key="item.id" 
+                    :data="item" 
+                    @cut="remove(whitelistUsers, item)"
+                  >
+                    <v-sheet :key="item.id" class="pa-3" rounded :color="reorder ? 'success' : 'white'" elevation=1><b>{{item.email}}</b> [{{item.role}}]</v-sheet>
+                  </drag>
+                </template>
+                <template v-slot:feedback="{data}">
+                  <v-sheet rounded class="pa-3" elevation=1 color="success" :key="data.id"><b>{{data.email}}</b> [{{data.role}}]</v-sheet>
+                </template>
+              </drop-list>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="aclDialog=false">Close</v-btn>
+          <v-btn color="primary" text :loading="loading" :disabled="loading || !valid" @click="saveAcl">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
       <template v-slot:action="{ attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              @click="snack = false"
-            >
-              Close
-            </v-btn>
-          </template>
+        <v-btn
+          dark
+          text
+          v-bind="attrs"
+          @click="snack = false"
+        >
+          Close
+        </v-btn>
+      </template>
     </v-snackbar>
   </v-container>
 </template>
 
 <script>
-  import { BASE_API, Get, Post, Put } from '@/api'
-  import axios from 'axios'
+  import { Get, Post, Put } from '@/api'
   import { mapState } from 'vuex'
+  import { Drag, Drop, DropList } from "vue-easy-dnd";
 
   export default {
     name: 'DashboardAllUsersTables',
+
+    components: {
+      Drag,
+      Drop,
+      DropList
+    },
 
     data: () => ({
       loading: false,
@@ -189,22 +322,6 @@
       snack: false,
       snackColor: '',
       snackText: '',
-      max25chars: v => v.length <= 25 || 'Input too long!',
-      pagination: {},
-      actions: [
-        {
-          color: 'info',
-          icon: 'mdi-account',
-        },
-        {
-          color: 'success',
-          icon: 'mdi-pencil',
-        },
-        {
-          color: 'error',
-          icon: 'mdi-close',
-        },
-      ],
       headers: [
         {
           text: 'Email',
@@ -233,6 +350,10 @@
         {
           text: 'Member Since',
           value: 'member_since',
+        },
+        {
+          text: 'Last IP',
+          value: 'ip',
         },
         { text: 'Actions', value: 'action', sortable: false },
       ],
@@ -269,9 +390,15 @@
         ip: '',
         last_login: '',
         member_since: '',
+        company_name: '',
         code: '_',
         daily_tips_opt_out: false
       },
+      aclDialog: false,
+      valid: true,
+      whitelistIPs: [],
+      srcUsers: [],
+      whitelistUsers: [],
       rules: {
         required: value => !!value || 'This field is required.',
         counter: value => value.length >= 6 || 'Min 6 characters',
@@ -279,11 +406,15 @@
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
         },
+        ip: v => {
+          const pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+          return pattern.test(v) || 'Invalid IP address or range.'
+        }
       },
     }),
 
     mounted () {
-      this.fetchUsers()
+      this.refreshPage()  
     },
 
     computed: {
@@ -307,6 +438,11 @@
     methods: {
       getPageNum (_page) {
         localStorage.setItem('page', _page)
+      },
+
+      async refreshPage () {
+        await this.fetchUsers()
+        await this.fetchACLData()
       },
 
       changeStatus (val) {
@@ -341,6 +477,7 @@
       editItem (item) {
         this.editedIndex = this.users.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        this.editedItem.code = this.editedItem.code || '-'
         this.dialog = true
       },
       deleteItem (item) {
@@ -351,33 +488,20 @@
           this.deleteUser(item)
         } 
       },
-      deleteUser (item) {
-        const self = this
-        self.loading = true
-        axios({
-            url: `${BASE_API}/api/users/${item.email}`,
-            method: 'POST',
-          })
-            .then(function (res) {
-              self.snackText = res.data.message
-              if (res.data.status === 'ok') {
-                self.snackColor = 'success'
-              } else {
-                self.snackColor = 'error'
-              }
-              self.snack = true
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
-              self.loading = false
-            })
+      async deleteUser (item) {
+        this.loading = true
+        const res = await Post(`users/${item.email}`)
+        this.showSnack(res)
+        this.loading = false
       },
       showSnack(res) {
         this.snackText = res.message
         this.snackColor = res.status
         this.snack = true
+      },
+      showCreateDlg () {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.dialog = true
       },
       async createUser (item) {
         console.log(item)
@@ -390,8 +514,7 @@
         this.loading = false
       },
       async updateUser (item) {
-        const self = this
-        self.loading = true
+        this.loading = true
         const res = await Put(`users/${item.email}`, item)
         this.showSnack(res)
         if (res.status == 'success') {
@@ -417,7 +540,74 @@
         } finally {
           this.loading = false
         }
-      }
+      },
+      async fetchACLData () {
+        this.loading = true
+        const res = await Get('admin/acl/read')
+        if (res.status == 'success'){
+          this.srcUsers = res.acl.src_users || this.users.map(user=>{
+            return {
+              id: user.id,
+              email: user.email,
+              role: user.role
+            }
+          })
+          this.whitelistUsers = res.acl.whitelist_users || []
+          this.whitelistIPs = res.acl.whitelist_ips || []
+        }
+        this.loading = false
+      },
+      manageACL () {
+        this.aclDialog = true
+        this.fetchACLData()
+      },
+      async saveAcl () {
+        this.loading = true
+        const data = {
+          whitelist_ips: JSON.stringify(this.whitelistIPs),
+          whitelist_users: JSON.stringify(this.whitelistUsers),
+          src_users: JSON.stringify(this.srcUsers)
+        }
+        const res = await Post('admin/acl/update', data)
+        this.showSnack(res)
+        this.loading = false
+      },
+      onInsert1(event) {
+        this.srcUsers.splice(event.index, 0, event.data);
+      },
+      onInsert2(event) {
+        this.whitelistUsers.splice(event.index, 0, event.data);
+      },
+      remove(array, value) {
+        let index = array.indexOf(value);
+        array.splice(index, 1);
+      },
     }
   }
 </script>
+
+<style lang="scss" scoped>
+.list {
+  border: 1px solid black;
+  margin: 10px auto;
+  width: 100%;
+  min-height: 300px;
+  border-radius: 4px;
+
+  .item {
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    &.feedback {
+      border: 2px dashed black;
+    }
+
+    &.drag-image {
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+</style>

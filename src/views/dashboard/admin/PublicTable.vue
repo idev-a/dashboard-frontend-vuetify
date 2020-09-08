@@ -59,9 +59,8 @@
 </template>
 
 <script>
-  import { BASE_API, fetchPublicData } from '../../../api'
-  import { DOMAIN_LIST } from '../../../util'
-  import axios from 'axios'
+  import { BASE_API, fetchPublicData, Get, Post } from '@/api'
+  import { DOMAIN_LIST } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -109,58 +108,49 @@
     },
 
     components: {
-        PublicData: () => import('../component/PublicData'),
+      PublicData: () => import('../component/PublicData'),
+    },
+
+    async mounted () {
+      await this.fetchUsers()
+    },
+
+    methods: {        
+      _email (email) {
+        return email.split('@')[1]
       },
 
-      async mounted () {
-        await this.fetchUsers()
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
       },
 
-      methods: {        
-        _email (email) {
-          return email.split('@')[1]
-        },
+      async fetchUsers () {
+        let res = await Get(`users/all`)
+        res = res.users
+        const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.email.split('@')[1]))
+        this.defaultCompanies = []
+        const self = this;
+        res.map(user => { if (user.company_id) { self.defaultCompanies.push(user.company_id) }})
+        this.defaultPersonalEmails = res.map(user => user.email)
+        this.loadingUsers = false
+      },
 
-        getPageNum (_page) {
-            localStorage.setItem('page', _page)
-          },
+      async changeCategory () {
+        this.company = ''
+        if (this.category == 'Business') {
+          this.companies = this.defaultCompanies
+          this.companyLabel = 'Select a Company'
+          this.title = 'Business Data'
+        } else {
+          this.companies = this.defaultPersonalEmails
+          this.companyLabel = 'Select a Person'
+          this.title = 'Personal Data'
+        }
+      },
 
-          async fetchUsers () {
-            let res = await axios.get(`${BASE_API}/api/users/all`)
-            res = res.data.users
-            const companyUsers = res.filter(user => !DOMAIN_LIST.includes(user.email.split('@')[1]))
-            this.defaultCompanies = []
-            const self = this;
-            // companyUsers.map(user => {
-            //   if (!self.defaultCompanies.includes(user.email.split('@')[1])) {
-            //     self.defaultCompanies.push(user.email.split('@')[1]) 
-            //   }
-            // })
-            res.map(user => { if (user.company_id) { self.defaultCompanies.push(user.company_id) }})
-            // const persons = res.filter(user => DOMAIN_LIST.includes(user.email.split('@')[1]))
-            this.defaultPersonalEmails = res.map(user => user.email)
-            this.loadingUsers = false
-          },
-
-          async changeCategory () {
-            this.company = ''
-            if (this.category == 'Business') {
-              this.companies = this.defaultCompanies
-              this.companyLabel = 'Select a Company'
-              this.title = 'Business Data'
-            } else {
-              this.companies = this.defaultPersonalEmails
-              this.companyLabel = 'Select a Person'
-              this.title = 'Personal Data'
-            }
-          },
-
-          async changeCompany () {
-            // this.loading = true
-            // const res = await axios.get(`${BASE_API}/api/public/${this.company}/${this.category.toLowerCase()}`)
-          //  this.loading = false
-            this.company = this.company.toLowerCase()
-          },
-      }
+      async changeCompany () {
+        this.company = this.company.toLowerCase()
+      },
+    }
   }
 </script>

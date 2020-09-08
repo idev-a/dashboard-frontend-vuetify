@@ -1,6 +1,4 @@
-import  { BASE_API, updateAnswer } from '../api'
-import axios from 'axios'
-
+import  { BASE_API, updateAnswer, Get } from '../api'
 export const strict = false
 
 export default {
@@ -37,11 +35,11 @@ export default {
   	async getPublicData({ commit }, payload) {
       let value = {}
       try {
-    		const res = await axios.get(`${BASE_API}/api/public/${payload.company_id}/${payload.category}`)
+    		const res = await Get(`public/${payload.company_id}/${payload.category}`)
     		value = {
-          high: res.data.data.high,
-          medium: res.data.data.medium,
-          low: res.data.data.low
+          high: res.data.high,
+          medium: res.data.medium,
+          low: res.data.low
         };
       } catch(e) {
       }

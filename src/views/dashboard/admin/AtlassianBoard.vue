@@ -110,9 +110,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { BASE_API } from '../../../api'
-  import { downloadCSV, beautifyEmail, beautifyEmails } from '../../../util'
+  import { BASE_API, Get, Post } from '@/api'
+  import { downloadCSV, beautifyEmail, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
@@ -125,43 +124,43 @@
         orgId: 'c6da411c-59d4-431e-a49a-f624edd2c345',
         company_id: '',
         snackbar: false,
-            message: '',
-            color: 'success',
-            search: '',
-            selectedItems: [],
-            items: [],
-            headers: [
-              {
-                text: 'Email',
-                value: 'email'
-              },
-              {
-                text: 'Active',
-                value: 'active'
-              },
-              {
-                text: 'Billable',
-                value: 'access_billable'
-              },
-              {
-                text: 'Type',
-                value: 'account_type'
-              },
-              {
-                text: 'Company',
-                value: 'company_id'
-              },
-              {
-                text: 'Run',
-                value: 'run_at'
-              }
-            ],
-        rules: {
-              required: value => {
-                return !!value || 'This field is required.'
-              },
-            }
+        message: '',
+        color: 'success',
+        search: '',
+        selectedItems: [],
+        items: [],
+        headers: [
+          {
+            text: 'Email',
+            value: 'email'
+          },
+          {
+            text: 'Active',
+            value: 'active'
+          },
+          {
+            text: 'Billable',
+            value: 'access_billable'
+          },
+          {
+            text: 'Type',
+            value: 'account_type'
+          },
+          {
+            text: 'Company',
+            value: 'company_id'
+          },
+          {
+            text: 'Run',
+            value: 'run_at'
           }
+        ],
+        rules: {
+            required: value => {
+              return !!value || 'This field is required.'
+            },
+          }
+        }
       },
 
       computed: {
@@ -175,65 +174,61 @@
     methods: {
       ...mapActions(['showCronDialog']),
 
-          beautifyEmail,
+      beautifyEmail,
       beautifyEmails,
 
       downloadCSV () {
-            if (this.selectedItems.length) {
-              downloadCSV(this.selectedItems)
-            } else {
-              downloadCSV(this.items)
-            }
-          },
+        if (this.selectedItems.length) {
+          downloadCSV(this.selectedItems)
+        } else {
+          downloadCSV(this.items)
+        }
+      },
 
-          getPageNum (_page) {
-            localStorage.setItem('page', _page)
-        },
+      getPageNum (_page) {
+        localStorage.setItem('page', _page)
+      },
 
-          async readAll () {
-          var url = `${BASE_API}/api/admin/atlassian_users/read`
-            this.loading = true
-          this.selectedItems = []
-            this.items = []
-          try {
-            const res = await axios.get(url)
-              this.items = res.data.items
-              this.message = res.data.message
-              this.color = res.data.status
-          } catch(e) {
-            this.message = 'Something wrong happened on the server.'
-          } finally {
-              this.loading = false
-              this.snackbar = true
-          }
-          },
+      async readAll () {
+        var url = `admin/atlassian_users/read`
+          this.loading = true
+        this.selectedItems = []
+          this.items = []
+        try {
+          const res = await Get(url)
+          this.items = res.items
+          this.message = res.message
+          this.color = res.status
+        } catch(e) {
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+            this.loading = false
+            this.snackbar = true
+        }
+      },
 
-        showCron () {
-            this.showCronDialog({dialog: true, type: 'run_atlassian', interval: 'Daily'})
-          },
+      showCron () {
+        this.showCronDialog({dialog: true, type: 'run_atlassian', interval: 'Daily'})
+      },
 
-          async authZoom () {
-            this.loading = true
-            try {
-              const res = await axios({
-                url: `${BASE_API}/api/admin/atlassianauth`,
-                data: { 
-                  api_key: this.apiKey.trim(),
-                  org_id: this.orgId.trim(),
-                  user_id: this.userId,
-                  company_id: this.company_id.trim()
-                },
-                method: 'POST'
-              })
-              this.message = res.data.message
-              this.color = res.data.status
-            } catch (e) {
-              console.log(e.response)
-            } finally {
-              this.loading = false
-              this.snackbar = true
-            }
-          }
+      async authZoom () {
+        this.loading = true
+        try {
+          const res = await Post(`admin/atlassianauth`, { 
+            api_key: this.apiKey.trim(),
+            org_id: this.orgId.trim(),
+            user_id: this.userId,
+            company_id: this.company_id.trim()
+          })
+          this.message = res.message
+          this.color = res.status
+        } catch (e) {
+          console.log(e.response)
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
+      }
     }
   }
 </script>
