@@ -234,7 +234,7 @@
                 :search="search"
                 show-select
                 @update:items-per-page="getPageNum"
-                  @click:row="showDetails"
+                @click:row="showDetails"
               > 
                 <template v-slot:item.conditions="{ item }">
                   <div v-for=" cond,x in item.conditions"><b>{{ x + 1 }}.</b> {{ cond.condition }}</div>
@@ -448,14 +448,14 @@
           this.loading = true
           try {
             const res = await Get(`admin/chart/${this.companyId}/readall`)
-              this.chartTableData = res
-              this.message = res.message
-              this.color = res.status
+            this.chartTableData = res.data
+            this.message = res.message
+            this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
-              this.loading = false
-              this.snackbar = true
+            this.loading = false
+            this.snackbar = true
           }
         },
 
@@ -513,17 +513,17 @@
           }
           try {
             const res = await Post(`admin/chart/test`, data)
-              this.data = res
-              this.total = res.total
-              this.message = res.message
-              this.tested = res.status
-              this.color = res.status
+            this.data = res.data
+            this.total = res.total
+            this.message = res.message
+            this.tested = res.status
+            this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
-              this.loading = false
-              this.snackbar = true
-              this.done = true
+            this.loading = false
+            this.snackbar = true
+            this.done = true
           }
         },
         changeCompany () {
