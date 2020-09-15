@@ -530,6 +530,7 @@ export default {
       } finally {
         this.loading = false
         this.showSnackbar(payload)  
+        this.file = null
       }
     }
   }

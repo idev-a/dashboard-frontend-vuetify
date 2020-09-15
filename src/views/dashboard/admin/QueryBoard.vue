@@ -33,6 +33,7 @@
               :items="tables"
               label="Tables"
               outlined
+              :loading="loading"
               @input="selectTable"
             >
             </v-autocomplete>
@@ -371,7 +372,9 @@ export default {
   }),
 
   mounted () {
+    this.loading = true
     this.fetchTables()
+    this.loading = false
   },
 
   computed: {

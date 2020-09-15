@@ -523,6 +523,10 @@
             value: 'Category',
             width: 180
           },
+          {
+            text: 'Date',
+            value: 'run_at',
+          },
           { text: 'Actions', value: 'action', sortable: false, align: 'center', width: 180 }
         ],
         rules: {

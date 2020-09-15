@@ -32,7 +32,7 @@
                     :rules="[rules.required]"
                     chips
                     :items="companies"
-                    class=""
+                    :loading="loading"
                     label="Select a company"
                     hint="Select a company you want to get the chart data"
                     :error="error"
@@ -114,7 +114,7 @@
                     :rules="[rules.required]"
                     chips
                     :items="tableNames"
-                    class=""
+                    :loading="loading"
                     label="Select a target table"
                     hint="Select a table you want change chart"
                   />
@@ -263,7 +263,7 @@
   </v-container>
 </template>
 <script>
-  import { BASE_API, fetchCompanies, Get, Post } from '@/api'
+  import { BASE_API, fetchCompanies, fetchTables, Get, Post } from '@/api'
   import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '@/util'
   import { mapState } from 'vuex'
 
@@ -372,14 +372,12 @@
       async mounted () {
         this.getTables()
 
-        this.companies = await this.fetchCompanies()
+        this.companies = await fetchCompanies()
       },
 
       methods: {
-        fetchCompanies,
-
         getPageNum (_page) {
-            localStorage.setItem('page', _page)
+          localStorage.setItem('page', _page)
         },
 
         add () {
@@ -407,16 +405,16 @@
         async _deleteChartTableData () {
           this.loading = true
           const ids = this.selectedChartTableData.map(item => item.id)
-            try {
+          try {
             const res = await Post(`admin/chart/delete`, { ids })
-              this.chartTableData = this.chartTableData.filter(item => !ids.includes(item.id))
-              this.message = res.message
-              this.color = res.status
+            this.chartTableData = this.chartTableData.filter(item => !ids.includes(item.id))
+            this.message = res.message
+            this.color = res.status
           } catch(e) {
             this.message = e.response.data.message
           } finally {
-              this.loading = false
-              this.snackbar = true
+            this.loading = false
+            this.snackbar = true
           }
         },
 
@@ -433,15 +431,9 @@
           this.done = false
         },
         async getTables () {
-          const query = 'Show Tables'
-          try {
-            const res = await Post(`admin/query`, { query })
-            this.tableNames = res.items.map(item => { return item.Tables_in_revamp })
-          } catch(e) {
-            console.log(e)
-          } finally {
-              this.loading = false
-          }
+          this.loading = true
+          this.tableNames = await fetchTables()
+          this.loading = false
         },
 
         async readAll () {

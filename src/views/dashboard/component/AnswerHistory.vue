@@ -78,8 +78,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Get, Post } from '../../../api'
-import { formatDate, removeQuotes, highlightText } from '../../../util'
+import { Get, Post } from '@/api'
+import { formatDate, removeQuotes, highlightText } from '@/util'
 export default {
   props: ['loading', 'headers', 'history', 'value'],
 
