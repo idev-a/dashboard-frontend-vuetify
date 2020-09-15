@@ -283,7 +283,7 @@
         if (this.select.length) {
           this.risks = this.risksOrigin.filter(risk => this.select.includes(risk.category))
         } else {
-          this.risks = this.risksOrigin
+          this.risks = this.risksOrigin.filter(risk => risk)
         }
         this.risks = this.risks.filter(risk => {
           if (this.filteredRisks.length) {
@@ -300,8 +300,7 @@
             } else if (pattern == 'informational') {
               pattern = /informational/i
             } 
-            const risks = this.filteredRisks.map(risk => risk.value)
-            if (risks.join('').match(pattern)) {
+            if (this.filteredRisks.join('').match(pattern)) {
               return risk
             }
           } else {

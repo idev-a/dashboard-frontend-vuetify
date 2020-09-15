@@ -177,7 +177,7 @@
               pattern = /informational/i
             } 
             const risks = this.filteredRisks.map(risk => risk.value)
-            if (risks.join('').match(pattern)) {
+            if (this.filteredRisks.join('').match(pattern)) {
               return user
             }
           }
