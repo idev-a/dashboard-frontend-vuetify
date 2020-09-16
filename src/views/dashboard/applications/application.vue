@@ -130,77 +130,7 @@
             </div>
 
             <!-- Application detail -->
-            <div
-              v-if="details"
-              class="px-4 py-1"
-            >
-              <v-row>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">No of Users</b>
-                    <div class="text--secondary">{{currentApp.no_users}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">Price</b>
-                    <div class="text--secondary"><b>$</b>{{currentApp.price}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                  <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-                    <b class="display-1">SoC2</b>
-                    <div class="text--secondary">{{currentApp.soc2}}</div>
-                  <!-- </v-card> -->
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">Other</b>
-                    <div class="text--secondary">{{currentApp.other}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1 mr-2">Login URL</b>
-                    <a :href="currentApp.login_url" target="_blank" class="text--red">GoTo</a>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1">Owner</b>
-                    <div class="text--secondary">{{currentApp.owner}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1">Admin User</b>
-                    <div v-html="beautifyEmail(currentApp.admin_user)" class="text--secondary"></div>
-                </v-col>
-                <v-col
-                  cols="6"
-                >
-                    <b class="display-1">Purpose</b>
-                    <div class="text--secondary">{{currentApp.purpose}}</div>
-                </v-col>
-              </v-row>
-            </div>
+            <app-detail v-if="details" :currentApp="currentApp" />
           </td>
         </template>
       </v-data-table>
@@ -214,12 +144,16 @@
 </template>
 
 <script>
-  import { fetchApps, fetchAppUsers } from '../../../api'
-  import { validEmail, levelColor } from '../../../util'
+  import { fetchApps, fetchAppUsers } from '@/api'
+  import { validEmail, levelColor } from '@/util'
   import { mapState, mapActions } from 'vuex';
 
   export default {
     name: 'DashboardApplications',
+
+    components: {
+      AppDetail: () => import('../component/AppDetail')
+    },
 
     data: () => ({
       loading: false,

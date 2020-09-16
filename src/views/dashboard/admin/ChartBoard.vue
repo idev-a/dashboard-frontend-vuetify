@@ -263,7 +263,7 @@
   </v-container>
 </template>
 <script>
-  import { BASE_API, fetchCompanies, fetchTables, Get, Post } from '@/api'
+  import { BASE_API, getCompaniesUsers, fetchTables, Get, Post } from '@/api'
   import { DOMAIN_LIST, downloadCSV, pieChart, barchart } from '@/util'
   import { mapState } from 'vuex'
 
@@ -372,7 +372,7 @@
       async mounted () {
         this.getTables()
 
-        this.companies = await fetchCompanies()
+        this.companies = await getCompaniesUsers()
       },
 
       methods: {

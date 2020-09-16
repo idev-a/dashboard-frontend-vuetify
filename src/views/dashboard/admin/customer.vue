@@ -519,7 +519,6 @@
         const res = await Put(`users/${item.email}`, item)
         this.showSnack(res)
         if (res.status == 'success') {
-          console.log(this.editedIndex, this.editedItem)
           Object.assign(this.users[this.editedIndex], this.editedItem)
         }
         this.loading = false

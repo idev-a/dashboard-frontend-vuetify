@@ -155,7 +155,7 @@
 <script>
   import { 
     BASE_API,
-    fetchCompanies,
+    getCompaniesUsers,
     fetchTables,
     fetchAllApps,
     fetchAllQuestions,
@@ -261,19 +261,15 @@
     },
 
     async mounted () {
-      this.companies = await this.fetchCompanies()
+      this.companies = await getCompaniesUsers()
 
-      this.apps = await this.fetchAllApps()
-      this.questions = await this.fetchAllQuestions()
-      this.devices = await this.fetchDevices()
+      this.apps = await fetchAllApps()
+      this.questions = await fetchAllQuestions()
+      this.devices = await fetchDevices()
     },
 
     methods: {
-      fetchCompanies,
       beautifyEmails,
-      fetchAllApps,
-      fetchAllQuestions,
-      fetchDevices,
 
       filterRange (date) {
         this.$refs.menu.save(date)

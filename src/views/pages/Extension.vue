@@ -8,15 +8,15 @@
       align="center"
     >
       <v-col    
-        class="mb-10"
+        class="mt-10"
         cols="12"
       >
         <pages-heading class="mb-12">
-          Your Dashboard for Chrome Extensions
+          Dashboard for Chrome Extensions <span class="display-2">({{email}})</span>
         </pages-heading>
 
         <div class="display-1 font-weight-light grey--text text--darken-2">
-          We have found out the vulnerabilities among &nbsp;<br class="hidden-sm-and-down"> your extensions.
+          We have found out the vulnerabilities among your extensions.
         </div>
       </v-col>
         <v-progress-linear
@@ -64,6 +64,12 @@ import { BASE_API, Get, Post } from '@/api'
       ]
     }),
 
+    computed: {
+      email () {
+        return this.$route.params.email
+      }
+    },
+
     mounted () {
       this.fetchExts()
     },
@@ -72,7 +78,7 @@ import { BASE_API, Get, Post } from '@/api'
       async fetchExts () {
         this.loading = true
         try {
-          const res = await Post(`admin/ext/mine`, { email: this.$route.params.email })
+          const res = await Post(`admin/ext/mine`, { email: this.email })
           this.exts = res.exts
           this.message = res.message
         } catch(e) {

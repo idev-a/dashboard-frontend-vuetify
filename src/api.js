@@ -179,7 +179,6 @@ export const fetchAllQuestions = async () => {
   return questions
 }
 
-
 export const fetchCompanies = async () => {
   let res = await Get(`users/all`)
   res = res.users
@@ -239,5 +238,5 @@ export const enableDailyTips = async () => {
 
 export const getCompaniesUsers = async () => {
   let res = await Get('users/all')
-  return res.users.map(user => user.company_id)
+  return res.users.map(user => user.company_id).sort()
 }

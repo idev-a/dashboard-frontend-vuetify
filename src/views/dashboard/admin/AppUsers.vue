@@ -584,67 +584,7 @@
         <template v-slot:expanded-item="{ headers }">
           <td :colspan="headers.length">
            <!-- Application detail -->
-            <div
-              v-if="details"
-              class="px-4 py-1"
-            > 
-              <v-row>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">No of Users</b>
-                    <div class="text--secondary">{{currentDetail.no_users}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">Price</b>
-                    <div class="text--secondary">{{currentDetail.price}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  md="3"
-                >
-                    <b class="display-1">Other</b>
-                    <div class="text--secondary">{{currentDetail.other}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1 mr-1">Login URL</b>
-                    <a :href="currentDetail.login_url" target="_blank" class="text--red">GoTo</a>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1">Owner</b>
-                    <div class="text--secondary">{{currentDetail.owner}}</div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="3"
-                  sm="3"
-                >
-                    <b class="display-1">Admin User</b>
-                    <div v-html="beautifyEmails(currentDetail.admin_user)" class="text--secondary"></div>
-                </v-col>
-                <v-col
-                  cols="6"
-                >
-                    <b class="display-1">Purpose</b>
-                    <div class="text--secondary">{{currentDetail.purpose}}</div>
-                </v-col>
-              </v-row>
-            </div>
+            <app-detail v-if="details" :currentApp="currentDetail" />
           </td>
         </template>
       </v-data-table>
@@ -679,13 +619,17 @@
 </template>
 
 <script>
-  import { fetchApps, fetchAppUsers, BASE_API, getCompaniesUsers, Get, Post } from '@/api'
+  import { fetchApps, fetchAppUsers, fetchAllApps, BASE_API, getCompaniesUsers, Get, Post } from '@/api'
   import { validEmail, beautifyEmails, levelColor, DOMAIN_LIST, getTableName } from '@/util'
   import { mapState } from 'vuex'
   import { lowerCase } from 'lodash'
 
   export default {
     name: 'DashboardApplications',
+
+    components: {
+      AppDetail: () => import('../component/AppDetail')
+    },
 
     data: () => ({
       loading: false,
@@ -835,12 +779,9 @@
 
     async mounted () {
       this.loading = true
-      await this.fetchDashboardUsers()
+      this.fetchDashboardUsers()
       this.appDetails = await fetchApps('all')
-      const res = await Get(`applications/all`)
-      if (res) {
-        this.apps = res.apps
-      }
+      this.apps = await fetchAllApps()
       this.loading = false
 
       // initialize dialogs
