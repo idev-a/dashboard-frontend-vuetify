@@ -19,14 +19,23 @@
       />
     </template>
 
-    <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title class="text-uppercase font-weight-regular display-2">
-          <span class="logo-mini">{{ $t('SD') }}</span>
-          <span class="logo-normal">{{ $t('Secure Dashboard') }}</span>
-        </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
+    <v-skeleton-loader
+      :loading="loading"
+      height="'100%'"
+      width=300
+      type="paragraph, paragraph, paragraph, paragraph, paragraph, paragraph, paragraph, paragraph, paragraph, paragraph, paragraph"
+    >
+      <v-list-item two-line>
+        <v-list-item-content>
+          <v-list-item-title class="text-uppercase font-weight-regular display-2">
+            <span class="logo-mini">{{ $t('SD') }}</span>
+            <span class="logo-normal">{{ $t('Secure Dashboard') }}</span>
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-skeleton-loader>
+
+    
 
     <v-divider class="mb-1" />
 
@@ -90,7 +99,8 @@ import { Get, Post } from '@/api'
 
     data: () => ({
       user: {},
-      items: []
+      items: [],
+      loading: false
     }),
 
     computed: {
@@ -168,8 +178,10 @@ import { Get, Post } from '@/api'
         }
       },
       async getItems () {
+        this.loading = true
         const res = await Get(`admin/drawer/${this.email}/read`)
         this.items = res.items
+        this.loading = false
       }
     },
   }
