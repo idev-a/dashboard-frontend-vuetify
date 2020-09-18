@@ -278,6 +278,8 @@
                   v-model="days"
                   label="Date Range Filter"
                   class="ml-5"
+                  hint="Interval"
+                  persistent-hint
                   :items="daysItems"
                   @change="changeDateRange"
                 />
@@ -396,7 +398,12 @@ import { mapState, mapActions } from 'vuex'
         charts: null,
         catLineChart: {},
         days: 30,
-        daysItems: [1, 10, 20, 30],
+        daysItems: [
+          { text: '1 day', value: 1},
+          { text: '10 days', value: 10},
+          { text: '20 days', value: 20},
+          { text: '30 days', value: 30}
+        ],
         selectedCategories: [],
         cia_by_categories: [],
         categoryMenu: false,

@@ -200,13 +200,16 @@
       v-model="aclDialog"
       width="800"
     >
-      <v-card>
+      <v-card class="pb-8">
         <v-card-title>
           Access Control List(ACL)
         </v-card-title>
-        <v-card-text class="pb-0">
-          <div class="mt-5">Manage Whitelist IPs</div>
-        </v-card-text>
+        <v-card-actions class="pl-6 pb-0">
+          <div class="mt-5 display-2">Manage Whitelist IPs</div>
+          <v-spacer></v-spacer>
+          <v-btn color="warning" text @click="aclDialog=false">Close</v-btn>
+          <v-btn color="primary" text :loading="loading" :disabled="loading || !valid" @click="saveAcl">Save</v-btn>
+        </v-card-actions>
         <v-card-text>
           <v-form
             ref="form"
@@ -214,7 +217,7 @@
           >
             <v-combobox
               v-model="whitelistIPs"
-              :rules="[rules.ip]"
+              :rules="[rules.required, rules.ip]"
               label="Source IPs"
               :loading="loading"
               placeholder="for example, 0.0.0.0, 192.168.2.0"
@@ -226,7 +229,7 @@
               multiple
             />
           </v-form>
-          <div class="mt-5">Manage Whitelist Users</div>
+          <div class="mt-5 display-1">Manage Whitelist Users</div>
           <v-row>
             <v-col>
               <div class="d-flex justify-center font-weight-medium primary--text">Users</div>
@@ -278,11 +281,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="aclDialog=false">Close</v-btn>
-          <v-btn color="primary" text :loading="loading" :disabled="loading || !valid" @click="saveAcl">Save</v-btn>
-        </v-card-actions>
+
       </v-card>
     </v-dialog>
 
@@ -409,7 +408,11 @@
         },
         ip: v => {
           const pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
-          return pattern.test(v) || 'Invalid IP address or range.'
+          let res = ''
+          v.map(_v => {
+            res = pattern.test(_v) || 'Invalid IP address or range.'
+          })
+          return res
         }
       },
     }),
@@ -434,6 +437,12 @@
       dialog (val) {
         val || this.close()
       },
+      'editedItem.email' (val) {
+        if (val.includes('@')) {
+          this.editedItem.company_id = val.split('@')[1]
+          this.editedItem.company_name = val.split('@')[1]
+        }
+      }
     },
 
     methods: {
@@ -509,7 +518,7 @@
         this.loading = true
         const res = await Post(`users/register`, item)
         if (res.status == 'success') {
-          this.users.push(item)
+          this.users.push(res.user)
         }
         this.showSnack(res)
         this.loading = false
