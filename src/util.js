@@ -332,8 +332,8 @@ export const columnChart = (title, subtitle, yLabel, series, categories, type='c
     pointFormat = '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
           '<td style="padding:0"><b>{point.y}</b></td></tr>'
   }
-  if (type == 'column') {
-    type = 'bar'
+  if (type == 'bar') {
+    type = 'column'
   }
   return {
     chart: {
@@ -355,6 +355,18 @@ export const columnChart = (title, subtitle, yLabel, series, categories, type='c
       title: {
         text: yLabel
       }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'top',
+      x: -40,
+      y: 80,
+      floating: true,
+      borderWidth: 1,
+      backgroundColor:
+          Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+      shadow: true
     },
     tooltip: {
       headerFormat: '<span style="font-size:14px">{point.key}:</span><table>',
