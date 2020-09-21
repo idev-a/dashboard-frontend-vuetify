@@ -181,8 +181,21 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
+          <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              :loading="loading" 
+              :disabled="loading || (!items.length && !selectedItems.length)" 
+              @click="downloadCSV" 
+              color="main"
+              v-on="on"
+            >
+              <v-icon  size="16" dark>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Download Data as CSV</span>
+        </v-tooltip>
           
-          <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main"><v-icon  size="16" dark>mdi-download</v-icon></v-btn>
         </v-card-title>
             <v-card-title>
               <v-autocomplete

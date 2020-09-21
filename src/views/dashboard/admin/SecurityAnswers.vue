@@ -265,7 +265,7 @@
                     :rules="[rules.required]"
                     label="Select a company"
                     required
-                />
+                  />
                 </v-col>
               </v-row>
               <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">CIA</div>

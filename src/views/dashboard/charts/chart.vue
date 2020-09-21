@@ -16,42 +16,26 @@
             Custom Charts
           </v-card-title>
           <v-card-text>
-            <v-col
-              cols='12'
-              md="6"
-            >
-              <v-select
-                v-model="custom_id"
-                :loading="loadingCard"
-                :items="customCharts"
-                item-value="id"
-                item-text="label"
-                class=""
-                label="Select a custom chart"
-                hint="Select a custom chart"
-                @input="selectCustomChart"
-              ></v-select>
-            </v-col>
             <v-row>
               <v-col
-                cols='12'
-                md="5"
-                v-if="!loading && donePie"
+                cols='auto'
               >
-                <v-sheet class="min-50">
-                  <highcharts  :options="pieChart"></highcharts>
-                </v-sheet>
-              </v-col>
-              <v-col
-                cols='12'
-                md="6"
-                v-if="!loading && doneBar" 
-              >
-              <v-sheet class="min-50">
-                  <highcharts :options="barChart"></highcharts>
-                </v-sheet>
+                <v-select
+                  v-model="custom_id"
+                  :loading="loadingCard"
+                  :items="customCharts"
+                  item-value="id"
+                  item-text="title"
+                  return-object
+                  label="Select a custom chart"
+                  hint="Select a custom chart"
+                  @input="selectCustomChart"
+                ></v-select>
               </v-col>
             </v-row>
+            <div v-if="series.length">
+              <highcharts :options="columnChart"></highcharts>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -63,7 +47,8 @@
   import { BASE_API, Get, Post } from '../../../api'
   import { 
     pieChart,
-    barchart
+    barchart,
+    columnChart
   } from '../../../util'
   import Highcharts from 'highcharts'
   import { mapState } from 'vuex'
@@ -85,6 +70,8 @@
       custom_data: null,
       total: 0,
       custom_id: '',
+      series: [],
+      categories: []
     }),
 
     async mounted () {
@@ -101,14 +88,17 @@
       barChart () {
         return barchart(this.title, '', '#', this.custom_bar_data)
       },
+      columnChart () {
+        return columnChart(this.title, '', 'Counts', this.series, this.categories, this.chartType)
+      },
     },
 
     methods: {
       async fetchCustomCharts () {
         this.loadingCard  = true
         try {
-          const res = await Get(`admin/chart/${this.companyId}/readall`)
-          this.customCharts = res.data
+          const res = await Get(`admin/chart/read/new`)
+          this.customCharts = res.items
         } catch (e){
           console.log(e)
         }  finally {
@@ -116,38 +106,25 @@
         }
       },
 
-      async selectCustomChart (id) {
-        const item = this.customCharts.filter(chart => chart.id == id)[0]
+      async selectCustomChart (item) {
         this.loading = true
         this.donePie = false
         this.doneBar = false
-        try {
-          const data =  { 
-            company_id_field: item.company_id_field,
-            targetTable: item.target_table,
-            conditions: item.conditions,
-            chartType: item.type,
-            dataLabel: item.data_label,
-            company: this.companyId,
-            label: item.label,
-            title: item.title
-          }
-          const res = await Post('admin/chart/test', data)
-          const chartType = item['type']
-          if (chartType == 'Pie Chart') {
-            this.custom_pie_data = res.data[chartType]
-            this.donePie = true
-          } else {
-            this.doneBar = true
-            this.custom_bar_data = res.data[chartType]
-          }
-          this.title = item.title
-          this.total = res.total
-        } catch (e){
-          console.log(e)
-        }  finally {
-          this.loading = false
+        this.loading = true
+        const res = await Post('admin/chart/change-field', {
+          company_id: this.companyId,
+          table: item.table,
+          tableField: item.table_field,
+          breakdownField: item.breakdown_field,
+          chartType: item.chart_type,
+          topCnts: item.pieces_cnt
+        })
+        if (res.status == 'success') {
+          this.chartType = item.chart_type
+          this.series = res.series
+          this.categories = res.categories
         }
+        this.loading = false
       },
     }
   }

@@ -238,11 +238,11 @@
               > 
                 <template v-slot:item.conditions="{ item }">
                   <div v-for=" cond,x in item.conditions"><b>{{ x + 1 }}.</b> {{ cond.condition }}</div>
-                </template>
-            </v-data-table>
-          </v-card-text>
-        </v-card>
-    </v-card>
+                  </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+      </v-card>
     <v-snackbar
       v-model="snackbar"
       bottom

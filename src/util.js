@@ -119,11 +119,11 @@ export const validEmail = (email) => {
 export const pieChart = (title, data, total) => {
   return {
     chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-        height: '100%'
+      plotBackgroundColor: null,
+      plotBorderWidth: null,
+      plotShadow: false,
+      type: 'pie',
+      height: '100%'
     },
     title: {
       text: title
@@ -132,7 +132,7 @@ export const pieChart = (title, data, total) => {
       text: `Total ${total}`
     },
     tooltip: {
-        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
+      pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
     },
     accessibility: {
       announceNewData: {
@@ -143,17 +143,17 @@ export const pieChart = (title, data, total) => {
       }
     },
     plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: false,
-                format: '{point.y:.1f} %',
-                distance: '-20%',
-            },
-            showInLegend: true,
-            center: ['50%', '50%']
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: false,
+          format: '{point.y:.1f} %',
+          distance: '-20%',
         },
+        showInLegend: true,
+        center: ['50%', '50%']
+      },
     },
     series:  [{
       name: '',
@@ -246,17 +246,17 @@ const riskPieChart = ({critical, high, medium, low, informational, title, critic
       }
     },
     plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: false,
-                format: '{point.y:.1f} %',
-                distance: '-20%',
-            },
-            showInLegend: true,
-            center: ['50%', '50%']
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+            enabled: false,
+            format: '{point.y:.1f} %',
+            distance: '-20%',
         },
+        showInLegend: true,
+        center: ['50%', '50%']
+      },
     },
     series: [{
       name: '',
@@ -286,7 +286,7 @@ export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
       }
     },
     xAxis: {
-        type: 'category'
+      type: 'category'
     },
     yAxis: {
       min: 0,
@@ -300,16 +300,18 @@ export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
     },
     tooltip: {
       headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>',
+      shared: true,
+      useHTML: true
     },
 
     plotOptions: {
       series: {
-          borderWidth: 0,
-          dataLabels: {
-              enabled: true,
-              format: '{point.y}'
-          }
+        borderWidth: 0,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y}'
+        }
       }
     },
     series: [
@@ -323,11 +325,20 @@ export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
 }
 
 // column chart
-export const columnChart = (title, subtitle, yLabel, series, categories, interval=1) => {
+export const columnChart = (title, subtitle, yLabel, series, categories, type='column') => {
+  let pointFormat = '<b>{point.y} ({point.percentage:.1f}%)</b>'
+  type = type.toLowerCase()
+  if (type != 'pie') {
+    pointFormat = '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y}</b></td></tr>'
+  }
+  if (type == 'column') {
+    type = 'bar'
+  }
   return {
     chart: {
-      type: 'column',
-      zoomType: 'x'
+      type,
+      zoomType: 'x',
     },
     title: {
       text: title
@@ -336,30 +347,62 @@ export const columnChart = (title, subtitle, yLabel, series, categories, interva
       text: subtitle
     },
     xAxis: {
-      categories: categories,
+      categories,
       crosshair: true
     },
     yAxis: {
-        min: 0,
-        title: {
-            text: yLabel
-        }
+      min: 0,
+      title: {
+        text: yLabel
+      }
     },
     tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
+      headerFormat: '<span style="font-size:14px">{point.key}:</span><table>',
+      pointFormat,
+      footerFormat: '</table>',
+      shared: true,
+      useHTML: true
     },
     plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
+      column: {
+        pointPadding: 0.2,
+        borderRadius: 5,
+        borderWidth: 0,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y}', // one decimal
+        },
+      },
+      area: {
+        pointStart: 1940,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y}', // one decimal
+        },
+        marker: {
+          enabled: true,
+          symbol: 'circle',
+          radius: 2,
+          states: {
+            hover: {
+              enabled: true
+            }
+          }
         }
+      },
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '{point.percentage:.1f}%',
+          distance: '-20%',
+        },
+        showInLegend: true,
+        center: ['50%', '50%']
+      },
     },
-    series: series
+    series
   }
 }
 

@@ -121,13 +121,30 @@ const companyId = getCompanyId()
 export const  fetchTables = async () => {
   let tables = []
   try {
-      const res = await Get(`admin/query/tables`)
-      tables = res.items
-    } catch (e) {
-      console.log(e.response)
-    }
+    const res = await Get(`admin/query/tables`)
+    tables = res.items
+  } catch (e) {
+    console.log(e.response)
+  }
 
-    return tables
+  return tables
+}
+
+export const fetchTableFields = async(table, chartType) => {
+  let fields = []
+
+  try {
+    const data = {
+      table,
+      chartType
+    }
+    const res = await Post(`admin/chart/available-fields`, data)
+    fields = res.items
+  } catch (e) {
+    console.log(e.response)
+  }
+
+  return fields
 }
 
 export const fetchAllApps = async () => {
