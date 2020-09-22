@@ -46,7 +46,7 @@ const random_arr = (arr) => {
     cia.push(arr[_rdx])
   }
 
-  return cia
+  return cia.join(';')
 }
 
 const random_risk_level = () => {

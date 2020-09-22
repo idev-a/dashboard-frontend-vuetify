@@ -632,7 +632,7 @@ export const highRiskByCatLineChart = (data) => {
 export const get_json = (val) => {
   let res = {}
   try {
-    res = JSON.parse(val.Answer)
+    res = JSON.parse(val.answer)
   } catch(e) {}
   return res
 }
@@ -640,7 +640,7 @@ export const get_json = (val) => {
 export const parse_array = (val) => {
   let res = []
   try {
-    res = JSON.parse(val.Answer)
+    res = JSON.parse(val.answer)
   } catch(e) {}
   return res
 }

@@ -127,8 +127,8 @@
             <span>Show History</span>
           </v-tooltip>
         </template>
-        <template v-slot:item.Answer="{ item }">
-          <span v-html="highlightText(removeQuotes(item.Answer))"></span>
+        <template v-slot:item.answer="{ item }">
+          <span v-html="highlightText(removeQuotes(item.answer))"></span>
         </template>
         <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
           <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
@@ -196,7 +196,7 @@
           },
           {
             text: 'Answer',
-            value: 'Answer',
+            value: 'answer',
             width: 300
           },
         ]

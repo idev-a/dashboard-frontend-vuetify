@@ -42,7 +42,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{removeQuotes(currentQuestion.Answer)}}</span>
+            <span class="text--secondary">{{removeQuotes(currentQuestion.answer)}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>
@@ -205,7 +205,7 @@
       removeQuotes,
 
       parseJSON(val) {
-        return JSON.parse(val)
+        return val.split(';')
       }
 		}
 	}

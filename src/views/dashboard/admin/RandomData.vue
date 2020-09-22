@@ -238,7 +238,7 @@
               if (item == 'description') {
                 header.width = 300
               } 
-              if (item == 'Answer') {
+              if (item == 'answer') {
                 header.width = 100
               } 
               if (item === 'question') {

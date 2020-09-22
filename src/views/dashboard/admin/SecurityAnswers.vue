@@ -654,8 +654,8 @@
         this.mode = 'View'
         this.defaultIndex = this.items.indexOf(item)
         this.editItem = Object.assign({}, item)
-        this.editItem.cia = JSON.parse(this.editItem.cia)
-        this.editItem.threats = JSON.parse(this.editItem.threats)
+        this.editItem.cia = this.editItem.cia.split(';')
+        this.editItem.threats = this.editItem.threats.split(';')
         this.updateValid = true
         this.updateDialog = true
       },  
@@ -748,6 +748,8 @@
       async _createAnswer () {
         this.showConfirm(false)
         this.loading = true
+        this.editItem.cia = this.editItem.cia.join(';')
+        this.editItem.threats = this.editItem.threats.join(';')
         const res = await Post('admin/risks/create', this.editItem)
         this.message = res.message
         this.color = res.status
@@ -770,7 +772,9 @@
 
       async _updateAnswer () {
         this.loading = true
-        const res = await Post('admin/risks/update', this.editItem,)
+        this.editItem.cia = this.editItem.cia.join(';')
+        this.editItem.threats = this.editItem.threats.join(';')
+        const res = await Post('admin/risks/update', this.editItem)
         this.message = res.message
         this.color = res.status
         if (res.status == 'success') {

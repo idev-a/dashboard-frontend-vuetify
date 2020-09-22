@@ -23,7 +23,7 @@
 		<v-expansion-panel-content>
 			<!-- <div class="pre-strim">{{removeQuotes(data.answer)}}</div> -->
 			<template>
-				<pre v-html="readNewLine(removeQuotes(data.Answer))"></pre>
+				<pre v-html="readNewLine(removeQuotes(data.answer))"></pre>
 				<update-answer-dialog 
 					v-if="mode"
 					:loading="loading"

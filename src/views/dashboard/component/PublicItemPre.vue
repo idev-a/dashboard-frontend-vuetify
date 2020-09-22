@@ -22,7 +22,7 @@
     </v-expansion-panel-header>
       </v-hover>
     <v-expansion-panel-content>
-      <div class="pre-strim" v-html="removeQuotes(data.Answer)"></div>
+      <div class="pre-strim" v-html="removeQuotes(data.answer)"></div>
       <update-answer-dialog 
         v-if="mode"
         :loading="loading"

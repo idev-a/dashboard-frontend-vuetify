@@ -34,8 +34,8 @@
           <template v-slot:item.run_at="{ item }">
             <span>{{ formatDate(item.run_at) }}</span>
           </template>
-          <template v-slot:item.Answer="{ item }">
-            <span>{{removeQuotes(item.Answer)}}</span>
+          <template v-slot:item.answer="{ item }">
+            <span>{{removeQuotes(item.answer)}}</span>
           </template>
           <template v-slot:item.action="{ item }">
             <v-tooltip bottom>
@@ -57,8 +57,8 @@
             <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
             <v-btn @click="expand(false)" v-if="item.canExpand && isExpanded">close</v-btn>
           </template>
-          <template v-slot:item.Answer="{ item }">
-            <span v-html="highlightText(removeQuotes(item.Answer))"></span>
+          <template v-slot:item.answer="{ item }">
+            <span v-html="highlightText(removeQuotes(item.answer))"></span>
           </template>
           <template v-slot:expanded-item="{ headers }">
             <td :colspan="headers.length">

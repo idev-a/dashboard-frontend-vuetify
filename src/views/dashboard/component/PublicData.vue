@@ -40,7 +40,7 @@
               </div>
               <div>
                 <b class="mr-2">Domain:</b>
-                <span class="display-1" v-html="removeQuotes(publicData.high.domain.Answer)"></span>
+                <span class="display-1" v-html="removeQuotes(publicData.high.domain.answer)"></span>
             </div>
           </v-row>
         </v-col>
@@ -66,7 +66,7 @@
             </div>
             <div>
               <b class="mr-2">IP:</b>
-              <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.Answer)"></span>
+              <span class="display-1" v-html="removeQuotes(publicData.high.website_ip.answer)"></span>
             </div>
           </v-row>
         </v-col>
@@ -99,7 +99,7 @@
             </div>
             <div>
               <b class="mr-2">Name:</b>
-              <span class="display-1">{{publicData.high.name.Answer}}</span>
+              <span class="display-1">{{publicData.high.name.answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -125,7 +125,7 @@
             </div>
             <div>
               <b class="mr-2">Email:</b>
-              <span class="display-1" v-html="beautifyEmail(publicData.high.email.Answer)"></span>
+              <span class="display-1" v-html="beautifyEmail(publicData.high.email.answer)"></span>
             </div>
           </v-row>
         </v-col>
@@ -151,7 +151,7 @@
             </div>
             <div>
               <b class="mr-2">Birthday:</b>
-              <span class="display-1">{{publicData.high.dob.Answer}}</span>
+              <span class="display-1">{{publicData.high.dob.answer}}</span>
             </div>
           </v-row>
         </v-col>
@@ -292,7 +292,7 @@
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                       <div class="d-flex flex-wrap">
-                      <div v-for="domain in split(result.ctfr_subdomain.Answer)">
+                      <div v-for="domain in split(result.ctfr_subdomain.answer)">
                         <v-chip outlined class="secondary ma-2 pa-2 mb-3 text--secondary">{{domain}}</v-chip>
                       </div>
                     </div>
@@ -579,7 +579,7 @@
 
       builtWithLink () {
         if (this.publicData.high.domain) {
-          return 'https://builtwith.com/' + removeQuotes(this.publicData.high.domain.Answer)
+          return 'https://builtwith.com/' + removeQuotes(this.publicData.high.domain.answer)
         } else {
           return ''
         }
