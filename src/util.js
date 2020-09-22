@@ -250,9 +250,9 @@ const riskPieChart = ({critical, high, medium, low, informational, title, critic
         allowPointSelect: true,
         cursor: 'pointer',
         dataLabels: {
-            enabled: false,
-            format: '{point.y:.1f} %',
-            distance: '-20%',
+          enabled: false,
+          format: '{point.y:.1f} %',
+          distance: '-20%',
         },
         showInLegend: true,
         center: ['50%', '50%']

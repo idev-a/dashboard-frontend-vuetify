@@ -469,7 +469,7 @@ import { mapState, mapActions } from 'vuex'
       },
 
       CIACharts () {
-        return CIAChart(this.charts.confidentiality, this.charts.integrity, this.charts.availability)
+        return CIAChart(this.charts.cia.confidentiality, this.charts.cia.integrity, this.charts.cia.availability)
       },
 
       scoreChart () {

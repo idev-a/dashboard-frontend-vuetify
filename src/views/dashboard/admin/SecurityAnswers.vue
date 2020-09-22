@@ -21,7 +21,7 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="fetchRisks" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-refresh</v-icon></v-btn>
+              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || !company" @click="fetchRisks" class="mr-2"  color="main"><v-icon  size="16"  dark>mdi-refresh</v-icon></v-btn>
             </template>
             <span>Refresh</span>
           </v-tooltip>
@@ -137,8 +137,8 @@
                   <span>Show History</span>
                 </v-tooltip>
               </template>
-              <template v-slot:item.Answer="{ item }">
-                <span v-html="removeQuotes(item.Answer)"></span>
+              <template v-slot:item.answer="{ item }">
+                <span v-html="removeQuotes(item.answer)"></span>
               </template>
               <template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
                 <v-btn @click="expand(true)" v-if="item.canExpand && !isExpanded">Expand</v-btn>
@@ -182,7 +182,7 @@
               </v-autocomplete>
               <v-textarea
                 v-if="mode == 'Edit'"
-                v-model="editItem.Answer"
+                v-model="editItem.answer"
                 label="Answer" 
                 auto-grow
                 rows="1"
@@ -194,7 +194,7 @@
               </v-textarea>
               <v-textarea
                 v-if="mode == 'Edit'"
-                v-model="editItem.Notes"
+                v-model="editItem.notes"
                 label="Notes" 
                 auto-grow
                 rows="1"
@@ -275,16 +275,16 @@
                 column
                 multiple
               >
-                <v-chip filter outlined v-for="cia in cias" class="text-capitalize">{{cia}}</v-chip>
+                <v-chip filter outlined v-for="(cia, i) in cias" :value="cia" class="text-capitalize">{{cia}}</v-chip>
               </v-chip-group>
               <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">T1 ~ T11</div>
               <v-chip-group
                 v-if="mode == 'Edit'"
-                v-model="editItem.Ts"
+                v-model="editItem.threats"
                 column
                 multiple
               >
-                <v-chip filter outlined v-for="t in tList">{{t}}</v-chip>
+                <v-chip filter outlined :value="t" v-for="(t, i) in tList">{{t}}</v-chip>
               </v-chip-group>
           </v-form>
         </v-card-text>
@@ -327,7 +327,7 @@
             <div v-if="mode == 'Edit'" class="text--secondary text-center display-2">{{ currentQuestion.question }}</div>
             <v-textarea
               v-if="mode == 'Edit'"
-              v-model="editItem.Answer"
+              v-model="editItem.answer"
               label="Answer" 
               auto-grow
               rows="1"
@@ -338,7 +338,7 @@
             />
             <v-textarea
               v-if="mode == 'Edit'"
-              v-model="editItem.Notes"
+              v-model="editItem.notes"
               label="Notes" 
               auto-grow
               rows="1"
@@ -383,16 +383,16 @@
               column
               multiple
             >
-              <v-chip filter outlined v-for="cia in cias" class="text-capitalize">{{cia}}</v-chip>
+              <v-chip filter outlined v-for="(cia, i) in cias" :value="cia"  class="text-capitalize">{{cia}}</v-chip>
             </v-chip-group>
-            <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">T1 ~ T11</div>
+            <div v-if="mode == 'Edit'" class="body-1 text--secondary mt-4">Threats</div>
             <v-chip-group
               v-if="mode == 'Edit'"
-              v-model="editItem.Ts"
+              v-model="editItem.threats"
               column
               multiple
             >
-              <v-chip filter outlined v-for="t in tList">{{t}}</v-chip>
+              <v-chip filter outlined  :value="t" v-for="(t, i) in tList">{{t}}</v-chip>
             </v-chip-group>
           </v-form>
         </v-card-text>
@@ -500,7 +500,6 @@
           tag: '',
           risk_level: 'high',
           cia: [],
-          Ts: []
         },
         tags: [],
         valid: true,
@@ -515,7 +514,7 @@
           },
           {
             text: 'Answer',
-            value: 'Answer',
+            value: 'answer',
             width: 350
           },
           {
@@ -623,25 +622,25 @@
         this.loading = false
       },
 
-      toGroups (item, idxs) {
-        let group = []
+      // toGroups (item, idxs) {
+      //   let group = []
     
-        idxs.map( (idx, i) => {
-          if (item[idx]) {
-            group.push(i)
-          }
-        })
+      //   idxs.map( (idx, i) => {
+      //     if (item[idx]) {
+      //       group.push(i)
+      //     }
+      //   })
 
-        return group
-      },
+      //   return group
+      // },
 
-      fromGroups (group, item, idxs) {
-        group.map(idx => {
-          const listIdx = idxs[idx]
-          item[listIdx] = 1
-        })
-        return item
-      },
+      // fromGroups (group, item, idxs) {
+      //   group.map(idx => {
+      //     const listIdx = idxs[idx]
+      //     item[listIdx] = 1
+      //   })
+      //   return item
+      // },
 
       createModal () {
         this.editItem = Object.assign({}, this.defaultItem)
@@ -655,8 +654,8 @@
         this.mode = 'View'
         this.defaultIndex = this.items.indexOf(item)
         this.editItem = Object.assign({}, item)
-        this.editItem.cia = this.toGroups(item, this.cias)
-        this.editItem.Ts = this.toGroups(item, this.tList)
+        this.editItem.cia = JSON.parse(this.editItem.cia)
+        this.editItem.threats = JSON.parse(this.editItem.threats)
         this.updateValid = true
         this.updateDialog = true
       },  
@@ -749,8 +748,6 @@
       async _createAnswer () {
         this.showConfirm(false)
         this.loading = true
-        this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-        this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
         const res = await Post('admin/risks/create', this.editItem)
         this.message = res.message
         this.color = res.status
@@ -773,8 +770,6 @@
 
       async _updateAnswer () {
         this.loading = true
-        this.editItem = this.fromGroups(this.editItem.cia, this.editItem, this.cias)
-        this.editItem = this.fromGroups(this.editItem.Ts, this.editItem, this.tList)
         const res = await Post('admin/risks/update', this.editItem,)
         this.message = res.message
         this.color = res.status

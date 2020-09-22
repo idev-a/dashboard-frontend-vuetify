@@ -18,8 +18,39 @@ const RISK_LEVELS = [
   'informational'
 ]
 
+const CIA = [
+  'confidetiality',
+  'integrity',
+  'availability'
+]
+
+const THREATS = [
+  `T1. Software Failures (code, configuration etc.)`,
+  `T2. Cloud Failures (Provider, VHardware, Capacity)`,
+  `T3. Legal Threats (failure to comply, bad contacts)`,
+  `T4. Social Engineering`,
+  `T5. External Unauthorized Access to Information Systems / Data`,
+  `T6. Traffic Monitoring or Interception`,
+  `T7.External Attacker Tampering with Data / Data Destruction`,
+  `T8. Repudiation of transactions and messages`,
+  `T9. Insider Abuse of Privilege`,
+  `T10. Third Party Liability (contractors, third processing)`,
+  `T11. Employee / User Mistakes`,
+]
+
+const random_arr = (arr) => {
+  const ciaIdx = random.int(0, arr.length-1)
+  const cia = []
+  for (let i = 0; i < ciaIdx; i++) {
+    const _rdx = random.int(0, arr.length-1)
+    cia.push(arr[_rdx])
+  }
+
+  return cia
+}
+
 const random_risk_level = () => {
-  const risk_idx = random.int(0, 4)
+  const risk_idx = random.int(0, RISK_LEVELS.length-1)
   return RISK_LEVELS[risk_idx]
 }
 
@@ -312,52 +343,27 @@ export const generateSecurityAnswers = ({company_id, questions, startDate, endDa
         if (!faker.random.boolean()) {
           return
         }
-        const idx = random.int(0, ANSWER_TEMPLATES.length-1)
-        const Answer = ANSWER_TEMPLATES[idx]
+        const answerIdx = random.int(0, ANSWER_TEMPLATES.length-1)
+        const answer = ANSWER_TEMPLATES[answerIdx]
         const link = ''
         const tag = ''
         const risk_level = random_risk_level()
-        const informational_risk = Number(faker.random.boolean())
-        const Confidentiality = Number(faker.random.boolean())
-        const Integrity = Number(faker.random.boolean())
-        const availability = Number(faker.random.boolean())
-        const T1 = Number(faker.random.boolean())
-        const T2 = Number(faker.random.boolean())
-        const T3 = Number(faker.random.boolean())
-        const T4 = Number(faker.random.boolean())
-        const T5 = Number(faker.random.boolean())
-        const T6 = Number(faker.random.boolean())
-        const T7 = Number(faker.random.boolean())
-        const T8 = Number(faker.random.boolean())
-        const T9 = Number(faker.random.boolean())
-        const T10 = Number(faker.random.boolean())
-        const T11 = Number(faker.random.boolean())
-        const Notes = ''
+        const cia = random_arr(CIA)
+        const threats = random_arr(THREATS)
+        const notes = ''
         answers.push({
           id,
           question_id: question.id,
           question: question.Question,
-          Answer,
+          answer,
           Category: question.Category,
           description: question.Description,
           link,
           tag,
           risk_level,
-          Confidentiality,
-          Integrity,
-          availability,
-          T1,
-          T2,
-          T3,
-          T4,
-          T5,
-          T6,
-          T7,
-          T8,
-          T9,
-          T10,
-          T11,
-          Notes,
+          cia,
+          threats,
+          notes,
           company_id,
           run_at
         })

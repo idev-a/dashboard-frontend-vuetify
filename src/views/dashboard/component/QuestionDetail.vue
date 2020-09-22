@@ -142,139 +142,44 @@
         align="center"
         class="mb-3"
       >
-        <div
-          class="d-flex flex-wrap"
+        <v-col
+          cols="auto"
+          class="py-0"
         >
-          <v-chip
-            outlined
-            class="ma-2"
-            :color="currentQuestion.availability == 1 ? 'red accent-2' : 'grey accent-4'"
+          <div class="font-weight-medium">
+            CIA
+          </div>
+        </v-col>
+        <v-col
+          cols="auto"
+        >
+          <v-chip-group
+            column
           >
-            <v-avatar v-if="currentQuestion.availability == 1" left>
-              <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-avatar>
-            Availability
-          </v-chip>
-       
-          <v-chip
-            outlined
-            class="ma-2"
-            :color="currentQuestion.Confidentiality == 1 ? 'red accent-2' : 'grey accent-4'"
-          >
-            <v-avatar v-if="currentQuestion.Confidentiality == 1" left>
-              <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-avatar>
-            Confidentiality
-          </v-chip>
-       
-          <v-chip
-            outlined
-            class="ma-2"
-            :color="currentQuestion.Integrity == 1 ? 'red accent-2' : 'grey accent-4'"
-          >
-            <v-avatar v-if="currentQuestion.Integrity == 1" left>
-              <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-avatar>
-            Integrity
-          </v-chip>
-        </div>
+            <v-chip color="red lighten-1" outlined v-for="(cia, i) in parseJSON(currentQuestion.cia)" :value="cia" class="text-capitalize">{{cia}}</v-chip>
+          </v-chip-group>
+        </v-col>
       </v-row>
       <v-row
         align="center"
       >
-        <div
-          class="d-flex flex-wrap"
+        <v-col
+          cols="auto"
+          class="py-0"
         >
-          <v-chip
-            v-if="currentQuestion['T1. Software Failures (code, configuration etc.)'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Software Failures (code, configuration etc.)
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T2. Cloud Failures (Provider, VHardware, Capacity)'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Cloud Failures (Provider, VHardware, Capacity)
-          </v-chip>
+          <div class="font-weight-medium">
+            Threats
+          </div>
         </v-col>
-          <v-chip
-            v-if="currentQuestion['T3. Legal Threats (failure to comply, bad contacts)'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
+        <v-col
+          cols="auto"
+        >
+          <v-chip-group
+            column
           >
-            Legal Threats (failure to comply, bad contacts)
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T4. Social Engineering'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Social Engineering
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T5. External Unauthorized Access to Information Systems / Data'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            External Unauthorized Access to Information Systems / Data
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T6. Traffic Monitoring or Interception'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Traffic Monitoring or Interception
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T7.External Attacker Tampering with Data / Data Destruction'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            External Attacker Tampering with Data / Data Destruction
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T8. Repudiation of transactions and messages'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Repudiation of transactions and messages
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T9. Insider Abuse of Privilege'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Insider Abuse of Privilege
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T10. Third Party Liability (contractors, third processing)'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Third Party Liability (contractors, third processing)
-          </v-chip>
-          <v-chip
-            v-if="currentQuestion['T11. Employee / User Mistakes'] == 1"
-            outlined
-            class="ma-2"
-            color="secondary"
-          >
-            Employee / User Mistakes
-          </v-chip>
-        </div>
+            <v-chip color="main" outlined v-for="(t, i) in parseJSON(currentQuestion.threats)" :value="t" class="text-capitalize">{{t}}</v-chip>
+          </v-chip-group>
+        </v-col>
       </v-row>
     </div>
 </template>
@@ -284,34 +189,24 @@
 	export default {
 		name: 'QuestionDetail',
 
+    components: {
+      ChipListGroup: () => import('./ChipListGroup')
+    },
+
 		props: {
 			currentQuestion: {
 				type: Object
 			}
 		},
 
-		computed: {
-			risk () {
-    		let risk = 'Low'
-        if (this.currentQuestion.critical) {
-          risk = 'Critical'
-        } else if (this.currentQuestion.high) {
-    			risk = 'High'
-    		} else if (this.currentQuestion.medium) {
-    			risk = 'Medium'
-    		} else if (this.currentQuestion.low) {
-    			risk = 'Low'
-    		} else if (this.currentQuestion.informational) {
-          risk = 'Informational'
-        }
-    		return risk
-			},
-		},
-
 		methods: {
 			levelColor,
       highlightText,
-      removeQuotes
+      removeQuotes,
+
+      parseJSON(val) {
+        return JSON.parse(val)
+      }
 		}
 	}
 </script>
