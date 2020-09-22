@@ -357,12 +357,12 @@ export const columnChart = (title, subtitle, yLabel, series, categories, type='c
       }
     },
     legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'top',
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
       x: -40,
-      y: 80,
-      floating: true,
+      y: -10,
+      floating: false,
       borderWidth: 1,
       backgroundColor:
           Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
