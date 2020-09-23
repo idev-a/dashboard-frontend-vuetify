@@ -191,7 +191,7 @@
         let headers = [
           {
             text: 'Question',
-            value: 'Question',
+            value: 'description',
             width: 350
           },
           {
@@ -203,7 +203,7 @@
         if (this.category == 'all') {
           headers.push({
             text: 'Category',
-            value: 'Category',
+            value: 'category',
             width: 200
           })
         }

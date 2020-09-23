@@ -135,10 +135,10 @@
             v-model="valid"
           >
             <v-combobox
-              v-model="editedItem.Question"
+              v-model="editedItem.question"
               label="Question" 
               item-value="id"
-              item-text="Question"
+              item-text="question"
               :rules="[rules.required]"
               :items="questions"
               clear-icon
@@ -146,7 +146,7 @@
               >
             </v-combobox>
             <v-textarea
-              v-model="editedItem.Description"
+              v-model="editedItem.description"
               label="Description" 
               auto-grow
               rows="2"
@@ -165,7 +165,7 @@
             >
             </v-textarea>
             <v-combobox
-              v-model="editedItem.Category"
+              v-model="editedItem.category"
               :items="categories"
               :rules="[rules.required]"
               label="Category"
@@ -299,17 +299,17 @@ export default {
       headers: [
         {
           text: 'Question',
-          value: 'Question',
+          value: 'question',
           width: 350
         },
         {
           text: 'Description',
-          value: 'Description',
+          value: 'description',
           width: 300
         },
         {
           text: 'Category',
-          value: 'Category',
+          value: 'category',
           width: 180
         },
         { text: 'Actions', value: 'action', sortable: false, width: 120, align: 'center' }
@@ -346,7 +346,7 @@ export default {
     },
     filteredQuestions () {
       if (this.category.length) {
-        return this.questions.filter(que => this.category.includes(que.Category))
+        return this.questions.filter(que => this.category.includes(que.category))
       } else {
         return this.questions
       }
@@ -355,8 +355,8 @@ export default {
       const cats = []
       if (this.questions.length) {
         this.questions.map(item => {
-          if (!cats.includes(item.Category)) {
-            cats.push(item.Category)
+          if (!cats.includes(item.category)) {
+            cats.push(item.category)
           }
         })
       } 

@@ -17,7 +17,7 @@
                     </v-icon>
                   </v-btn>
                 </div>
-				<b class="display-2 d-block">{{data.Question}}</b>
+				<b class="display-2 d-block">{{data.question}}</b>
 			</v-row>
 		</v-expansion-panel-header>
 		<v-expansion-panel-content>

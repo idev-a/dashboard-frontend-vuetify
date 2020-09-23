@@ -19,7 +19,7 @@
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
             <span class="text--secondary">
-            	{{currentQuestion.Question}} 
+            	{{currentQuestion.question}} 
             	<v-chip :color="levelColor(currentQuestion.risk_level)" dark>
 		            <div class="subtitle-2 text-capitalize">{{ currentQuestion.risk_level }}</div>
           	  	</v-chip>
@@ -61,7 +61,7 @@
           cols="auto"
         >
           <!-- <v-card shaped outlined class="my-0 pa-2"> -->
-            <span class="text--secondary">{{currentQuestion.Category}}</span>
+            <span class="text--secondary">{{currentQuestion.category}}</span>
           <!-- </v-card> -->
         </v-col>
       </v-row>

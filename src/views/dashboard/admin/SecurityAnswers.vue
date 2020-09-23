@@ -519,7 +519,7 @@
           },
           {
             text: 'Category',
-            value: 'Category',
+            value: 'category',
             width: 180
           },
           {
@@ -565,7 +565,7 @@
       },
       filteredQuestions () {
         if (this.selectedCategories.length) {
-          return this.risksOrigin.filter(que => this.selectedCategories.includes(que.Category))
+          return this.risksOrigin.filter(que => this.selectedCategories.includes(que.category))
         } else {
           return this.risksOrigin
         }

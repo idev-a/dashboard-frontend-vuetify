@@ -287,7 +287,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.ctfr_subdomain.Question}}</b>
+                      <b class="display-2 d-block">{{result.ctfr_subdomain.question}}</b>
                       </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
@@ -316,7 +316,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.builtwith.Question}}</b>
+                      <b class="display-2 d-block">{{result.builtwith.question}}</b>
                     </v-row>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -349,7 +349,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.dnstwist.Question}}</b>
+                      <b class="display-2 d-block">{{result.dnstwist.question}}</b>
                     </v-row>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -397,7 +397,7 @@
                           </v-icon>
                         </v-btn>
                       </div>
-                      <b class="display-2 d-block">{{result.ssllabs.Question}}</b>
+                      <b class="display-2 d-block">{{result.ssllabs.question}}</b>
                     </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>

@@ -354,10 +354,10 @@ export const generateSecurityAnswers = ({company_id, questions, startDate, endDa
         answers.push({
           id,
           question_id: question.id,
-          question: question.Question,
+          question: question.question,
           answer,
-          Category: question.Category,
-          description: question.Description,
+          category: question.category,
+          description: question.description,
           link,
           tag,
           risk_level,

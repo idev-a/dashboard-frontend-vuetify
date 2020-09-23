@@ -249,8 +249,8 @@
           <template v-slot:item.description="{item}">
             <span v-html="highlightText(item.description)"></span>
           </template>
-          <template v-slot:item.Description="{item}">
-            <span v-html="highlightText(item.Description)"></span>
+          <template v-slot:item.description="{item}">
+            <span v-html="highlightText(item.description)"></span>
           </template>
         </v-data-table>
     </v-card>
