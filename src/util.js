@@ -6,10 +6,27 @@ import anchorme from 'anchorme'
 import { companyId } from './api'
 
 Highcharts.setOptions({
-    global: {
-        useUTC: false
-    }
+  global: {
+    useUTC: false
+  }
 });
+
+const refactorZeroWithNull = (series) => {
+  return series.map(item => {
+    const newSet = []
+    item.data.map(v => {
+      if (v == 0) {
+        newSet.push(null)
+      } else {
+        newSet.push(v)
+      }
+    })
+    return {
+      name: item.name,
+      data: newSet
+    }
+  })
+}
 
 export const DOMAIN_LIST = [
   /* Default domains included */
@@ -328,6 +345,7 @@ export const barchart = (title, subtitle='', yLabel, data, interval=1) => {
 export const columnChart = (title, subtitle, yLabel, series, categories, type='column') => {
   let pointFormat = '<b>{point.y} ({point.percentage:.1f}%)</b>'
   type = type.toLowerCase()
+  series = refactorZeroWithNull(series)
   if (type != 'pie') {
     pointFormat = '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
           '<td style="padding:0"><b>{point.y}</b></td></tr>'
@@ -360,7 +378,7 @@ export const columnChart = (title, subtitle, yLabel, series, categories, type='c
       layout: 'horizontal',
       align: 'center',
       verticalAlign: 'bottom',
-      x: -40,
+      x: 0,
       y: -10,
       floating: false,
       borderWidth: 1,
