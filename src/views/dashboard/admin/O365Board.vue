@@ -242,13 +242,13 @@
 
       async readAllUsers () {
         this.headers = this.userHeaders
-        var url = `${BASE_API}/api/admin/office_365_users/read`
+        var url = `admin/office_365_users/read`
         await this.readAll(url)
       },
 
       async readAllGroups () {
         this.headers = this.groupHeaders
-        var url = `${BASE_API}/api/admin/office_365_groups/read`
+        var url = `admin/office_365_groups/read`
         await this.readAll(url)
       },
 
