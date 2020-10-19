@@ -262,7 +262,7 @@
             company_id: this.company_id,
             user_id: this.userId
           })
-          if (res.status == 200) {
+          if (res.status == 'success') {
             window.open(res.auth_url, '_blank', "toolbar=yes, resizable=yes, top=100, left=100, width=400, height=300, noreferrer")
           }
         } catch (e) {
