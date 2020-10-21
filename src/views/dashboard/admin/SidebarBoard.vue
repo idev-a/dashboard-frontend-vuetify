@@ -29,7 +29,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn :loading="loading" v-if="false" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCreateDialog()" color="main"><v-icon left size="16">mdi-plus</v-icon>Add</v-btn>
+            <v-btn :loading="loading" v-bind="attrs" v-on="on" :disabled="loading"  class="mr-2" @click="showCreateDialog()" color="main"><v-icon left size="16">mdi-plus</v-icon>Add</v-btn>
           </template>
           <span>Create new menu</span>
         </v-tooltip>

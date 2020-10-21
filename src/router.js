@@ -214,6 +214,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Tree Board',
+          path: 'admin/tree-board',
+          component: () => import('@/views/dashboard/admin/TreeBoard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'GSuite Board',
           path: 'admin/gsuite',
           component: () => import('@/views/dashboard/admin/GSuiteBoard'),
