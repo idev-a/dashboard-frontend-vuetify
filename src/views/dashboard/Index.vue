@@ -31,12 +31,10 @@
     watch: {
       async isIdle (val) {
         if (val) {
-          this.loading = true
           const data = {
             id: this.userId,
           }
           const res = await Post(`users/login/keep`, data)
-          this.loading = false
           if (res.status === 'ok') {
             if (res.is_required) {
               this.$router.push({ name: 'Lock' })

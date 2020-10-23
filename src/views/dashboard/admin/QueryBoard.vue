@@ -227,16 +227,16 @@
 
         <v-data-table
           v-model="selectedItems"
-            :loading="loading"
-            :headers="filteredHeaders"
-            :items="indexedItems"
-            fixed-header
-            :items-per-page="page"
-            item-key="_id"
-            :search="search"
-            show-select
-            @update:items-per-page="getPageNum"
-          > 
+          :loading="loading"
+          :headers="filteredHeaders"
+          :items="indexedItems"
+          fixed-header
+          :items-per-page="page"
+          item-key="_id"
+          :search="search"
+          show-select
+          @update:items-per-page="getPageNum"
+        > 
           <template v-slot:item.email="{item}">
             <span v-html="highlightText(item.email)"></span>
           </template>
