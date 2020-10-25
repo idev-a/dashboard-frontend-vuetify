@@ -15,6 +15,12 @@
             <v-icon right>mdi-send</v-icon>
           </v-btn>
           <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="uploadDialog=true" color="main"><v-icon  size="16" dark>mdi-upload</v-icon></v-btn>
+            </template>
+            <span>Upload Extra Sheet</span>
+          </v-tooltip>
         </v-card-title>
         <v-card-text>
           <v-row>
@@ -115,6 +121,58 @@
         </v-btn>
       </template>
     </v-snackbar>
+
+    <v-dialog
+      v-model="uploadDialog"
+      width=600
+    >
+      <v-card>
+        <v-card-title>
+          Upload the answers sheet
+        </v-card-title>
+        <v-card-text>
+          <v-form
+            ref="uploadForm"
+            v-model="uploadValid"
+          >
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-file-input
+                  ref="myfile" 
+                  v-model="file"
+                  accept=".csv"
+                  placeholder="Import CSV file"
+                  prepend-icon="mdi-database-import"
+                  label="Extra sheet"
+                  :rules="[rules.required]"
+                  :loading="loading"
+                  @change="uploadCSV"
+                ></v-file-input>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="selectedFields"
+                  :items="csvFields"
+                  label="Select fields" 
+                  hint="Select fields to be populated into office_365_users table"
+                  persistent-hint
+                  multiple
+                  deletable-chips
+                  chips
+                  :rules="[rules.required]"
+                  hide-details="auto"
+                />
+              </v-col>
+            </v-row>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn text @click="uploadDialog = false" :loading="loading" :disabled="loading">Close</v-btn>
+              <v-btn color="success" text @click="uploadCSV2Server" :loading="loading" :disabled="loading || !uploadValid || !company_id">Upload</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -122,6 +180,7 @@
   import { BASE_API, Get, Post } from '@/api'
   import { downloadCSV, beautifyEmail, beautifyEmails } from '@/util'
   import { mapState, mapActions } from 'vuex';
+  import * as Papa from 'papaparse'
 
   export default {
     name: 'GsuiteBoard',
@@ -185,6 +244,11 @@
             value: 'run_at'
           }
         ],
+        file: null,
+        selectedFields: [],
+        csvFields: [],
+        uploadDialog: false,
+        uploadValid: true,
         rules: {
           required: value => {
             return !!value || 'This field is required.'
@@ -273,6 +337,49 @@
       },
       showCron () {
         this.showCronDialog({dialog: true, type: 'run_o365', interval: 'Daily'})
+      },
+      uploadCSV () {
+        const _fields = []
+        const self = this
+        Papa.parse(this.file, {
+          worker: true,
+          step: function(row) {
+            _fields.push(row.data)
+          },
+          complete: function() {
+            self.csvFields = _fields[0]
+          },
+          skipEmptyLines: true
+        })
+      },
+      async uploadCSV2Server () {
+        let formData = new FormData()
+        formData.append("file", this.file, this.file.name);
+
+        const data = {
+          fields: this.selectedFields,
+          company_id: this.company_id
+        }
+
+        const json = JSON.stringify(data);
+        const blob = new Blob([json], {
+          type: 'application/json'
+        });
+
+        formData.append("document", blob);
+        this.loading = true
+        this.file = null
+        try {
+          const res = await Post('o365/upload_csv', formData)
+          this.message = res.message
+          this.color = res.status
+        } catch(e) {
+          this.color = 'error'
+          this.message = 'Something wrong happened on the server.'
+        } finally {
+          this.loading = false
+          this.snackbar = true
+        }
       }
     }
   }
