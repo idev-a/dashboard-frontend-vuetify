@@ -8,13 +8,22 @@
         class="pa-5"
       >
         <v-card-title>
-            Office365 Board (office_365_users, office_365_groups)
-            <v-spacer></v-spacer>
-            <v-btn class="main" :loading="loading" @click="redirectO365" :disabled="!importable">
-            Authenticate
-            <v-icon right>mdi-send</v-icon>
-          </v-btn>
-          <v-btn :loading="loading" :disabled="loading"  class="" @click="showCron" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+          Office365 Board (office_365_users, office_365_groups)
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn class="main" :loading="loading" v-on="on" v-bind="attrs"   @click="redirectO365" :disabled="!importable">
+                <v-icon >mdi-send</v-icon>
+              </v-btn>
+              </template>
+            <span>Authenticate O365</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn :loading="loading" :disabled="loading" v-on="on" v-bind="attrs"  class="" @click="showCron" color="main"><v-icon  size="16"  dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+            </template>
+            <span>Show Cron information</span>
+          </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" @click="uploadDialog=true" color="main"><v-icon  size="16" dark>mdi-upload</v-icon></v-btn>
@@ -79,9 +88,24 @@
               hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllUsers" color="main">Users<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-            <v-btn :loading="loading" :disabled="loading" class="mr-2" @click="readAllGroups" color="main">Groups<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
-            <v-btn :loading="loading" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" class="mr-2" @click="readAllUsers" color="main">Users<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+              </template>
+              <span>Show all data for office_365_users table</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading" class="mr-2" @click="readAllGroups" color="main">Groups<v-icon  size="16" right dark>mdi-database-search</v-icon></v-btn>
+              </template>
+              <span>Show all data for office_365_groups table</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn :loading="loading" v-on="on" v-bind="attrs" :disabled="loading || (!items.length && !selectedItems.length)" @click="downloadCSV" color="main">Download <v-icon  size="16" right dark>mdi-download</v-icon></v-btn>
+              </template>
+              <span>Download data below</span>
+            </v-tooltip>
           </v-card-title>
           <v-data-table
             v-model="selectedItems"
@@ -128,8 +152,11 @@
     >
       <v-card>
         <v-card-title>
-          Upload the answers sheet
+          Upload extra sheet
         </v-card-title>
+        <div class="text-center">
+          (office_365_users)
+        </div>
         <v-card-text>
           <v-form
             ref="uploadForm"
