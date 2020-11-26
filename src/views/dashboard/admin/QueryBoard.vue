@@ -478,8 +478,8 @@ export default {
     hasSheetIntegrity: true,
     file: null,
     sheet: {
-      id: '1ld0hi4nX1xA7hbvPw_8Oq-85fDm21C_87IA6YyOpF-8',
-      name: 'Sheet1',
+      id: '',
+      name: '',
       tableName: '',
       company_id: ''
     },

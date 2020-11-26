@@ -860,7 +860,9 @@ export const downloadBlob = (url, filename) => {
 export const _norm = (name) => {
   let _name = ""
   for (let ch of name) {
-    if (ch == ' ' || (/[a-zA-Z0-9]/).test(ch)) {
+    if (ch == ' ' ) {
+      _name = _name.concat('_')
+    } else if ((/[a-zA-Z0-9_]/).test(ch)) {
       _name = _name.concat(ch)
     }
   }
