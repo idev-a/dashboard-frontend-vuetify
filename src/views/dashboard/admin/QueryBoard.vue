@@ -8,20 +8,25 @@
         class="pa-5"
       >
         <v-card-title>
-            Query Board
-            <v-spacer></v-spacer>
-            <v-switch
+          Query Board
+          <v-spacer></v-spacer>
+          <v-switch
+            class="mt-0 mr-3"
+            v-model="toggleSpreadSheet"
+            label="Google Sheet"
+          ></v-switch>
+          <v-switch
             class="mt-0 mr-3"
             v-model="findHunter"
             label="Hunter.io"
           ></v-switch>
-            <v-switch
+          <v-switch
             class="mt-0 mr-3"
             v-model="toggleEmailNotification"
             :label="labelEmailNotification"
           ></v-switch>
-            <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="main">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
-          </v-card-title>
+          <v-btn :loading="loading" :disabled="loading || !query" @click="runQuery" color="main">Run Query <v-icon  size="16" right dark>mdi-send</v-icon></v-btn>
+        </v-card-title>
         <v-row
         >
           <v-col
@@ -80,12 +85,12 @@
         </v-card-text>
       </v-card>
         
-        <!-- Email Notification -->
-        <v-card 
-          tile
-          outlined
-          v-if="toggleEmailNotification"
-        >
+      <!-- Email Notification -->
+      <v-card 
+        tile
+        outlined
+        v-if="toggleEmailNotification"
+      >
         <v-card-title
           class="my-3"
         >
@@ -169,7 +174,97 @@
             </v-row>
           </form>
         </v-card-text>
-        </v-card>
+      </v-card>
+
+      <!-- Manage tables from Google Spreadsheet -->
+      <v-card
+        tile
+        outlined
+        v-if="toggleSpreadSheet"
+      >
+        <v-card-title
+          class="my-3"
+        >
+          Synchronize tables from SpreadSheet
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn class="main" v-on="on" @click="checkSheet" :loading="loading" :disabled="loading || !sheetValid">
+                Check
+                <v-icon right>mdi-check</v-icon>
+              </v-btn>
+            </template>
+            <span>Check data integrity only</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn class="main" v-on="on" @click="registerSheet" :loading="loading" :disabled="!registerPossible">
+                Register
+                <v-icon right>mdi-link-plus</v-icon>
+              </v-btn>
+            </template>
+            <span>Register sheet</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn :loading="loading" v-on="on" :disabled="loading" @click="showCronDialog({dialog: true, type: 'run_gspread_sync', interval: 'Daily'})" color="main">Crons<v-icon  size="16" right dark>mdi-clock-time-eight-outline</v-icon></v-btn>
+            </template>
+            <span>Show Crons</span>
+          </v-tooltip>
+        </v-card-title>
+        <v-card-text>
+          <v-form
+            ref="sheetForm"
+            v-model="sheetValid"
+          >
+            <v-row>
+              <v-col cols="12" md="5">
+                <v-text-field
+                  v-model="sheet.id"
+                  label="Sheet ID"
+                  clearable
+                  :rules="[rules.required]"
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                  v-model="sheet.name"
+                  label="Worksheet Name"
+                  :hint="`Table Name: ${potentialTableName}`"
+                  persistent-hint
+                  clearable
+                  :rules="[rules.required]"
+                />
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-file-input
+                  v-model="file"
+                  :loading="loading"
+                  :rules="[rules.required]"
+                  accept=".json"
+                  placeholder=""
+                  prepend-icon="mdi-database-import"
+                  hint="The Google Sheet must be shared with this account."
+                  persistent-hint
+                  label="Service account key (.json file)"
+                  ref="myfile" 
+                ></v-file-input>
+              </v-col>
+            </v-row>
+          </v-form>
+          <v-alert
+            v-if="!hasSheetIntegrity"
+            type="error"
+            border="left"
+            dismissible
+            text
+            dense
+          >
+            Please make sure data have its own primary key 'id'.
+          </v-alert>
+        </v-card-text>
+      </v-card>
+        
         <v-card-title>
           <v-text-field
             v-model="search"
@@ -182,19 +277,19 @@
           ></v-text-field>
           <v-spacer></v-spacer>
           <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn 
-              :loading="loading" 
-              :disabled="loading || (!items.length && !selectedItems.length)" 
-              @click="downloadCSV" 
-              color="main"
-              v-on="on"
-            >
-              <v-icon  size="16" dark>mdi-download</v-icon>
-            </v-btn>
-          </template>
-          <span>Download Data as CSV</span>
-        </v-tooltip>
+            <template v-slot:activator="{ on }">
+              <v-btn 
+                :loading="loading" 
+                :disabled="loading || (!items.length && !selectedItems.length)" 
+                @click="downloadCSV" 
+                color="main"
+                v-on="on"
+              >
+                <v-icon  size="16" dark>mdi-download</v-icon>
+              </v-btn>
+            </template>
+            <span>Download Data as CSV</span>
+          </v-tooltip>
           
         </v-card-title>
             <v-card-title>
@@ -310,9 +405,10 @@
 </template>
 
 <script>
-import { BASE_API, fetchTables, Get, Post } from '../../../api'
-import { downloadCSV, highlightText } from '../../../util'
+import { BASE_API, fetchTables, Get, Post } from '@/api'
+import { downloadCSV, highlightText, _norm } from '@/util'
 import { mapState, mapActions } from 'vuex';
+import upperFirst from 'lodash/upperFirst'
 
 export default {
   name: 'QueryBoard',
@@ -377,6 +473,18 @@ export default {
       interval: '0 9 * * *',
       attach: null,
     },
+    toggleSpreadSheet: false,
+    checkIntegrity: false,
+    hasSheetIntegrity: true,
+    file: null,
+    sheet: {
+      id: '1ld0hi4nX1xA7hbvPw_8Oq-85fDm21C_87IA6YyOpF-8',
+      name: 'Sheet1',
+      tableName: '',
+      company_id: ''
+    },
+    sheetValid: true,
+    sheetData: [],
     rules: {
       required: value => {
         return !!value || 'This field is required.'
@@ -410,12 +518,19 @@ export default {
     },
     notifyPossible () {
       return this.noti.title && this.noti.message && !this.loading && this.query &&this.items.length
+    },
+    potentialTableName() {
+      return `${_norm(this.sheet.name)}`
+    },
+    registerPossible () {
+      return !this.loading && this.sheetValid
     }
   },
 
   methods: {
     ...mapActions(['showCronDialog']),
     highlightText,
+    _norm,
 
     cleanWebsite (string) {
       return string.trim().replace('https://', '').replace('http://', '').replace('www.', '').split('?')[0]
@@ -520,18 +635,20 @@ export default {
       this.tables = await fetchTables()
     },
 
-    async runQuery () {
+    async _runAPI(endpoint, data) {
       this.loading = true
       this.headers = []
       this.selectedItems = []
       this.selectedHeaders = []
       this.filteredHeaders = []
 
+      let headers = []
       try {
-        const res = await Post(`admin/query`, { query: this.query })
+        const res = await Post(endpoint, data)
+        headers = res.headers
         res.headers.map(header => {
           this.headers.push({
-            text: header.toUpperCase(),
+            text: upperFirst(header),
             value: header
           })
         })
@@ -545,6 +662,12 @@ export default {
         this.loading = false
         this.snackbar = true
       }
+
+      return headers
+    },
+
+    async runQuery () {
+      await this._runAPI(`admin/query`, { query: this.query })
     },
 
     // Email Notification
@@ -567,33 +690,33 @@ export default {
       })
     },
 
-  async _sendEmailNotification () {
-    let formData = new FormData()
-    if (this.noti.attach) {
-      for (let file of this.noti.attach) {
-        formData.append("files", file, file.name);
+    async _sendEmailNotification () {
+      let formData = new FormData()
+      if (this.noti.attach) {
+        for (let file of this.noti.attach) {
+          formData.append("files", file, file.name);
+        }
       }
-    }
 
-    const _items = this.selectedItems.length ? this.selectedItems : this.items
-    let emails = _items.map(item => item.email)
+      const _items = this.selectedItems.length ? this.selectedItems : this.items
+      let emails = _items.map(item => item.email)
 
-    const data = {
-      title: this.noti.title,
-      message: this.noti.message,
-      template_id: this.noti.templateId,
-      recipients: this.noti.recipients,
-      interval: this.noti.interval,
-      query: this.query,
-      emails,
-      company_id: this.companyId,
-      user_id: this.userId
-    }
+      const data = {
+        title: this.noti.title,
+        message: this.noti.message,
+        template_id: this.noti.templateId,
+        recipients: this.noti.recipients,
+        interval: this.noti.interval,
+        query: this.query,
+        emails,
+        company_id: this.companyId,
+        user_id: this.userId
+      }
 
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], {
-      type: 'application/json'
-    });
+      const json = JSON.stringify(data);
+      const blob = new Blob([json], {
+        type: 'application/json'
+      });
 
       formData.append("document", blob);
 
@@ -601,15 +724,50 @@ export default {
       this.file = null
       try {
         const res = await Post(`admin/email_notification/run`, formData)
-          this.message = res.message
-          this.color = res.status
+        this.message = res.message
+        this.color = res.status
       } catch(e) {
         this.message = 'Something wrong happened on the server.'
       } finally {
-          this.loading = false
-          this.snackbar = true
+        this.loading = false
+        this.snackbar = true
       }
     },
+
+    // Google Sheet
+    buildFormData() {
+      let formData = new FormData()
+      if (this.file) {
+        formData.append("file", this.file, this.file.name);
+
+        this.sheet.tableName = this.potentialTableName
+        const json = JSON.stringify(this.sheet);
+        const blob = new Blob([json], {
+          type: 'application/json'
+        });
+
+        formData.append("document", blob);
+      }
+      return formData
+    },
+    async checkSheet () {
+      // check integrity of sheet data
+      this.hasSheetIntegrity = true
+      this.loading = true
+      const headers = await this._runAPI('admin/sheet/check', this.buildFormData())
+      this.hasSheetIntegrity = headers.includes('id')
+      this.checkIntegrity = true
+    },
+
+    async registerSheet () {
+      this.loading = true
+      this.hasSheetIntegrity = true
+      const headers = await this._runAPI('admin/sheet/register', this.buildFormData())
+      this.hasSheetIntegrity = headers.includes('id')
+      this.loading = false
+      this.file = null
+      this.checkIntegrity = false
+    }
   }
 }
 </script>

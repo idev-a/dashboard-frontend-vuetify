@@ -40,22 +40,28 @@
             @update:items-per-page="getPageNum"
           > 
             <template v-slot:item.name="{ item }">
-                <span v-if="item.name">{{_name(item.name)}}</span>
+              <span v-if="item.name">{{_name(item.name)}}</span>
             </template>
             <template v-slot:item.emails="{ item }">
-                <span v-html="beautifyEmails(item.emails)"></span>
+              <span v-html="beautifyEmails(item.emails)"></span>
             </template>
             <template v-slot:item.recipients="{ item }">
-                <span v-if="item.recipients" v-html="beautifyEmails(item.recipients)"></span>
+              <span v-if="item.recipients" v-html="beautifyEmails(item.recipients)"></span>
             </template>
             <template v-slot:item.attachments="{ item }">
-                <span v-if="item.attachments">{{ item.attachments.length + 1 }} attachments</span>
+              <span v-if="item.attachments">{{ item.attachments.length + 1 }} attachments</span>
+            </template>
+            <template #item.sheet="{item}">
+              <a :href="_sheetLink(item.data)" target="_blank">{{_table(item.data)}}</a>
+            </template>
+            <template #item.tableName="{item}">
+              <span>{{item.data.tableName }}</span>
             </template>
             <template v-slot:item.run_at="{ item }">
-                <span v-html="beautifyDateTime(item.run_at)"></span>
+              <span v-html="beautifyDateTime(item.run_at)"></span>
             </template>
             <template v-slot:item.nextRun="{ item }">
-                <span v-html="showNextRun(item.nextRun)"></span>
+              <span v-html="showNextRun(item.nextRun)"></span>
             </template>
           </v-data-table>
         </v-card-text>
@@ -177,6 +183,23 @@ export default {
         ]
       }
 
+      // Google Sheet
+      if (this.cron.type == 'run_gspread_sync') {
+        this.cronHeaders = this.cronHeadersDefault.slice(2, 5)
+        this.cronHeaders = [
+          {
+            text: 'Sheet',
+            value: 'sheet',
+            width: 350
+          },
+          {
+            text: 'Table',
+            value: 'tableName',
+          },
+          ...this.cronHeaders
+        ]
+      }
+
       this.crons = this.selectedCrons = []
       this.readAllCrons()
     },
@@ -199,6 +222,7 @@ export default {
         run_email_notification: 'Email Notification',
         run_migrate_users: 'Migrate Users',
         run_migrate_groups: 'Migrate Groups',
+        run_gspread_sync: 'Synchronize GSpread'
       }
       return readableNames[val]
     },
@@ -370,6 +394,16 @@ export default {
       if (this.callback) {
         this.callback()
       }
+    },
+    _sheetLink (data) {
+      let link = ''
+      if (data && data.id) {
+        link = `https://docs.google.com/spreadsheets/d/${data.id}`
+      }
+      return link
+    },
+    _table (data) {
+      return data && data.tableName || ''
     }
   }
 }

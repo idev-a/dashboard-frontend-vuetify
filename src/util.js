@@ -857,3 +857,12 @@ export const downloadBlob = (url, filename) => {
   document.body.removeChild(link);
 }
 
+export const _norm = (name) => {
+  let _name = ""
+  for (let ch of name) {
+    if (ch == ' ' || (/[a-zA-Z0-9]/).test(ch)) {
+      _name = _name.concat(ch)
+    }
+  }
+  return _name.toLowerCase().trim().replace(" ", "_").replace("%20", "")
+}
