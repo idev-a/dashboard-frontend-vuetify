@@ -1,7 +1,7 @@
 <template>
   <v-main
   >
-    <router-view />
+    <router-view :key="$route.fullPath" />
 
     <dashboard-core-footer />
   </v-main>

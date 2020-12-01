@@ -8,7 +8,7 @@
     <template v-slot:after-heading>
       <div class="ml-auto text-right">
         <div
-          class="body-3 grey--text font-weight-light"
+          class="body-1 grey--text font-weight-light"
           v-text="title"
         />
 
@@ -33,11 +33,14 @@
       {{ subIcon }}
     </v-icon>
 
-    <span
+    <div
       :class="subTextColor"
-      class="caption grey--text font-weight-light"
+      class="d-inline-flex align-center caption grey--text font-weight-light"
       v-text="subText"
     />
+
+    <v-btn v-if="!isUser" class="ml-auto" icon @click="$emit('update')"><v-icon >mdi-close</v-icon></v-btn>
+
   </base-material-card>
 </template>
 
@@ -48,6 +51,9 @@
     name: 'MaterialStatsCard',
 
     inheritAttrs: false,
+
+    methods: {
+    },
 
     props: {
       ...Card.props,
@@ -83,6 +89,11 @@
         type: String,
         default: undefined,
       },
+    },
+    data () {
+      return {
+        isUser: this.$route.name == 'Dashboard',
+      }
     },
   }
 </script>

@@ -124,6 +124,15 @@ let router = new Router({
           }
         },
         {
+          name: 'Custom Dashboard',
+          path: 'admin/custom-dashboard',
+          component: () => import('@/views/dashboard/home/Dashboard'),
+          meta: {
+            is_admin: true,
+            requiresAuth: true
+          }
+        },
+        {
           name: 'Drawer Board',
           path: 'admin/drawer-board',
           component: () => import('@/views/dashboard/admin/SidebarBoard'),

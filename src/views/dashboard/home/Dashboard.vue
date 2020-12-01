@@ -27,8 +27,8 @@
     </v-banner>
     
     <chart-component />
-
-    <stats-component />
+    <stats v-if="!isUser" />
+    <customer-stats v-else />
     
   </v-container>
 </template>
@@ -40,12 +40,14 @@ import { mapState } from 'vuex'
 export default {
   components: {
     ChartComponent: () => import('../component/ChartComponent'),
-    StatsComponent: () => import('./StatsComponent')
+    Stats: () => import('./Stats'),
+    CustomerStats: () => import('./CustomerStats')
   },
 
   data() {
     return {
-      banner: true
+      banner: true,
+      isUser: this.$route.name == 'Dashboard',
     }
   },
   methods: {
@@ -53,6 +55,6 @@ export default {
   },
   computed: {
     ...mapState(['companyName']),
-  }
+  },
 }
 </script>

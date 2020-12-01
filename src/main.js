@@ -29,6 +29,10 @@ import 'vuetify-dialog/dist/vuetify-dialog.css'
 import VueTheMask from 'vue-the-mask'
 // import { VueReCaptcha } from 'vue-recaptcha-v3'
 import Vue2Editor from "vue2-editor";
+import Generic from "@/views/dashboard/component/Generic.vue";
+import Stats from "@/views/dashboard/home/Stats.vue";
+Vue.component("generic", Generic);
+Vue.component("stats", Stats);
 
 import { BASE_API } from './api.js'
 

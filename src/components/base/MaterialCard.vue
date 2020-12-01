@@ -59,7 +59,7 @@
 
       <div
         v-if="$slots['after-heading']"
-        class="ml-6"
+        class="ml-auto"
       >
         <slot name="after-heading" />
       </div>
@@ -77,7 +77,6 @@
         class="ml-4"
       >
         <div
-
           class="card-title font-weight-light"
           v-text="title"
         />

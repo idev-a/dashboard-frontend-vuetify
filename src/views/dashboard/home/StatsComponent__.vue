@@ -7,10 +7,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.critical_risk"
         color="black darken-4"
         icon="mdi-alert-outline"
         title="Critical Risks"
-        :value="smallCards.critical_risk"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All Critical Risks"
         to="Critical Risks"
@@ -25,10 +25,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.high_risk"
         color="red darken-4"
         icon="mdi-alert-outline"
         title="High Risks"
-        :value="smallCards.high_risk"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All High Risks"
         to="High Risks"
@@ -44,10 +44,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.medium_risk"
         color="red lighten-1"
         icon="mdi-alert-outline"
         title="Medium Risks"
-        :value="smallCards.medium_risk"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All Medium Risks"
         to="Medium Risks"
@@ -63,10 +63,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.low_risk"
         color="yellow darken-1"
         icon="mdi-alert-outline"
         title="Low Risks"
-        :value="smallCards.low_risk"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All Low Risks"
         to="Low Risks"
@@ -82,10 +82,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.informational_risk"
         color="grey darken-1"
         icon="mdi-alert-outline"
         title="Informational Risks"
-        :value="smallCards.informational_risk"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All Informational Risks"
         to="Informational Risks"
@@ -101,10 +101,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.applications"
         color="success"
         icon="mdi-alert-outline"
         title="Application Risk"
-        :value="smallCards.applications"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View All Applications Data"
         to="Applications"
@@ -120,10 +120,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.users"
         color="secondary"
         icon="mdi-account-multiple"
         title="Users"
-        :value="smallCards.users"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         to="Users"
@@ -139,10 +139,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.groups"
         color="secondary"
         icon="mdi-account-group-outline"
         title="Groups"
-        :value="smallCards.groups"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         to="Groups"
@@ -158,10 +158,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.public_data"
         color="secondary"
         icon="mdi-database"
         title="Public Data"
-        :value="smallCards.public_data"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         to="Public Data"
@@ -177,10 +177,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.email_security"
         color="red lighten-1"
         icon="mdi-security"
         title="Email Security"
-        :value="smallCards.email_security"
         sub-icon="mdi-chevron-triple-right"
         sub-text="Phishing, Spam"
         to="Email Security"
@@ -196,10 +196,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.network_security"
         color="red lighten-1"
         icon="mdi-security"
         title="Network Security"
-        :value="smallCards.network_security"
         sub-icon="mdi-chevron-triple-right"
         sub-text="Wifi, Internet"
         to="Network Security"
@@ -215,10 +215,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.physical_security"
         color="red lighten-1"
         icon="mdi-security"
         title="Physial Security"
-        :value="smallCards.physical_security"
         sub-icon="mdi-chevron-triple-right"
         sub-text="Doors, Alarms, Locks"
         to="Physical Security"
@@ -234,10 +234,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.device_security"
         color="red lighten-1"
         icon="mdi-security"
         title="Device Security"
-        :value="smallCards.device_security"
         sub-icon="mdi-chevron-triple-right"
         sub-text="Doors, Alarms, Locks"
         to="Device Security"
@@ -253,10 +253,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.charts"
         color="success"
         icon="mdi-poll"
         title="Charts"
-        :value="smallCards.charts"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         to="Charts"
@@ -272,10 +272,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.links"
         color="info"
         icon="mdi-link"
         title="Links"
-        :value="smallCards.links"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         flat
@@ -290,10 +290,10 @@
     >
       <base-material-stats-card
         :loading="loading"
+        :value="smallCards.other"
         color="info"
         icon="mdi-alert-rhombus-outline"
         title="Other"
-        :value="smallCards.other"
         sub-icon="mdi-chevron-triple-right"
         sub-text="View Details"
         dark
