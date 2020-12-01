@@ -78,7 +78,7 @@
         </Draggable>
         </div>
         <Draggable v-for="(column, columnIdx) in cards.children" :key="column.id">
-          <div v-if="column.children.length > 1" :class="columnClass(column.props.className)">
+          <div :class="columnClass(column.props.className)">
             <div v-if="movable" class="card-column-header">
               <span class="column-drag-handle">&#x2630;</span>
             </div>

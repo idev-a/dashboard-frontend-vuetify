@@ -26,7 +26,7 @@
       </v-card>
     </v-banner>
     
-    <chart-component />
+    <chart-component v-if="isUser"/>
     <stats v-if="!isUser" />
     <customer-stats v-else />
     
